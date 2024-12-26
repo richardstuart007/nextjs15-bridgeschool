@@ -8,7 +8,7 @@ import {
 } from '@/routes'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
-import { cookies } from 'next/headers'
+import { getCookieSessionId } from '@/src/lib/data-cookie'
 
 export default async function middleware(req: any): Promise<any> {
   const functionName = 'middleware'
@@ -36,7 +36,7 @@ export default async function middleware(req: any): Promise<any> {
   //
   //  Login status (Auth not working yet)
   //
-  const cookie = cookies().get('SessionId')
+  const cookie = await getCookieSessionId()
   const isLoggedInCookie = !!cookie
   //-------------------------------------------------------------------------------------------------
   //  Allow all API routes

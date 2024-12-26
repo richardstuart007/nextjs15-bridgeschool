@@ -12,12 +12,13 @@ export async function updateCookieSessionId(sessionId: number) {
     //
     const cookieName = 'SessionId'
     //
-    //  Write the cookie
+    // Write the cookie
     //
-    const JSON_cookie = JSON.stringify(sessionId)
-    cookies().set(cookieName, JSON_cookie, {
+    const cookieValue = JSON.stringify(sessionId)
+    const cookieStore = await cookies()
+    cookieStore.set(cookieName, cookieValue, {
       httpOnly: false,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/'
     })
@@ -35,7 +36,8 @@ export async function updateCookieSessionId(sessionId: number) {
 export async function deleteCookie(cookieName: string = 'SessionId') {
   const functionName = 'deleteCookie'
   try {
-    cookies().delete(cookieName)
+    const cookieStore = await cookies()
+    cookieStore.delete(cookieName)
     //
     //  Errors
     //
@@ -50,7 +52,8 @@ export async function deleteCookie(cookieName: string = 'SessionId') {
 export async function getCookieSessionId(cookieName: string = 'SessionId'): Promise<string | null> {
   const functionName = 'getCookieSessionId'
   try {
-    const cookie = cookies().get(cookieName)
+    const cookieStore = await cookies()
+    const cookie = cookieStore.get(cookieName)
     if (!cookie) return null
     //
     //  Get value
