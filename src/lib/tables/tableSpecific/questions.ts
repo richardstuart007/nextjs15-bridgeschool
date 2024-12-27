@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 const MAINT_ITEMS_PER_PAGE = 15
@@ -10,7 +10,7 @@ const MAINT_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
 export async function fetchQuestionsFiltered(query: string, currentPage: number) {
   const functionName = 'fetchQuestionsFiltered'
-  noStore()
+
   const offset = (currentPage - 1) * MAINT_ITEMS_PER_PAGE
   try {
     //
@@ -132,7 +132,7 @@ export async function buildWhere_questions(query: string) {
 //---------------------------------------------------------------------
 export async function fetchQuestionsTotalPages(query: string) {
   const functionName = 'fetchQuestionsTotalPages'
-  noStore()
+
   try {
     //
     //  Build Where clause

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react';
 import Image from 'next/image'
 import { table_Questions } from '@/src/lib/tables/definitions'
 

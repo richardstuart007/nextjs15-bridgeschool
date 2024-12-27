@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   title: 'Quiz Review'
 }
 
-export default async function Page({ params }: { params: { hid: number } }) {
+export default async function Page(props: { params: Promise<{ hid: number }> }) {
+  const params = await props.params;
   //
   //  Variables used in the return statement
   //

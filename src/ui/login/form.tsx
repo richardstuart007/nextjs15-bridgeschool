@@ -3,12 +3,11 @@
 import { lusitana } from '@/src/fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormState } from 'react-dom'
-import { loginUser } from '@/src/ui/login/action'
+import { action } from '@/src/ui/login/action'
 import { usePathname, useRouter } from 'next/navigation'
 import { deleteCookie } from '@/src/lib/data-cookie'
 import Socials from '@/src/ui/login/socials'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useActionState } from 'react'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 export default function LoginForm() {
@@ -22,10 +21,24 @@ export default function LoginForm() {
   //
   const pathname = usePathname()
   //
-  //  State
+  // Define the StateSession type
   //
-  const initialState = { message: null, errors: {} }
-  const [formState, formAction] = useFormState(loginUser, initialState)
+  type actionState = {
+    errors?: {
+      email?: string[]
+      password?: string[]
+    }
+    message?: string | null
+  }
+  //
+  // Initialize the form state with default empty errors object
+  //
+  const initialState: actionState = {
+    errors: {},
+    message: null
+  }
+  const [formState, formAction] = useActionState(action, initialState)
+
   const errorMessage = formState?.message || null
   //
   // Local state to manage submitting status

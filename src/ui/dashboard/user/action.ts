@@ -1,8 +1,6 @@
 'use server'
 
 import { z } from 'zod'
-// import { revalidatePath } from 'next/cache'
-// import { redirect } from 'next/navigation'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 // ----------------------------------------------------------------------
 //  Update User Setup
@@ -31,7 +29,7 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function UserEdit(_prevState: StateSetup, formData: FormData) {
+export async function action(_prevState: StateSetup, formData: FormData) {
   //
   //  Validate form data
   //

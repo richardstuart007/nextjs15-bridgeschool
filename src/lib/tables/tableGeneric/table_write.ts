@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //
 // Define the column-value pair interface
@@ -20,7 +20,6 @@ interface Props {
 
 export async function table_write({ table, columnValuePairs }: Props): Promise<any[]> {
   const functionName = 'table_write'
-  noStore()
 
   //
   // Prepare the columns and parameterized placeholders for the INSERT statement

@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface ColumnValuePair {
@@ -18,7 +17,6 @@ export async function table_check(
   tableColumnValuePairs: TableColumnValuePairs[]
 ): Promise<boolean> {
   const functionName = 'table_check'
-  noStore()
 
   try {
     //

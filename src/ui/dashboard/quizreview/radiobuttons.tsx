@@ -1,5 +1,7 @@
 import { FaceFrownIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 
+import type { JSX } from "react";
+
 interface RadioOption {
   id: string
   label: string

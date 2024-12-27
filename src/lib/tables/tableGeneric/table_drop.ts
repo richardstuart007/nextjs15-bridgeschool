@@ -1,11 +1,9 @@
 'use server'
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 export async function table_drop(table: string): Promise<boolean> {
   const functionName = 'table_drop'
-  noStore()
   try {
     //
     // Base DROP query

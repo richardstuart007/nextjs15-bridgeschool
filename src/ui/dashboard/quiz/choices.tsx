@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react';
 import RadioGroup from '@/src/ui/dashboard/quiz/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'
 

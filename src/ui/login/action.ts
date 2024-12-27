@@ -26,7 +26,7 @@ export type StateLogin = {
 
 const Login = FormSchemaLogin
 
-export async function loginUser(_prevState: StateLogin | undefined, formData: FormData) {
+export async function action(_prevState: StateLogin | undefined, formData: FormData) {
   //
   //  Validate the fields using Zod
   //

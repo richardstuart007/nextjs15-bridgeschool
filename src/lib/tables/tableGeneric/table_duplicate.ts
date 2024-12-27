@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface TableDup {
@@ -11,7 +10,6 @@ interface TableDup {
 
 export async function table_duplicate(TableDup: TableDup): Promise<boolean> {
   const functionName = 'table_duplicate'
-  noStore()
 
   try {
     //

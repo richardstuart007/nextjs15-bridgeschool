@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 import { deleteCookie, getCookieSessionId } from '@/src/lib/data-cookie'
@@ -134,7 +134,7 @@ export async function UpdateSessions(
 //---------------------------------------------------------------------
 export async function fetchSessionInfo(sessionId: number) {
   const functionName = 'fetchSessionInfo'
-  noStore()
+
   try {
     const sqlQueryStatement = `
     SELECT

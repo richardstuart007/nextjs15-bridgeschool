@@ -30,7 +30,7 @@ export type StateSession = {
 
 const Session = FormSchemaSession
 
-export async function sessionUser(_prevState: StateSession, formData: FormData) {
+export async function action(_prevState: StateSession, formData: FormData) {
   //
   //  Validate form data
   //

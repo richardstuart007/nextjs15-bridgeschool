@@ -25,7 +25,7 @@ export type StateRegister = {
 
 const Register = FormSchemaRegister
 
-export async function registerUser(_prevState: StateRegister | undefined, formData: FormData) {
+export async function action(_prevState: StateRegister | undefined, formData: FormData) {
   //
   //  Validate the fields using Zod
   //

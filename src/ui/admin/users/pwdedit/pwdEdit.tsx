@@ -1,14 +1,14 @@
 'use client'
-import { useState } from 'react'
+import { useState, useActionState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom';
 import { PwdEdit } from '@/src/ui/admin/users/pwdedit/action'
 import type { table_Users } from '@/src/lib/tables/definitions'
 
 export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useFormState(PwdEdit, initialState)
+  const [formState, formAction] = useActionState(PwdEdit, initialState)
   const [uppwd, setUppwd] = useState('')
   const upuid = UserRecord.u_uid
   const upemail = UserRecord.u_email

@@ -1,6 +1,8 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 import Image from 'next/image'
 
+import type { JSX } from "react";
+
 interface QuizHandsProps {
   question: table_Questions
 }

@@ -6,7 +6,8 @@ export const metadata: Metadata = {
   title: 'Session Preferences'
 }
 
-export default async function Page({ params }: { params: { id: number } }) {
+export default async function Page(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   //
   //  Variables used in the return statement
   //

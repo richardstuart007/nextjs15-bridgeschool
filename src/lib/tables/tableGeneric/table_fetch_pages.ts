@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 // Define types for joins and filters
@@ -39,7 +38,6 @@ export async function fetchFiltered({
   distinctColumns?: string[]
 }): Promise<any[]> {
   const functionName = 'fetchFiltered'
-  noStore()
   const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
   try {
     let finalQuery = sqlQuery
@@ -96,7 +94,6 @@ export async function fetchTotalPages({
   distinctColumns?: string[]
 }): Promise<number> {
   const functionName = 'fetchTotalPages'
-  noStore()
   try {
     const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
     //

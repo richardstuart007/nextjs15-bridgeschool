@@ -1,7 +1,7 @@
 'use server'
 
 import { z } from 'zod'
-import validateLibrary from '@/src/ui/admin/library/maint-validate'
+import validateLibrary from '@/src/ui/admin/library/validate'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
@@ -41,11 +41,8 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function LibraryMaint(
-  _prevState: StateSetup,
-  formData: FormData
-): Promise<StateSetup> {
-  const functionName = 'LibraryMaint'
+export async function action(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
+  const functionName = 'action'
   //
   //  Validate form data
   //
@@ -161,7 +158,6 @@ export async function LibraryMaint(
     //  Errors
     //
   } catch (error) {
-    console.log(error)
     const errorMessage = 'Database Error: Failed to Update Library.'
     writeLogging(functionName, errorMessage)
     return {

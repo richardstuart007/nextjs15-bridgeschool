@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface Props {
@@ -11,7 +10,6 @@ interface Props {
 
 export async function table_copy_data(Props: Props): Promise<boolean> {
   const functionName = 'table_copy_data'
-  noStore()
 
   try {
     //

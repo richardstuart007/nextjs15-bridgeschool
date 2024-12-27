@@ -1,9 +1,9 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '../../utils/button'
-import { useFormState, useFormStatus } from 'react-dom'
-import { UserEdit } from '@/src/ui/dashboard/user/action'
+import { useFormStatus } from 'react-dom'
+import { action } from '@/src/ui/dashboard/user/action'
 import { notFound } from 'next/navigation'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { COUNTRIES } from '@/src/ui/utils/countries'
@@ -17,10 +17,25 @@ export default function Form() {
   const { sessionContext } = useUserContext()
   const userRecordRef = useRef(null)
   //
-  //  Form action
+  // Define the StateSession type
   //
-  const initialState = { message: null, errors: {} }
-  const [formState, formAction] = useFormState(UserEdit, initialState)
+  type actionState = {
+    errors?: {
+      u_uid?: string[]
+      u_name?: string[]
+      u_fedid?: string[]
+      u_fedcountry?: string[]
+    }
+    message?: string | null
+  }
+  //
+  // Initialize the form state with default empty errors object
+  //
+  const initialState: actionState = {
+    errors: {},
+    message: null
+  }
+  const [formState, formAction] = useActionState(action, initialState)
   //
   //  User State
   //

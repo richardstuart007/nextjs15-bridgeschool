@@ -1,9 +1,9 @@
 'use client'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useActionState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom';
 import { Maint } from '@/src/ui/admin/questions/hands/action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -39,7 +39,7 @@ interface FormProps {
 }
 export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: FormProps) {
   const initialState = { message: null, errors: {} as FormStateErrors, databaseUpdated: false }
-  const [formState, formAction] = useFormState(Maint, initialState)
+  const [formState, formAction] = useActionState(Maint, initialState)
 
   const [hand_value, sethand_value] = useState<(string | null)[]>([])
   //

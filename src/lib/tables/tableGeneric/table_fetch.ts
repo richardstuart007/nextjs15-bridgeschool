@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //
 // Column-value pairs
@@ -24,7 +23,6 @@ export async function table_fetch({
   orderBy
 }: Props): Promise<any[]> {
   const functionName = 'table_fetch'
-  noStore()
   //
   // Start building the query
   //

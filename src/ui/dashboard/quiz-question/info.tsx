@@ -1,5 +1,7 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 
+import type { JSX } from "react";
+
 interface RadioGroupProps {
   question: table_Questions
   QuizInfo: number

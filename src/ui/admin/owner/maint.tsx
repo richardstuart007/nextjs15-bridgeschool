@@ -1,8 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useState, useActionState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useFormStatus } from 'react-dom';
 import { OwnerMaint } from '@/src/ui/admin/owner/maint-action'
 
 interface FormProps {
@@ -12,7 +12,7 @@ interface FormProps {
 
 export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProps) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useFormState(OwnerMaint, initialState)
+  const [formState, formAction] = useActionState(OwnerMaint, initialState)
   //
   //  State and Initial values
   //

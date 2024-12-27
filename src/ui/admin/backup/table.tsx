@@ -67,6 +67,7 @@ export default function Table() {
   //
   useEffect(() => {
     fetchbase()
+    // eslint-disable-next-line
   }, [currentPage])
   //----------------------------------------------------------------------------------------------
   //  Fetch Base

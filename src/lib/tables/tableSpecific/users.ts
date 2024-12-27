@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { table_Users } from '@/src/lib/tables/definitions'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 const USERS_ITEMS_PER_PAGE = 15
@@ -10,7 +10,7 @@ const USERS_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
 export async function fetchUsersFiltered(query: string, currentPage: number) {
   const functionName = 'fetchUsersFiltered'
-  noStore()
+
   const offset = (currentPage - 1) * USERS_ITEMS_PER_PAGE
   try {
     //
@@ -63,7 +63,7 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
 //---------------------------------------------------------------------
 export async function fetchUsersTotalPages(query: string) {
   const functionName = 'fetchUsersTotalPages'
-  noStore()
+
   try {
     //
     //  Build Where clause

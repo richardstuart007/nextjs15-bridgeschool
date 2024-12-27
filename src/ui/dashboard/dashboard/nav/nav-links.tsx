@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type JSX } from 'react';
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'

@@ -17,7 +17,7 @@ export type StateSetup = {
 
 export default async function validateLibrary(record: table_Library): Promise<StateSetup> {
   const { lrlid, lrref, lrowner, lrgroup } = record
-  const errors: StateSetup['errors'] = {}
+  let errors: StateSetup['errors'] = {}
   //
   //  Check for Add duplicate
   //

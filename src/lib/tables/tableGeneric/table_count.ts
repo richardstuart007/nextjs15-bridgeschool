@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //
 // Column-value pairs
@@ -20,7 +19,6 @@ interface Props {
 
 export async function table_count({ table, whereColumnValuePairs }: Props): Promise<number> {
   const functionName = 'table_count'
-  noStore()
   //
   // Build the base SQL query
   //

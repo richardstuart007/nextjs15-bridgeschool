@@ -1,4 +1,18 @@
 'use client'
+import { Bar } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+//
+//  Register the components
+//
+ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 //
 //  Graph Interfaces
 //
@@ -26,15 +40,50 @@ export function StackedBarChart({
   GridDisplayY?: boolean
 }) {
   //
+  // Default background colors for each dataset
+  //
+  const defaultBackgroundColors = [
+    'rgba(75, 192, 192, 0.6)',
+    'rgba(192, 75, 192, 0.6)',
+    'rgba(255, 159, 64, 0.6)',
+    'rgba(54, 162, 235, 0.6)',
+    'rgba(153, 102, 255, 0.6)'
+  ]
+  //
+  // Set the background color to default if not provided in the dataset
+  //
+  const datasetsWithDefaultColors = StackedGraphData.datasets.map((dataset, index) => ({
+    ...dataset,
+    backgroundColor: dataset.backgroundColor || defaultBackgroundColors[index]
+  }))
+  //
+  //  Modify the graph data with the default colors
+  //
+  const modifiedGraphData = {
+    ...StackedGraphData,
+    datasets: datasetsWithDefaultColors
+  }
+  //
+  //  Options
+  //
+  const options = {
+    scales: {
+      x: {
+        stacked: Stacked,
+        grid: {
+          display: GridDisplayX // Remove x-axis gridlines
+        }
+      },
+      y: {
+        stacked: Stacked,
+        grid: {
+          display: GridDisplayY // Remove y-axis gridlines
+        }
+      }
+    }
+  }
+  //
   //  Return the Bar component
   //
-  return (
-    <div>
-      <p>Chart functionality is temporarily unavailable. Waiting for upgrade...</p>
-      <p>Data: {JSON.stringify(StackedGraphData)}</p>
-      <p>Stacked: {Stacked ? 'Yes' : 'No'}</p>
-      <p>Grid Display X: {GridDisplayX ? 'Yes' : 'No'}</p>
-      <p>Grid Display Y: {GridDisplayY ? 'Yes' : 'No'}</p>
-    </div>
-  )
+  return <Bar data={modifiedGraphData} options={options} />
 }

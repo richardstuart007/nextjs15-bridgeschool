@@ -1,5 +1,6 @@
-'use client'
+'use client';
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
+import type { JSX } from "react";
 interface FormProps {
   sessionInfo: structure_SessionsInfo
 }

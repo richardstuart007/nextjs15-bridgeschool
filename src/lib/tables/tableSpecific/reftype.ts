@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { table_Reftype } from '@/src/lib/tables/definitions'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 const MAINT_ITEMS_PER_PAGE = 15
@@ -10,7 +10,7 @@ const MAINT_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
 export async function fetchReftypeFiltered(query: string, currentPage: number) {
   const functionName = 'fetchReftypeFiltered'
-  noStore()
+
   const offset = (currentPage - 1) * MAINT_ITEMS_PER_PAGE
   try {
     //
@@ -133,7 +133,7 @@ export async function buildWhere_reftype(query: string) {
 //---------------------------------------------------------------------
 export async function fetchReftypeTotalPages(query: string) {
   const functionName = 'fetchReftypeTotalPages'
-  noStore()
+
   try {
     //
     //  Build Where clause

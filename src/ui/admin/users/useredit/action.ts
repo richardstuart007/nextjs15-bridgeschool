@@ -33,7 +33,7 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function UserEdit(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
+export async function action(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
   const functionName = 'UserEdit'
   //
   //  Validate form data

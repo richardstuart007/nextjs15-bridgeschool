@@ -2,7 +2,7 @@
 
 import { table_Ownergroup } from '@/src/lib/tables/definitions'
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
@@ -12,7 +12,7 @@ const MAINT_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
 export async function fetchFiltered(query: string, currentPage: number) {
   const functionName = 'fetchFiltered'
-  noStore()
+
   const offset = (currentPage - 1) * MAINT_ITEMS_PER_PAGE
   try {
     //
@@ -139,7 +139,7 @@ export async function buildWhere_Ownergroup(query: string) {
 //---------------------------------------------------------------------
 export async function fetchPages(query: string) {
   const functionName = 'fetchPages'
-  noStore()
+
   try {
     //
     //  Build Where clause
@@ -187,7 +187,7 @@ export async function fetchPages(query: string) {
 //---------------------------------------------------------------------
 export async function update_ogcntquestions(gid: number) {
   const functionName = 'update_ogcntquestions'
-  noStore()
+
   try {
     const rowCount = await table_count({
       table: 'questions',
@@ -223,7 +223,7 @@ export async function update_ogcntquestions(gid: number) {
 //---------------------------------------------------------------------
 export async function update_ogcntlibrary(gid: number) {
   const functionName = 'update_ogcntlibrary'
-  noStore()
+
   try {
     const rowCount = await table_count({
       table: 'library',

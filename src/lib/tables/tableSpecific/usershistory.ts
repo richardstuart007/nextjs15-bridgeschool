@@ -1,14 +1,14 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-import { unstable_noStore as noStore } from 'next/cache'
+
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
 export async function fetchTopResultsData() {
   const functionName = 'fetchTopResultsData'
-  noStore()
+
   // await new Promise(resolve => setTimeout(resolve, 3000))
   try {
     const sqlQueryStatement = `
@@ -68,7 +68,7 @@ export async function fetchTopResultsData() {
 //---------------------------------------------------------------------
 export async function fetchRecentResultsData1() {
   const functionName = 'fetchRecentResultsData1'
-  noStore()
+
   // ???
   // await new Promise(resolve => setTimeout(resolve, 3000))
   try {
@@ -129,7 +129,6 @@ export async function fetchRecentResultsData1() {
 //---------------------------------------------------------------------
 export async function fetchRecentResultsData5(userIds: number[]) {
   const functionName = 'fetchRecentResultsData5'
-  noStore()
 
   try {
     const [id1, id2, id3, id4, id5] = userIds
