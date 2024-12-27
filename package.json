@@ -44,7 +44,7 @@
   "engines": {
     "node": ">=20"
   },
-  "name": "nextjs15upgrade01-bridgeschool",
+  "name": "nextjs15-bridgeschool",
   "description": "Bridge School",
   "version": "4.0.0",
   "main": "next.config.js",
