@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, type JSX } from 'react';
+import { useState, type JSX } from 'react'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
-import Pagination from '@/src/ui/utils/pagination'
+import Pagination from '@/src/ui/utils/paginationState'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
 
 interface QuestionsFormProps {

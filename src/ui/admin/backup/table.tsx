@@ -9,7 +9,7 @@ import { table_copy_data } from '@/src/lib/tables/tableGeneric/table_copy_data'
 import { table_truncate } from '@/src/lib/tables/tableGeneric/table_truncate'
 import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
-import Pagination from '@/src/ui/utils/pagination'
+import Pagination from '@/src/ui/utils/paginationState'
 import { Button } from '@/src/ui/utils/button'
 import { basetables } from '@/src/lib/tables/basetables'
 

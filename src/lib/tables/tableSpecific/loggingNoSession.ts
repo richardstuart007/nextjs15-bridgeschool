@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
-// import { getCookieSessionId } from '@/src/lib/data-cookie'
 //---------------------------------------------------------------------
 //  Write User Logging
 //---------------------------------------------------------------------
@@ -14,9 +13,7 @@ export async function writeLogging(
     //
     //  Get session id
     //
-    let lgsession = 0
-    // const cookie = await getCookieSessionId()
-    // if (cookie) lgsession = parseInt(cookie, 10)
+    const lgsession = 0
     //
     //  Get datetime
     //

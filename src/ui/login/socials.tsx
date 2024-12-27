@@ -2,7 +2,6 @@
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
-
 import { Button } from '@/src/ui/utils/button'
 import { Routes_AfterLogin_redirect } from '@/validroutes'
 export default function Socials() {

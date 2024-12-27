@@ -10,7 +10,7 @@ import {
   fetchReftypeTotalPages
 } from '@/src/lib/tables/tableSpecific/reftype'
 import SearchWithURL from '@/src/ui/utils/search/search-withURL'
-import Pagination from '@/src/ui/utils/pagination'
+import Pagination from '@/src/ui/utils/paginationURL'
 import { useSearchParams } from 'next/navigation'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'

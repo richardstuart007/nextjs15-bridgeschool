@@ -14,7 +14,7 @@ import {
 } from '@/src/lib/tables/tableSpecific/questions'
 import SearchWithState from '@/src/ui/utils/search/search-withState'
 import SearchWithURL from '@/src/ui/utils/search/search-withURL'
-import Pagination from '@/src/ui/utils/pagination'
+import Pagination from '@/src/ui/utils/paginationURL'
 import { useSearchParams } from 'next/navigation'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup'
