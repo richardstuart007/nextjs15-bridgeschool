@@ -7,13 +7,16 @@ import { sql } from '@vercel/postgres'
 export async function writeLogging(
   lgfunctionname: string,
   lgmsg: string,
-  lgseverity: string = 'E'
+  lgseverity: string = 'E',
+  lgsession: number = 0
 ) {
   try {
     //
-    //  Get session id
+    // Skip logging for 'I' severity in production mode
     //
-    let lgsession = 0
+    if (lgseverity === 'I' && process.env.NODE_ENV === 'production') {
+      return null
+    }
     //
     //  Get datetime
     //
