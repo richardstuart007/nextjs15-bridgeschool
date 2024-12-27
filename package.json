@@ -42,7 +42,7 @@
     "prettier-plugin-tailwindcss": "0.5.4"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "name": "nextjs15-bridgeschool",
   "description": "Bridge School",
