@@ -9,7 +9,6 @@ import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 export async function fetchTopResultsData() {
   const functionName = 'fetchTopResultsData'
 
-  // await new Promise(resolve => setTimeout(resolve, 3000))
   try {
     const sqlQueryStatement = `
     SELECT
@@ -70,7 +69,7 @@ export async function fetchRecentResultsData1() {
   const functionName = 'fetchRecentResultsData1'
 
   // ???
-  // await new Promise(resolve => setTimeout(resolve, 3000))
+  // await new Promise(resolve => setTimeout(resolve, ))
   try {
     const sqlQueryStatement = `
     SELECT
