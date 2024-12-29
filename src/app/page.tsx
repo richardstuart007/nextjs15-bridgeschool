@@ -43,7 +43,7 @@ export default function Page() {
       <div className='flex flex-col justify-center items-center gap-6 rounded-lg px-6 py-10'>
         <div className='self-center'>
           <Image
-            src='/logos/bridgelogo.svg'
+            src='/logos/cardslogo.svg'
             width={logoSize}
             height={logoSize}
             priority
