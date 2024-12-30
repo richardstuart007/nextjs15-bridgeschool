@@ -12,6 +12,7 @@ import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
 import Pagination from '@/src/ui/utils/paginationState'
 import { Button } from '@/src/ui/utils/button'
 import { basetables } from '@/src/lib/tables/basetables'
+import { downloadDataAsJSON } from '@/src/lib/tables/backupUtils'
 
 export default function Table() {
   //
@@ -42,6 +43,10 @@ export default function Table() {
   const [tabledata_count_Z, settabledata_count_Z] = useState<number[]>([])
   const [exists_Z, setexists_Z] = useState<boolean[]>([])
   const [prefix_Z, setprefix_Z] = useState<string>('1')
+  //
+  //  Downloads
+  //
+  const [dataDirectory, setDataDirectory] = useState('')
   //
   //  Messages
   //
@@ -219,33 +224,38 @@ export default function Table() {
     //
     setConfirmDialog({ ...confirmDialog, isOpen: false })
     //
-    //  Copy all backup tables
+    //  Duplicate all backup tables sequentially
     //
-    tabledata.forEach((_, index) => {
-      if (!exists_Z[index]) {
-        const tablebase = tabledata[index]
-        const tablebackup = `${backupStartChar}${prefix_Z}${tablebase}`
-        performDup(tablebase, tablebackup)
+    try {
+      for (let index = 0; index < tabledata.length; index++) {
+        if (!exists_Z[index]) {
+          const tablebase = tabledata[index]
+          const tablebackup = `${backupStartChar}${prefix_Z}${tablebase}`
+          await performDup(tablebase, tablebackup, true)
+        }
       }
-    })
-    //
-    //  Completed
-    //
-    setmessage('perform_Dup_ALL completed')
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Dup_ALL completed')
+    } catch (error) {
+      console.error('Error during perform_Dup_ALL:', error)
+      setmessage('Error during perform_Dup_ALL')
+    }
   }
   //----------------------------------------------------------------------------------------------
   //  Perform the Duplicate
   //----------------------------------------------------------------------------------------------
-  async function performDup(tablebase: string, tablebackup: string) {
+  async function performDup(tablebase: string, tablebackup: string, many: boolean = false) {
     try {
-      //
-      //  Loading state
-      //
-      setmessage('performDup')
       //
       //  Reset dialog
       //
-      setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`performDup from ${tablebase} to ${tablebackup}`)
       //
       //  Get index
       //
@@ -258,13 +268,12 @@ export default function Table() {
       //
       // Set the count for the backup table to 0
       //
-
       updexists_Z(index, true)
       updcount_Z(index, 0)
       //
-      //  Loading state
+      //  Status Message
       //
-      setmessage('Task completed')
+      if (!many) setmessage('Task completed')
     } catch (error) {
       console.error('Error during duplicate:', error)
       setmessage('Error during duplicate')
@@ -301,34 +310,41 @@ export default function Table() {
     //  Reset dialog
     //
     setConfirmDialog({ ...confirmDialog, isOpen: false })
+
     //
-    //  Copy all backup tables
+    //  Copy all backup tables sequentially
     //
-    tabledata_Z
-      .filter((_, index) => tabledata_Z[index])
-      .forEach((_, index) => {
-        const tablebackup = tabledata_Z[index]
-        const tablebase = tabledata[index]
-        performCopy(tablebase, tablebackup)
-      })
-    //
-    //  Completed
-    //
-    setmessage('perform_Copy_ALL completed')
+    try {
+      for (let index = 0; index < tabledata_Z.length; index++) {
+        if (tabledata_Z[index]) {
+          const tablebackup = tabledata_Z[index]
+          const tablebase = tabledata[index]
+          await performCopy(tablebase, tablebackup, true)
+        }
+      }
+
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Copy_ALL completed')
+    } catch (error) {
+      console.error('Error during perform_Copy_ALL:', error)
+      setmessage('Error during perform_Copy_ALL')
+    }
   }
   //----------------------------------------------------------------------------------------------
   //  Perform the Copy
   //----------------------------------------------------------------------------------------------
-  async function performCopy(tablebase: string, tablebackup: string) {
+  async function performCopy(tablebase: string, tablebackup: string, many: boolean = false) {
     try {
-      //
-      //  Loading state
-      //
-      setmessage(`Copy Data from (${tablebase}) to (${tablebackup})`)
       //
       //  Reset dialog
       //
-      setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`Copy Data from (${tablebase}) to (${tablebackup})`)
       //
       //  Index check
       //
@@ -343,9 +359,9 @@ export default function Table() {
       //
       updcount_Z(index, tabledata_count[index])
       //
-      //  Loading state
+      //  Status Message
       //
-      setmessage('Task completed')
+      if (!many) setmessage('Task completed')
       //
       //  Errors
       //
@@ -386,31 +402,33 @@ export default function Table() {
     //
     setConfirmDialog({ ...confirmDialog, isOpen: false })
     //
-    //  Clear all backup tables
+    //  Clear all backup tables in parallel
     //
-    tabledata_Z
-      .filter(row => row)
-      .forEach(row => {
-        performClear(row)
-      })
-    //
-    //  Completed
-    //
-    setmessage('perform_Clear_ALL completed')
+    try {
+      const clearPromises = tabledata_Z.filter(row => row).map(row => performClear(row, true))
+      await Promise.all(clearPromises)
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Clear_ALL completed')
+    } catch (error) {
+      console.error('Error during perform_Clear_ALL:', error)
+      setmessage('Error during perform_Clear_ALL')
+    }
   }
   //----------------------------------------------------------------------------------------------
   //  Perform the Clear
   //----------------------------------------------------------------------------------------------
-  async function performClear(tablebackup: string) {
+  async function performClear(tablebackup: string, many: boolean = false) {
     try {
-      //
-      //  Loading state
-      //
-      setmessage(`CLEAR (${tablebackup}) - starting`)
       //
       //  Reset dialog
       //
-      setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`CLEAR (${tablebackup})`)
       //
       //  Get index
       //
@@ -425,9 +443,9 @@ export default function Table() {
       //
       updcount_Z(index, 0)
       //
-      //  Loading state
+      //  Status Message
       //
-      setmessage(`CLEAR (${tablebackup}) - completed`)
+      if (!many) setmessage(`CLEAR (${tablebackup}) - completed`)
       //
       //  Errors
       //
@@ -468,31 +486,36 @@ export default function Table() {
     //
     setConfirmDialog({ ...confirmDialog, isOpen: false })
     //
-    //  Drop all backup tables
+    //  Drop all backup tables sequentially
     //
-    tabledata_Z
-      .filter(row => row)
-      .forEach(row => {
-        performDrop(row)
-      })
-    //
-    //  Completed
-    //
-    setmessage('perform_Drop_ALL completed')
+    try {
+      for (const row of tabledata_Z) {
+        if (row) {
+          await performDrop(row, true)
+        }
+      }
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Drop_ALL completed')
+    } catch (error) {
+      console.error('Error during perform_Drop_ALL:', error)
+      setmessage('Error during perform_Drop_ALL')
+    }
   }
   //----------------------------------------------------------------------------------------------
   //  Perform the Drop
   //----------------------------------------------------------------------------------------------
-  async function performDrop(tablebackup: string) {
+  async function performDrop(tablebackup: string, many: boolean = false) {
     try {
-      //
-      //  Loading state
-      //
-      setmessage(`CLEAR (${tablebackup}) - starting`)
       //
       //  Reset dialog
       //
-      setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`CLEAR (${tablebackup})`)
       //
       //  Index check
       //
@@ -508,15 +531,101 @@ export default function Table() {
       updexists_Z(index, false)
       updcount_Z(index, 0)
       //
-      //  Loading state
+      //  Status Message
       //
-      setmessage(`DROP (${tablebackup}) - completed`)
+      if (!many) setmessage(`DROP (${tablebackup}) - completed`)
       //
       //  Errors
       //
     } catch (error) {
       console.error('Error during table_drop:', error)
       setmessage('Error during table_drop')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Down ALL
+  //----------------------------------------------------------------------------------------------
+  function handleDownClick_ALL() {
+    const dirPath = `C:/backups/${dataDirectory}`
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Down ALL',
+      subTitle: `Are you sure you want to Down to directory ${dirPath}/ ?`,
+      onConfirm: () => perform_Down_ALL()
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Down
+  //----------------------------------------------------------------------------------------------
+  function handleDownClick(tablebase: string) {
+    const tabledown = `${tablebase}.json`
+    const dirPath = `C:/backups/${dataDirectory}`
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Down',
+      subTitle: `Are you sure you want to Down Data from (${tablebase}) to (${dirPath}/${tabledown}) ?`,
+      onConfirm: () => performDown(tablebase, tabledown)
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the Down ALL
+  //----------------------------------------------------------------------------------------------
+  async function perform_Down_ALL() {
+    //
+    //  Reset dialog
+    //
+    setConfirmDialog({ ...confirmDialog, isOpen: false })
+    //
+    //  Perform all sequentially
+    //
+    try {
+      for (const tablebase of tabledata) {
+        const tabledown = `${tablebase}.json`
+        await performDown(tablebase, tabledown, true)
+      }
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Down_ALL completed')
+    } catch (error) {
+      console.error('Error during perform_Down_ALL:', error)
+      setmessage('Error during perform_Down_ALL')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the Down
+  //----------------------------------------------------------------------------------------------
+  async function performDown(tablebase: string, tabledown: string, many: boolean = false) {
+    try {
+      //
+      //  Reset dialog
+      //
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`Down Data from (${tablebase}) to (${tabledown})`)
+      //
+      //  Index check
+      //
+      const index = tabledata.findIndex(row => row === tablebase)
+      if (tabledata_count[index] === 0) return
+      //
+      // Call the server function to Download
+      //
+      const query = `SELECT json_agg(t) FROM ${tablebase} t`
+      const dirPath = `C:/backups/${dataDirectory}`
+      await downloadDataAsJSON(query, dirPath, tabledown)
+      //
+      //  Status Message
+      //
+      if (!many) setmessage('Task completed')
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.error('Error during table_copy_data:', error)
+      setmessage('Error during copy_data')
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -546,6 +655,7 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
+
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -559,6 +669,24 @@ export default function Table() {
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left font-normal text-xs'>
+            <tr>
+              <td colSpan={9}></td>
+              <td className='font-medium px-2 text-center'>
+                <label htmlFor='dataDirectory' className='sr-only'>
+                  Data Directory
+                </label>
+                <input
+                  id='dataDirectory'
+                  name='dataDirectory'
+                  className={`w-40 rounded-md border border-gray-300 py-1 px-2 text-xs`}
+                  type='text'
+                  value={dataDirectory}
+                  onChange={e => setDataDirectory(e.target.value)}
+                />
+              </td>
+            </tr>
+          </thead>
           <thead className='rounded-lg text-left font-normal text-xs'>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
@@ -591,6 +719,9 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Copy Data
               </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Down Data
+              </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
@@ -618,7 +749,7 @@ export default function Table() {
                 <input
                   id='prefixZ'
                   name='prefixZ'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  className={`w-20 rounded-md border border-blue-500  py-2 font-normal text-xs`}
                   type='text'
                   value={prefix_Z}
                   onChange={e => {
@@ -689,6 +820,19 @@ export default function Table() {
                       overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
                     >
                       Copy ALL
+                    </Button>
+                  </div>
+                )}
+              </th>
+              {/* ................................................... */}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                {tabledata.length > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleDownClick_ALL()}
+                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    >
+                      Down ALL
                     </Button>
                   </div>
                 )}
@@ -774,6 +918,18 @@ export default function Table() {
                         </Button>
                       </div>
                     )}
+                  </td>
+
+                  {/* Down Button -  */}
+                  <td className='px-2 py-1 text-center'>
+                    <div className='inline-flex justify-center items-center'>
+                      <Button
+                        onClick={() => handleDownClick(tabledata)}
+                        overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                      >
+                        Down
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               )
