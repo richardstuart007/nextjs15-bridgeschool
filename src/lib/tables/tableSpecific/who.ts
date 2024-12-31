@@ -61,7 +61,7 @@ export async function fetchWhoFiltered(query: string, currentPage: number) {
 //---------------------------------------------------------------------
 //  Who where clause
 //---------------------------------------------------------------------
-export async function buildWhere_Who(query: string) {
+async function buildWhere_Who(query: string) {
   //
   //  Empty search
   //

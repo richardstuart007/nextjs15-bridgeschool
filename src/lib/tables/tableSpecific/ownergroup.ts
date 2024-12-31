@@ -62,7 +62,7 @@ export async function fetchFiltered(query: string, currentPage: number) {
 //---------------------------------------------------------------------
 //  ownergroup where clause
 //---------------------------------------------------------------------
-export async function buildWhere_Ownergroup(query: string) {
+async function buildWhere_Ownergroup(query: string) {
   //
   //  Empty search
   //

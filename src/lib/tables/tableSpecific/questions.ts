@@ -60,7 +60,7 @@ export async function fetchQuestionsFiltered(query: string, currentPage: number)
 //---------------------------------------------------------------------
 //  questions where clause
 //---------------------------------------------------------------------
-export async function buildWhere_questions(query: string) {
+async function buildWhere_questions(query: string) {
   //
   //  Empty search
   //

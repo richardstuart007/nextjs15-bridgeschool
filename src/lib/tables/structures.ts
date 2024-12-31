@@ -1,28 +1,3 @@
-import { DateTime } from 'next-auth/providers/kakao'
-
-export type structure_HistoryGroup = {
-  r_hid: number
-  r_datetime: DateTime
-  r_owner: string
-  r_group: string
-  r_questions: number
-  r_qid: number[]
-  r_ans: number[]
-  r_uid: number
-  r_points: number[]
-  r_maxpoints: number
-  r_totalpoints: number
-  r_correctpercent: number
-  r_gid: number
-  r_sid: number
-  ogowner: string
-  oggroup: string
-  ogtitle: string
-  ogcntquestions: number
-  ogcntlibrary: number
-  u_name: string
-}
-
 export type structure_SessionsInfo = {
   bsuid: number
   bsname: string

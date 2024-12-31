@@ -61,7 +61,7 @@ export async function fetchReftypeFiltered(query: string, currentPage: number) {
 //---------------------------------------------------------------------
 //  reftype where clause
 //---------------------------------------------------------------------
-export async function buildWhere_reftype(query: string) {
+async function buildWhere_reftype(query: string) {
   //
   //  Empty search
   //

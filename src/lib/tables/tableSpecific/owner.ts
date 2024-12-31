@@ -60,7 +60,7 @@ export async function fetchOwnerFiltered(query: string, currentPage: number) {
 //---------------------------------------------------------------------
 //  Owner where clause
 //---------------------------------------------------------------------
-export async function buildWhere_Owner(query: string) {
+async function buildWhere_Owner(query: string) {
   //
   //  Empty search
   //

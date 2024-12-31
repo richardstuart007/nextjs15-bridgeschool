@@ -110,7 +110,7 @@ export async function fetchUsersTotalPages(query: string) {
 //---------------------------------------------------------------------
 //  Users where clause
 //---------------------------------------------------------------------
-export async function buildWhere_Users(query: string) {
+async function buildWhere_Users(query: string) {
   const functionName = 'buildWhere_Users'
   try {
     //
