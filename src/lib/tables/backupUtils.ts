@@ -293,11 +293,7 @@ export async function downloadDataAsJSON(
     //
     // Log the query
     //
-    writeLogging(
-      functionName,
-      `Query: ${query} dirPath: ${dirPath} file_outName: ${file_outName}`,
-      'I'
-    )
+    writeLogging(functionName, `${query} dirPath: ${dirPath} file_outName: ${file_outName}`, 'I')
     //
     // Execute the query
     //

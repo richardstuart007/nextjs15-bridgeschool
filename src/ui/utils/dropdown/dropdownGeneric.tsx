@@ -49,15 +49,17 @@ export default function DropdownGeneric({
         }
 
         if (table) {
-          if (tableColumn && tableColumnValue) {
-            return table_fetch({
-              table,
-              whereColumnValuePairs: [{ column: tableColumn, value: tableColumnValue }],
-              orderBy
-            })
+          const fetchParams: any = {
+            table,
+            orderBy: orderBy || optionLabel,
+            columns: optionLabel === optionValue ? [optionLabel] : [optionLabel, optionValue],
+            distinct: true
           }
 
-          return table_fetch({ table, orderBy })
+          if (tableColumn && tableColumnValue) {
+            fetchParams.whereColumnValuePairs = [{ column: tableColumn, value: tableColumnValue }]
+          }
+          return table_fetch(fetchParams)
         }
 
         throw new Error('Either tableData or table must be provided')

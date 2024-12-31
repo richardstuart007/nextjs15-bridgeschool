@@ -28,7 +28,7 @@ export async function table_copy_data(Props: Props): Promise<boolean> {
     //
     // Log the query
     //
-    writeLogging(functionName, `Query: ${sqlQuery}`, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     // Execute the query
     //

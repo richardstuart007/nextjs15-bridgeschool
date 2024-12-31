@@ -38,8 +38,11 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //
     //  Logging
     //
-    const message = `Query: ${sqlQuery}, Values: ${JSON.stringify(values)}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
+      'I'
+    )
     //
     //  Execute the sql
     //

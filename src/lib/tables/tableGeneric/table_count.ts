@@ -40,7 +40,11 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     //
     //  Logging
     //
-    writeLogging(functionName, `Query: ${sqlQuery}, Values: ${JSON.stringify(values)}`, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
+      'I'
+    )
     //
     // Execute the query
     //

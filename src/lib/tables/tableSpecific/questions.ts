@@ -151,8 +151,7 @@ export async function fetchQuestionsTotalPages(query: string) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${sqlWhere}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //
@@ -194,7 +193,7 @@ export async function getNextSeq(qowner: string, qgroup: string) {
     //
     //  Logging
     //
-    const message = `Query: ${sqlQuery}, Values: ${JSON.stringify([qowner, qgroup])}`
+    const message = `${sqlQuery}, Values: ${JSON.stringify([qowner, qgroup])}`
     writeLogging(functionName, message, 'I')
     //
     //  Run sql Query

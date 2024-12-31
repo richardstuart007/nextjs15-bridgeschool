@@ -58,10 +58,14 @@ export async function table_delete({
     //
     let data
     if (values.length > 0) {
-      writeLogging(functionName, `Query: ${sqlQuery}, Values: ${JSON.stringify(values)}`, 'I')
+      writeLogging(
+        functionName,
+        `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
+        'I'
+      )
       data = await sql.query(sqlQuery, values)
     } else {
-      writeLogging(functionName, `Query: ${sqlQuery}`, 'I')
+      writeLogging(functionName, sqlQuery, 'I')
       data = await sql.query(sqlQuery)
     }
     //

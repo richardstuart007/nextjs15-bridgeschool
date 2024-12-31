@@ -303,7 +303,6 @@ export default function Table() {
     }
   }
   //----------------------------------------------------------------------------------------------
-  console.log(tabledata)
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -396,8 +395,7 @@ export default function Table() {
                     name='owner'
                     table='usersowner'
                     tableColumn='uouid'
-                    tableColumnValue={uid}
-                    orderBy='uouid, uoowner'
+                    tableColumnValue={sessionContext.cxuid}
                     optionLabel='uoowner'
                     optionValue='uoowner'
                     dropdownWidth='w-28'
@@ -418,7 +416,6 @@ export default function Table() {
                       table='ownergroup'
                       tableColumn='ogowner'
                       tableColumnValue={owner}
-                      orderBy='ogowner, oggroup'
                       optionLabel='ogtitle'
                       optionValue='oggroup'
                       dropdownWidth='w-36'
@@ -541,8 +538,8 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
-              tabledata?.map(tabledata => (
-                <tr key={tabledata.r_hid} className='w-full border-b'>
+              tabledata?.map((tabledata, index) => (
+                <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
                   {show_gid && <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>}
                   {show_owner && <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>}
                   {show_group && <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>}

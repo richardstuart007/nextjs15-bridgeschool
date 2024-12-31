@@ -36,8 +36,11 @@ export async function fetchFiltered(query: string, currentPage: number) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQuery}${queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''}`,
+      'I'
+    )
     //
     //  Execute SQL
     //
@@ -158,8 +161,7 @@ export async function fetchPages(query: string) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${sqlWhere}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //

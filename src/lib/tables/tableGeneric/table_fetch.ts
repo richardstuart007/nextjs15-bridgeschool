@@ -16,17 +16,22 @@ interface Props {
   table: string
   whereColumnValuePairs?: ColumnValuePair[]
   orderBy?: string
+  distinct?: boolean
+  columns?: string[] // List of columns to include in the SELECT statement
 }
 export async function table_fetch({
   table,
   whereColumnValuePairs,
-  orderBy
+  orderBy,
+  distinct = false,
+  columns
 }: Props): Promise<any[]> {
   const functionName = 'table_fetch'
   //
   // Start building the query
   //
-  let sqlQuery = `SELECT * FROM ${table}`
+  const selectedColumns = columns?.join(', ') || '*' // Use provided columns or default to '*'
+  let sqlQuery = `SELECT ${distinct ? 'DISTINCT' : ''} ${selectedColumns} FROM ${table}`
   try {
     const values: (string | number)[] = []
     //
@@ -47,7 +52,11 @@ export async function table_fetch({
     //
     // Log the query and values
     //
-    writeLogging(functionName, `Query: ${sqlQuery}, Values: ${JSON.stringify(values)}`, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
+      'I'
+    )
     //
     // Execute the query
     //
@@ -57,11 +66,11 @@ export async function table_fetch({
     //
     return data.rows.length > 0 ? data.rows : []
     //
-    //  Errors
+    // Errors
     //
   } catch (error) {
     //
-    //  Logging
+    // Logging
     //
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)

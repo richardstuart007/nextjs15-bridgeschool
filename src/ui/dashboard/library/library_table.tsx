@@ -505,7 +505,6 @@ export default function Table({
                       setSelectedOption={setowner}
                       name='owner'
                       table='owner'
-                      orderBy='oowner'
                       optionLabel='oowner'
                       optionValue='oowner'
                       dropdownWidth='w-28'
@@ -520,7 +519,6 @@ export default function Table({
                       table='usersowner'
                       tableColumn='uouid'
                       tableColumnValue={uid}
-                      orderBy='uouid, uoowner'
                       optionLabel='uoowner'
                       optionValue='uoowner'
                       dropdownWidth='w-28'
@@ -544,7 +542,6 @@ export default function Table({
                       table='ownergroup'
                       tableColumn='ogowner'
                       tableColumnValue={owner}
-                      orderBy='ogowner, oggroup'
                       optionLabel='ogtitle'
                       optionValue='oggroup'
                       dropdownWidth='w-36'
@@ -607,7 +604,6 @@ export default function Table({
                     setSelectedOption={setwho}
                     name='who'
                     table='who'
-                    orderBy='wtitle'
                     optionLabel='wtitle'
                     optionValue='wwho'
                     dropdownWidth='w-28'
@@ -625,7 +621,6 @@ export default function Table({
                     setSelectedOption={settype}
                     name='type'
                     table='reftype'
-                    orderBy='rttitle'
                     optionLabel='rttitle'
                     optionValue='rttype'
                     dropdownWidth='w-28'

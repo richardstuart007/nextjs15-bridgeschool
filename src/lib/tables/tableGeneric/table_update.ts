@@ -54,8 +54,11 @@ export async function table_update({
     //
     //  Log the sql
     //
-    const lgmsg = `Query: ${sqlQuery}, Values: ${JSON.stringify(values)}`
-    writeLogging(functionName, lgmsg, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
+      'I'
+    )
     //
     //  Execute the sql
     //

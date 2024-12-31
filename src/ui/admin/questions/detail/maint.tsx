@@ -1,8 +1,8 @@
 'use client'
-import { useState, useActionState } from 'react';
+import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom'
 import { Maint_detail } from '@/src/ui/admin/questions/detail/action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -48,7 +48,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   }
 
   return (
-    (<form action={formAction} className='space-y-3 '>
+    <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
         {/*  ...................................................................................*/}
         {/*  ID  */}
@@ -75,7 +75,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             name='qowner'
             label='Owner'
             table='owner'
-            orderBy='oowner'
             optionLabel='oowner'
             optionValue='oowner'
             dropdownWidth='w-72'
@@ -83,7 +82,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           />
         ) : (
           /* -----------------Edit ------------------*/
-          (<>
+          <>
             <div className='mt-2'>
               <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qowner'>
                 Owner
@@ -95,7 +94,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 <input id='qowner' type='hidden' name='qowner' value={qowner} />
               </>
             </div>
-          </>)
+          </>
         )}
         {/*  ...................................................................................*/}
         {/*   Owner Group */}
@@ -109,7 +108,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             table='ownergroup'
             tableColumn='ogowner'
             tableColumnValue={qowner}
-            orderBy='ogowner, oggroup'
             optionLabel='oggroup'
             optionValue='ogroup'
             dropdownWidth='w-72'
@@ -117,7 +115,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           />
         ) : (
           /* -----------------Edit ------------------*/
-          (<>
+          <>
             <div className='mt-2'>
               <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qgroup'>
                 Owner Group
@@ -129,7 +127,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 <input id='qgroup' type='hidden' name='qgroup' value={qgroup} />
               </>
             </div>
-          </>)
+          </>
         )}
         {/*  ...................................................................................*/}
         {/*  Seq  */}
@@ -186,6 +184,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         </div>
         {/*  ...................................................................................*/}
       </div>
-    </form>)
-  );
+    </form>
+  )
 }

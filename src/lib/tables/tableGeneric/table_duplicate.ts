@@ -27,7 +27,7 @@ export async function table_duplicate(TableDup: TableDup): Promise<boolean> {
     //
     // Log the query
     //
-    writeLogging(functionName, `Query: ${sqlQuery}`, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     // Execute the query
     //

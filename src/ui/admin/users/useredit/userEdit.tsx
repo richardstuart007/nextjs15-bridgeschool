@@ -132,7 +132,6 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
               name='u_fedcountry'
               label={`Bridge Federation Country (${u_fedcountry})`}
               tableData={COUNTRIES}
-              orderBy='oowner'
               optionLabel='label'
               optionValue='code'
               dropdownWidth='w-72'

@@ -12,7 +12,7 @@ export async function table_truncate(table: string): Promise<boolean> {
     //
     // Logging
     //
-    writeLogging(functionName, `Query: ${sqlQuery}`, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     // Run query
     //

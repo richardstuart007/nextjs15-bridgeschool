@@ -145,7 +145,6 @@ export async function fetchWhoTotalPages(query: string) {
     const sqlQueryStatement = `SELECT COUNT(*)
     FROM who
     ${sqlWhere}`
-    const queryValues = [sqlWhere]
     //
     // Remove redundant spaces
     //
@@ -153,8 +152,7 @@ export async function fetchWhoTotalPages(query: string) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //

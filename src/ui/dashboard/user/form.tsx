@@ -149,7 +149,6 @@ export default function Form() {
             name='u_fedcountry'
             label={`Bridge Federation Country (${u_fedcountry})`}
             tableData={COUNTRIES}
-            orderBy='oowner'
             optionLabel='label'
             optionValue='code'
             dropdownWidth='w-72'

@@ -83,8 +83,7 @@ export async function fetchUsersTotalPages(query: string) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${sqlWhere}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //

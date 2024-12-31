@@ -107,14 +107,21 @@ export async function fetchTotalPages({
       countQuery = `SELECT COUNT(*) FROM (${sqlQuery.replace('SELECT *', `SELECT DISTINCT ON (${distinctColumns.join(', ')}) *`)}) AS distinct_records`
     }
     //
+    // Strip blanks
+    //
+    const sqlQueryupd = countQuery.replace(/\s+/g, ' ').trim()
+    //
     // Logging
     //
-    const message = `Query: ${countQuery} Values: ${JSON.stringify(queryValues)}`
-    writeLogging(functionName, message, 'I')
+    writeLogging(
+      functionName,
+      `${sqlQueryupd}${queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''}`,
+      'I'
+    )
     //
     // Execute Query
     //
-    const result = await sql.query(countQuery.replace(/\s+/g, ' ').trim(), queryValues)
+    const result = await sql.query(sqlQueryupd, queryValues)
     //
     // Calculate Total Pages
     //
