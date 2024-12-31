@@ -1,11 +1,11 @@
 'use server'
 
 import { signOut } from '@/auth'
-import { navsignout } from '@/src/lib/tables/tableSpecific/sessions'
+import { deleteCookie } from '@/src/lib/data-cookie'
 // ----------------------------------------------------------------------
 //  Sign out
 // ----------------------------------------------------------------------
 export async function logout() {
-  await navsignout()
+  await deleteCookie('SessionId')
   await signOut({ redirectTo: '/login' })
 }

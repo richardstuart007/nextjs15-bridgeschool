@@ -1,4 +1,4 @@
-import { useState, useEffect, type JSX } from 'react';
+import { useState, useEffect, type JSX } from 'react'
 
 interface RadioOption {
   id: string
@@ -31,7 +31,7 @@ export default function RadioGroup(props: RadioGroupProps): JSX.Element {
     //  If the value is not a number, throw an error in development mode
     //
     if (isNaN(int)) {
-      if (process.env.NODE_ENV !== 'production') {
+      if (process.env.CUSTOM_ENV !== 'production') {
         throw new Error(`Invalid value "${value}" for radio button option`)
       }
       return

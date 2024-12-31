@@ -29,7 +29,6 @@ export type structure_SessionsInfo = {
   bsemail: string
   bsadmin: boolean
   bsid: number
-  bssignedin: boolean
   bssortquestions: boolean
   bsskipcorrect: boolean
   bsdftmaxquestions: number

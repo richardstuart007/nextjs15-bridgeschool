@@ -79,7 +79,6 @@ export type table_Sessions = {
   s_id: number
   s_datetime: DateTime
   s_uid: number
-  s_signedin: boolean
   s_sortquestions: boolean
   s_skipcorrect: boolean
   s_dftmaxquestions: number

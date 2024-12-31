@@ -14,7 +14,7 @@ export async function writeLogging(
     //
     // Skip logging for 'I' severity in production mode
     //
-    if (lgseverity === 'I' && process.env.NODE_ENV === 'production') {
+    if (lgseverity === 'I' && process.env.CUSTOM_ENV === 'production') {
       return null
     }
     //

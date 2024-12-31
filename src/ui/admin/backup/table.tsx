@@ -12,7 +12,7 @@ import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
 import Pagination from '@/src/ui/utils/paginationState'
 import { Button } from '@/src/ui/utils/button'
 import { basetables } from '@/src/lib/tables/basetables'
-import { downloadDataAsJSON } from '@/src/lib/tables/backupUtils'
+import { downloadDataAsJSON, listFilesInDirectory } from '@/src/lib/tables/backupUtils'
 
 export default function Table() {
   //
@@ -29,6 +29,7 @@ export default function Table() {
   const rowsPerPage = 20
   const schemaname = 'public'
   const backupStartChar = 'z_'
+  const dirPathPrefix = 'C:/backups/'
   //
   //  Base Data
   //
@@ -47,6 +48,7 @@ export default function Table() {
   //  Downloads
   //
   const [dataDirectory, setDataDirectory] = useState('')
+  const [exists_D, setexists_D] = useState<boolean[]>([])
   //
   //  Messages
   //
@@ -184,6 +186,34 @@ export default function Table() {
       settabledata_count_Z(rowCountsZ)
       const exists = backuptables.map(table => filteredZ.some(row => row?.tablename === table))
       setexists_Z(exists)
+      //
+      // Clear loading state
+      //
+      setmessage('Task completed')
+    } catch (error) {
+      setmessage('Error fetching tables')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Fetch download file
+  //----------------------------------------------------------------------------------------------
+  async function fetchdirectory() {
+    try {
+      //
+      // Loading state
+      //
+      setmessage('Fetching directory tables...')
+      //
+      // Construct filters dynamically from input fields
+      //
+      const dirPath = `${dirPathPrefix}${dataDirectory}`
+      const dirTables = await listFilesInDirectory(dirPath)
+      //
+      //  Update State
+      //
+      const strippedDirTables = dirTables.map(table => table.replace('.json', ''))
+      const exists = tabledata.map(table => (strippedDirTables.includes(table) ? true : false))
+      setexists_D(exists)
       //
       // Clear loading state
       //
@@ -546,11 +576,11 @@ export default function Table() {
   //  Down ALL
   //----------------------------------------------------------------------------------------------
   function handleDownClick_ALL() {
-    const dirPath = `C:/backups/${dataDirectory}`
+    const dirPath = `${dirPathPrefix}${dataDirectory}`
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Down ALL',
-      subTitle: `Are you sure you want to Down to directory ${dirPath}/ ?`,
+      subTitle: `Are you sure you want to Down to directory ${dirPath} ?`,
       onConfirm: () => perform_Down_ALL()
     })
   }
@@ -559,7 +589,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   function handleDownClick(tablebase: string) {
     const tabledown = `${tablebase}.json`
-    const dirPath = `C:/backups/${dataDirectory}`
+    const dirPath = `${dirPathPrefix}${dataDirectory}`
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Down',
@@ -614,8 +644,12 @@ export default function Table() {
       // Call the server function to Download
       //
       const query = `SELECT json_agg(t) FROM ${tablebase} t`
-      const dirPath = `C:/backups/${dataDirectory}`
+      const dirPath = `${dirPathPrefix}${dataDirectory}`
       await downloadDataAsJSON(query, dirPath, tabledown)
+      //
+      // Update exists
+      //
+      updexists_D(index, true)
       //
       //  Status Message
       //
@@ -642,13 +676,26 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
-  //  Update count_Z
+  //  Update exists_Z
   //----------------------------------------------------------------------------------------------
   async function updexists_Z(index: number, value: boolean) {
     //
     //  Update the latest version
     //
     setexists_Z(prev => {
+      const updateexists = [...prev]
+      updateexists[index] = value
+      return updateexists
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Update exists_D
+  //----------------------------------------------------------------------------------------------
+  async function updexists_D(index: number, value: boolean) {
+    //
+    //  Update the latest version
+    //
+    setexists_D(prev => {
       const updateexists = [...prev]
       updateexists[index] = value
       return updateexists
@@ -722,6 +769,9 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Down Data
               </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Exists
+              </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
@@ -732,7 +782,7 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-right'>
                 <div className='inline-flex justify-center items-center'>
                   <Button
-                    onClick={fetchbase}
+                    onClick={() => fetchbase()}
                     overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
                   >
                     Refresh
@@ -762,7 +812,7 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 <div className='inline-flex justify-center items-center'>
                   <Button
-                    onClick={fetchbackup}
+                    onClick={() => fetchbackup()}
                     overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
                   >
                     Refresh
@@ -838,6 +888,19 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                {tabledata.length > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => fetchdirectory()}
+                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    >
+                      Refresh
+                    </Button>
+                  </div>
+                )}
+              </th>
+              {/* ................................................... */}
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
@@ -847,6 +910,8 @@ export default function Table() {
             {tabledata?.map((tabledata, index) => {
               // Check if the Z table exists
               const existsInZ = exists_Z[index] || false
+              const existsInD = exists_D[index] || false
+              const existsInB = tabledata_count[index] || false
               return (
                 <tr key={tabledata} className='w-full border-b'>
                   {/* Table Name */}
@@ -922,15 +987,18 @@ export default function Table() {
 
                   {/* Down Button -  */}
                   <td className='px-2 py-1 text-center'>
-                    <div className='inline-flex justify-center items-center'>
-                      <Button
-                        onClick={() => handleDownClick(tabledata)}
-                        overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
-                      >
-                        Down
-                      </Button>
-                    </div>
+                    {existsInB && (
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleDownClick(tabledata)}
+                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                        >
+                          Down
+                        </Button>
+                      </div>
+                    )}
                   </td>
+                  <td className='px-2 pt-2 text-center'>{existsInD ? 'Y' : ''}</td>
                 </tr>
               )
             })}

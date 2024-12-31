@@ -4,86 +4,9 @@ import { sql } from '@vercel/postgres'
 
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
-import { deleteCookie, getCookieSessionId } from '@/src/lib/data-cookie'
+import { getCookieSessionId } from '@/src/lib/data-cookie'
 //---------------------------------------------------------------------
-//  Update Sessions to signed out
-//---------------------------------------------------------------------
-export async function SessionsSignout(s_id: number) {
-  const functionName = 'SessionsSignout'
-  try {
-    const sqlQueryStatement = `
-    UPDATE sessions
-    SET
-      s_signedin = false
-    WHERE s_id = $1
-    `
-    const queryValues = [s_id]
-    //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
-    await sql.query(sqlQuery, queryValues)
-    //
-    //  Errors
-    //
-  } catch (error) {
-    //
-    //  Logging
-    //
-    console.error(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
-    return {
-      message: 'SessionsSignout: Failed to Update session.'
-    }
-  }
-}
-//---------------------------------------------------------------------
-//  Update User Sessions to signed out - ALL
-//---------------------------------------------------------------------
-export async function SessionsSignoutAll() {
-  const functionName = 'SessionsSignoutAll'
-  try {
-    const sqlQueryStatement = `
-    UPDATE sessions
-    SET
-      s_signedin = false
-    WHERE
-      s_signedin = true AND
-      s_datetime < NOW() - INTERVAL '3 HOURS'
-    `
-    //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
-    //  Run sql Query
-    //
-    await sql.query(sqlQuery)
-    //
-    //  Errors
-    //
-  } catch (error) {
-    //
-    //  Logging
-    //
-    console.error(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
-    return {
-      message: 'SessionsSignoutAll: Failed to Update ssession.'
-    }
-  }
-}
-//---------------------------------------------------------------------
-//  Update Sessions to signed out
+//  Update Sessions
 //---------------------------------------------------------------------
 export async function UpdateSessions(
   s_id: number,
@@ -143,7 +66,6 @@ export async function fetchSessionInfo(sessionId: number) {
         u_email,
         u_admin,
         s_id,
-        s_signedin,
         s_sortquestions,
         s_skipcorrect,
         s_dftmaxquestions
@@ -176,44 +98,11 @@ export async function fetchSessionInfo(sessionId: number) {
       bsemail: row.u_email,
       bsadmin: row.u_admin,
       bsid: row.s_id,
-      bssignedin: row.s_signedin,
       bssortquestions: row.s_sortquestions,
       bsskipcorrect: row.s_skipcorrect,
       bsdftmaxquestions: row.s_dftmaxquestions
     }
     return structure_SessionsInfo
-    //
-    //  Errors
-    //
-  } catch (error) {
-    //
-    //  Logging
-    //
-    console.error(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
-  }
-}
-// ----------------------------------------------------------------------
-//  Nav signout
-// ----------------------------------------------------------------------
-export async function navsignout() {
-  const functionName = 'navsignout'
-  try {
-    //
-    //  Get the Bridge School session cookie
-    //
-    const sessionId = await getCookieSessionId()
-    if (!sessionId) return
-    //
-    //  Update the session to signed out
-    //
-    const s_id = parseInt(sessionId, 10)
-    await SessionsSignout(s_id)
-    //
-    //  Delete the cookie
-    //
-    await deleteCookie('SessionId')
     //
     //  Errors
     //

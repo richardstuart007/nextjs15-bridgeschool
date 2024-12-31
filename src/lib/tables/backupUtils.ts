@@ -97,7 +97,7 @@ export async function listFilesInDirectory(dirPath: string): Promise<string[]> {
   try {
     // Check if the directory exists
     if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
-      writeLogging(functionName, `The provided path is not a valid directory`, 'E')
+      writeLogging(functionName, `The provided path (${dirPath}) is not a valid directory`, 'E')
       return []
     }
 

@@ -1,8 +1,9 @@
 'use client'
-import { useState, useEffect, useActionState } from 'react';
+import React from 'react'
+import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/questions/bidding/action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -82,12 +83,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     //  Unpack arrays into form fields
     //
     let formIdx = 0
-    let roundCnt = 0
     Rounds?.forEach(round => {
-      roundCnt++
-      let bidCnt = 0
       round.forEach(bid => {
-        bidCnt++
         //
         //  Convert N to empty string
         //
@@ -173,11 +170,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {/* Row Label */}
           {/*  ...................................................................................*/}
           {['1', '2', '3', '4', '5', '6', '7'].map((label, rowIndex) => (
-            <>
+            <React.Fragment key={`row-${rowIndex}`}>
               <div className='flex items-center justify-center font-bold'>{label}</div>
-              {/*  ...................................................................................*/}
-              {/* Row of Inputs */}
-              {/*  ...................................................................................*/}
               {Array.from({ length: 4 }).map((_, colIndex) => {
                 const inputName = bidding_names[
                   rowIndex * 4 + colIndex
@@ -185,7 +179,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 const inputValue = (bidding_value[rowIndex * 4 + colIndex] || '') as string
 
                 return (
-                  <div key={`${label}-${colIndex}`} className='col-span-1 mb-2'>
+                  <div key={`cell-${rowIndex}-${colIndex}`} className='col-span-1 mb-2'>
                     <input
                       name={inputName}
                       value={inputValue}
@@ -201,7 +195,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                   </div>
                 )
               })}
-            </>
+            </React.Fragment>
           ))}
         </div>
         {/*  ...................................................................................*/}
