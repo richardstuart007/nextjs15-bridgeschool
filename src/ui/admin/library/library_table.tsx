@@ -10,7 +10,6 @@ import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import Link from 'next/link'
 import { useUserContext } from '@/UserContext'
 import { Button } from '@/src/ui/utils/button'
 
@@ -18,14 +17,8 @@ interface FormProps {
   selected_gid?: number | null
   selected_owner?: string | null
   selected_group?: string | null
-  maintMode?: boolean | null
 }
-export default function Table({
-  selected_gid,
-  selected_owner,
-  selected_group,
-  maintMode = false
-}: FormProps) {
+export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
   //
   //  User context
   //
@@ -55,14 +48,14 @@ export default function Table({
   //
   //  Show columns
   //
-  const [show_gid, setshow_gid] = useState(maintMode)
+  const [show_gid, setshow_gid] = useState(true)
   const [show_owner, setshow_owner] = useState(false)
   const [show_group, setshow_group] = useState(false)
   const [show_lid, setshow_lid] = useState(false)
   const [show_who, setshow_who] = useState(false)
   const [show_ref, setshow_ref] = useState(false)
   const [show_type, setshow_type] = useState(false)
-  const [show_questions, setshow_questions] = useState(!maintMode)
+  const [show_questions, setshow_questions] = useState(false)
   //
   //  Data
   //
@@ -214,12 +207,6 @@ export default function Table({
       { column: 'ogcntquestions', value: questions, operator: '>=' }
     ]
     //
-    // Add the 'uouid' filter if not in maintMode
-    //
-    if (!maintMode) {
-      filtersToUpdate.push({ column: 'uouid', value: uid, operator: '=' })
-    }
-    //
     // Filter out any entries where `value` is not defined or empty
     //
     const updatedFilters = filtersToUpdate.filter(filter => filter.value)
@@ -228,7 +215,7 @@ export default function Table({
     //
     setFilters(updatedFilters)
     setShouldFetchData(true)
-  }, [uid, owner, group, who, type, ref, desc, questions, maintMode])
+  }, [uid, owner, group, who, type, ref, desc, questions])
   //......................................................................................
   // Fetch on mount and when shouldFetchData changes
   //......................................................................................
@@ -268,10 +255,6 @@ export default function Table({
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    //  For non-maint the user-id must be set
-    //
-    if (!maintMode && uid === 0) return
-    //
     //  Continue to get data
     //
     try {
@@ -283,9 +266,7 @@ export default function Table({
       //  Distinct - no uid selected
       //
       let distinctColumns: string[] = []
-      if (maintMode) {
-        distinctColumns = ['lrowner', 'lrgroup', 'lrref']
-      }
+      distinctColumns = ['lrowner', 'lrgroup', 'lrref']
       //
       //  Joins
       //
@@ -405,20 +386,17 @@ export default function Table({
       {/** Display Label                                                        */}
       {/** -------------------------------------------------------------------- */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>
-          {maintMode ? 'Library MAINT' : `Library`}
-        </h1>
+        <h1 className={`${lusitana.className} text-xl`}>Library MAINT</h1>
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}
-        {maintMode && (
-          <Button
-            onClick={() => handleClickAdd()}
-            overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
-          >
-            Add
-          </Button>
-        )}
+
+        <Button
+          onClick={() => handleClickAdd()}
+          overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
+        >
+          Add
+        </Button>
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
@@ -474,10 +452,10 @@ export default function Table({
                 </th>
               )}
               <th scope='col' className=' font-medium px-2 text-center'>
-                {maintMode ? 'Edit' : 'View'}
+                Edit
               </th>
               <th scope='col' className=' font-medium px-2 text-center'>
-                {maintMode ? 'Delete' : 'Quiz'}
+                Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
@@ -499,18 +477,7 @@ export default function Table({
                 <th scope='col' className='px-2'>
                   {selected_owner ? (
                     <h1>{selected_owner}</h1>
-                  ) : uid === undefined || uid === 0 ? null : maintMode ? (
-                    <DropdownGeneric
-                      selectedOption={owner}
-                      setSelectedOption={setowner}
-                      name='owner'
-                      table='owner'
-                      optionLabel='oowner'
-                      optionValue='oowner'
-                      dropdownWidth='w-28'
-                      includeBlank={true}
-                    />
-                  ) : (
+                  ) : uid === undefined || uid === 0 ? null : (
                     <DropdownGeneric
                       selectedOption={owner}
                       setSelectedOption={setowner}
@@ -690,20 +657,12 @@ export default function Table({
                 <td className='px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <Button
-                      onClick={
-                        maintMode
-                          ? () => handleClickEdit(tabledata)
-                          : () => window.open(`${tabledata.lrlink}`, '_blank')
-                      }
-                      overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
-                        maintMode
-                          ? 'bg-blue-500 hover:bg-blue-600'
-                          : tabledata.lrtype === 'youtube'
-                            ? 'bg-orange-500 hover:bg-orange-600'
-                            : 'bg-green-500 hover:bg-green-600'
-                      }`}
+                      onClick={() => handleClickEdit(tabledata)}
+                      overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md
+
+                           bg-blue-500 hover:bg-blue-600'
                     >
-                      {maintMode ? 'Edit' : tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
+                      Edit
                     </Button>
                   </div>
                 </td>
@@ -712,23 +671,12 @@ export default function Table({
                 {/* ................................................... */}
                 <td className='px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    {maintMode ? (
-                      <Button
-                        onClick={() => handleDeleteClick(tabledata)}
-                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
-                      >
-                        Delete
-                      </Button>
-                    ) : 'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
-                      <Link
-                        href={`/dashboard/quiz/${tabledata.lrgid}`}
-                        className='bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600'
-                      >
-                        Quiz
-                      </Link>
-                    ) : (
-                      ' '
-                    )}{' '}
+                    <Button
+                      onClick={() => handleDeleteClick(tabledata)}
+                      overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}
@@ -751,32 +699,32 @@ export default function Table({
       {/* ---------------------------------------------------------------------------------- */}
       {/* Maintenance functions              */}
       {/* ---------------------------------------------------------------------------------- */}
-      {maintMode && (
-        <>
-          {/* Edit Modal */}
-          {selectedRow && (
-            <MaintPopup
-              libraryRecord={selectedRow}
-              isOpen={isModelOpenEdit}
-              onClose={handleModalCloseEdit}
-            />
-          )}
 
-          {/* Add Modal */}
-          {maintMode && isModelOpenAdd && (
-            <MaintPopup
-              libraryRecord={null}
-              selected_owner={selected_owner}
-              selected_group={selected_group}
-              isOpen={isModelOpenAdd}
-              onClose={handleModalCloseAdd}
-            />
-          )}
+      <>
+        {/* Edit Modal */}
+        {selectedRow && (
+          <MaintPopup
+            libraryRecord={selectedRow}
+            isOpen={isModelOpenEdit}
+            onClose={handleModalCloseEdit}
+          />
+        )}
 
-          {/* Confirmation Dialog */}
-          <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
-        </>
-      )}
+        {/* Add Modal */}
+        {isModelOpenAdd && (
+          <MaintPopup
+            libraryRecord={null}
+            selected_owner={selected_owner}
+            selected_group={selected_group}
+            isOpen={isModelOpenAdd}
+            onClose={handleModalCloseAdd}
+          />
+        )}
+
+        {/* Confirmation Dialog */}
+        <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      </>
+
       {/* ---------------------------------------------------------------------------------- */}
     </>
   )

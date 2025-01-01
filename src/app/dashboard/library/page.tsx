@@ -13,7 +13,7 @@ export default async function Page() {
   return (
     <div className='w-full md:p-6'>
       <Suspense fallback={<TableSkeleton />}>
-        <Table maintMode={false} />
+        <Table />
       </Suspense>
     </div>
   )

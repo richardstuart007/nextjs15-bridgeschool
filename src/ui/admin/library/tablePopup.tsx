@@ -13,7 +13,7 @@ interface Props {
 export default function MaintPopup({ gid, owner, group, isOpen, onClose }: Props) {
   return (
     <Popup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
-      <Table selected_gid={gid} selected_owner={owner} selected_group={group} maintMode={true} />
+      <Table selected_gid={gid} selected_owner={owner} selected_group={group} />
     </Popup>
   )
 }

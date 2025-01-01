@@ -1,4 +1,4 @@
-import Table from '@/src/ui/dashboard/library/library_table'
+import Table from '@/src/ui/admin/library/library_table'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
@@ -12,7 +12,7 @@ export default async function Page() {
   return (
     <div className='w-full md:p-6'>
       <Suspense fallback={<div>Loading...</div>}>
-        <Table maintMode={true} />
+        <Table />
       </Suspense>
     </div>
   )
