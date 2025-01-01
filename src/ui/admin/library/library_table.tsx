@@ -2,20 +2,30 @@
 
 import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
+import MaintPopup from '@/src/ui/admin/library/maintPopup'
+import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Library, table_LibraryGroup } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
+import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
+import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import Link from 'next/link'
 import { useUserContext } from '@/UserContext'
 import { Button } from '@/src/ui/utils/button'
 
-interface Props {
+interface FormProps {
   selected_gid?: number | null
   selected_owner?: string | null
   selected_group?: string | null
+  maintMode?: boolean | null
 }
-export default function Table({ selected_gid, selected_owner, selected_group }: Props) {
+export default function Table({
+  selected_gid,
+  selected_owner,
+  selected_group,
+  maintMode = false
+}: FormProps) {
   //
   //  User context
   //
@@ -45,14 +55,14 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //
   //  Show columns
   //
-  const [show_gid, setshow_gid] = useState(false)
+  const [show_gid, setshow_gid] = useState(maintMode)
   const [show_owner, setshow_owner] = useState(false)
   const [show_group, setshow_group] = useState(false)
   const [show_lid, setshow_lid] = useState(false)
   const [show_who, setshow_who] = useState(false)
   const [show_ref, setshow_ref] = useState(false)
   const [show_type, setshow_type] = useState(false)
-  const [show_questions, setshow_questions] = useState(true)
+  const [show_questions, setshow_questions] = useState(!maintMode)
   //
   //  Data
   //
@@ -60,6 +70,18 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   const [tabledata, setTabledata] = useState<(table_Library | table_LibraryGroup)[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
+  //
+  //  Maintenance
+  //
+  const [isModelOpenEdit, setIsModelOpenEdit] = useState(false)
+  const [isModelOpenAdd, setIsModelOpenAdd] = useState(false)
+  const [selectedRow, setSelectedRow] = useState<table_Library | null>(null)
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    subTitle: '',
+    onConfirm: () => {}
+  })
   //......................................................................................
   //  UID
   //......................................................................................
@@ -192,9 +214,11 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       { column: 'ogcntquestions', value: questions, operator: '>=' }
     ]
     //
-    // Add the 'uouid' filter
+    // Add the 'uouid' filter if not in maintMode
     //
-    filtersToUpdate.push({ column: 'uouid', value: uid, operator: '=' })
+    if (!maintMode) {
+      filtersToUpdate.push({ column: 'uouid', value: uid, operator: '=' })
+    }
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -204,7 +228,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     //
     setFilters(updatedFilters)
     setShouldFetchData(true)
-  }, [uid, owner, group, who, type, ref, desc, questions])
+  }, [uid, owner, group, who, type, ref, desc, questions, maintMode])
   //......................................................................................
   // Fetch on mount and when shouldFetchData changes
   //......................................................................................
@@ -246,7 +270,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     //
     //  For non-maint the user-id must be set
     //
-    if (uid === 0) return
+    if (!maintMode && uid === 0) return
     //
     //  Continue to get data
     //
@@ -259,6 +283,9 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //  Distinct - no uid selected
       //
       let distinctColumns: string[] = []
+      if (maintMode) {
+        distinctColumns = ['lrowner', 'lrgroup', 'lrref']
+      }
       //
       //  Joins
       //
@@ -303,13 +330,95 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     }
   }
   //----------------------------------------------------------------------------------------------
+  //  Edit
+  //----------------------------------------------------------------------------------------------
+  function handleClickEdit(tabledata: table_Library) {
+    setSelectedRow(tabledata)
+    setIsModelOpenEdit(true)
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Add
+  //----------------------------------------------------------------------------------------------
+  function handleClickAdd() {
+    setIsModelOpenAdd(true)
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Close Modal Edit
+  //----------------------------------------------------------------------------------------------
+  function handleModalCloseEdit() {
+    setIsModelOpenEdit(false)
+    setSelectedRow(null)
+    setShouldFetchData(true)
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Close Modal Add
+  //----------------------------------------------------------------------------------------------
+  function handleModalCloseAdd() {
+    setIsModelOpenAdd(false)
+    setShouldFetchData(true)
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Delete
+  //----------------------------------------------------------------------------------------------
+  function handleDeleteClick(tabledata: table_Library) {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Deletion',
+      subTitle: `Are you sure you want to delete (${tabledata.lrlid}) : ${tabledata.lrdesc}?`,
+      onConfirm: () => performDelete(tabledata)
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the delete
+  //----------------------------------------------------------------------------------------------
+  async function performDelete(tabledata: table_Library) {
+    try {
+      //
+      // Call the server function to delete
+      //
+      const Params = {
+        table: 'library',
+        whereColumnValuePairs: [{ column: 'lrlid', value: tabledata.lrlid }]
+      }
+      await table_delete(Params)
+      //
+      //  update Library counts in Ownergroup
+      //
+      await update_ogcntlibrary(tabledata.lrgid)
+      //
+      //  Reload the page
+      //
+      setShouldFetchData(true)
+      //
+      //  Reset dialog
+      //
+      setConfirmDialog({ ...confirmDialog, isOpen: false })
+    } catch (error) {
+      console.error('Error during deletion:', error)
+    }
+    setConfirmDialog({ ...confirmDialog, isOpen: false })
+  }
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
       {/** Display Label                                                        */}
       {/** -------------------------------------------------------------------- */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>Library</h1>
+        <h1 className={`${lusitana.className} text-xl`}>
+          {maintMode ? 'Library MAINT' : `Library`}
+        </h1>
+        {/** -------------------------------------------------------------------- */}
+        {/** Add button                                                        */}
+        {/** -------------------------------------------------------------------- */}
+        {maintMode && (
+          <Button
+            onClick={() => handleClickAdd()}
+            overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
+          >
+            Add
+          </Button>
+        )}
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
@@ -354,16 +463,21 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                   Who
                 </th>
               )}
+              {show_type && (
+                <th scope='col' className=' font-medium px-2'>
+                  Type
+                </th>
+              )}
               {show_questions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
               )}
               <th scope='col' className=' font-medium px-2 text-center'>
-                Type
+                {maintMode ? 'Edit' : 'View'}
               </th>
               <th scope='col' className=' font-medium px-2 text-center'>
-                Quiz
+                {maintMode ? 'Delete' : 'Quiz'}
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
@@ -385,7 +499,18 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 <th scope='col' className='px-2'>
                   {selected_owner ? (
                     <h1>{selected_owner}</h1>
-                  ) : uid === undefined || uid === 0 ? null : (
+                  ) : uid === undefined || uid === 0 ? null : maintMode ? (
+                    <DropdownGeneric
+                      selectedOption={owner}
+                      setSelectedOption={setowner}
+                      name='owner'
+                      table='owner'
+                      optionLabel='oowner'
+                      optionValue='oowner'
+                      dropdownWidth='w-28'
+                      includeBlank={true}
+                    />
+                  ) : (
                     <DropdownGeneric
                       selectedOption={owner}
                       setSelectedOption={setowner}
@@ -486,7 +611,23 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                   />
                 </th>
               )}
-
+              {/* ................................................... */}
+              {/* type                                                 */}
+              {/* ................................................... */}
+              {show_type && (
+                <th scope='col' className=' px-2'>
+                  <DropdownGeneric
+                    selectedOption={type}
+                    setSelectedOption={settype}
+                    name='type'
+                    table='reftype'
+                    optionLabel='rttitle'
+                    optionValue='rttype'
+                    dropdownWidth='w-28'
+                    includeBlank={true}
+                  />
+                </th>
+              )}
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
@@ -508,25 +649,9 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 </th>
               )}
               {/* ................................................... */}
-              {/* type                                                 */}
+              {/* View/Quiz                                       */}
               {/* ................................................... */}
-              {show_type && (
-                <th scope='col' className=' px-2 text-center'>
-                  <DropdownGeneric
-                    selectedOption={type}
-                    setSelectedOption={settype}
-                    name='type'
-                    table='reftype'
-                    optionLabel='rttitle'
-                    optionValue='rttype'
-                    dropdownWidth='w-24'
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* Quiz                                       */}
-              {/* ................................................... */}
+              <th scope='col' className=' px-2'></th>
               <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
             </tr>
@@ -550,6 +675,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     : tabledata.lrdesc}
                 </td>
                 {show_who && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
+                {show_type && <td className=' px-2 pt-2'>{tabledata.lrtype}</td>}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
@@ -564,14 +690,20 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 <td className='px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <Button
-                      onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
+                      onClick={
+                        maintMode
+                          ? () => handleClickEdit(tabledata)
+                          : () => window.open(`${tabledata.lrlink}`, '_blank')
+                      }
                       overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
-                        tabledata.lrtype === 'youtube'
-                          ? 'bg-orange-500 hover:bg-orange-600'
-                          : 'bg-green-500 hover:bg-green-600'
+                        maintMode
+                          ? 'bg-blue-500 hover:bg-blue-600'
+                          : tabledata.lrtype === 'youtube'
+                            ? 'bg-orange-500 hover:bg-orange-600'
+                            : 'bg-green-500 hover:bg-green-600'
                       }`}
                     >
-                      {tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
+                      {maintMode ? 'Edit' : tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
                     </Button>
                   </div>
                 </td>
@@ -580,7 +712,14 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 {/* ................................................... */}
                 <td className='px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
+                    {maintMode ? (
+                      <Button
+                        onClick={() => handleDeleteClick(tabledata)}
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                      >
+                        Delete
+                      </Button>
+                    ) : 'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
                       <Link
                         href={`/dashboard/quiz/${tabledata.lrgid}`}
                         className='bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600'
@@ -589,7 +728,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                       </Link>
                     ) : (
                       ' '
-                    )}
+                    )}{' '}
                   </div>
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}
@@ -598,6 +737,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
           </tbody>
         </table>
       </div>
+
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}
@@ -608,6 +748,35 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
           setStateCurrentPage={setcurrentPage}
         />
       </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Maintenance functions              */}
+      {/* ---------------------------------------------------------------------------------- */}
+      {maintMode && (
+        <>
+          {/* Edit Modal */}
+          {selectedRow && (
+            <MaintPopup
+              libraryRecord={selectedRow}
+              isOpen={isModelOpenEdit}
+              onClose={handleModalCloseEdit}
+            />
+          )}
+
+          {/* Add Modal */}
+          {maintMode && isModelOpenAdd && (
+            <MaintPopup
+              libraryRecord={null}
+              selected_owner={selected_owner}
+              selected_group={selected_group}
+              isOpen={isModelOpenAdd}
+              onClose={handleModalCloseAdd}
+            />
+          )}
+
+          {/* Confirmation Dialog */}
+          <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+        </>
+      )}
       {/* ---------------------------------------------------------------------------------- */}
     </>
   )
