@@ -136,7 +136,7 @@ export default function Table() {
         <div className='inline-block min-w-full align-middle'>
           <div className='rounded-lg bg-gray-50 p-2 md:pt-0'>
             <table className='min-w-full text-gray-900 table-fixed table'>
-              <thead className='rounded-lg text-left font-normal text-sm'>
+              <thead className='rounded-lg text-left font-normal text-xs'>
                 <tr>
                   <th scope='col' className='px-2 py-2 font-medium text-left'>
                     Id
@@ -174,37 +174,37 @@ export default function Table() {
                 {users?.map(user => (
                   <tr
                     key={user.u_uid}
-                    className='w-full border-b py-2 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
+                    className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
                   >
-                    <td className='px-2 py-1 text-sm'>{user.u_uid}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_name}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_email}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_fedid}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_admin ? 'Y' : ''}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_fedcountry}</td>
-                    <td className='px-2 py-1 text-sm'>{user.u_provider}</td>
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>{user.u_uid}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_name}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_email}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_fedid}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_admin ? 'Y' : ''}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_fedcountry}</td>
+                    <td className='px-2 py-1 text-xs'>{user.u_provider}</td>
+                    <td className='px-2 py-1 text-xs text-center'>
                       <Button
                         onClick={() => handleEditClick(user)}
-                        overrideClass='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         Edit
                       </Button>
                     </td>
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       {user.u_provider === 'email' && (
                         <Button
                           onClick={() => handlePwdClick(user)}
-                          overrideClass='bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600'
+                          overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
                         >
                           Pwd
                         </Button>
                       )}
                     </td>
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleDeleteClick(user)}
-                        overrideClass='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
                       >
                         Delete
                       </Button>

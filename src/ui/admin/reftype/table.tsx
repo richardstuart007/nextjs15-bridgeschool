@@ -141,7 +141,7 @@ export default function Table() {
     <>
       <div className='flex w-full items-center justify-between'>
         <h1 className={`${lusitana.className} text-2xl`}>reftype</h1>
-        <h1 className='px-2 py-1 text-sm'>
+        <h1 className='px-2 py-1 text-xs'>
           <Button
             onClick={() => handleClickAdd()}
             overrideClass='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
@@ -155,7 +155,7 @@ export default function Table() {
         <div className='inline-block min-w-full align-middle'>
           <div className='rounded-lg bg-gray-50 p-2 md:pt-0'>
             <table className='min-w-full text-gray-900 table-fixed table'>
-              <thead className='rounded-lg text-left font-normal text-sm'>
+              <thead className='rounded-lg text-left font-normal text-xs'>
                 <tr>
                   <th scope='col' className='px-2 py-2 font-medium text-left'>
                     Reftype
@@ -178,23 +178,23 @@ export default function Table() {
                 {record?.map(record => (
                   <tr
                     key={record.rtrid}
-                    className='w-full border-b py-2 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
+                    className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
                   >
-                    <td className='px-2 py-1 text-sm '>{record.rttype}</td>
-                    <td className='px-2 py-1 text-sm '>{record.rttitle}</td>
-                    <td className='px-2 py-1 text-sm '>{record.rtrid}</td>
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs '>{record.rttype}</td>
+                    <td className='px-2 py-1 text-xs '>{record.rttitle}</td>
+                    <td className='px-2 py-1 text-xs '>{record.rtrid}</td>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleClickEdit(record)}
-                        className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         Edit
                       </Button>
                     </td>
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleDeleteClick(record)}
-                        overrideClass='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
                       >
                         Delete
                       </Button>

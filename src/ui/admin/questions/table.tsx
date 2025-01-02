@@ -169,7 +169,7 @@ export default function Table({ gid }: FormProps) {
     <>
       <div className='flex w-full items-center justify-between'>
         <h1 className={`${lusitana.className} text-2xl`}>questions</h1>
-        <h1 className='px-2 py-1 text-sm'>
+        <h1 className='px-2 py-1 text-xs'>
           <Button
             onClick={() => handleClickAdd_detail()}
             overrideClass='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
@@ -192,7 +192,7 @@ export default function Table({ gid }: FormProps) {
         <div className='inline-block min-w-full align-middle'>
           <div className='rounded-lg bg-gray-50 p-2 md:pt-0'>
             <table className='min-w-full text-gray-900 table-fixed table'>
-              <thead className='rounded-lg text-left font-normal text-sm'>
+              <thead className='rounded-lg text-left font-normal text-xs'>
                 <tr>
                   <th scope='col' className='px-2 py-2 font-medium text-left'>
                     Owner
@@ -230,19 +230,19 @@ export default function Table({ gid }: FormProps) {
                 {record?.map(record => (
                   <tr
                     key={record.qqid}
-                    className='w-full border-b py-2 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
+                    className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
                   >
-                    <td className='px-2 py-1 text-sm '>{record.qowner}</td>
-                    <td className='px-2 py-1 text-sm '>{record.qgroup}</td>
-                    <td className='px-2 py-1 text-sm '>{record.qgid}</td>
-                    <td className='px-2 py-1 text-sm '>{record.qseq}</td>
+                    <td className='px-2 py-1 text-xs '>{record.qowner}</td>
+                    <td className='px-2 py-1 text-xs '>{record.qgroup}</td>
+                    <td className='px-2 py-1 text-xs '>{record.qgid}</td>
+                    <td className='px-2 py-1 text-xs '>{record.qseq}</td>
                     {/* --------------------------------------------------------------------- */}
                     {/* Detail                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm '>
+                    <td className='px-2 py-1 text-xs '>
                       <Button
                         onClick={() => handleClickEdit_detail(record)}
-                        overrideClass='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         {record.qdetail.length > 75
                           ? `${record.qdetail.slice(0, 75)}...`
@@ -252,10 +252,10 @@ export default function Table({ gid }: FormProps) {
                     {/* --------------------------------------------------------------------- */}
                     {/* Answers                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm '>
+                    <td className='px-2 py-1 text-xs '>
                       <Button
                         onClick={() => handleClickEdit_answers(record)}
-                        overrideClass='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         {record.qans && record.qans.length > 0 ? 'Y' : 'N'}
                       </Button>
@@ -263,10 +263,10 @@ export default function Table({ gid }: FormProps) {
                     {/* --------------------------------------------------------------------- */}
                     {/* Hands                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleClickEdit_hands(record)}
-                        overrideClass='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         {(record.qnorth?.length ?? 0) > 0 ||
                         (record.qeast?.length ?? 0) > 0 ||
@@ -279,10 +279,10 @@ export default function Table({ gid }: FormProps) {
                     {/* --------------------------------------------------------------------- */}
                     {/* Bidding                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleClickEdit_bidding(record)}
-                        overrideClass='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                       >
                         {record.qrounds && record.qrounds.length > 0 ? 'Y' : 'N'}
                       </Button>
@@ -290,14 +290,14 @@ export default function Table({ gid }: FormProps) {
                     {/* --------------------------------------------------------------------- */}
                     {/* ID                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm '>{record.qqid}</td>
+                    <td className='px-2 py-1 text-xs '>{record.qqid}</td>
                     {/* --------------------------------------------------------------------- */}
                     {/* Delete                                                               */}
                     {/* --------------------------------------------------------------------- */}
-                    <td className='px-2 py-1 text-sm'>
+                    <td className='px-2 py-1 text-xs'>
                       <Button
                         onClick={() => handleDeleteClick(record)}
-                        overrideClass='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600'
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
                       >
                         Delete
                       </Button>
