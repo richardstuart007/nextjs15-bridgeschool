@@ -53,7 +53,7 @@ export default function Table() {
         //  Errors
         //
       } catch (error) {
-        console.error('Error fetching reftype:', error)
+        console.log('Error fetching reftype:', error)
       }
     }
     fetchdata()

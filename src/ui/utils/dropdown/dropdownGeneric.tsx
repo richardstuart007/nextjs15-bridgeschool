@@ -77,7 +77,7 @@ export default function DropdownGeneric({
 
         setDropdownOptions(includeBlank ? [{ value: '', label: '' }, ...options] : options)
       } catch (error) {
-        console.error('Error fetching dropdown options:', error)
+        console.log('Error fetching dropdown options:', error)
       } finally {
         setLoading(false)
       }

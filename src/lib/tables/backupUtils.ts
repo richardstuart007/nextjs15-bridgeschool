@@ -4,7 +4,7 @@ import * as fs from 'fs'
 import path from 'path'
 import csv from 'csv-parser'
 import readline from 'readline'
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //--------------------------------------------------------------------------
 //  Checks if a directory exists on the system
@@ -25,7 +25,7 @@ export async function directory_Exists(dirPath: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -53,7 +53,7 @@ export async function directory_create(dirPath: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -80,7 +80,7 @@ export async function directory_delete(dirPath: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -114,7 +114,7 @@ export async function listFilesInDirectory(dirPath: string): Promise<string[]> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -138,7 +138,7 @@ export async function file_exists(filePath: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -165,7 +165,7 @@ export async function file_delete(filePath: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -196,7 +196,7 @@ export async function convertCsvToJson(
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -232,7 +232,7 @@ async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -262,7 +262,7 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
         console.log(`CSV data has been converted and saved to ${Path_file_out}`)
       })
       .on('error', (error: Error) => {
-        console.error('An error occurred:', error.message)
+        console.log('An error occurred:', error.message)
       })
     //
     //  Errors
@@ -271,7 +271,7 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -297,7 +297,8 @@ export async function downloadDataAsJSON(
     //
     // Execute the query
     //
-    const result = await sql.query(query)
+    const db = await sql()
+    const result = await db.query(query)
     //
     // Check if data exists
     //
@@ -335,7 +336,7 @@ export async function downloadDataAsJSON(
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -368,7 +369,7 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

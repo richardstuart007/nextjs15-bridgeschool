@@ -1,7 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
-
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //---------------------------------------------------------------------
 //  Top results data
@@ -44,7 +43,8 @@ export async function fetchTopResultsData() {
     //
     //  Run sql Query
     //
-    const data = await sql.query(sqlQuery)
+    const db = await sql()
+    const data = await db.query(sqlQuery)
     //
     //  Return rows
     //
@@ -57,9 +57,8 @@ export async function fetchTopResultsData() {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }
 //---------------------------------------------------------------------
@@ -68,8 +67,6 @@ export async function fetchTopResultsData() {
 export async function fetchRecentResultsData1() {
   const functionName = 'fetchRecentResultsData1'
 
-  // ???
-  // await new Promise(resolve => setTimeout(resolve, ))
   try {
     const sqlQueryStatement = `
     SELECT
@@ -105,7 +102,8 @@ export async function fetchRecentResultsData1() {
     //
     //  Run sql Query
     //
-    const data = await sql.query(sqlQuery)
+    const db = await sql()
+    const data = await db.query(sqlQuery)
     //
     //  Return rows
     //
@@ -118,9 +116,8 @@ export async function fetchRecentResultsData1() {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }
 //---------------------------------------------------------------------
@@ -150,7 +147,7 @@ export async function fetchRecentResultsData5(userIds: number[]) {
       WHERE rn <= 5
       ORDER BY r_uid;
         `
-    const queryValues = [id1, id2, id3, id4, id5]
+    const values = [id1, id2, id3, id4, id5]
     //
     // Remove redundant spaces
     //
@@ -158,12 +155,13 @@ export async function fetchRecentResultsData5(userIds: number[]) {
     //
     //  Logging
     //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
+    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
+    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
     //
     //  Run sql Query
     //
-    const data = await sql.query(sqlQuery, queryValues)
+    const db = await sql()
+    const data = await db.query(sqlQuery, values)
     //
     //  Return rows
     //
@@ -176,8 +174,7 @@ export async function fetchRecentResultsData5(userIds: number[]) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }

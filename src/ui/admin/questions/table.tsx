@@ -63,7 +63,7 @@ export default function Table({ gid }: FormProps) {
         //  Errors
         //
       } catch (error) {
-        console.error('Error fetching questions:', error)
+        console.log('Error fetching questions:', error)
       }
     }
     fetchdata()

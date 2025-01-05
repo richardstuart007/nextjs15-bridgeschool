@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface TableDup {
@@ -31,7 +31,8 @@ export async function table_duplicate(TableDup: TableDup): Promise<boolean> {
     //
     // Execute the query
     //
-    await sql.query(sqlQuery)
+    const db = await sql()
+    await db.query(sqlQuery)
     //
     // All ok
     //
@@ -43,7 +44,7 @@ export async function table_duplicate(TableDup: TableDup): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

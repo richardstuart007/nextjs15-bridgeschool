@@ -49,7 +49,7 @@ export default function Table() {
         //  Errors
         //
       } catch (error) {
-        console.error('Error fetching users:', error)
+        console.log('Error fetching users:', error)
       }
     }
     fetchUsers()

@@ -47,7 +47,7 @@ export default function Table() {
         //  Errors
         //
       } catch (error) {
-        console.error('Error fetching owner:', error)
+        console.log('Error fetching owner:', error)
       }
     }
     fetchdata()

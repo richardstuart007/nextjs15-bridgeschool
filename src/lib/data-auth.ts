@@ -47,7 +47,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -140,7 +140,7 @@ export async function getAuthSession() {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

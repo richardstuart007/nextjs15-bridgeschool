@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 // Define types for joins and filters
@@ -17,6 +17,7 @@ type FilterParams = {
 
 // Default items per page
 const ITEMS_PER_PAGE = 10
+
 //---------------------------------------------------------------------
 // Fetch Filtered Function
 //---------------------------------------------------------------------
@@ -38,6 +39,7 @@ export async function fetchFiltered({
   distinctColumns?: string[]
 }): Promise<any[]> {
   const functionName = 'fetchFiltered'
+  const db = await sql()
   const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
   try {
     let finalQuery = sqlQuery
@@ -68,11 +70,11 @@ export async function fetchFiltered({
     //
     // Execute Query
     //
-    const data = await sql.query(sqlQuerystatement, queryValues)
+    const data = await db.query(sqlQuerystatement, queryValues)
     return data.rows.length > 0 ? data.rows : []
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.error(`${functionName}: ${errorMessage}`, error)
+    console.log(`${functionName}: ${errorMessage}`, error)
     writeLogging(functionName, errorMessage)
     throw new Error(`${functionName}, ${errorMessage}`)
   }
@@ -94,6 +96,7 @@ export async function fetchTotalPages({
   distinctColumns?: string[]
 }): Promise<number> {
   const functionName = 'fetchTotalPages'
+  const db = await sql()
   try {
     const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
     //
@@ -121,7 +124,7 @@ export async function fetchTotalPages({
     //
     // Execute Query
     //
-    const result = await sql.query(sqlQueryupd, queryValues)
+    const result = await db.query(sqlQueryupd, queryValues)
     //
     // Calculate Total Pages
     //
@@ -129,7 +132,7 @@ export async function fetchTotalPages({
     const totalPages = Math.ceil(count / items_per_page)
     return totalPages
   } catch (error) {
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

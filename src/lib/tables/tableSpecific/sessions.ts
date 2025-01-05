@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
@@ -15,6 +15,7 @@ export async function UpdateSessions(
   s_skipcorrect: boolean
 ) {
   const functionName = 'UpdateSessions'
+
   try {
     const sqlQueryStatement = `
     UPDATE sessions
@@ -37,7 +38,8 @@ export async function UpdateSessions(
     //
     //  Execute the sql
     //
-    await sql.query(sqlQuery, queryValues)
+    const db = await sql()
+    await db.query(sqlQuery, queryValues)
     //
     //  Errors
     //
@@ -45,7 +47,7 @@ export async function UpdateSessions(
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     return {
       message: 'UpdateSessions: Failed to Update session.'
@@ -87,7 +89,8 @@ export async function fetchSessionInfo(sessionId: number) {
     //
     //  Execute the sql
     //
-    const data = await sql.query(sqlQuery, queryValues)
+    const db = await sql()
+    const data = await db.query(sqlQuery, queryValues)
     const row = data.rows[0]
     //
     //  Return the session info
@@ -110,7 +113,7 @@ export async function fetchSessionInfo(sessionId: number) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -148,7 +151,7 @@ export async function isAdmin() {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

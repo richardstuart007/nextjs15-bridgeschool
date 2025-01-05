@@ -299,7 +299,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.log('Error fetching library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------

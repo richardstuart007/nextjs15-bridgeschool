@@ -45,7 +45,7 @@ export const {
         //  Errors
         //
       } catch (error) {
-        console.error('Provider signIn error:', error)
+        console.log('Provider signIn error:', error)
         return false
       }
     },
@@ -142,7 +142,7 @@ export const {
           //  Errors
           //
         } catch (error) {
-          console.error('Authorization error:', error)
+          console.log('Authorization error:', error)
           return null
         }
       }

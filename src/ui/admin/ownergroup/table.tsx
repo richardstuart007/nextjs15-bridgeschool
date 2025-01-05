@@ -54,7 +54,7 @@ export default function Table() {
         //  Errors
         //
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.log('Error fetching data:', error)
       }
     }
     fetchdata()

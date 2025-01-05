@@ -1,5 +1,5 @@
 'use server'
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 export async function table_drop(table: string): Promise<boolean> {
@@ -16,14 +16,15 @@ export async function table_drop(table: string): Promise<boolean> {
     //
     // Run query
     //
-    await sql.query(sqlQuery)
+    const db = await sql()
+    await db.query(sqlQuery)
     return true
   } catch (error) {
     //
     // Logging
     //
     const errorMessage = `Table(${table}) DROP FAILED`
-    console.error(`${functionName}: ${errorMessage}`, error)
+    console.log(`${functionName}: ${errorMessage}`, error)
     writeLogging(functionName, errorMessage)
     throw new Error(`${functionName}, ${errorMessage}`)
   }

@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface Props {
@@ -32,7 +32,8 @@ export async function table_copy_data(Props: Props): Promise<boolean> {
     //
     // Execute the query
     //
-    await sql.query(sqlQuery)
+    const db = await sql()
+    await db.query(sqlQuery)
     //
     // All ok
     //
@@ -44,7 +45,7 @@ export async function table_copy_data(Props: Props): Promise<boolean> {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

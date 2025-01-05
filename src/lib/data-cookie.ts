@@ -26,7 +26,7 @@ export async function updateCookieSessionId(sessionId: number) {
     //  Errors
     //
   } catch (error) {
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -42,7 +42,7 @@ export async function deleteCookie(cookieName: string = 'SessionId') {
     //  Errors
     //
   } catch (error) {
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -73,7 +73,7 @@ export async function getCookieSessionId(cookieName: string = 'SessionId'): Prom
     //  Errors
     //
   } catch (error) {
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     return null
   }
 }

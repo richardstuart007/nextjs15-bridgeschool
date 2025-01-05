@@ -3,18 +3,40 @@ import { inter } from '@/src/fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/UserContext'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
-
+import { URL_current } from '@/src/constants'
+import dotenv from 'dotenv'
+//
+//  Metadata
+//
 export const metadata: Metadata = {
   title: {
     template: '%s | Bridge School Dashboard',
     default: 'Bridge School Dashboard'
   },
   description: 'nextjs15 Bridge School.',
-  metadataBase: new URL('https://nextjs15-bridgeschool.vercel.app/')
+  metadataBase: new URL(URL_current)
 }
-
+//
+//  Load the environment variables
+//
+dotenv.config()
+//
+//  Root Layout
+//
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const d_name: string = await getDatabaseName()
+  //
+  // Determine the background color class based on d_name
+  //
+  type Environment = 'development' | 'production' | 'localhost' | 'unknown'
+  const environmentColors: Record<Environment, string> = {
+    development: 'bg-yellow-100',
+    production: 'bg-blue-100',
+    localhost: 'bg-green-100',
+    unknown: 'bg-red-100'
+  }
+  const backgroundColor = environmentColors[d_name as Environment] || ''
+  const className = `${inter.className} antialiased ${backgroundColor}`
   //-----------------------------------------------------------------------------
   //  Get the database
   //-----------------------------------------------------------------------------
@@ -35,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       whereColumnValuePairs: [{ column: 'd_did', value: 1 }]
     })
     const row = rows[0]
-    const dbName = row?.d_name ?? 'Unknown'
+    const dbName = row?.d_name ?? 'unknown'
     //
     // Store the database name in globalThis for future requests
     //
@@ -48,9 +70,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   //-----------------------------------------------------------------------------
   return (
     <html lang='en'>
-      <body
-        className={`${inter.className} antialiased ${d_name === 'Dev' ? 'bg-yellow-100' : 'bg-blue-100'}`}
-      >
+      <body className={className}>
         <UserProvider>{children}</UserProvider>
       </body>
     </html>

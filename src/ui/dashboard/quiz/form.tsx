@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, type JSX } from 'react';
+import { useState, useEffect, type JSX } from 'react'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
@@ -77,7 +77,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //  Errors
       //
     } catch (error) {
-      console.error('An error occurred while fetching data:', error)
+      console.log('An error occurred while fetching data:', error)
     }
   }
   //...................................................................................
@@ -111,7 +111,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   async function handleQuizCompleted() {
     if (!question) {
       // If the question is null, skip the writing process
-      console.error('Question is null, skipping write operation.')
+      console.log('Question is null, skipping write operation.')
       return
     }
     //

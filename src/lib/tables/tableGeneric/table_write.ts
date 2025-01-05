@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 //
@@ -38,15 +38,13 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //
     //  Logging
     //
-    writeLogging(
-      functionName,
-      `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
-      'I'
-    )
+    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
+    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
     //
     //  Execute the sql
     //
-    const data = await sql.query(sqlQuery, values)
+    const db = await sql()
+    const data = await db.query(sqlQuery, values)
     //
     // Return the inserted rows
     //
@@ -59,7 +57,7 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //  Logging
     //
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.error(`${functionName}: ${errorMessage}`, error)
+    console.log(`${functionName}: ${errorMessage}`, error)
     writeLogging(functionName, errorMessage)
     // throw new Error(`${functionName}, ${errorMessage}`)
     return []

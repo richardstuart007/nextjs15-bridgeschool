@@ -1,8 +1,7 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 
-import { table_Who } from '@/src/lib/tables/definitions'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 const MAINT_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
@@ -40,7 +39,8 @@ export async function fetchWhoFiltered(query: string, currentPage: number) {
     //
     //  Execute the sql
     //
-    const data = await sql.query<table_Who>(sqlQuery, queryValues)
+    const db = await sql()
+    const data = await db.query(sqlQuery, queryValues)
     //
     //  Return results
     //
@@ -53,7 +53,7 @@ export async function fetchWhoFiltered(query: string, currentPage: number) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -156,7 +156,8 @@ export async function fetchWhoTotalPages(query: string) {
     //
     //  Run sql Query
     //
-    const result = await sql.query(sqlQuery)
+    const db = await sql()
+    const result = await db.query(sqlQuery)
     //
     //  Return results
     //
@@ -170,7 +171,7 @@ export async function fetchWhoTotalPages(query: string) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

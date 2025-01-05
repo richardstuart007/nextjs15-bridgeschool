@@ -1,8 +1,7 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 
-import { table_Users } from '@/src/lib/tables/definitions'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 const USERS_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
@@ -40,7 +39,8 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
     //
     //  Execute the sql
     //
-    const data = await sql.query<table_Users>(sqlQuery, queryValues)
+    const db = await sql()
+    const data = await db.query(sqlQuery, queryValues)
     //
     //  Return results
     //
@@ -53,7 +53,7 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -87,7 +87,8 @@ export async function fetchUsersTotalPages(query: string) {
     //
     //  Run sql Query
     //
-    const result = await sql.query(sqlQuery)
+    const db = await sql()
+    const result = await db.query(sqlQuery)
     //
     //  Return results
     //
@@ -101,7 +102,7 @@ export async function fetchUsersTotalPages(query: string) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
@@ -200,7 +201,7 @@ async function buildWhere_Users(query: string) {
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }

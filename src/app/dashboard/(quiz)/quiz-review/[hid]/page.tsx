@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Page(props: { params: Promise<{ hid: number }> }) {
-  const params = await props.params;
+  const params = await props.params
   //
   //  Variables used in the return statement
   //
@@ -66,7 +66,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Errors
     //
   } catch (error) {
-    console.error('An error occurred while fetching history data:', error)
+    console.log('An error occurred while fetching history data:', error)
     return <div>An error occurred while fetching history data.</div>
   }
 }

@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 //---------------------------------------------------------------------
 //  Write User Logging
 //---------------------------------------------------------------------
@@ -47,7 +47,8 @@ export async function writeLogging(
     //
     //  Execute the sql
     //
-    const { rows } = await sql.query(sqlQuery, queryValues)
+    const db = await sql()
+    const { rows } = await db.query(sqlQuery, queryValues)
     //
     //  Return inserted log
     //
@@ -56,7 +57,6 @@ export async function writeLogging(
     //  Errors
     //
   } catch (error) {
-    console.error('writeLogging:', error)
-    throw new Error('writeLogging: Failed')
+    console.log('writeLogging Error')
   }
 }

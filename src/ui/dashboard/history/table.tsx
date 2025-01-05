@@ -299,7 +299,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching history:', error)
+      console.log('Error fetching history:', error)
     }
   }
   //----------------------------------------------------------------------------------------------

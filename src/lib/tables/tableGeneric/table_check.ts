@@ -1,6 +1,6 @@
 'use server'
 
-import { sql } from '@vercel/postgres'
+import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface ColumnValuePair {
@@ -48,15 +48,13 @@ export async function table_check(
       //
       // Log the query
       //
-      writeLogging(
-        functionName,
-        `${sqlQuery}${values?.length ? `, Values: ${JSON.stringify(values)}` : ''}`,
-        'I'
-      )
+      const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
+      writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
       //
       // Execute the query
       //
-      const data = await sql.query(sqlQuery, values)
+      const db = await sql()
+      const data = await db.query(sqlQuery, values)
       //
       // Check if rows exist
       //
@@ -77,7 +75,7 @@ export async function table_check(
     //
     //  Logging
     //
-    console.error(`${functionName}:`, error)
+    console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
     throw new Error(`${functionName}: Failed`)
   }
