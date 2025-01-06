@@ -79,14 +79,14 @@ export default function Table() {
   function handleModalCloseEdit() {
     setIsModelOpenEdit(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
     setIsModelOpenAdd(false)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -128,7 +128,7 @@ export default function Table() {
         //
         //  Reload the page
         //
-        setShouldFetchData(true)
+        setTimeout(() => setShouldFetchData(true), 0)
         //
         //  Reset dialog
         //

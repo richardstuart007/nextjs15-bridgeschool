@@ -1,9 +1,9 @@
-import Table from '@/src/ui/admin/library/table'
+import Table from '@/src/ui/admin/usersowner/table'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
 export const metadata: Metadata = {
-  title: 'Library'
+  title: 'usersowner'
 }
 //
 //  Exported Function

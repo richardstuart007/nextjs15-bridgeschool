@@ -167,7 +167,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     //  Change of Rows
     //
     setcurrentPage(1)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //......................................................................................
   // Reset the group when the owner changes

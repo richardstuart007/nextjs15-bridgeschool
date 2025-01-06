@@ -1,6 +1,6 @@
 'use client'
 import Popup from '@/src/ui/utils/popup'
-import Form from '@/src/ui/admin/users/useredit/userEdit'
+import Form from '@/src/ui/admin/users/pwdedit/maint'
 import { table_Users } from '@/src/lib/tables/definitions'
 
 interface Props {

@@ -56,7 +56,11 @@ export default function Page() {
               Users
             </Link>
           </div>
-          <div className='w-48 h-16'></div>
+          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
+            <Link key='ownergroup' href='/admin/usersowner'>
+              Users Owner
+            </Link>
+          </div>
           <div className='w-48 h-16'></div>
           <div className='w-48 h-16'></div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}

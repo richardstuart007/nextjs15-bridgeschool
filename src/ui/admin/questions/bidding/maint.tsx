@@ -4,7 +4,7 @@ import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
 import { useFormStatus } from 'react-dom'
-import { Maint } from '@/src/ui/admin/questions/bidding/action'
+import { Maint } from '@/src/ui/admin/questions/bidding/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 
 const bidding_names = [

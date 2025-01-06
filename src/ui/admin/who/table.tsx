@@ -83,7 +83,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
     setIsModelOpenAdd(false)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -125,7 +125,7 @@ export default function Table() {
         //
         //  Reload the page
         //
-        setShouldFetchData(true)
+        setTimeout(() => setShouldFetchData(true), 0)
         //
         //  Reset dialog
         //

@@ -246,7 +246,7 @@ export default function Table() {
     //  Change of Rows
     //
     setcurrentPage(1)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   // fetchdata

@@ -3,7 +3,7 @@ import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
 import { useFormStatus } from 'react-dom'
-import { Maint_detail } from '@/src/ui/admin/questions/detail/action'
+import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 

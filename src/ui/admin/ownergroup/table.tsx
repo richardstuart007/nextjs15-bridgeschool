@@ -88,24 +88,24 @@ export default function Table() {
   function handleModalCloseEdit_ownergroup() {
     setIsModelOpenEdit_ownergroup(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_library() {
     setIsModelOpenEdit_library(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_questions() {
     setIsModelOpenEdit_questions(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd_ownergroup() {
     setIsModelOpenAdd_ownergroup(false)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -151,7 +151,7 @@ export default function Table() {
         //
         //  Reload the page
         //
-        setShouldFetchData(true)
+        setTimeout(() => setShouldFetchData(true), 0)
         //
         //  Reset dialog
         //

@@ -1,10 +1,10 @@
 'use client'
 import Image from 'next/image'
-import { useState, useEffect, useActionState } from 'react';
+import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
-import { Maint } from '@/src/ui/admin/questions/hands/action'
+import { useFormStatus } from 'react-dom'
+import { Maint } from '@/src/ui/admin/questions/hands/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 
 const hand_name = [

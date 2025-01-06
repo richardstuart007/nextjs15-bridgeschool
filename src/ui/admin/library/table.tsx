@@ -182,7 +182,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     //  Change of Rows
     //
     setcurrentPage(1)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //......................................................................................
   // Reset the group when the owner changes
@@ -329,14 +329,14 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   function handleModalCloseEdit() {
     setIsModelOpenEdit(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
     setIsModelOpenAdd(false)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -369,7 +369,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //
       //  Reload the page
       //
-      setShouldFetchData(true)
+      setTimeout(() => setShouldFetchData(true), 0)
       //
       //  Reset dialog
       //

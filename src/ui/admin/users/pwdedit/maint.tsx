@@ -1,9 +1,9 @@
 'use client'
-import { useState, useActionState } from 'react';
+import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
-import { PwdEdit } from '@/src/ui/admin/users/pwdedit/action'
+import { useFormStatus } from 'react-dom'
+import { PwdEdit } from '@/src/ui/admin/users/pwdedit/maint-action'
 import type { table_Users } from '@/src/lib/tables/definitions'
 
 export default function Form({ UserRecord }: { UserRecord: table_Users }) {

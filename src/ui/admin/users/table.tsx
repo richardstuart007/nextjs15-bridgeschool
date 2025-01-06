@@ -2,8 +2,9 @@
 
 import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
-import UserEditPopup from '@/src/ui/admin/users/useredit/userEditPopup'
-import PwdEditPopup from '@/src/ui/admin/users/pwdedit/pwdEditPopup'
+import UserEditPopup from '@/src/ui/admin/users/useredit/maintPopup'
+import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
+import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { fetchUsersFiltered, fetchUsersTotalPages } from '@/src/lib/tables/tableSpecific/users'
@@ -26,9 +27,10 @@ export default function Table() {
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(true)
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setisModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<table_Users | null>(null)
   const [selectedPwd, setSelectedPwd] = useState<table_Users | null>(null)
+  const [selectedUsersowner, setSelectedUsersowner] = useState<table_Users | null>(null)
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: '',
@@ -39,6 +41,7 @@ export default function Table() {
   // Fetch users on mount and when shouldFetchData changes
   //----------------------------------------------------------------------------------------------
   useEffect(() => {
+    if (!shouldFetchData) return
     const fetchUsers = async () => {
       try {
         const fetchedUsers = await fetchUsersFiltered(query, currentPage)
@@ -60,23 +63,31 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   function handleEditClick(user: table_Users) {
     setSelectedUser(user)
-    setIsModalOpen(true)
+    setisModalOpen(true)
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Usersowner
+  //----------------------------------------------------------------------------------------------
+  function handleUsersownerClick(user: table_Users) {
+    setSelectedUsersowner(user)
+    setisModalOpen(true)
   }
   //----------------------------------------------------------------------------------------------
   //  Password User
   //----------------------------------------------------------------------------------------------
   function handlePwdClick(user: table_Users) {
     setSelectedPwd(user)
-    setIsModalOpen(true)
+    setisModalOpen(true)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal
   //----------------------------------------------------------------------------------------------
   function handleCloseModal() {
-    setIsModalOpen(false)
+    setisModalOpen(false)
     setSelectedUser(null)
     setSelectedPwd(null)
-    setShouldFetchData(true)
+    setSelectedUsersowner(null)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -117,7 +128,7 @@ export default function Table() {
         //
         //  Reload the page
         //
-        setShouldFetchData(true)
+        setTimeout(() => setShouldFetchData(true), 0)
         //
         //  Reset dialog
         //
@@ -150,64 +161,80 @@ export default function Table() {
                   <th scope='col' className='px-2 py-2 font-medium text-left'>
                     Federation ID
                   </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
                     Admin
                   </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
                     Fed Country
                   </th>
                   <th scope='col' className='px-2 py-2 font-medium text-left'>
                     Provider
                   </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
                     Edit
                   </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
+                    Owners
+                  </th>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
                     Pwd
                   </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
+                  <th scope='col' className='px-2 py-2 font-medium text-center'>
                     Delete
                   </th>
                 </tr>
               </thead>
               <tbody className='bg-white'>
                 {users?.map(user => (
-                  <tr
-                    key={user.u_uid}
-                    className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
-                  >
+                  <tr key={user.u_uid} className='w-full border-b py-2 text-xs'>
                     <td className='px-2 py-1 text-xs'>{user.u_uid}</td>
                     <td className='px-2 py-1 text-xs'>{user.u_name}</td>
                     <td className='px-2 py-1 text-xs'>{user.u_email}</td>
                     <td className='px-2 py-1 text-xs'>{user.u_fedid}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_admin ? 'Y' : ''}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_fedcountry}</td>
+                    <td className='px-2 py-1 text-xs text-center'>{user.u_admin ? 'Y' : ''}</td>
+                    <td className='px-2 py-1 text-xs text-center'>{user.u_fedcountry}</td>
                     <td className='px-2 py-1 text-xs'>{user.u_provider}</td>
-                    <td className='px-2 py-1 text-xs text-center'>
-                      <Button
-                        onClick={() => handleEditClick(user)}
-                        overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
-                      >
-                        Edit
-                      </Button>
-                    </td>
-                    <td className='px-2 py-1 text-xs'>
-                      {user.u_provider === 'email' && (
+                    <td className='px-2 py-1 text-center'>
+                      <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handlePwdClick(user)}
-                          overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
+                          onClick={() => handleEditClick(user)}
+                          overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
                         >
-                          Pwd
+                          Edit
                         </Button>
-                      )}
+                      </div>
                     </td>
-                    <td className='px-2 py-1 text-xs'>
-                      <Button
-                        onClick={() => handleDeleteClick(user)}
-                        overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
-                      >
-                        Delete
-                      </Button>
+                    <td className='px-2 py-1 text-center'>
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleUsersownerClick(user)}
+                          overrideClass=' h-6 px-2 py-2 text-xs bg-green-500 text-white rounded-md hover:bg-green-600 px-2 py-1'
+                        >
+                          Owners
+                        </Button>
+                      </div>
+                    </td>
+                    <td className='px-2 py-1 text-center'>
+                      <div className='inline-flex justify-center items-center'>
+                        {user.u_provider === 'email' && (
+                          <Button
+                            onClick={() => handlePwdClick(user)}
+                            overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
+                          >
+                            Pwd
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                    <td className='px-2 py-1 text-center'>
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleDeleteClick(user)}
+                          overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                        >
+                          Delete
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -224,6 +251,15 @@ export default function Table() {
         {selectedUser && (
           <UserEditPopup
             userRecord={selectedUser}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+          />
+        )}
+
+        {/* User Usersowner Modal */}
+        {selectedUsersowner && (
+          <UserownertablePopup
+            uid={selectedUsersowner.u_uid}
             isOpen={isModalOpen}
             onClose={handleCloseModal}
           />

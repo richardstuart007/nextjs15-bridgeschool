@@ -95,26 +95,26 @@ export default function Table({ gid }: FormProps) {
   function handleModalCloseEdit_detail() {
     setIsModelOpenEdit_detail(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_answers() {
     setIsModelOpenEdit_answers(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_hands() {
     setIsModelOpenEdit_hands(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_bidding() {
     setIsModelOpenEdit_bidding(false)
     setSelectedRow(null)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Add
@@ -124,7 +124,7 @@ export default function Table({ gid }: FormProps) {
   }
   function handleModalCloseAdd_detail() {
     setIsModelOpenAdd_detail(false)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Delete
@@ -150,7 +150,7 @@ export default function Table({ gid }: FormProps) {
         //
         //  Reload the page
         //
-        setShouldFetchData(true)
+        setTimeout(() => setShouldFetchData(true), 0)
         //
         //  Reset dialog
         //

@@ -1,42 +1,44 @@
 'use server'
 
 import { z } from 'zod'
-import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
+import validateUsersowner from '@/src/ui/admin/usersowner/maint-validate'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import validate from '@/src/ui/admin/who/maint-validate'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
 //
-//  Form Schema for validation
-//
-const FormSchemaSetup = z.object({
-  wwho: z.string(),
-  wtitle: z.string()
-})
-//
 //  Errors and Messages
 //
-export type StateSetup = {
+type StateSetup = {
   errors?: {
-    wwho?: string[]
-    wtitle?: string[]
+    uid?: string[]
+    owner?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
 }
 
-const Setup = FormSchemaSetup
-
-export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'MaintWho'
+export async function ActionUsersowner(
+  _prevState: StateSetup,
+  formData: FormData
+): Promise<StateSetup> {
+  const functionName = 'ActionUsersowner'
+  console.log('formData', formData)
+  //
+  //  Form Schema for validation
+  //
+  const FormSchemaSetup = z.object({
+    uid: z.string(),
+    owner: z.string()
+  })
+  const Setup = FormSchemaSetup
   //
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    wwho: formData.get('wwho'),
-    wtitle: formData.get('wtitle')
+    uid: formData.get('uid'),
+    owner: formData.get('owner')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -50,20 +52,19 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   // Unpack form data
   //
-  const { wwho, wtitle } = validatedFields.data
+  const { owner } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
-  const wwid = Number(formData.get('wwid'))
+  const uid = Number(formData.get('uid'))
   //
   // Validate fields
   //
-  const Table = {
-    wwid: wwid,
-    wwho: wwho,
-    wtitle: wtitle
+  const table_usersowner = {
+    uouid: uid,
+    uoowner: owner
   }
-  const errorMessages = await validate(Table)
+  const errorMessages = await validateUsersowner(table_usersowner)
   if (errorMessages.message) {
     return {
       errors: errorMessages.errors,
@@ -76,22 +77,16 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   try {
     //
-    //  Write/Update
+    //  Write
     //
-    const updateParams = {
-      table: 'who',
-      columnValuePairs: [{ column: 'wtitle', value: wtitle }],
-      whereColumnValuePairs: [{ column: 'wwho', value: wwho }]
-    }
     const writeParams = {
-      table: 'who',
+      table: 'usersowner',
       columnValuePairs: [
-        { column: 'wwho', value: wwho },
-        { column: 'wtitle', value: wtitle }
+        { column: 'uouid', value: uid },
+        { column: 'uoowner', value: owner }
       ]
     }
-    await (wwid === 0 ? table_write(writeParams) : table_update(updateParams))
-
+    await table_write(writeParams)
     return {
       message: `Database updated successfully.`,
       errors: undefined,
@@ -101,7 +96,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Errors
     //
   } catch (error) {
-    const errorMessage = 'Database Error: Failed to Update Library.'
+    const errorMessage = 'Database Error: Failed to Update Usersowner.'
     writeLogging(functionName, errorMessage)
     return {
       message: errorMessage,
