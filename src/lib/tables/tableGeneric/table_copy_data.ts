@@ -4,8 +4,8 @@ import { sql } from '@/src/lib/db'
 import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
 
 interface Props {
-  tablebase: string
-  tablebackup: string
+  table_from: string
+  table_to: string
 }
 
 export async function table_copy_data(Props: Props): Promise<boolean> {
@@ -15,11 +15,11 @@ export async function table_copy_data(Props: Props): Promise<boolean> {
     //
     // Construct the SQL
     //
-    const tablebase = Props.tablebase
-    const tablebackup = Props.tablebackup
+    const table_from = Props.table_from
+    const table_to = Props.table_to
     const sqlQueryStatement = `
-    INSERT INTO ${tablebackup}
-        SELECT * FROM ${tablebase}
+    INSERT INTO ${table_to}
+        SELECT * FROM ${table_from}
     `
     //
     // Remove redundant spaces

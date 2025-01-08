@@ -24,7 +24,8 @@ export async function writeLogging(
     //
     //  Trim message
     //
-    const lgmsgTrim = lgmsg.trim()
+    const message = lgmsg.length > 250 ? lgmsg.substring(0, 250) + '...' : lgmsg
+    const lgmsgTrim = message.trim()
     //
     //  Query statement
     //

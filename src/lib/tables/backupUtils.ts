@@ -27,7 +27,7 @@ export async function directory_Exists(dirPath: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 //--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ export async function directory_create(dirPath: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 //--------------------------------------------------------------------------
@@ -82,7 +82,7 @@ export async function directory_delete(dirPath: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 //--------------------------------------------------------------------------
@@ -116,7 +116,7 @@ export async function listFilesInDirectory(dirPath: string): Promise<string[]> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return []
   }
 }
 //--------------------------------------------------------------------------
@@ -140,7 +140,7 @@ export async function file_exists(filePath: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 //--------------------------------------------------------------------------
@@ -167,7 +167,7 @@ export async function file_delete(filePath: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 //--------------------------------------------------------------------------
@@ -198,7 +198,6 @@ export async function convertCsvToJson(
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }
 //--------------------------------------------------------------------------
@@ -234,7 +233,7 @@ async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }
 
@@ -273,7 +272,6 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }
 //--------------------------------------------------------------------------
@@ -338,7 +336,6 @@ export async function downloadDataAsJSON(
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
   }
 }
 
@@ -371,6 +368,92 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
     //
     console.log(`${functionName}:`, error)
     writeLogging(functionName, 'Function failed')
-    throw new Error(`${functionName}: Failed`)
+    return []
+  }
+}
+//--------------------------------------------------------------------------
+//  Uploads the content of a JSON file to the PostgreSQL database
+//--------------------------------------------------------------------------
+/**
+ * @param filePath - The path to the JSON file to upload.
+ * @param tableName - The name of the PostgreSQL table to insert data into.
+ */
+export async function uploadJSONToDatabase(filePath: string, tableName: string): Promise<number> {
+  const functionName = 'uploadJSONToDatabase'
+  const BATCH_SIZE = 100
+  const maxSqlLength = 150
+  const maxValuesLength = 100
+  try {
+    //
+    // Log the parameters
+    //
+    writeLogging(functionName, `filePath: ${filePath}, tableName: ${tableName}`, 'I')
+    //
+    // Check if the file exists
+    //
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`)
+    }
+    //
+    // Read and parse the JSON file
+    //
+    const fileContent = fs.readFileSync(filePath, 'utf-8')
+    const jsonData = JSON.parse(fileContent)
+    //
+    // Validate JSON data
+    //
+    if (!Array.isArray(jsonData)) {
+      throw new Error('JSON data is not an array. Expected an array of objects.')
+    }
+    //
+    // Initialize variables for batching
+    //
+    let totalInserted = 0
+    const db = await sql()
+
+    // Process in batches
+    for (let i = 0; i < jsonData.length; i += BATCH_SIZE) {
+      const batch = jsonData.slice(i, i + BATCH_SIZE)
+
+      const columns = Object.keys(batch[0])
+      const values = batch.map(row => Object.values(row))
+
+      const sqlStatement =
+        `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES ` +
+        values
+          .map(
+            (_, idx) =>
+              `(${columns.map((_, colIdx) => `$${idx * columns.length + colIdx + 1}`).join(', ')})`
+          )
+          .join(', ') +
+        ' RETURNING *'
+
+      const flattenedValues = values.flat()
+
+      // Restrict the length of sqlStatement
+      const truncatedSqlStatement =
+        sqlStatement.length > maxSqlLength ? sqlStatement.slice(0, maxSqlLength) : sqlStatement
+
+      // Restrict the length of flattenedValues
+      const valuesJson = flattenedValues?.length
+        ? `, Values: ${JSON.stringify(flattenedValues).slice(0, maxValuesLength)}`
+        : ''
+      console.log('truncatedSqlStatement:', truncatedSqlStatement)
+      console.log('valuesJson:', valuesJson)
+      writeLogging(functionName, `${truncatedSqlStatement}${valuesJson}`, 'I')
+      // Execute the query
+      const result = await db.query(sqlStatement, flattenedValues)
+
+      // Increment the total count
+      totalInserted += result?.rowCount || 0
+    }
+
+    // Return the total number of inserted records
+    return totalInserted
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.log(`${functionName}:`, errorMessage)
+    writeLogging(functionName, errorMessage, 'E')
+    return 0
   }
 }

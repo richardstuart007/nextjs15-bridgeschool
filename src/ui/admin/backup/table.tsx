@@ -12,7 +12,11 @@ import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
 import Pagination from '@/src/ui/utils/paginationState'
 import { Button } from '@/src/ui/utils/button'
 import { basetables } from '@/src/lib/tables/basetables'
-import { downloadDataAsJSON, listFilesInDirectory } from '@/src/lib/tables/backupUtils'
+import {
+  downloadDataAsJSON,
+  listFilesInDirectory,
+  uploadJSONToDatabase
+} from '@/src/lib/tables/backupUtils'
 
 export default function Table() {
   //
@@ -383,7 +387,7 @@ export default function Table() {
       //
       // Call the server function to Duplicate
       //
-      await table_copy_data({ tablebase, tablebackup })
+      await table_copy_data({ table_from: tablebase, table_to: tablebackup })
       //
       // Update count
       //
@@ -663,6 +667,196 @@ export default function Table() {
     }
   }
   //----------------------------------------------------------------------------------------------
+  //  Upload ALL
+  //----------------------------------------------------------------------------------------------
+  function handleUploadClick_ALL() {
+    const dirPath = `${dirPathPrefix}${dataDirectory}`
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Upload ALL',
+      subTitle: `Are you sure you want to Upload from directory ${dirPath} ?`,
+      onConfirm: () => perform_Upload_ALL()
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Upload
+  //----------------------------------------------------------------------------------------------
+  function handleUploadClick(tablebase: string, tablebackup: string) {
+    const tableUpload = `${tablebase}.json`
+    const filePath = `${dirPathPrefix}${dataDirectory}/${tableUpload}`
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Upload',
+      subTitle: `Are you sure you want to Upload Data FROM (${filePath}) TO (${tablebackup}) ?`,
+      onConfirm: () => performUpload(filePath, tablebackup)
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the Upload ALL
+  //----------------------------------------------------------------------------------------------
+  async function perform_Upload_ALL() {
+    //
+    //  Reset dialog
+    //
+    setConfirmDialog({ ...confirmDialog, isOpen: false })
+    //
+    //  Perform all sequentially
+    //
+    try {
+      //
+      // Construct filters dynamically from input fields
+      //
+      for (const tablebase of tabledata) {
+        const filePath = `${dirPathPrefix}${dataDirectory}/${tablebase}.json`
+        const tablebackup = `${backupStartChar}${prefix_Z}${tablebase}`
+        await performUpload(filePath, tablebackup, true)
+      }
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Upload_ALL completed')
+    } catch (error) {
+      console.log('Error during perform_Upload_ALL:', error)
+      setmessage('Error during perform_Upload_ALL')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the Upload
+  //----------------------------------------------------------------------------------------------
+  async function performUpload(filePath: string, tablebackup: string, many: boolean = false) {
+    try {
+      //
+      //  Reset dialog
+      //
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Index check
+      //
+      const index = tabledata_Z.findIndex(row => row === tablebackup)
+      //
+      //  Do not upload if there are records already in the file
+      //
+      if (tabledata_count_Z[index] > 0) return
+      //
+      //  Status Message
+      //
+      setmessage(`Upload Data from (${filePath}) to (${tablebackup})`)
+      //
+      // Call the server function to Uploadload
+      //
+
+      const count = await uploadJSONToDatabase(filePath, tablebackup)
+      console.log('count:', count)
+      //
+      // Update count
+      //
+      updcount_Z(index, count)
+      //
+      //  Status Message
+      //
+      if (!many) setmessage('Task completed')
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.log('Error during table_copy_data:', error)
+      setmessage('Error during copy_data')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  ToBase ALL
+  //----------------------------------------------------------------------------------------------
+  function handleToBaseClick_ALL() {
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm ToBase ALL',
+      subTitle: `Are you sure you want to Copy to ALL ToBase Tables?`,
+      onConfirm: () => perform_ToBase_ALL()
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  ToBase
+  //----------------------------------------------------------------------------------------------
+  function handleToBaseClick(tablebase: string) {
+    const tablebackup = `${backupStartChar}${prefix_Z}${tablebase}`
+    setConfirmDialog({
+      isOpen: true,
+      title: 'Confirm Copy to ToBase',
+      subTitle: `Are you sure you want to Copy Data FROM (${tablebackup}) TO (${tablebase}) ?`,
+      onConfirm: () => performToBase(tablebackup, tablebase)
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the ToBase ALL
+  //----------------------------------------------------------------------------------------------
+  async function perform_ToBase_ALL() {
+    //
+    //  Reset dialog
+    //
+    setConfirmDialog({ ...confirmDialog, isOpen: false })
+    //
+    //  Copy all backup tables sequentially
+    //
+    try {
+      for (let index = 0; index < tabledata_Z.length; index++) {
+        if (tabledata_Z[index]) {
+          const tablebackup = tabledata_Z[index]
+          const tablebase = tabledata[index]
+          await performCopy(tablebase, tablebackup, true)
+        }
+      }
+      //
+      //  Task completed message
+      //
+      setmessage('perform_Copy_ALL completed')
+    } catch (error) {
+      console.log('Error during perform_Copy_ALL:', error)
+      setmessage('Error during perform_Copy_ALL')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Perform the ToBase
+  //----------------------------------------------------------------------------------------------
+  async function performToBase(tablebackup: string, tablebase: string, many: boolean = false) {
+    try {
+      //
+      //  Reset dialog
+      //
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`Copy Data from (${tablebackup}) to (${tablebase})`)
+      //
+      //  Index check
+      //
+      const index = tabledata_Z.findIndex(row => row === tablebackup)
+      if (!exists_Z[index] || tabledata_count_Z[index] === 0) return
+      //
+      //  Clear the base table
+      //
+      await table_truncate(tablebase)
+      //
+      //  Copy the data
+      //
+      await table_copy_data({ table_from: tablebackup, table_to: tablebase })
+      //
+      // Update count
+      //
+      updcount(index, tabledata_count_Z[index])
+      //
+      //  Status Message
+      //
+      if (!many) setmessage('Task completed')
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.log('Error during table_copy_data:', error)
+      setmessage('Error during copy_data')
+    }
+  }
+  //----------------------------------------------------------------------------------------------
   //  Update count_Z
   //----------------------------------------------------------------------------------------------
   async function updcount_Z(index: number, value: number) {
@@ -670,6 +864,19 @@ export default function Table() {
     //  Update the latest version
     //
     settabledata_count_Z(prev => {
+      const updatedCount = [...prev]
+      updatedCount[index] = value
+      return updatedCount
+    })
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Update count
+  //----------------------------------------------------------------------------------------------
+  async function updcount(index: number, value: number) {
+    //
+    //  Update the latest version
+    //
+    settabledata_count(prev => {
       const updatedCount = [...prev]
       updatedCount[index] = value
       return updatedCount
@@ -702,7 +909,6 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
-
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -714,70 +920,97 @@ export default function Table() {
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+      <div className='mt-4 py-2 px-2 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        <table className='min-w-full text-gray-900 table-auto '>
+          {/* --------------------------------------------------------------------- */}
+          {/** HEADING                                                             */}
+          {/** -------------------------------------------------------------------- */}
+          <thead className='rounded-lg text-left font-normal text-xs '>
+            {/* --------------------------------------------------------------------- */}
+            {/** ROW                                                                  */}
+            {/** -------------------------------------------------------------------- */}
             <tr>
-              <td colSpan={9}></td>
-              <td className='font-medium px-2 text-center'>
+              <th className='pb-2 px-2' colSpan={2}>
+                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+                  Postgres Base Tables
+                </div>
+              </th>
+              <th className='pb-2 px-2' colSpan={7}>
+                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+                  Postgres Backup Tables
+                </div>
+              </th>
+
+              {/** ................................................................ */}
+              <th className='pb-2 px-8' colSpan={4}>
+                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+                  {`PC Folder (${dirPathPrefix}${dataDirectory})`}
+                </div>
+              </th>
+              <th></th>
+            </tr>
+            {/* --------------------------------------------------------------------- */}
+            {/** ROW - Headings                                                       */}
+            {/** -------------------------------------------------------------------- */}
+            <tr>
+              <th scope='col' className=' font-medium px-2'>
+                Table
+              </th>
+              <th scope='col' className=' font-medium px-2 text-right'>
+                Records
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Table
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Exists
+              </th>
+              <th scope='col' className=' font-medium px-2 text-right'>
+                Records
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Drop
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Duplicate
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Clear
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Copy
+              </th>
+              {/** ................................................................ */}
+              <th scope='col' className='font-bold px-2 text-center'>
                 <label htmlFor='dataDirectory' className='sr-only'>
                   Data Directory
                 </label>
                 <input
                   id='dataDirectory'
                   name='dataDirectory'
-                  className={`w-40 rounded-md border border-gray-300 py-1 px-2 text-xs`}
+                  className={`w-40 rounded-md border border-blue-500 py-1 px-2 text-xs text-center`}
                   type='text'
                   value={dataDirectory}
                   onChange={e => setDataDirectory(e.target.value)}
                 />
-              </td>
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Exists
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Upload
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                ToBase
+              </th>
             </tr>
-          </thead>
-          <thead className='rounded-lg text-left font-normal text-xs'>
             {/* --------------------------------------------------------------------- */}
-            {/** HEADINGS                                                                */}
+            {/** ROW - DROPDOWN & SEARCHES                                            */}
             {/** -------------------------------------------------------------------- */}
-            <tr>
-              <th scope='col' className=' font-medium px-2'>
-                Base Table
-              </th>
-              <th scope='col' className=' font-medium px-2 text-right'>
-                Records
-              </th>
-              <th scope='col' className=' font-medium px-2'>
-                Backup Table
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Exists
-              </th>
-              <th scope='col' className=' font-medium px-2 text-right'>
-                Records
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Drop Table
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Duplicate Table
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Clear Data
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Copy Data
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Down Data
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Exists
-              </th>
-            </tr>
-            {/* ---------------------------------------------------------------------------------- */}
-            {/* DROPDOWN & SEARCHES             */}
-            {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
               <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+              {/* Refresh                                       */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-right'>
                 <div className='inline-flex justify-center items-center'>
@@ -792,14 +1025,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* Backup prefixZ                                       */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='font-medium px-2 text-left'>
                 <label htmlFor='prefixZ' className='sr-only'>
                   prefixZ
                 </label>
                 <input
                   id='prefixZ'
                   name='prefixZ'
-                  className={`w-20 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  className={`w-20 rounded-md border border-blue-500 py-1 px-2 text-xs`}
                   type='text'
                   value={prefix_Z}
                   onChange={e => {
@@ -808,6 +1041,8 @@ export default function Table() {
                   }}
                 />
               </th>
+              {/* ................................................... */}
+              {/* Refresh - backup                                      */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 <div className='inline-flex justify-center items-center'>
@@ -821,7 +1056,7 @@ export default function Table() {
               </th>
               <th scope='col' className='px-2'></th>
               {/* ................................................... */}
-              {/* Buttons                                    */}
+              {/* DROP button                                    */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata_Z.length > 0 && (
@@ -836,6 +1071,8 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              {/* Dup button                                      */}
+              {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
@@ -848,6 +1085,8 @@ export default function Table() {
                   </div>
                 )}
               </th>
+              {/* ................................................... */}
+              {/* Clear button                                       */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata_Z.length > 0 && (
@@ -862,6 +1101,8 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              {/* Copy                                       */}
+              {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
@@ -874,6 +1115,8 @@ export default function Table() {
                   </div>
                 )}
               </th>
+              {/* ................................................... */}
+              {/* Download                                       */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata.length > 0 && (
@@ -888,6 +1131,8 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              {/* Refresh directory                                      */}
+              {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
                 {tabledata.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
@@ -901,40 +1146,69 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              {/* Upload ALL                                    */}
+              {/* ................................................... */}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                {tabledata.length > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleUploadClick_ALL()}
+                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    >
+                      Upload
+                    </Button>
+                  </div>
+                )}
+              </th>
+              {/* ................................................... */}
+              {/* ToBase ALL                                    */}
+              {/* ................................................... */}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                {tabledata.length > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleToBaseClick_ALL()}
+                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    >
+                      ToBase
+                    </Button>
+                  </div>
+                )}
+              </th>
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white text-xs'>
-            {tabledata?.map((tabledata, index) => {
-              // Check if the Z table exists
-              const existsInZ = exists_Z[index] || false
-              const existsInD = exists_D[index] || false
-              const existsInB = tabledata_count[index] || false
+            {tabledata?.map((row_tabledata, index) => {
+              //
+              // Create map constants
+              //
+              const row_existsInZ = exists_Z[index] || false
+              const row_existsInD = exists_D[index] || false
+              const row_existsInB = tabledata_count[index] || false
+              const row_tabledata_Z = tabledata_Z[index]
+              const row_tabledata_count = tabledata_count[index]
+              const row_tabledata_count_Z = tabledata_count_Z[index]
+              //
+              // Return the table row
+              //
               return (
-                <tr key={tabledata} className='w-full border-b'>
+                <tr key={row_tabledata} className='w-full border-b'>
                   {/* Table Name */}
-                  <td className='px-2 pt-2'>{tabledata}</td>
-                  <td className='px-2 pt-2 text-right'>
-                    {typeof tabledata_count[index] === 'number'
-                      ? tabledata_count[index].toLocaleString()
-                      : ''}
-                  </td>
-                  <td className='px-2 pt-2'>{tabledata_Z[index]}</td>
-                  <td className='px-2 pt-2 text-center'>{existsInZ ? 'Y' : ''}</td>
-                  <td className='px-2 pt-2 text-right'>
-                    {typeof tabledata_count_Z[index] === 'number'
-                      ? tabledata_count_Z[index].toLocaleString()
-                      : ''}
-                  </td>
+                  <td className='px-2 pt-2'>{row_tabledata}</td>
+                  <td className='px-2 pt-2 text-right'>{row_tabledata_count}</td>
+                  <td className='px-2 pt-2'>{row_tabledata_Z}</td>
+                  <td className='px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
+                  <td className='px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
 
                   {/* Drop Button - Only if Z table exists */}
                   <td className='px-2 py-1 text-center'>
-                    {existsInZ && (
+                    {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handleDropClick(tabledata)}
+                          onClick={() => handleDropClick(row_tabledata)}
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Drop
@@ -945,10 +1219,10 @@ export default function Table() {
 
                   {/* Duplicate Button - Only if Z table does not exist */}
                   <td className='px-2 py-1 text-center'>
-                    {!existsInZ && tabledata_Z.length > 0 && (
+                    {!row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handleDupClick(tabledata)}
+                          onClick={() => handleDupClick(row_tabledata)}
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Duplicate
@@ -959,10 +1233,10 @@ export default function Table() {
 
                   {/* Clear Button - Only if Z table exists */}
                   <td className='px-2 py-1 text-center'>
-                    {existsInZ && (
+                    {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handleClearClick(tabledata)}
+                          onClick={() => handleClearClick(row_tabledata)}
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Clear
@@ -973,10 +1247,10 @@ export default function Table() {
 
                   {/* Copy Button - Only if Z table exists */}
                   <td className='px-2 py-1 text-center'>
-                    {existsInZ && (
+                    {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handleCopyClick(tabledata)}
+                          onClick={() => handleCopyClick(row_tabledata)}
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Copy
@@ -987,10 +1261,10 @@ export default function Table() {
 
                   {/* Down Button -  */}
                   <td className='px-2 py-1 text-center'>
-                    {existsInB && (
+                    {row_existsInB && (
                       <div className='inline-flex justify-center items-center'>
                         <Button
-                          onClick={() => handleDownClick(tabledata)}
+                          onClick={() => handleDownClick(row_tabledata)}
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Down
@@ -998,7 +1272,37 @@ export default function Table() {
                       </div>
                     )}
                   </td>
-                  <td className='px-2 pt-2 text-center'>{existsInD ? 'Y' : ''}</td>
+
+                  {/* Exists flag -  */}
+                  <td className='px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
+
+                  {/* Upload Button -  */}
+                  <td className='px-2 py-1 text-center'>
+                    {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleUploadClick(row_tabledata, row_tabledata_Z)}
+                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                        >
+                          Upload
+                        </Button>
+                      </div>
+                    )}
+                  </td>
+
+                  {/* ToBase Button -  */}
+                  <td className='px-2 py-1 text-center'>
+                    {row_existsInZ && row_tabledata_count_Z > 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleToBaseClick(row_tabledata)}
+                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                        >
+                          ToBase
+                        </Button>
+                      </div>
+                    )}
+                  </td>
                 </tr>
               )
             })}

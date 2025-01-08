@@ -14,10 +14,10 @@ type FilterParams = {
   operator: '=' | 'LIKE' | 'NOT LIKE' | '>' | '>=' | '<' | '<=' | 'IN' | 'NOT IN'
   value: string | number | (string | number)[]
 }
-
+//
 // Default items per page
+//
 const ITEMS_PER_PAGE = 10
-
 //---------------------------------------------------------------------
 // Fetch Filtered Function
 //---------------------------------------------------------------------
@@ -66,7 +66,9 @@ export async function fetchFiltered({
     //
     // Logging
     //
-    writeLogging(functionName, sqlQuerystatement, 'I')
+    const qryvaluesJSON = queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''
+    const message = `${sqlQuerystatement}${qryvaluesJSON}`
+    writeLogging(functionName, message, 'I')
     //
     // Execute Query
     //
@@ -116,11 +118,9 @@ export async function fetchTotalPages({
     //
     // Logging
     //
-    writeLogging(
-      functionName,
-      `${sqlQueryupd}${queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''}`,
-      'I'
-    )
+    const qryvaluesJSON = queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''
+    const message = `${sqlQueryupd}${qryvaluesJSON}`
+    writeLogging(functionName, message, 'I')
     //
     // Execute Query
     //
