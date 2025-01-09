@@ -99,6 +99,7 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
+    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, uid, owner, group, ref, desc, who, questions, type])
   //......................................................................................
   //  Screen size
