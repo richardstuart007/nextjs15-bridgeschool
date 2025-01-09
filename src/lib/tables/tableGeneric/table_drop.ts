@@ -10,14 +10,10 @@ export async function table_drop(table: string): Promise<boolean> {
     //
     const sqlQuery = `DROP Table ${table}`
     //
-    // Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
     // Run query
     //
     const db = await sql()
-    await db.query(sqlQuery)
+    await db.query(sqlQuery, [], functionName)
     return true
   } catch (error) {
     //

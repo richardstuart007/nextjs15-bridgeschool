@@ -9,7 +9,7 @@ export async function fetchTopResultsData() {
   const functionName = 'fetchTopResultsData'
 
   try {
-    const sqlQueryStatement = `
+    const sqlQuery = `
     SELECT
         r_uid,
         u_name,
@@ -33,18 +33,10 @@ export async function fetchTopResultsData() {
       LIMIT 5
   `
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery)
+    const data = await db.query(sqlQuery, [], functionName)
     //
     //  Return rows
     //
@@ -66,7 +58,7 @@ export async function fetchRecentResultsData1() {
   const functionName = 'fetchRecentResultsData1'
 
   try {
-    const sqlQueryStatement = `
+    const sqlQuery = `
     SELECT
       r_hid, r_uid, u_name, r_totalpoints, r_maxpoints, r_correctpercent
       FROM (
@@ -90,18 +82,10 @@ export async function fetchRecentResultsData1() {
       LIMIT 5
       `
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery)
+    const data = await db.query(sqlQuery, [], functionName)
     //
     //  Return rows
     //
@@ -124,7 +108,7 @@ export async function fetchRecentResultsData5(userIds: number[]) {
 
   try {
     const [id1, id2, id3, id4, id5] = userIds
-    const sqlQueryStatement = `
+    const sqlQuery = `
     SELECT
       r_hid,
       r_uid,
@@ -145,19 +129,10 @@ export async function fetchRecentResultsData5(userIds: number[]) {
         `
     const values = [id1, id2, id3, id4, id5]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQuery, values, functionName)
     //
     //  Return rows
     //

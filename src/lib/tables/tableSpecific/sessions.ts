@@ -17,7 +17,7 @@ export async function UpdateSessions(
   const functionName = 'UpdateSessions'
 
   try {
-    const sqlQueryStatement = `
+    const sqlQuery = `
     UPDATE sessions
     SET
       s_dftmaxquestions = $1,
@@ -27,19 +27,10 @@ export async function UpdateSessions(
     `
     const queryValues = [s_dftmaxquestions, s_sortquestions, s_skipcorrect, s_id]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    await db.query(sqlQuery, queryValues)
+    await db.query(sqlQuery, queryValues, functionName)
     //
     //  Errors
     //
@@ -59,7 +50,7 @@ export async function fetchSessionInfo(sessionId: number) {
   const functionName = 'fetchSessionInfo'
 
   try {
-    const sqlQueryStatement = `
+    const sqlQuery = `
     SELECT
         u_uid,
         u_name,
@@ -76,19 +67,10 @@ export async function fetchSessionInfo(sessionId: number) {
     `
     const queryValues = [sessionId]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues)
+    const data = await db.query(sqlQuery, queryValues, functionName)
     const row = data.rows[0]
     //
     //  Return the session info

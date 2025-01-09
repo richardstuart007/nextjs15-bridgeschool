@@ -36,15 +36,10 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
   //
   try {
     //
-    //  Logging
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQuery, values, functionName)
     //
     // Return the inserted rows
     //

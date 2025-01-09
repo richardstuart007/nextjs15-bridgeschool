@@ -10,6 +10,7 @@ export async function writeLogging(
   lgseverity: string = 'E',
   lgsession: number = 0
 ) {
+  const functionName = 'writeLogging'
   try {
     //
     // Skip logging for 'I' severity in production mode
@@ -49,7 +50,7 @@ export async function writeLogging(
     //  Execute the sql
     //
     const db = await sql()
-    const { rows } = await db.query(sqlQuery, queryValues)
+    const { rows } = await db.query(sqlQuery, queryValues, functionName)
     //
     //  Return inserted log
     //

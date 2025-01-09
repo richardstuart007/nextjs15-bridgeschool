@@ -19,7 +19,7 @@ export async function fetchOwnerFiltered(query: string, currentPage: number) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `SELECT *
+    const sqlQuery = `SELECT *
     FROM owner
      ${sqlWhere}
       ORDER BY oowner
@@ -27,19 +27,10 @@ export async function fetchOwnerFiltered(query: string, currentPage: number) {
      `
     const queryValues = [MAINT_ITEMS_PER_PAGE, offset]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
-    //
     //  Execute SQL
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues)
+    const data = await db.query(sqlQuery, queryValues, functionName)
     //
     //  Return results
     //
@@ -134,22 +125,14 @@ export async function fetchOwnerTotalPages(query: string) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `SELECT COUNT(*)
+    const sqlQuery = `SELECT COUNT(*)
     FROM owner
     ${sqlWhere}`
-    //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //
     const db = await sql()
-    const result = await db.query(sqlQuery)
+    const result = await db.query(sqlQuery, [], functionName)
     //
     //  Return results
     //

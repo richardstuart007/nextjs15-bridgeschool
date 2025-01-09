@@ -19,7 +19,7 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `SELECT *
+    const sqlQuery = `SELECT *
     FROM users
      ${sqlWhere}
       ORDER BY u_name
@@ -28,19 +28,10 @@ export async function fetchUsersFiltered(query: string, currentPage: number) {
      `
     const queryValues = [USERS_ITEMS_PER_PAGE, offset]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${sqlWhere}`
-    writeLogging(functionName, message, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues)
+    const data = await db.query(sqlQuery, queryValues, functionName)
     //
     //  Return results
     //
@@ -70,23 +61,15 @@ export async function fetchUsersTotalPages(query: string) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `
+    const sqlQuery = `
     SELECT COUNT(*)
     FROM users
     ${sqlWhere}`
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
     //  Run sql Query
     //
     const db = await sql()
-    const result = await db.query(sqlQuery)
+    const result = await db.query(sqlQuery, [], functionName)
     //
     //  Return results
     //

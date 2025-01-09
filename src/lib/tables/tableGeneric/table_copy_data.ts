@@ -31,24 +31,16 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
     //
     // Construct the SQL
     //
-    const sqlQueryStatement = `
+    const sqlQuery = `
         INSERT INTO ${table_to}
           (${columnsList})
         SELECT ${valuesList}
           FROM ${table_from}
       `
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    // Log the query
-    //
-    writeLogging(functionName, sqlQuery, 'I')
-    //
     // Execute the query
     //
-    await db.query(sqlQuery)
+    await db.query(sqlQuery, [], functionName)
     //
     // All ok
     //
@@ -70,23 +62,15 @@ async function getColumns(db: any, table: string): Promise<string[]> {
   //
   // Construct the SQL
   //
-  const sqlQueryStatement = `
+  const sqlQuery = `
         SELECT column_name
         FROM information_schema.columns
         where table_name = '${table}'
     `
   //
-  // Remove redundant spaces
-  //
-  const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-  //
-  // Log the query
-  //
-  writeLogging(functionName, sqlQuery, 'I')
-  //
   // Execute the query
   //
-  const data = await db.query(sqlQuery)
+  const data = await db.query(sqlQuery, [], functionName)
   //
   //  Extract and return the columns
   //

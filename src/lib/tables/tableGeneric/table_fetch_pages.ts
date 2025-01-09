@@ -60,19 +60,9 @@ export async function fetchFiltered({
     if (limit !== undefined) finalQuery += ` LIMIT ${limit}`
     if (offset !== undefined) finalQuery += ` OFFSET ${offset}`
     //
-    // Remove redundant spaces
-    //
-    const sqlQuerystatement = finalQuery.replace(/\s+/g, ' ').trim()
-    //
-    // Logging
-    //
-    const qryvaluesJSON = queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''
-    const message = `${sqlQuerystatement}${qryvaluesJSON}`
-    writeLogging(functionName, message, 'I')
-    //
     // Execute Query
     //
-    const data = await db.query(sqlQuerystatement, queryValues)
+    const data = await db.query(finalQuery, queryValues, functionName)
     return data.rows.length > 0 ? data.rows : []
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
@@ -112,19 +102,9 @@ export async function fetchTotalPages({
       countQuery = `SELECT COUNT(*) FROM (${sqlQuery.replace('SELECT *', `SELECT DISTINCT ON (${distinctColumns.join(', ')}) *`)}) AS distinct_records`
     }
     //
-    // Strip blanks
-    //
-    const sqlQueryupd = countQuery.replace(/\s+/g, ' ').trim()
-    //
-    // Logging
-    //
-    const qryvaluesJSON = queryValues?.length ? `, Values: ${JSON.stringify(queryValues)}` : ''
-    const message = `${sqlQueryupd}${qryvaluesJSON}`
-    writeLogging(functionName, message, 'I')
-    //
     // Execute Query
     //
-    const result = await db.query(sqlQueryupd, queryValues)
+    const result = await db.query(countQuery, queryValues, functionName)
     //
     // Calculate Total Pages
     //

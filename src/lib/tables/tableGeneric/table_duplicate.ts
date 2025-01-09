@@ -15,22 +15,14 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
     //
     // Create the backup table
     //
-    const createTableSQL = `
+    const sqlQuery = `
         CREATE TABLE ${table_to}
         (LIKE ${table_from} INCLUDING ALL)`
-    //
-    // Remove redundant spaces
-    //
-    const sqlQuery = createTableSQL.replace(/\s+/g, ' ').trim()
-    //
-    // Log the query
-    //
-    writeLogging(functionName, sqlQuery, 'I')
     //
     // Execute the query
     //
     const db = await sql()
-    await db.query(sqlQuery)
+    await db.query(sqlQuery, [], functionName)
     //
     // All ok
     //

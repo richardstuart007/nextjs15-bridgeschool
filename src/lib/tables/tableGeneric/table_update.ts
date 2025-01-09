@@ -52,15 +52,10 @@ export async function table_update({
     //
     const sqlQuery = `UPDATE ${table} SET ${setClause} WHERE ${whereClause} RETURNING *`
     //
-    //  Log the sql
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQuery, values, functionName)
     //
     // Return rows updated
     //

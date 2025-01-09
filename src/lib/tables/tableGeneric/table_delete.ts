@@ -50,19 +50,10 @@ export async function table_delete({
     //
     if (returning) sqlQueryStatement += ` RETURNING *`
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    // Log the query
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQueryStatement, values, functionName)
     //
     // If RETURNING * is specified, return the deleted rows
     //

@@ -50,19 +50,10 @@ export async function table_fetch({
     //
     if (orderBy) sqlQuery += ` ORDER BY ${orderBy}`
     //
-    // Remove redundant spaces
-    //
-    sqlQuery = sqlQuery.replace(/\s+/g, ' ').trim()
-    //
-    // Log the query and values
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQuery, values, functionName)
     //
     // Return rows
     //

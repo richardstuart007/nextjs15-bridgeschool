@@ -19,7 +19,7 @@ export async function fetchWhoFiltered(query: string, currentPage: number) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `SELECT *
+    const sqlQuery = `SELECT *
     FROM who
      ${sqlWhere}
       ORDER BY wwho
@@ -28,19 +28,10 @@ export async function fetchWhoFiltered(query: string, currentPage: number) {
      `
     const queryValues = [MAINT_ITEMS_PER_PAGE, offset]
     //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    const message = `${sqlQuery} Values: ${queryValues}`
-    writeLogging(functionName, message, 'I')
-    //
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues)
+    const data = await db.query(sqlQuery, queryValues, functionName)
     //
     //  Return results
     //
@@ -140,22 +131,14 @@ export async function fetchWhoTotalPages(query: string) {
     //
     //  Build Query Statement
     //
-    const sqlQueryStatement = `SELECT COUNT(*)
+    const sqlQuery = `SELECT COUNT(*)
     FROM who
     ${sqlWhere}`
-    //
-    // Remove redundant spaces
-    //
-    const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-    //
-    //  Logging
-    //
-    writeLogging(functionName, sqlQuery, 'I')
     //
     //  Run sql Query
     //
     const db = await sql()
-    const result = await db.query(sqlQuery)
+    const result = await db.query(sqlQuery, [], functionName)
     //
     //  Return results
     //

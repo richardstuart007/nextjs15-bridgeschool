@@ -36,25 +36,16 @@ export async function table_check(
       //
       // Construct the SQL SELECT query
       //
-      const sqlQueryStatement = `
+      const sqlQuery = `
       SELECT 1
       FROM ${table}
       WHERE ${whereClause}
       LIMIT 1`
       //
-      // Remove redundant spaces
-      //
-      const sqlQuery = sqlQueryStatement.replace(/\s+/g, ' ').trim()
-      //
-      // Log the query
-      //
-      const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-      writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-      //
       // Execute the query
       //
       const db = await sql()
-      const data = await db.query(sqlQuery, values)
+      const data = await db.query(sqlQuery, values, functionName)
       //
       // Check if rows exist
       //

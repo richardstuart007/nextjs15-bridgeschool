@@ -38,15 +38,10 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
       sqlQuery += ` WHERE ${whereClause}`
     }
     //
-    //  Logging
-    //
-    const valuesJson = values?.length ? `, Values: ${JSON.stringify(values)}` : ''
-    writeLogging(functionName, `${sqlQuery}${valuesJson}`, 'I')
-    //
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values)
+    const data = await db.query(sqlQuery, values, functionName)
     //
     // Return the count
     //

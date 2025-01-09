@@ -288,7 +288,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     // Execute the query
     //
     const db = await sql()
-    const result = await db.query(query)
+    const result = await db.query(query, [], functionName)
     //
     // Check if data exists
     //
@@ -458,7 +458,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
       //
       // Execute the query
       //
-      const result = await db.query(sqlStatement, flattenedValues)
+      const result = await db.query(sqlStatement, flattenedValues, functionName)
       //
       // Increment the total count
       //
