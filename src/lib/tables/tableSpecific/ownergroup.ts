@@ -54,11 +54,9 @@ export async function fetchFiltered(query: string, currentPage: number) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -177,11 +175,9 @@ export async function fetchPages(query: string) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -213,11 +209,9 @@ export async function update_ogcntquestions(gid: number) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -249,11 +243,9 @@ export async function update_ogcntlibrary(gid: number) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }

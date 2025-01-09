@@ -44,11 +44,9 @@ export async function UpdateSessions(
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     return {
       message: 'UpdateSessions: Failed to Update session.'
     }
@@ -110,11 +108,9 @@ export async function fetchSessionInfo(sessionId: number) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -148,11 +144,9 @@ export async function isAdmin() {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }

@@ -11,11 +11,11 @@ import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
 import Pagination from '@/src/ui/utils/paginationState'
 import { Button } from '@/src/ui/utils/button'
-import { basetables } from '@/src/lib/tables/basetables'
+import { basetables } from '@/src/ui/admin/backup/basetables'
 import {
-  downloadDataAsJSON,
-  listFilesInDirectory,
-  uploadJSONToDatabase
+  table_write_toJSON,
+  directory_list,
+  table_write_fromJSON
 } from '@/src/lib/tables/backupUtils'
 
 export default function Table() {
@@ -211,7 +211,7 @@ export default function Table() {
       // Construct filters dynamically from input fields
       //
       const dirPath = `${dirPathPrefix}${dataDirectory}`
-      const dirTables = await listFilesInDirectory(dirPath)
+      const dirTables = await directory_list(dirPath)
       //
       //  Update State
       //
@@ -298,7 +298,7 @@ export default function Table() {
       //
       // Call the server function to Duplicate
       //
-      await table_duplicate({ tablebase, tablebackup })
+      await table_duplicate({ table_from: tablebase, table_to: tablebackup })
       //
       // Set the count for the backup table to 0
       //
@@ -356,7 +356,6 @@ export default function Table() {
           await performCopy(tablebase, tablebackup, true)
         }
       }
-
       //
       //  Task completed message
       //
@@ -647,9 +646,8 @@ export default function Table() {
       //
       // Call the server function to Download
       //
-      const query = `SELECT json_agg(t) FROM ${tablebase} t`
       const dirPath = `${dirPathPrefix}${dataDirectory}`
-      await downloadDataAsJSON(query, dirPath, tabledown)
+      await table_write_toJSON({ table: tablebase, dirPath: dirPath, file_out: tabledown })
       //
       // Update exists
       //
@@ -745,7 +743,7 @@ export default function Table() {
       // Call the server function to Uploadload
       //
 
-      const count = await uploadJSONToDatabase(filePath, tablebackup)
+      const count = await table_write_fromJSON(filePath, tablebackup)
       console.log('count:', count)
       //
       // Update count
@@ -802,7 +800,7 @@ export default function Table() {
         if (tabledata_Z[index]) {
           const tablebackup = tabledata_Z[index]
           const tablebase = tabledata[index]
-          await performCopy(tablebase, tablebackup, true)
+          await performToBase(tablebackup, tablebase, true)
         }
       }
       //
@@ -935,14 +933,13 @@ export default function Table() {
                   Postgres Base Tables
                 </div>
               </th>
-              <th className='pb-2 px-2' colSpan={7}>
+              <th className='pb-2 px-2' colSpan={8}>
                 <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
                   Postgres Backup Tables
                 </div>
               </th>
-
               {/** ................................................................ */}
-              <th className='pb-2 px-8' colSpan={4}>
+              <th className='pb-2 px-8' colSpan={3}>
                 <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
                   {`PC Folder (${dirPathPrefix}${dataDirectory})`}
                 </div>
@@ -980,6 +977,9 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Copy
               </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                ToBase
+              </th>
               {/** ................................................................ */}
               <th scope='col' className='font-bold px-2 text-center'>
                 <label htmlFor='dataDirectory' className='sr-only'>
@@ -999,9 +999,6 @@ export default function Table() {
               </th>
               <th scope='col' className=' font-medium px-2 text-center'>
                 Upload
-              </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                ToBase
               </th>
             </tr>
             {/* --------------------------------------------------------------------- */}
@@ -1116,6 +1113,21 @@ export default function Table() {
                 )}
               </th>
               {/* ................................................... */}
+              {/* ToBase ALL                                    */}
+              {/* ................................................... */}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                {tabledata.length > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleToBaseClick_ALL()}
+                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    >
+                      ToBase
+                    </Button>
+                  </div>
+                )}
+              </th>
+              {/* ................................................... */}
               {/* Download                                       */}
               {/* ................................................... */}
               <th scope='col' className=' font-medium px-2 text-center'>
@@ -1156,21 +1168,6 @@ export default function Table() {
                       overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
                     >
                       Upload
-                    </Button>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* ToBase ALL                                    */}
-              {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
-                {tabledata.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <Button
-                      onClick={() => handleToBaseClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
-                    >
-                      ToBase
                     </Button>
                   </div>
                 )}
@@ -1259,6 +1256,20 @@ export default function Table() {
                     )}
                   </td>
 
+                  {/* ToBase Button -  */}
+                  <td className='px-2 py-1 text-center'>
+                    {row_existsInZ && row_tabledata_count_Z > 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <Button
+                          onClick={() => handleToBaseClick(row_tabledata)}
+                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                        >
+                          ToBase
+                        </Button>
+                      </div>
+                    )}
+                  </td>
+
                   {/* Down Button -  */}
                   <td className='px-2 py-1 text-center'>
                     {row_existsInB && (
@@ -1285,20 +1296,6 @@ export default function Table() {
                           overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
                         >
                           Upload
-                        </Button>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* ToBase Button -  */}
-                  <td className='px-2 py-1 text-center'>
-                    {row_existsInZ && row_tabledata_count_Z > 0 && (
-                      <div className='inline-flex justify-center items-center'>
-                        <Button
-                          onClick={() => handleToBaseClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
-                        >
-                          ToBase
                         </Button>
                       </div>
                     )}

@@ -54,11 +54,9 @@ export async function fetchTopResultsData() {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
   }
 }
 //---------------------------------------------------------------------
@@ -113,11 +111,9 @@ export async function fetchRecentResultsData1() {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
   }
 }
 //---------------------------------------------------------------------
@@ -171,10 +167,8 @@ export async function fetchRecentResultsData5(userIds: number[]) {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
   }
 }

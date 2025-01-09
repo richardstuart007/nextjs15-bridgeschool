@@ -56,9 +56,6 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
     writeLogging(functionName, errorMessage)

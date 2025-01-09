@@ -132,8 +132,9 @@ export async function fetchTotalPages({
     const totalPages = Math.ceil(count / items_per_page)
     return totalPages
   } catch (error) {
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }

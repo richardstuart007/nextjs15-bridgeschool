@@ -72,11 +72,9 @@ export async function table_check(
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }

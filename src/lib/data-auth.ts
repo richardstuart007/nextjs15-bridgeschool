@@ -44,11 +44,9 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
@@ -137,11 +135,9 @@ export async function getAuthSession() {
     //  Errors
     //
   } catch (error) {
-    //
-    //  Logging
-    //
-    console.log(`${functionName}:`, error)
-    writeLogging(functionName, 'Function failed')
+    const errorMessage = (error as Error).message
+    writeLogging(functionName, errorMessage, 'E')
+    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }

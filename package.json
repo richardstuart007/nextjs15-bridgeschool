@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "start": "next start",
     "dev": "next dev --turbopack",
     "locallocal": "set PORT=3000 && copy /Y .env.locallocal .env && next dev",
     "localdev": "set PORT=3001 && copy /Y .env.localdev .env && next dev",
