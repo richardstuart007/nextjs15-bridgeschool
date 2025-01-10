@@ -8,7 +8,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { deleteCookie } from '@/src/lib/data-cookie'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 export default function LoginForm() {
   const functionName = 'LoginForm'
@@ -75,8 +75,12 @@ export default function LoginForm() {
       //
       //  Logging
       //
-      const message = 'nav-side: Auth redirect but not /dashboard'
-      writeLogging(functionName, message, 'W')
+      const errorMessage = 'nav-side: Auth redirect but not /dashboard'
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: errorMessage,
+        lgseverity: 'W'
+      })
       router.push('/login')
     }
   }

@@ -1,7 +1,7 @@
 'use server'
 
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 //
 //  Errors and Messages
 //
@@ -305,7 +305,11 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       ok = false
       message = 'Database Error: Failed to Update.'
       const errorMessage = 'Database Error: Failed to Update Bidding.'
-      writeLogging(functionName, errorMessage)
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: errorMessage,
+        lgseverity: 'E'
+      })
       return {
         message: errorMessage,
         errors: undefined,

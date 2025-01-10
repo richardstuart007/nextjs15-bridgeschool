@@ -7,7 +7,7 @@ import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions'
 import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -148,7 +148,11 @@ export async function Maint_detail(
     }
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Library.'
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     return {
       message: errorMessage,
       errors: undefined,

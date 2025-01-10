@@ -6,7 +6,7 @@ import {
   Routes_Prefix_admin,
   Routes_Login
 } from '@/src/validroutes'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
 import { cookies } from 'next/headers'
 
@@ -78,7 +78,12 @@ export default async function middleware(req: any): Promise<any> {
       //
       //  Logging
       //
-      writeLogging(functionName, `Admin Route not logged in: Redirect ${Routes_Login}`, 'W')
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: `Admin Route not logged in: Redirect ${Routes_Login}`,
+        lgseverity: 'W'
+      })
+
       return Response.redirect(new URL(Routes_Login, nextUrl))
     }
     //
@@ -86,11 +91,11 @@ export default async function middleware(req: any): Promise<any> {
     //
     const isAdminAuthorised = await isAdmin()
     if (!isAdminAuthorised) {
-      writeLogging(
-        functionName,
-        `Admin Route not Authorised: Redirect ${Routes_AfterLogin_redirect}`,
-        'W'
-      )
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: `Admin Route not Authorised: Redirect ${Routes_AfterLogin_redirect}`,
+        lgseverity: 'W'
+      })
       return Response.redirect(new URL(Routes_AfterLogin_redirect, nextUrl))
     }
     //

@@ -2,7 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 //
 // Define the column-value pair interface
 //
@@ -39,7 +39,7 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values, functionName)
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
     // Return the inserted rows
     //
@@ -50,7 +50,11 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     // throw new Error(`${functionName}, ${errorMessage}`)
     return []
   }

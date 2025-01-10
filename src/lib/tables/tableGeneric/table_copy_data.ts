@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 interface Props {
   table_from: string
@@ -40,7 +40,7 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
     //
     // Execute the query
     //
-    await db.query(sqlQuery, [], functionName)
+    await db.query({ query: sqlQuery, functionName: functionName })
     //
     // All ok
     //
@@ -50,7 +50,11 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
@@ -70,7 +74,7 @@ async function getColumns(db: any, table: string): Promise<string[]> {
   //
   // Execute the query
   //
-  const data = await db.query(sqlQuery, [], functionName)
+  const data = await db.query({ query: sqlQuery, functionName: functionName })
   //
   //  Extract and return the columns
   //

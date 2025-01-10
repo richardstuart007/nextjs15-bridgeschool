@@ -3,7 +3,7 @@
 import { sql } from '@/src/lib/db'
 
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 import { getCookieSessionId } from '@/src/lib/data-cookie'
 //---------------------------------------------------------------------
 //  Update Sessions
@@ -30,13 +30,17 @@ export async function UpdateSessions(
     //  Execute the sql
     //
     const db = await sql()
-    await db.query(sqlQuery, queryValues, functionName)
+    await db.query({ query: sqlQuery, params: queryValues, functionName: functionName })
     //
     //  Errors
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     return {
       message: 'UpdateSessions: Failed to Update session.'
@@ -70,7 +74,11 @@ export async function fetchSessionInfo(sessionId: number) {
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues, functionName)
+    const data = await db.query({
+      query: sqlQuery,
+      params: queryValues,
+      functionName: functionName
+    })
     const row = data.rows[0]
     //
     //  Return the session info
@@ -91,7 +99,11 @@ export async function fetchSessionInfo(sessionId: number) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
@@ -127,7 +139,11 @@ export async function isAdmin() {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }

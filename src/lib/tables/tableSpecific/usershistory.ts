@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
@@ -36,7 +36,7 @@ export async function fetchTopResultsData() {
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, [], functionName)
+    const data = await db.query({ query: sqlQuery, functionName: functionName })
     //
     //  Return rows
     //
@@ -47,7 +47,11 @@ export async function fetchTopResultsData() {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
   }
 }
@@ -85,7 +89,7 @@ export async function fetchRecentResultsData1() {
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, [], functionName)
+    const data = await db.query({ query: sqlQuery, functionName: functionName })
     //
     //  Return rows
     //
@@ -96,7 +100,11 @@ export async function fetchRecentResultsData1() {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
   }
 }
@@ -132,7 +140,7 @@ export async function fetchRecentResultsData5(userIds: number[]) {
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values, functionName)
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
     //  Return rows
     //
@@ -143,7 +151,11 @@ export async function fetchRecentResultsData5(userIds: number[]) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
   }
 }

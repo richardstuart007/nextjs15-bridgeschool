@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 // Define types for joins and filters
 type JoinParams = {
@@ -62,12 +62,21 @@ export async function fetchFiltered({
     //
     // Execute Query
     //
-    const data = await db.query(finalQuery, queryValues, functionName)
+    const data = await db.query({
+      query: finalQuery,
+      params: queryValues,
+      functionName: functionName
+    })
+
     return data.rows.length > 0 ? data.rows : []
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     throw new Error(`${functionName}, ${errorMessage}`)
   }
 }
@@ -104,7 +113,12 @@ export async function fetchTotalPages({
     //
     // Execute Query
     //
-    const result = await db.query(countQuery, queryValues, functionName)
+    const result = await db.query({
+      query: countQuery,
+      params: queryValues,
+      functionName: functionName
+    })
+
     //
     // Calculate Total Pages
     //
@@ -113,7 +127,11 @@ export async function fetchTotalPages({
     return totalPages
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }

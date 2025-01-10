@@ -1,6 +1,6 @@
 'use server'
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 export async function table_drop(table: string): Promise<boolean> {
   const functionName = 'table_drop'
@@ -13,7 +13,7 @@ export async function table_drop(table: string): Promise<boolean> {
     // Run query
     //
     const db = await sql()
-    await db.query(sqlQuery, [], functionName)
+    await db.query({ query: sqlQuery, functionName: functionName })
     return true
   } catch (error) {
     //
@@ -21,7 +21,11 @@ export async function table_drop(table: string): Promise<boolean> {
     //
     const errorMessage = `Table(${table}) DROP FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     throw new Error(`${functionName}, ${errorMessage}`)
   }
 }

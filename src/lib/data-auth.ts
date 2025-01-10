@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth'
 import { updateCookieSessionId } from '@/src/lib/data-cookie'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
@@ -45,7 +45,12 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
+
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
@@ -136,7 +141,11 @@ export async function getAuthSession() {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }

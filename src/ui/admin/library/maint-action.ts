@@ -6,7 +6,7 @@ import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Library Setup
 // ----------------------------------------------------------------------
@@ -159,7 +159,11 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Library.'
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     return {
       message: errorMessage,
       errors: undefined,

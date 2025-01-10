@@ -2,21 +2,28 @@
 
 import { sql } from '@/src/lib/db'
 //---------------------------------------------------------------------
-//  Write User Logging
+//  Write Logging
 //---------------------------------------------------------------------
-export async function writeLogging(
-  lgfunctionname: string,
-  lgmsg: string,
-  lgseverity: string = 'E',
-  lgsession: number = 0
-) {
-  const functionName = 'writeLogging'
+type Props = {
+  lgfunctionname: string
+  lgmsg: string
+  lgseverity?: string
+  lgsession?: number
+}
+
+export async function errorLogging({
+  lgfunctionname,
+  lgmsg,
+  lgseverity = 'E',
+  lgsession = 0
+}: Props): Promise<boolean> {
+  const functionName = 'errorLogging'
   try {
     //
     // Skip logging for 'I' severity in production mode
     //
     if (lgseverity === 'I' && process.env.CUSTOM_ENV === 'production') {
-      return null
+      return false
     }
     //
     //  Get datetime
@@ -39,7 +46,6 @@ export async function writeLogging(
       lgseverity
       )
     VALUES ($1,$2,$3,$4,$5)
-    RETURNING *
   `
     const queryValues = [lgdatetime, lgmsgTrim, lgfunctionname, lgsession, lgseverity]
     //
@@ -50,15 +56,16 @@ export async function writeLogging(
     //  Execute the sql
     //
     const db = await sql()
-    const { rows } = await db.query(sqlQuery, queryValues, functionName)
+    await db.query({ query: sqlQuery, params: queryValues, functionName: functionName })
     //
     //  Return inserted log
     //
-    return rows[0]
+    return true
     //
     //  Errors
     //
   } catch (error) {
-    console.log('writeLogging Error')
+    console.log('ErrorLogging Error')
+    return false
   }
 }

@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 interface Props {
   table_from: string
@@ -22,7 +22,7 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
     // Execute the query
     //
     const db = await sql()
-    await db.query(sqlQuery, [], functionName)
+    await db.query({ query: sqlQuery, functionName: functionName })
     //
     // All ok
     //
@@ -32,7 +32,11 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     return false
   }

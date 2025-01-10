@@ -9,7 +9,7 @@ import { getAuthSession } from '@/src/lib/data-auth'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/ui/utils/user-logout'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 import { Button } from '@/src/ui/utils/button'
 
 export default function NavSide() {
@@ -42,8 +42,12 @@ export default function NavSide() {
       //
       //  Logging
       //
-      const message = 'nav-side: Auth redirect but not /dashboard'
-      writeLogging(functionName, message, 'W')
+      const errorMessage = 'nav-side: Auth redirect but not /dashboard'
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: errorMessage,
+        lgseverity: 'W'
+      })
       router.push(pathname)
       return
     }

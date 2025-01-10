@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 //
 // Column-value pairs
@@ -53,7 +53,11 @@ export async function table_delete({
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query(sqlQueryStatement, values, functionName)
+    const data = await db.query({
+      query: sqlQueryStatement,
+      params: values,
+      functionName: functionName
+    })
     //
     // If RETURNING * is specified, return the deleted rows
     //
@@ -63,7 +67,11 @@ export async function table_delete({
     // Logging
     const errorMessage = `Table(${table}) DELETE FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     throw new Error(`${functionName}, ${errorMessage}`)
   }
 }

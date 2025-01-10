@@ -1,7 +1,7 @@
 'use server'
 
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 //
 //  Errors and Messages
 //
@@ -268,7 +268,11 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       message = `Database updated successfully.`
       databaseUpdated = true
       const errorMessage = 'Database Error: Failed to Update Library.'
-      writeLogging(functionName, errorMessage)
+      errorLogging({
+        lgfunctionname: functionName,
+        lgmsg: errorMessage,
+        lgseverity: 'E'
+      })
       return {
         message: errorMessage,
         errors: undefined,

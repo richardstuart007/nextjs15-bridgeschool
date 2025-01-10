@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 //
 // Column-value pairs
 //
@@ -41,7 +41,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, values, functionName)
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
     // Return the count
     //
@@ -53,7 +53,11 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.log(`${functionName}: ${errorMessage}`, error)
-    writeLogging(functionName, errorMessage)
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     throw new Error(`${functionName}, ${errorMessage}`)
   }
 }

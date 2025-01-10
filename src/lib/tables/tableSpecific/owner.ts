@@ -2,7 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 const MAINT_ITEMS_PER_PAGE = 15
 //---------------------------------------------------------------------
 //  Owner data
@@ -30,7 +30,11 @@ export async function fetchOwnerFiltered(query: string, currentPage: number) {
     //  Execute SQL
     //
     const db = await sql()
-    const data = await db.query(sqlQuery, queryValues, functionName)
+    const data = await db.query({
+      query: sqlQuery,
+      params: queryValues,
+      functionName: functionName
+    })
     //
     //  Return results
     //
@@ -41,7 +45,11 @@ export async function fetchOwnerFiltered(query: string, currentPage: number) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
@@ -132,7 +140,7 @@ export async function fetchOwnerTotalPages(query: string) {
     //  Run sql Query
     //
     const db = await sql()
-    const result = await db.query(sqlQuery, [], functionName)
+    const result = await db.query({ query: sqlQuery, functionName: functionName })
     //
     //  Return results
     //
@@ -144,7 +152,11 @@ export async function fetchOwnerTotalPages(query: string) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }

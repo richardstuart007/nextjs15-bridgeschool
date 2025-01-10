@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { writeLogging } from '@/src/lib/tables/tableSpecific/logging'
+import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
 
 interface ColumnValuePair {
   column: string
@@ -45,13 +45,17 @@ export async function table_check(
       // Execute the query
       //
       const db = await sql()
-      const data = await db.query(sqlQuery, values, functionName)
+      const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
       //
       // Check if rows exist
       //
       if (data.rows.length > 0) {
-        const message = `Keys exist in ${table} with conditions: ${JSON.stringify(whereColumnValuePairs)}`
-        writeLogging(functionName, message, 'I')
+        const errorMessage = `Keys exist in ${table} with conditions: ${JSON.stringify(whereColumnValuePairs)}`
+        errorLogging({
+          lgfunctionname: functionName,
+          lgmsg: errorMessage,
+          lgseverity: 'I'
+        })
         return true
       }
     }
@@ -64,7 +68,11 @@ export async function table_check(
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    writeLogging(functionName, errorMessage, 'E')
+    errorLogging({
+      lgfunctionname: functionName,
+      lgmsg: errorMessage,
+      lgseverity: 'E'
+    })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
