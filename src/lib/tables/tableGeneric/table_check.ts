@@ -15,7 +15,7 @@ interface TableColumnValuePairs {
 
 export async function table_check(
   tableColumnValuePairs: TableColumnValuePairs[]
-): Promise<boolean> {
+): Promise<{ found: boolean; message: string }> {
   const functionName = 'table_check'
 
   try {
@@ -56,13 +56,13 @@ export async function table_check(
           lgmsg: errorMessage,
           lgseverity: 'I'
         })
-        return true
+        return { found: true, message: errorMessage }
       }
     }
     //
     // If no matches were found
     //
-    return false
+    return { found: false, message: '' }
     //
     //  Errors
     //

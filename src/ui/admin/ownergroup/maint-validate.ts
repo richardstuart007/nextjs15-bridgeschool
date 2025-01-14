@@ -32,7 +32,7 @@ export default async function validateOwnergroup(record: table_Ownergroup): Prom
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists) errors.oggroup = ['Owner/Group must be unique']
+    if (exists.found) errors.oggroup = ['Owner/Group must be unique']
   }
   //
   // Return error messages

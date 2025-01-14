@@ -27,7 +27,7 @@ export default async function validate(record: table_Who): Promise<StateSetup> {
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists) errors.wwho = ['Who must be unique']
+    if (exists.found) errors.wwho = ['Who must be unique']
   }
   //
   // Return error messages

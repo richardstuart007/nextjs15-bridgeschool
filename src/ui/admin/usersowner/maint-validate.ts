@@ -27,7 +27,7 @@ export default async function validateUsersowner(record: table_Usersowner): Prom
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists) errors.owner = ['User/Owner combination already exists']
+  if (exists.found) errors.owner = ['User/Owner combination already exists']
   //
   // Return error messages
   //

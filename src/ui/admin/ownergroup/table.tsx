@@ -130,8 +130,8 @@ export default function Table() {
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
-        if (exists) {
-          setMessage(`Deletion Failed.  Keys exists in other tables`)
+        if (exists.found) {
+          setMessage(exists.message)
           setConfirmDialog({ ...confirmDialog, isOpen: false })
 
           // Automatically clear the message after some seconds

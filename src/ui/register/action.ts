@@ -57,7 +57,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists) {
+  if (exists.found) {
     return {
       message: 'Email already exists'
     }

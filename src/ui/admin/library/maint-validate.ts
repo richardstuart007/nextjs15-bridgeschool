@@ -33,7 +33,7 @@ export default async function validateLibrary(record: table_Library): Promise<St
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists) errors.lrref = ['Owner/Group/Ref must be unique']
+    if (exists.found) errors.lrref = ['Owner/Group/Ref must be unique']
   }
   //
   // Return error messages

@@ -27,7 +27,7 @@ export default async function validate(record: table_Reftype): Promise<StateSetu
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists) errors.rttype = ['reftype must be unique']
+    if (exists.found) errors.rttype = ['reftype must be unique']
   }
   //
   // Return error messages

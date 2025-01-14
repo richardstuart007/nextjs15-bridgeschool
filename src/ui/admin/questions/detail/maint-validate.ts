@@ -40,7 +40,7 @@ export default async function validate(record: Table): Promise<StateSetup> {
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists) errors.qowner = ['questions must be unique']
+    if (exists.found) errors.qowner = ['questions must be unique']
   }
   //
   // Return error messages

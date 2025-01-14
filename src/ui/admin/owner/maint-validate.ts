@@ -23,7 +23,7 @@ export default async function validateOwner(oowner: string): Promise<StateSetup>
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists) errors.oowner = ['Owner must be unique']
+  if (exists.found) errors.oowner = ['Owner must be unique']
   //
   // Return error messages
   //
