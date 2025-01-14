@@ -10,7 +10,6 @@ import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { useUserContext } from '@/UserContext'
 import { Button } from '@/src/ui/utils/button'
 
 interface FormProps {
@@ -19,25 +18,10 @@ interface FormProps {
   selected_group?: string | null
 }
 export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
-  //
-  //  User context
-  //
-  const { sessionContext } = useUserContext()
-  //
-  // Define the structure for filters
-  //
-  type Filter = {
-    column: string
-    value: string | number
-    operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-  }
-  const [filters, setFilters] = useState<Filter[]>([])
+  const rowsPerPage = 17
   //
   //  Selection
   //
-  const [uid, setuid] = useState(0)
-  const [widthNumber, setWidthNumber] = useState(2)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [owner, setowner] = useState(selected_owner ? selected_owner : '')
   const [group, setgroup] = useState(selected_group ? selected_group : '')
   const [desc, setdesc] = useState('')
@@ -45,17 +29,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   const [ref, setref] = useState('')
   const [type, settype] = useState('')
   const [questions, setquestions] = useState<number | string>('')
-  //
-  //  Show columns
-  //
-  const [show_gid, setshow_gid] = useState(true)
-  const [show_owner, setshow_owner] = useState(false)
-  const [show_group, setshow_group] = useState(false)
-  const [show_lid, setshow_lid] = useState(false)
-  const [show_who, setshow_who] = useState(false)
-  const [show_ref, setshow_ref] = useState(false)
-  const [show_type, setshow_type] = useState(false)
-  const [show_questions, setshow_questions] = useState(false)
   //
   //  Data
   //
@@ -76,158 +49,11 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     onConfirm: () => {}
   })
   //......................................................................................
-  //  UID
-  //......................................................................................
-  useEffect(() => {
-    if (sessionContext?.cxuid) {
-      setuid(sessionContext.cxuid)
-      setShouldFetchData(true)
-    }
-  }, [sessionContext])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    screenSize()
-    //
-    // Update on resize
-    //
-    window.addEventListener('resize', screenSize)
-    //
-    // Cleanup event listener on unmount
-    //
-    return () => window.removeEventListener('resize', screenSize)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  //......................................................................................
-  //  Screen size
-  //......................................................................................
-  function screenSize() {
-    updateColumns()
-    updateRows()
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Width
-  //----------------------------------------------------------------------------------------------
-  async function updateColumns() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const innerWidth = window.innerWidth
-    let widthNumber_new = 1
-    if (innerWidth >= 1536) widthNumber_new = 5
-    else if (innerWidth >= 1280) widthNumber_new = 4
-    else if (innerWidth >= 1024) widthNumber_new = 3
-    else if (innerWidth >= 768) widthNumber_new = 2
-    else widthNumber_new = 1
-    //
-    //  NO Change
-    //
-    if (widthNumber_new === widthNumber) return
-    //
-    //  Update widthNumber
-    //
-    setWidthNumber(widthNumber_new)
-    //
-    //  Initialize all values to false
-    //
-    setshow_gid(false)
-    setshow_owner(false)
-    setshow_group(false)
-    setshow_lid(false)
-    setshow_who(false)
-    setshow_ref(false)
-    setshow_type(false)
-    setshow_questions(false)
-    //
-    //  larger screens
-    //
-    if (widthNumber_new >= 2) {
-      setshow_gid(true)
-      setshow_owner(true)
-      setshow_group(true)
-      setshow_questions(true)
-      setshow_type(true)
-    }
-    if (widthNumber_new >= 3) {
-      setshow_who(true)
-    }
-    if (widthNumber_new >= 4) {
-      setshow_lid(true)
-      setshow_ref(true)
-    }
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Height affects ROWS
-  //----------------------------------------------------------------------------------------------
-  async function updateRows() {
-    const innerHeight = window.innerHeight
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    let screenRows = 5
-    if (innerHeight >= 864) screenRows = 17
-    else if (innerHeight >= 720) screenRows = 13
-    else if (innerHeight >= 576) screenRows = 10
-    else if (innerHeight >= 512) screenRows = 9
-    else screenRows = 4
-    //
-    //  NO Change
-    //
-    if (screenRows === rowsPerPage) return
-    //
-    //  Set the screenRows per page
-    //
-    setRowsPerPage(screenRows)
-    //
-    //  Change of Rows
-    //
-    setcurrentPage(1)
-    setTimeout(() => setShouldFetchData(true), 0)
-  }
-  //......................................................................................
   // Reset the group when the owner changes
   //......................................................................................
   useEffect(() => {
     setgroup('')
   }, [owner])
-  //......................................................................................
-  //  Update the filters array based on selected values
-  //......................................................................................
-  useEffect(() => {
-    //
-    // Construct filters dynamically from input fields
-    //
-    const filtersToUpdate: Filter[] = [
-      { column: 'lrowner', value: owner, operator: '=' },
-      { column: 'lrgroup', value: group, operator: '=' },
-      { column: 'lrwho', value: who, operator: '=' },
-      { column: 'lrtype', value: type, operator: '=' },
-      { column: 'lrref', value: ref, operator: 'LIKE' },
-      { column: 'lrdesc', value: desc, operator: 'LIKE' },
-      { column: 'ogcntquestions', value: questions, operator: '>=' }
-    ]
-    //
-    // Filter out any entries where `value` is not defined or empty
-    //
-    const updatedFilters = filtersToUpdate.filter(filter => filter.value)
-    //
-    //  Update filter to fetch data
-    //
-    setFilters(updatedFilters)
-    setShouldFetchData(true)
-  }, [uid, owner, group, who, type, ref, desc, questions])
-  //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
-  //......................................................................................
-  //
-  //  Change of filters
-  //
-  useEffect(() => {
-    if (filters.length > 0) {
-      setcurrentPage(1)
-      setShouldFetchData(true)
-    }
-  }, [filters])
   //
   // Reset currentPage to 1 when fetching new data
   //
@@ -249,11 +75,35 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData])
+  }, [currentPage, shouldFetchData, owner, group, who, type, ref, desc, questions])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
+    //
+    // Define the structure for filters
+    //
+    type Filter = {
+      column: string
+      value: string | number
+      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
+    }
+    //
+    // Construct filters dynamically from input fields
+    //
+    const filtersToUpdate: Filter[] = [
+      { column: 'lrowner', value: owner, operator: '=' },
+      { column: 'lrgroup', value: group, operator: '=' },
+      { column: 'lrwho', value: who, operator: '=' },
+      { column: 'lrtype', value: type, operator: '=' },
+      { column: 'lrref', value: ref, operator: 'LIKE' },
+      { column: 'lrdesc', value: desc, operator: 'LIKE' },
+      { column: 'ogcntquestions', value: questions, operator: '>=' }
+    ]
+    //
+    // Filter out any entries where `value` is not defined or empty
+    //
+    const filters = filtersToUpdate.filter(filter => filter.value)
     //
     //  Continue to get data
     //
@@ -263,7 +113,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //
       const table = 'library'
       //
-      //  Distinct - no uid selected
+      //  Distinct
       //
       let distinctColumns: string[] = []
       distinctColumns = ['lrowner', 'lrgroup', 'lrref']
@@ -335,7 +185,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
-    setIsModelOpenAdd(false)
+    setTimeout(() => setIsModelOpenAdd(false), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
@@ -390,7 +240,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}
-
         <Button
           onClick={() => handleClickAdd()}
           overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
@@ -408,49 +257,33 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {show_gid && (
-                <th scope='col' className=' font-medium px-2'>
-                  Gid
-                </th>
-              )}
-              {show_owner && (
-                <th scope='col' className=' font-medium px-2'>
-                  Owner
-                </th>
-              )}
-              {show_group && (
-                <th scope='col' className=' font-medium px-2'>
-                  Group-name
-                </th>
-              )}
-              {show_lid && (
-                <th scope='col' className=' font-medium px-2'>
-                  Lid
-                </th>
-              )}
-              {show_ref && (
-                <th scope='col' className=' font-medium px-2'>
-                  Ref
-                </th>
-              )}
+              <th scope='col' className=' font-medium px-2'>
+                Gid
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Owner
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Group-name
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Lid
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Ref
+              </th>
               <th scope='col' className=' font-medium px-2'>
                 Description
               </th>
-              {show_who && (
-                <th scope='col' className=' font-medium px-2'>
-                  Who
-                </th>
-              )}
-              {show_type && (
-                <th scope='col' className=' font-medium px-2'>
-                  Type
-                </th>
-              )}
-              {show_questions && (
-                <th scope='col' className=' font-medium px-2 text-center'>
-                  Questions
-                </th>
-              )}
+              <th scope='col' className=' font-medium px-2'>
+                Who
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Type
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Questions
+              </th>
               <th scope='col' className=' font-medium px-2 text-center'>
                 Edit
               </th>
@@ -465,83 +298,73 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* GID                                                 */}
               {/* ................................................... */}
-              {show_gid && (
-                <th scope='col' className=' px-2'>
-                  {selected_gid ? <h1>{selected_gid}</h1> : null}
-                </th>
-              )}
+              <th scope='col' className=' px-2'>
+                {selected_gid ? <h1>{selected_gid}</h1> : null}
+              </th>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {show_owner && (
-                <th scope='col' className='px-2'>
-                  {selected_owner ? (
-                    <h1>{selected_owner}</h1>
-                  ) : uid === undefined || uid === 0 ? null : (
-                    <DropdownGeneric
-                      selectedOption={owner}
-                      setSelectedOption={setowner}
-                      searchEnabled={false}
-                      name='owner'
-                      table='usersowner'
-                      tableColumn='uouid'
-                      tableColumnValue={uid}
-                      optionLabel='uoowner'
-                      optionValue='uoowner'
-                      dropdownWidth='w-28'
-                      includeBlank={true}
-                    />
-                  )}
-                </th>
-              )}
+              <th scope='col' className='px-2'>
+                {selected_owner ? (
+                  <h1>{selected_owner}</h1>
+                ) : (
+                  <DropdownGeneric
+                    selectedOption={owner}
+                    setSelectedOption={setowner}
+                    searchEnabled={false}
+                    name='owner'
+                    table='owner'
+                    optionLabel='oowner'
+                    optionValue='oowner'
+                    dropdownWidth='w-28'
+                    includeBlank={true}
+                  />
+                )}
+              </th>
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              {show_group && (
-                <th scope='col' className=' px-2'>
-                  {selected_group ? (
-                    <h1>{selected_group}</h1>
-                  ) : owner === undefined || owner === '' ? null : (
-                    <DropdownGeneric
-                      selectedOption={group}
-                      setSelectedOption={setgroup}
-                      name='group'
-                      table='ownergroup'
-                      tableColumn='ogowner'
-                      tableColumnValue={owner}
-                      optionLabel='ogtitle'
-                      optionValue='oggroup'
-                      dropdownWidth='w-36'
-                      includeBlank={true}
-                    />
-                  )}
-                </th>
-              )}
+              <th scope='col' className=' px-2'>
+                {selected_group ? (
+                  <h1>{selected_group}</h1>
+                ) : owner === undefined || owner === '' ? null : (
+                  <DropdownGeneric
+                    selectedOption={group}
+                    setSelectedOption={setgroup}
+                    name='group'
+                    table='ownergroup'
+                    tableColumn='ogowner'
+                    tableColumnValue={owner}
+                    optionLabel='ogtitle'
+                    optionValue='oggroup'
+                    dropdownWidth='w-36'
+                    includeBlank={true}
+                  />
+                )}
+              </th>
               {/* ................................................... */}
               {/* LIBRARY ID                                          */}
               {/* ................................................... */}
-              {show_lid && <th scope='col' className=' px-2'></th>}
+              <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
-              {show_ref && (
-                <th scope='col' className=' px-2 '>
-                  <label htmlFor='ref' className='sr-only'>
-                    Reference
-                  </label>
-                  <input
-                    id='ref'
-                    name='ref'
-                    className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
-                    type='text'
-                    value={ref}
-                    onChange={e => {
-                      const value = e.target.value.split(' ')[0]
-                      setref(value)
-                    }}
-                  />
-                </th>
-              )}
+              <th scope='col' className=' px-2 '>
+                <label htmlFor='ref' className='sr-only'>
+                  Reference
+                </label>
+                <input
+                  id='ref'
+                  name='ref'
+                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  type='text'
+                  value={ref}
+                  onChange={e => {
+                    const value = e.target.value.split(' ')[0]
+                    setref(value)
+                  }}
+                />
+              </th>
               {/* ................................................... */}
               {/* DESC                                                 */}
               {/* ................................................... */}
@@ -564,57 +387,51 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* WHO                                                 */}
               {/* ................................................... */}
-              {show_who && (
-                <th scope='col' className=' px-2'>
-                  <DropdownGeneric
-                    selectedOption={who}
-                    setSelectedOption={setwho}
-                    name='who'
-                    table='who'
-                    optionLabel='wtitle'
-                    optionValue='wwho'
-                    dropdownWidth='w-28'
-                    includeBlank={true}
-                  />
-                </th>
-              )}
+              <th scope='col' className=' px-2'>
+                <DropdownGeneric
+                  selectedOption={who}
+                  setSelectedOption={setwho}
+                  name='who'
+                  table='who'
+                  optionLabel='wtitle'
+                  optionValue='wwho'
+                  dropdownWidth='w-28'
+                  includeBlank={true}
+                />
+              </th>
               {/* ................................................... */}
               {/* type                                                 */}
               {/* ................................................... */}
-              {show_type && (
-                <th scope='col' className=' px-2'>
-                  <DropdownGeneric
-                    selectedOption={type}
-                    setSelectedOption={settype}
-                    name='type'
-                    table='reftype'
-                    optionLabel='rttitle'
-                    optionValue='rttype'
-                    dropdownWidth='w-28'
-                    includeBlank={true}
-                  />
-                </th>
-              )}
+              <th scope='col' className=' px-2'>
+                <DropdownGeneric
+                  selectedOption={type}
+                  setSelectedOption={settype}
+                  name='type'
+                  table='reftype'
+                  optionLabel='rttitle'
+                  optionValue='rttype'
+                  dropdownWidth='w-28'
+                  includeBlank={true}
+                />
+              </th>
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {show_questions && (
-                <th scope='col' className='px-2 text-center'>
-                  <input
-                    id='questions'
-                    name='questions'
-                    className={`h-8 w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
-                    type='text'
-                    value={questions}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = parseInt(value, 10)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
-                      setquestions(parsedValue)
-                    }}
-                  />
-                </th>
-              )}
+              <th scope='col' className='px-2 text-center'>
+                <input
+                  id='questions'
+                  name='questions'
+                  className={`h-8 w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                  type='text'
+                  value={questions}
+                  onChange={e => {
+                    const value = e.target.value
+                    const numValue = parseInt(value, 10)
+                    const parsedValue = isNaN(numValue) ? '' : numValue
+                    setquestions(parsedValue)
+                  }}
+                />
+              </th>
               {/* ................................................... */}
               {/* View/Quiz                                       */}
               {/* ................................................... */}
@@ -629,24 +446,22 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.lrlid} className='w-full border-b'>
-                {show_gid && (
-                  <td className=' px-2 pt-2 text-left'>{selected_gid ? '' : tabledata.lrgid}</td>
-                )}
-                {show_owner && <td className=' px-2 pt-2'>{owner ? '' : tabledata.lrowner}</td>}
-                {show_group && <td className=' px-2 pt-2'>{group ? '' : tabledata.lrgroup}</td>}
-                {show_lid && <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>}
-                {show_ref && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
+                <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>
+                <td className=' px-2 pt-2'>{tabledata.lrowner}</td>
+                <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>
+                <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>
+                <td className=' px-2 pt-2'>{tabledata.lrref}</td>
                 <td className='px-2 pt-2'>
                   {tabledata.lrdesc.length > 40
                     ? `${tabledata.lrdesc.slice(0, 35)}...`
                     : tabledata.lrdesc}
                 </td>
-                {show_who && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
-                {show_type && <td className=' px-2 pt-2'>{tabledata.lrtype}</td>}
+                <td className=' px-2 pt-2'>{tabledata.lrwho}</td>
+                <td className=' px-2 pt-2'>{tabledata.lrtype}</td>
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {show_questions && 'ogcntquestions' in tabledata && (
+                {'ogcntquestions' in tabledata && (
                   <td className='px-2 pt-2 text-center'>
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
@@ -659,7 +474,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     <Button
                       onClick={() => handleClickEdit(tabledata)}
                       overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md
-
                            bg-blue-500 hover:bg-blue-600'
                     >
                       Edit
@@ -685,7 +499,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
           </tbody>
         </table>
       </div>
-
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}
@@ -700,30 +513,28 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       {/* Maintenance functions              */}
       {/* ---------------------------------------------------------------------------------- */}
 
-      <>
-        {/* Edit Modal */}
-        {selectedRow && (
-          <MaintPopup
-            libraryRecord={selectedRow}
-            isOpen={isModelOpenEdit}
-            onClose={handleModalCloseEdit}
-          />
-        )}
+      {/* Edit Modal */}
+      {selectedRow && (
+        <MaintPopup
+          libraryRecord={selectedRow}
+          isOpen={isModelOpenEdit}
+          onClose={handleModalCloseEdit}
+        />
+      )}
 
-        {/* Add Modal */}
-        {isModelOpenAdd && (
-          <MaintPopup
-            libraryRecord={null}
-            selected_owner={selected_owner}
-            selected_group={selected_group}
-            isOpen={isModelOpenAdd}
-            onClose={handleModalCloseAdd}
-          />
-        )}
+      {/* Add Modal */}
+      {isModelOpenAdd && (
+        <MaintPopup
+          libraryRecord={null}
+          selected_owner={selected_owner}
+          selected_group={selected_group}
+          isOpen={isModelOpenAdd}
+          onClose={handleModalCloseAdd}
+        />
+      )}
 
-        {/* Confirmation Dialog */}
-        <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
-      </>
+      {/* Confirmation Dialog */}
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* ---------------------------------------------------------------------------------- */}
     </>

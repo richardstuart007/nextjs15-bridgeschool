@@ -7,21 +7,22 @@ import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
-import { fetchUsersFiltered, fetchUsersTotalPages } from '@/src/lib/tables/tableSpecific/users'
-import Pagination from '@/src/ui/utils/paginationURL'
-import { useSearchParams } from 'next/navigation'
-import SearchWithURL from '@/src/ui/utils/search/search-withURL'
+import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { Button } from '@/src/ui/utils/button'
+import Pagination from '@/src/ui/utils/paginationState'
 
 export default function Table() {
-  const placeholder = 'uid:23 name:richard email:richardstuart007@hotmail.com fedid:1234'
+  const rowsPerPage = 17
   //
-  //  URL updated with search paramenters (Search)
+  //  Selection
   //
-  const searchParams = useSearchParams()
-  const query = searchParams.get('query') || ''
-  const currentPage = Number(searchParams.get('page')) || 1
+  const [name, setname] = useState('')
+  const [email, setemail] = useState('')
+  const [fedid, setfedid] = useState('')
+  const [provider, setprovider] = useState('')
+  const [country, setcountry] = useState<number | string>('')
+  const [currentPage, setcurrentPage] = useState(1)
 
   const [users, setUsers] = useState<table_Users[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
@@ -37,27 +38,96 @@ export default function Table() {
     subTitle: '',
     onConfirm: () => {}
   })
-  //----------------------------------------------------------------------------------------------
-  // Fetch users on mount and when shouldFetchData changes
-  //----------------------------------------------------------------------------------------------
+  //......................................................................................
+  // Effects
+  //......................................................................................
+  //
+  // Reset currentPage to 1 when fetching new data
+  //
   useEffect(() => {
-    if (!shouldFetchData) return
-    const fetchUsers = async () => {
-      try {
-        const fetchedUsers = await fetchUsersFiltered(query, currentPage)
-        setUsers(fetchedUsers)
-        const fetchedTotalPages = await fetchUsersTotalPages(query)
-        setTotalPages(fetchedTotalPages)
-        //
-        //  Errors
-        //
-      } catch (error) {
-        console.log('Error fetching users:', error)
-      }
+    if (shouldFetchData) setcurrentPage(1)
+  }, [shouldFetchData])
+  //
+  // Adjust currentPage if it exceeds totalPages
+  //
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setcurrentPage(totalPages)
     }
-    fetchUsers()
+  }, [currentPage, totalPages])
+  //
+  // Change of current page or should fetch data
+  //
+  useEffect(() => {
+    fetchdata()
     setShouldFetchData(false)
-  }, [query, currentPage, shouldFetchData])
+    // eslint-disable-next-line
+  }, [currentPage, shouldFetchData, name, email, fedid, provider, country])
+  //----------------------------------------------------------------------------------------------
+  // fetchdata
+  //----------------------------------------------------------------------------------------------
+  async function fetchdata() {
+    //
+    // Define the structure for filters
+    //
+    type Filter = {
+      column: string
+      value: string | number
+      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
+    }
+    //
+    // Construct filters dynamically from input fields
+    //
+    const filtersToUpdate: Filter[] = [
+      { column: 'u_name', value: name, operator: 'LIKE' },
+      { column: 'u_email', value: email, operator: 'LIKE' },
+      { column: 'u_fedid', value: fedid, operator: 'LIKE' },
+      { column: 'u_provider', value: provider, operator: 'LIKE' },
+      { column: 'u_fedcountry', value: country, operator: 'LIKE' }
+    ]
+    //
+    // Filter out any entries where `value` is not defined or empty
+    //
+    const filters = filtersToUpdate.filter(filter => filter.value)
+    //
+    //  Continue to get data
+    //
+    try {
+      //
+      //  Table
+      //
+      const table = 'users'
+      //
+      // Calculate the offset for pagination
+      //
+      const offset = (currentPage - 1) * rowsPerPage
+      //
+      //  Get data
+      //
+      const data = await fetchFiltered({
+        table,
+        filters,
+        orderBy: 'u_name',
+        limit: rowsPerPage,
+        offset
+      })
+      setUsers(data)
+      //
+      //  Total number of pages
+      //
+      const fetchedTotalPages = await fetchTotalPages({
+        table,
+        filters,
+        items_per_page: rowsPerPage
+      })
+      setTotalPages(fetchedTotalPages)
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.log('Error fetching library:', error)
+    }
+  }
   //----------------------------------------------------------------------------------------------
   //  Edit User
   //----------------------------------------------------------------------------------------------
@@ -83,7 +153,7 @@ export default function Table() {
   //  Close Modal
   //----------------------------------------------------------------------------------------------
   function handleCloseModal() {
-    setisModalOpen(false)
+    setTimeout(() => setisModalOpen(false), 0)
     setSelectedUser(null)
     setSelectedPwd(null)
     setSelectedUsersowner(null)
@@ -139,140 +209,269 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
+      {/** -------------------------------------------------------------------- */}
+      {/** Display Label                                                        */}
+      {/** -------------------------------------------------------------------- */}
       <div className='flex w-full items-center justify-between'>
         <h1 className={`${lusitana.className} text-2xl`}>Users</h1>
       </div>
-      <SearchWithURL placeholder={placeholder} setShouldFetchData={setShouldFetchData} />
-      <div className='mt-2 md:mt-6 flow-root'>
-        <div className='inline-block min-w-full align-middle'>
-          <div className='rounded-lg bg-gray-50 p-2 md:pt-0'>
-            <table className='min-w-full text-gray-900 table-fixed table'>
-              <thead className='rounded-lg text-left font-normal text-xs'>
-                <tr>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
-                    Id
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
-                    Name
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
-                    Email
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
-                    Federation ID
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Admin
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Fed Country
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-left'>
-                    Provider
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Edit
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Owners
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Pwd
-                  </th>
-                  <th scope='col' className='px-2 py-2 font-medium text-center'>
-                    Delete
-                  </th>
-                </tr>
-              </thead>
-              <tbody className='bg-white'>
-                {users?.map(user => (
-                  <tr key={user.u_uid} className='w-full border-b py-2 text-xs'>
-                    <td className='px-2 py-1 text-xs'>{user.u_uid}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_name}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_email}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_fedid}</td>
-                    <td className='px-2 py-1 text-xs text-center'>{user.u_admin ? 'Y' : ''}</td>
-                    <td className='px-2 py-1 text-xs text-center'>{user.u_fedcountry}</td>
-                    <td className='px-2 py-1 text-xs'>{user.u_provider}</td>
-                    <td className='px-2 py-1 text-center'>
-                      <div className='inline-flex justify-center items-center'>
-                        <Button
-                          onClick={() => handleEditClick(user)}
-                          overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    </td>
-                    <td className='px-2 py-1 text-center'>
-                      <div className='inline-flex justify-center items-center'>
-                        <Button
-                          onClick={() => handleUsersownerClick(user)}
-                          overrideClass=' h-6 px-2 py-2 text-xs bg-green-500 text-white rounded-md hover:bg-green-600 px-2 py-1'
-                        >
-                          Owners
-                        </Button>
-                      </div>
-                    </td>
-                    <td className='px-2 py-1 text-center'>
-                      <div className='inline-flex justify-center items-center'>
-                        {user.u_provider === 'email' && (
-                          <Button
-                            onClick={() => handlePwdClick(user)}
-                            overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
-                          >
-                            Pwd
-                          </Button>
-                        )}
-                      </div>
-                    </td>
-                    <td className='px-2 py-1 text-center'>
-                      <div className='inline-flex justify-center items-center'>
-                        <Button
-                          onClick={() => handleDeleteClick(user)}
-                          overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      {/** -------------------------------------------------------------------- */}
+      {/** TABLE                                                                */}
+      {/** -------------------------------------------------------------------- */}
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left font-normal text-xs'>
+            {/* --------------------------------------------------------------------- */}
+            {/** HEADINGS                                                                */}
+            {/** -------------------------------------------------------------------- */}
+            <tr>
+              <th scope='col' className='px-2 py-2 font-medium text-left'>
+                Id
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-left'>
+                Name
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-left'>
+                Email
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-left'>
+                Federation ID
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Admin
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Fed Country
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-left'>
+                Provider
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Edit
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Owners
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Pwd
+              </th>
+              <th scope='col' className='px-2 py-2 font-medium text-center'>
+                Delete
+              </th>
+            </tr>
+            {/* ---------------------------------------------------------------------------------- */}
+            {/* DROPDOWN & SEARCHES             */}
+            {/* ---------------------------------------------------------------------------------- */}
+            <tr className='text-xs align-bottom'>
+              {/* ................................................... */}
+              {/* GID                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+              {/* Name                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2 '>
+                <label htmlFor='ref' className='sr-only'>
+                  Name
+                </label>
+                <input
+                  id='name'
+                  name='name'
+                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  type='text'
+                  value={name}
+                  onChange={e => {
+                    const value = e.target.value.split(' ')[0]
+                    setname(value)
+                  }}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* Email                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2 '>
+                <label htmlFor='ref' className='sr-only'>
+                  Email
+                </label>
+                <input
+                  id='email'
+                  name='email'
+                  className={`w-60 rounded-md border border-blue-500  py-2 font-normal text-xs `}
+                  type='text'
+                  value={email}
+                  onChange={e => {
+                    const value = e.target.value.split(' ')[0]
+                    setemail(value)
+                  }}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* fedid                                         */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2 '>
+                <label htmlFor='ref' className='sr-only'>
+                  Fed id
+                </label>
+                <input
+                  id='fedid'
+                  name='fedid'
+                  className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  type='text'
+                  value={fedid}
+                  onChange={e => {
+                    const value = e.target.value.split(' ')[0]
+                    setfedid(value)
+                  }}
+                />
+              </th>
+              <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+              {/* country                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='px-2'>
+                <div className={`text-center`}>
+                  <label htmlFor='desc' className='sr-only'>
+                    Country
+                  </label>
+                  <input
+                    id='country'
+                    name='country'
+                    className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    type='text'
+                    value={country}
+                    onChange={e => {
+                      const value = e.target.value.split(' ')[0]
+                      setcountry(value)
+                    }}
+                  />
+                </div>
+              </th>
+              {/* ................................................... */}
+              {/* provider                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2 '>
+                <label htmlFor='ref' className='sr-only'>
+                  provider
+                </label>
+                <input
+                  id='provider'
+                  name='provider'
+                  className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  type='text'
+                  value={provider}
+                  onChange={e => {
+                    const value = e.target.value
+                    setprovider(value)
+                  }}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* Other                                      */}
+              {/* ................................................... */}
 
-        <div className='mt-5 flex w-full justify-center'>
-          <Pagination totalPages={totalPages} />
-        </div>
-
-        {/* User Edit Modal */}
-        {selectedUser && (
-          <UserEditPopup
-            userRecord={selectedUser}
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-          />
-        )}
-
-        {/* User Usersowner Modal */}
-        {selectedUsersowner && (
-          <UserownertablePopup
-            uid={selectedUsersowner.u_uid}
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-          />
-        )}
-
-        {/* Password Edit Modal */}
-        {selectedPwd && (
-          <PwdEditPopup userRecord={selectedPwd} isOpen={isModalOpen} onClose={handleCloseModal} />
-        )}
-
-        {/* Confirmation Dialog */}
-        <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+              <th scope='col' className=' px-2'></th>
+              <th scope='col' className=' px-2'></th>
+              <th scope='col' className=' px-2'></th>
+              <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+            </tr>
+          </thead>
+          {/* ---------------------------------------------------------------------------------- */}
+          {/* BODY                                 */}
+          {/* ---------------------------------------------------------------------------------- */}
+          <tbody className='bg-white text-xs'>
+            {users?.map(user => (
+              <tr key={user.u_uid} className='w-full border-b py-2 text-xs'>
+                <td className='px-2 py-1 text-xs'>{user.u_uid}</td>
+                <td className='px-2 py-1 text-xs'>{user.u_name}</td>
+                <td className='px-2 py-1 text-xs'>{user.u_email}</td>
+                <td className='px-2 py-1 text-xs'>{user.u_fedid}</td>
+                <td className='px-2 py-1 text-xs text-center'>{user.u_admin ? 'Y' : ''}</td>
+                <td className='px-2 py-1 text-xs text-center'>{user.u_fedcountry}</td>
+                <td className='px-2 py-1 text-xs'>{user.u_provider}</td>
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleEditClick(user)}
+                      overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </td>
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleUsersownerClick(user)}
+                      overrideClass=' h-6 px-2 py-2 text-xs bg-green-500 text-white rounded-md hover:bg-green-600 px-2 py-1'
+                    >
+                      Owners
+                    </Button>
+                  </div>
+                </td>
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    {user.u_provider === 'email' && (
+                      <Button
+                        onClick={() => handlePwdClick(user)}
+                        overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
+                      >
+                        Pwd
+                      </Button>
+                    )}
+                  </div>
+                </td>
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    <Button
+                      onClick={() => handleDeleteClick(user)}
+                      overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Pagination                */}
+      {/* ---------------------------------------------------------------------------------- */}
+      <div className='mt-5 flex w-full justify-center'>
+        <Pagination
+          totalPages={totalPages}
+          statecurrentPage={currentPage}
+          setStateCurrentPage={setcurrentPage}
+        />
+      </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Maintenance functions              */}
+      {/* ---------------------------------------------------------------------------------- */}
+
+      {/* User Edit Modal */}
+      {selectedUser && (
+        <UserEditPopup userRecord={selectedUser} isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
+
+      {/* User Usersowner Modal */}
+      {selectedUsersowner && (
+        <UserownertablePopup
+          uid={selectedUsersowner.u_uid}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
+
+      {/* Password Edit Modal */}
+      {selectedPwd && (
+        <PwdEditPopup userRecord={selectedPwd} isOpen={isModalOpen} onClose={handleCloseModal} />
+      )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

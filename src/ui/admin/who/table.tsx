@@ -82,7 +82,7 @@ export default function Table() {
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
-    setIsModelOpenAdd(false)
+    setTimeout(() => setIsModelOpenAdd(false), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------

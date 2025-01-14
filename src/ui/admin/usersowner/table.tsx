@@ -155,7 +155,7 @@ export default function Table({ selected_uid }: FormProps) {
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd() {
-    setIsModelOpenAdd(false)
+    setTimeout(() => setIsModelOpenAdd(false), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
