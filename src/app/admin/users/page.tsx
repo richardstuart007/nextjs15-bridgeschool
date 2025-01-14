@@ -1,19 +1,30 @@
 import Table from '@/src/ui/admin/users/table'
+import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
-import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Users'
 }
-//
-//  Exported Function
-//
 export default async function Page() {
+  //
+  //  Breadcrumbs
+  //
+  const href = `/admin/users`
+  const hrefParent = `/admin`
+  //---------------------------------------------------
   return (
     <div className='w-full md:p-6'>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Table />
-      </Suspense>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: 'Admin', href: hrefParent },
+          {
+            label: 'Users',
+            href: href,
+            active: true
+          }
+        ]}
+      />
+      <Table />
     </div>
   )
 }

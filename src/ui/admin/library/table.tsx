@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/library/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
@@ -236,7 +235,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       {/** Display Label                                                        */}
       {/** -------------------------------------------------------------------- */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>Library MAINT</h1>
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}

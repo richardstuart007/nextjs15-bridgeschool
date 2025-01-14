@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
@@ -205,7 +204,6 @@ export default function Table({ selected_uid }: FormProps) {
       {/** Display Label                                                        */}
       {/** -------------------------------------------------------------------- */}
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>Users/Owner Maintenance</h1>
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}

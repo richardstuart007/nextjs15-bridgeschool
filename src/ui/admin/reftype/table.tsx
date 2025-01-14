@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reftype/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
@@ -140,7 +139,6 @@ export default function Table() {
   return (
     <>
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-2xl`}>reftype</h1>
         <h1 className='px-2 py-1 text-xs'>
           <Button
             onClick={() => handleClickAdd()}

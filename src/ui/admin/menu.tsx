@@ -74,6 +74,11 @@ export default function Page() {
               Backup table
             </Link>
           </div>
+          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
+            <Link key='backuptable' href='/admin/logging'>
+              Logging
+            </Link>
+          </div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
         </div>
       </div>

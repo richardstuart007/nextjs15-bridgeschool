@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
@@ -909,12 +908,6 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** Display Label                                                        */}
-      {/** -------------------------------------------------------------------- */}
-      <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>Tables</h1>
-      </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}

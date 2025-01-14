@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import MaintPopup_Ownergroup from '@/src/ui/admin/ownergroup/maintPopup'
 import MaintPopup_Library from '@/src/ui/admin/library/tablePopup'
@@ -163,7 +162,6 @@ export default function Table() {
   return (
     <>
       <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-2xl`}>ownergroup</h1>
         <h1 className='px-2 py-1 text-xs'>
           <Button
             onClick={() => handleClickAdd_ownergroup()}

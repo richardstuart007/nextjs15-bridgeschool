@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect } from 'react'
 import UserEditPopup from '@/src/ui/admin/users/useredit/maintPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
@@ -209,12 +208,6 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** Display Label                                                        */}
-      {/** -------------------------------------------------------------------- */}
-      <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-2xl`}>Users</h1>
-      </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
