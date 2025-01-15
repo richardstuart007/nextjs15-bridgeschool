@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { updateCookieSessionId } from '@/src/lib/data-cookie'
+import { updateCookieSessionId } from '@/src/lib/cookie_server'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'

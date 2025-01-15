@@ -1,7 +1,7 @@
 'use server'
 
 import { signOut } from '@/auth'
-import { deleteCookie } from '@/src/lib/data-cookie'
+import { deleteCookie } from '@/src/lib/cookie_server'
 // ----------------------------------------------------------------------
 //  Sign out
 // ----------------------------------------------------------------------

@@ -3,7 +3,7 @@
 import { sql } from '@/src/lib/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { getCookieSessionId } from '@/src/lib/data-cookie'
+import { getCookieSessionId } from '@/src/lib/cookie_server'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------

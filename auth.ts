@@ -31,7 +31,7 @@ export const {
       //
       if (!provider || !email || !name) return false
       //
-      //  Write session information & cookie
+      //  Write session information
       //
       const signInData: structure_ProviderSignInParams = {
         provider: provider,

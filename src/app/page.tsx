@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { lusitana } from '@/src/fonts'
-import { deleteCookie } from '@/src/lib/data-cookie'
+import { deleteCookie } from '@/src/lib/cookie_server'
 
 export default function Page() {
   const [logoSize, setLogoSize] = useState(90)
