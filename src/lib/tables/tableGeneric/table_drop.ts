@@ -1,6 +1,6 @@
 'use server'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 
 export async function table_drop(table: string): Promise<boolean> {
   const functionName = 'table_drop'

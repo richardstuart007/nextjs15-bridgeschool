@@ -6,7 +6,7 @@ import {
   Routes_Prefix_admin,
   Routes_Login
 } from '@/src/validroutes'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
 import { cookies } from 'next/headers'
 

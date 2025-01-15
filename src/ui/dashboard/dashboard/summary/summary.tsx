@@ -2,7 +2,7 @@ import {
   fetchTopResultsData,
   fetchRecentResultsData1,
   fetchRecentResultsData5
-} from '@/src/lib/tables/tableSpecific/usershistory'
+} from '@/src/lib/tables/tableSpecific/graphdata'
 import { StackedBarChart } from '@/src/ui/dashboard/dashboard/summary/stackedbarchart'
 import {
   structure_UsershistoryTopResults,

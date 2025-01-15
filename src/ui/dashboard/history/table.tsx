@@ -1,6 +1,5 @@
 'use client'
 
-import { lusitana } from '@/src/fonts'
 import { useState, useEffect, useRef } from 'react'
 import { table_UsershistoryGroupUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
@@ -292,12 +291,6 @@ export default function Table() {
   return (
     <>
       {/** -------------------------------------------------------------------- */}
-      {/** Display Label                                                        */}
-      {/** -------------------------------------------------------------------- */}
-      <div className='flex w-full items-center justify-between'>
-        <h1 className={`${lusitana.className} text-xl`}>{`History`}</h1>
-      </div>
-      {/** -------------------------------------------------------------------- */}
       {/** Loading ?                                                        */}
       {/** -------------------------------------------------------------------- */}
       {loading ? (
@@ -560,7 +553,10 @@ export default function Table() {
                       )}
                       <td className='px-2 py-2 text-center'>
                         <Link
-                          href={`/dashboard/quiz-review/${tabledata.r_hid}`}
+                          href={{
+                            pathname: `/dashboard/quiz/${tabledata.r_hid}`,
+                            query: { from: 'history' }
+                          }}
                           className='bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600'
                         >
                           Review
@@ -569,7 +565,10 @@ export default function Table() {
 
                       <td className='px-2 py-2 text-xs text-center'>
                         <Link
-                          href={`/dashboard/quiz/${tabledata.r_gid}`}
+                          href={{
+                            pathname: `/dashboard/quiz/${tabledata.r_gid}`,
+                            query: { from: 'history' }
+                          }}
                           className='bg-blue-500 text-white px-2 py-1  rounded-md hover:bg-blue-600'
                         >
                           Quiz

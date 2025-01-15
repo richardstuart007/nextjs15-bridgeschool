@@ -7,7 +7,7 @@ import { table_Library, table_LibraryGroup } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
+import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { Button } from '@/src/ui/utils/button'
 

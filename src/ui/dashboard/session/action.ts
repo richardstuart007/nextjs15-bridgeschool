@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getCookieSessionId } from '@/src/lib/data-cookie'
-import { UpdateSessions } from '@/src/lib/tables/tableSpecific/sessions'
+import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 // ----------------------------------------------------------------------
 //  Update Session
 // ----------------------------------------------------------------------
@@ -53,21 +53,27 @@ export async function action(_prevState: StateSession, formData: FormData) {
   //
   const { bsdftmaxquestions, bssortquestions, bsskipcorrect } = validatedFields.data
   //
-  //  Get session id
-  //
-  const cookie = await getCookieSessionId()
-  let sessionId = 0
-  //
   //  Update the session
   //
-  if (cookie) {
-    sessionId = parseInt(cookie, 10)
-    await UpdateSessions(sessionId, bsdftmaxquestions, bssortquestions, bsskipcorrect)
+  const sessionId = await getCookieSessionId()
+  if (sessionId) {
+    //
+    //  update parameters
+    //
+    const updateParams = {
+      table: 'sessions',
+      columnValuePairs: [
+        { column: 's_dftmaxquestions', value: bsdftmaxquestions },
+        { column: 's_sortquestions', value: bssortquestions },
+        { column: 's_skipcorrect', value: bsskipcorrect }
+      ],
+      whereColumnValuePairs: [{ column: 's_id', value: sessionId }]
+    }
+    //
+    //  Update the database
+    //
+    await table_update(updateParams)
   }
-  //
-  //  Update the session
-  //
-  await UpdateSessions(sessionId, bsdftmaxquestions, bssortquestions, bsskipcorrect)
   //
   // Revalidate the cache and redirect the user.
   //

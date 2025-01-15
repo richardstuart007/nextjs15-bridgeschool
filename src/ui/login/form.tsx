@@ -8,7 +8,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { deleteCookie } from '@/src/lib/data-cookie'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 
 export default function LoginForm() {
   const functionName = 'LoginForm'

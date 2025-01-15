@@ -2,7 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 //
 // Define the column-value pair interface
 //

@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 
 interface ColumnValuePair {
   column: string

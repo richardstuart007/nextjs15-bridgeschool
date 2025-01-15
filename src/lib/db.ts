@@ -1,6 +1,6 @@
 import { Client } from 'pg'
 import { sql as vercelSql } from '@vercel/postgres'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 //
 // Placeholder for the `query` method
 //

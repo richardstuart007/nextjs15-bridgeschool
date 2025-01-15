@@ -5,7 +5,7 @@ import path from 'path'
 import csv from 'csv-parser'
 import readline from 'readline'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 //--------------------------------------------------------------------------
 //  Checks if a directory exists on the system
 //--------------------------------------------------------------------------

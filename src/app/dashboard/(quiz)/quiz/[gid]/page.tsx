@@ -9,12 +9,31 @@ export const metadata: Metadata = {
   title: 'Quiz'
 }
 
-export default async function Page(props: { params: Promise<{ gid: number }> }) {
-  const params = await props.params
+export default async function Page({
+  params,
+  searchParams
+}: {
+  params: Promise<{ gid: number }>
+  searchParams: Promise<{ from?: string }>
+}) {
+  //
+  // Await the params promise
+  //
+  const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
+  //
+  //  gid
+  //
+  const gid = resolvedParams.gid
+
   //
   //  Variables used in the return statement
   //
-  const gid: number = params.gid
+  const from = resolvedSearchParams?.from || 'unknown'
+  const From = from.charAt(0).toUpperCase() + from.slice(1)
+  //
+  //  Get the data
+  //
   let questions: table_Questions[] = []
   try {
     //
@@ -38,7 +57,7 @@ export default async function Page(props: { params: Promise<{ gid: number }> }) 
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Library', href: '/dashboard/library' },
+          { label: From, href: `/dashboard/${from}` },
           {
             label: 'Quiz',
             href: `/dashboard/quiz/${gid}`,

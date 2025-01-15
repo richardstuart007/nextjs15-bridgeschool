@@ -4,7 +4,7 @@ import { z } from 'zod'
 import validateOwnergroup from '@/src/ui/admin/ownergroup/maint-validate'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Owner Setup
 // ----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth'
 import { updateCookieSessionId } from '@/src/lib/data-cookie'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'

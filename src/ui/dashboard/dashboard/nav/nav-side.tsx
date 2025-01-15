@@ -9,7 +9,7 @@ import { getAuthSession } from '@/src/lib/data-auth'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/ui/utils/user-logout'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 import { Button } from '@/src/ui/utils/button'
 
 export default function NavSide() {

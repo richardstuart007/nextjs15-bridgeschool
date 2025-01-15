@@ -1,52 +1,9 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 import { getCookieSessionId } from '@/src/lib/data-cookie'
-//---------------------------------------------------------------------
-//  Update Sessions
-//---------------------------------------------------------------------
-export async function UpdateSessions(
-  s_id: number,
-  s_dftmaxquestions: number,
-  s_sortquestions: boolean,
-  s_skipcorrect: boolean
-) {
-  const functionName = 'UpdateSessions'
-
-  try {
-    const sqlQuery = `
-    UPDATE sessions
-    SET
-      s_dftmaxquestions = $1,
-      s_sortquestions = $2,
-      s_skipcorrect = $3
-    WHERE s_id = $4
-    `
-    const queryValues = [s_dftmaxquestions, s_sortquestions, s_skipcorrect, s_id]
-    //
-    //  Execute the sql
-    //
-    const db = await sql()
-    await db.query({ query: sqlQuery, params: queryValues, functionName: functionName })
-    //
-    //  Errors
-    //
-  } catch (error) {
-    const errorMessage = (error as Error).message
-    errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
-    })
-    console.error('Error:', errorMessage)
-    return {
-      message: 'UpdateSessions: Failed to Update session.'
-    }
-  }
-}
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
@@ -117,15 +74,11 @@ export async function isAdmin() {
     //
     //  Get session id
     //
-    const cookie = await getCookieSessionId()
+    const sessionId = await getCookieSessionId()
     //
-    //  No cookie then not logged in
+    //  No session then not logged in
     //
-    if (!cookie) return false
-    //
-    //  Session ID
-    //
-    const sessionId = parseInt(cookie, 10)
+    if (!sessionId) return false
     //
     //  Session info
     //

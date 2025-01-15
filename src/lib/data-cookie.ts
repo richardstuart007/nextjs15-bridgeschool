@@ -49,7 +49,7 @@ export async function deleteCookie(cookieName: string = 'SessionId') {
 // ----------------------------------------------------------------------
 //  Get Cookie information
 // ----------------------------------------------------------------------
-export async function getCookieSessionId(cookieName: string = 'SessionId'): Promise<string | null> {
+export async function getCookieSessionId(cookieName: string = 'SessionId'): Promise<number | null> {
   const functionName = 'getCookieSessionId'
   try {
     const cookieStore = await cookies()
@@ -68,7 +68,8 @@ export async function getCookieSessionId(cookieName: string = 'SessionId'): Prom
     //
     //  Return JSON
     //
-    return JSON_cookie
+    const session = parseInt(JSON_cookie, 10)
+    return session
     //
     //  Errors
     //

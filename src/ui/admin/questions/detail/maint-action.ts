@@ -5,9 +5,9 @@ import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
-import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions'
-import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
+import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
+import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------

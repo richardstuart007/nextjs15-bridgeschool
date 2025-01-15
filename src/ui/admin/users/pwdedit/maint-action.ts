@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import bcrypt from 'bcryptjs'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update User Setup
 // ----------------------------------------------------------------------

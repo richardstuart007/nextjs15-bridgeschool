@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import validateOwner from '@/src/ui/admin/owner/maint-validate'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Owner Setup
 // ----------------------------------------------------------------------

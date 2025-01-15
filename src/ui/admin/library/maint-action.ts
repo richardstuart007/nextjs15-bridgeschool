@@ -5,8 +5,8 @@ import validateLibrary from '@/src/ui/admin/library/maint-validate'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup'
-import { errorLogging } from '@/src/lib/tables/tableSpecific/errorLogging'
+import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
+import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Library Setup
 // ----------------------------------------------------------------------
