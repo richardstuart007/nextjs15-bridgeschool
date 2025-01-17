@@ -20,6 +20,7 @@ export default function Table() {
   //
   const [uid, setuid] = useState(0)
   const [widthNumber, setWidthNumber] = useState(2)
+  const [widthDesc, setWidthDesc] = useState(30)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [owner, setowner] = useState('')
   const [group, setgroup] = useState('')
@@ -158,6 +159,10 @@ export default function Table() {
       setshow_lid(true)
       setshow_ref(true)
     }
+    // Description width
+    setWidthDesc(
+      widthNumber_new >= 4 ? 100 : widthNumber_new >= 3 ? 75 : widthNumber_new >= 2 ? 40 : 30
+    )
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -289,297 +294,295 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <>
-        {/** -------------------------------------------------------------------- */}
-        {/** TABLE                                                                */}
-        {/** -------------------------------------------------------------------- */}
-        <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
-          <table className='min-w-full text-gray-900 table-auto'>
-            <thead className='rounded-lg text-left font-normal text-xs'>
-              {/* --------------------------------------------------------------------- */}
-              {/** HEADINGS                                                                */}
-              {/** -------------------------------------------------------------------- */}
-              <tr className='text-xs'>
-                {show_gid && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Gid
-                  </th>
-                )}
-                {show_owner && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Owner
-                  </th>
-                )}
-                {show_group && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Group-name
-                  </th>
-                )}
-                {show_lid && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Lid
-                  </th>
-                )}
-                {show_ref && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Ref
-                  </th>
-                )}
+      {/** -------------------------------------------------------------------- */}
+      {/** TABLE                                                                */}
+      {/** -------------------------------------------------------------------- */}
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left font-normal text-xs'>
+            {/* --------------------------------------------------------------------- */}
+            {/** HEADINGS                                                                */}
+            {/** -------------------------------------------------------------------- */}
+            <tr className='text-xs'>
+              {show_gid && (
                 <th scope='col' className=' font-medium px-2'>
-                  Description
+                  Gid
                 </th>
-                {show_who && (
-                  <th scope='col' className=' font-medium px-2'>
-                    Who
-                  </th>
-                )}
-                {show_questions && (
-                  <th scope='col' className=' font-medium px-2 text-center'>
-                    Questions
-                  </th>
-                )}
+              )}
+              {show_owner && (
+                <th scope='col' className=' font-medium px-2'>
+                  Owner
+                </th>
+              )}
+              {show_group && (
+                <th scope='col' className=' font-medium px-2'>
+                  Group-name
+                </th>
+              )}
+              {show_lid && (
+                <th scope='col' className=' font-medium px-2'>
+                  Lid
+                </th>
+              )}
+              {show_ref && (
+                <th scope='col' className=' font-medium px-2'>
+                  Ref
+                </th>
+              )}
+              <th scope='col' className=' font-medium px-2'>
+                Description
+              </th>
+              {show_who && (
+                <th scope='col' className=' font-medium px-2'>
+                  Who
+                </th>
+              )}
+              {show_questions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
-                  Type
+                  Questions
                 </th>
-                <th scope='col' className=' font-medium px-2 text-center'>
-                  Quiz
+              )}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Type
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Quiz
+              </th>
+            </tr>
+            {/* ---------------------------------------------------------------------------------- */}
+            {/* DROPDOWN & SEARCHES             */}
+            {/* ---------------------------------------------------------------------------------- */}
+            <tr className='text-xs align-bottom'>
+              {/* ................................................... */}
+              {/* GID                                                 */}
+              {/* ................................................... */}
+              {show_gid && <th scope='col' className=' px-2'></th>}
+              {/* ................................................... */}
+              {/* OWNER                                                 */}
+              {/* ................................................... */}
+              {show_owner && (
+                <th scope='col' className='px-2'>
+                  <DropdownGeneric
+                    selectedOption={owner}
+                    setSelectedOption={setowner}
+                    searchEnabled={false}
+                    name='owner'
+                    table='usersowner'
+                    tableColumn='uouid'
+                    tableColumnValue={uid}
+                    optionLabel='uoowner'
+                    optionValue='uoowner'
+                    dropdownWidth='w-28'
+                    includeBlank={true}
+                  />
                 </th>
-              </tr>
-              {/* ---------------------------------------------------------------------------------- */}
-              {/* DROPDOWN & SEARCHES             */}
-              {/* ---------------------------------------------------------------------------------- */}
-              <tr className='text-xs align-bottom'>
-                {/* ................................................... */}
-                {/* GID                                                 */}
-                {/* ................................................... */}
-                {show_gid && <th scope='col' className=' px-2'></th>}
-                {/* ................................................... */}
-                {/* OWNER                                                 */}
-                {/* ................................................... */}
-                {show_owner && (
-                  <th scope='col' className='px-2'>
+              )}
+              {/* ................................................... */}
+              {/* GROUP                                                 */}
+              {/* ................................................... */}
+              {show_group && (
+                <th scope='col' className=' px-2'>
+                  {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
-                      selectedOption={owner}
-                      setSelectedOption={setowner}
-                      searchEnabled={false}
-                      name='owner'
-                      table='usersowner'
-                      tableColumn='uouid'
-                      tableColumnValue={uid}
-                      optionLabel='uoowner'
-                      optionValue='uoowner'
-                      dropdownWidth='w-28'
+                      selectedOption={group}
+                      setSelectedOption={setgroup}
+                      name='group'
+                      table='ownergroup'
+                      tableColumn='ogowner'
+                      tableColumnValue={owner}
+                      optionLabel='ogtitle'
+                      optionValue='oggroup'
+                      dropdownWidth='w-36'
                       includeBlank={true}
                     />
-                  </th>
-                )}
-                {/* ................................................... */}
-                {/* GROUP                                                 */}
-                {/* ................................................... */}
-                {show_group && (
-                  <th scope='col' className=' px-2'>
-                    {owner === undefined || owner === '' ? null : (
-                      <DropdownGeneric
-                        selectedOption={group}
-                        setSelectedOption={setgroup}
-                        name='group'
-                        table='ownergroup'
-                        tableColumn='ogowner'
-                        tableColumnValue={owner}
-                        optionLabel='ogtitle'
-                        optionValue='oggroup'
-                        dropdownWidth='w-36'
-                        includeBlank={true}
-                      />
-                    )}
-                  </th>
-                )}
-                {/* ................................................... */}
-                {/* LIBRARY ID                                          */}
-                {/* ................................................... */}
-                {show_lid && <th scope='col' className=' px-2'></th>}
-                {/* ................................................... */}
-                {/* REF                                                 */}
-                {/* ................................................... */}
-                {show_ref && (
-                  <th scope='col' className=' px-2 '>
-                    <label htmlFor='ref' className='sr-only'>
-                      Reference
-                    </label>
-                    <MyInput
-                      id='ref'
-                      name='ref'
-                      overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
-                      type='text'
-                      value={ref}
-                      onChange={e => {
-                        const value = e.target.value.split(' ')[0]
-                        setref(value)
-                      }}
-                    />
-                  </th>
-                )}
-                {/* ................................................... */}
-                {/* DESC                                                 */}
-                {/* ................................................... */}
-                <th scope='col' className='px-2'>
-                  <label htmlFor='desc' className='sr-only'>
-                    Description
+                  )}
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* LIBRARY ID                                          */}
+              {/* ................................................... */}
+              {show_lid && <th scope='col' className=' px-2'></th>}
+              {/* ................................................... */}
+              {/* REF                                                 */}
+              {/* ................................................... */}
+              {show_ref && (
+                <th scope='col' className=' px-2 '>
+                  <label htmlFor='ref' className='sr-only'>
+                    Reference
                   </label>
                   <MyInput
-                    id='desc'
-                    name='desc'
+                    id='ref'
+                    name='ref'
                     overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
-                    value={desc}
+                    value={ref}
                     onChange={e => {
                       const value = e.target.value.split(' ')[0]
-                      setdesc(value)
+                      setref(value)
                     }}
                   />
                 </th>
-                {/* ................................................... */}
-                {/* WHO                                                 */}
-                {/* ................................................... */}
-                {show_who && (
-                  <th scope='col' className=' px-2'>
-                    <DropdownGeneric
-                      selectedOption={who}
-                      setSelectedOption={setwho}
-                      name='who'
-                      table='who'
-                      optionLabel='wtitle'
-                      optionValue='wwho'
-                      dropdownWidth='w-28'
-                      includeBlank={true}
-                    />
-                  </th>
-                )}
+              )}
+              {/* ................................................... */}
+              {/* DESC                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='px-2'>
+                <label htmlFor='desc' className='sr-only'>
+                  Description
+                </label>
+                <MyInput
+                  id='desc'
+                  name='desc'
+                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  type='text'
+                  value={desc}
+                  onChange={e => {
+                    const value = e.target.value.split(' ')[0]
+                    setdesc(value)
+                  }}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* WHO                                                 */}
+              {/* ................................................... */}
+              {show_who && (
+                <th scope='col' className=' px-2'>
+                  <DropdownGeneric
+                    selectedOption={who}
+                    setSelectedOption={setwho}
+                    name='who'
+                    table='who'
+                    optionLabel='wtitle'
+                    optionValue='wwho'
+                    dropdownWidth='w-28'
+                    includeBlank={true}
+                  />
+                </th>
+              )}
 
+              {/* ................................................... */}
+              {/* Questions                                           */}
+              {/* ................................................... */}
+              {show_questions && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='questions'
+                    name='questions'
+                    overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    type='text'
+                    value={questions}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = parseInt(value, 10)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      setquestions(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* type                                                 */}
+              {/* ................................................... */}
+              {show_type && (
+                <th scope='col' className=' px-2 text-center'>
+                  <DropdownGeneric
+                    selectedOption={type}
+                    setSelectedOption={settype}
+                    name='type'
+                    table='reftype'
+                    optionLabel='rttitle'
+                    optionValue='rttype'
+                    dropdownWidth='w-24'
+                    includeBlank={true}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* Quiz                                       */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+            </tr>
+          </thead>
+          {/* ---------------------------------------------------------------------------------- */}
+          {/* BODY                                 */}
+          {/* ---------------------------------------------------------------------------------- */}
+          <tbody className='bg-white text-xs'>
+            {tabledata?.map(tabledata => (
+              <tr key={tabledata.lrlid} className='w-full border-b'>
+                {show_gid && <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>}
+                {show_owner && <td className=' px-2 pt-2'>{tabledata.lrowner}</td>}
+                {show_group && <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>}
+                {show_lid && <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>}
+                {show_ref && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
+                <td className='px-2 pt-2'>
+                  {tabledata.lrdesc.length > widthDesc
+                    ? `${tabledata.lrdesc.slice(0, widthDesc - 3)}...`
+                    : tabledata.lrdesc}
+                </td>
+                {show_who && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
                 {/* ................................................... */}
-                {/* Questions                                           */}
+                {/* Questions                                            */}
                 {/* ................................................... */}
-                {show_questions && (
-                  <th scope='col' className='px-2 text-center'>
-                    <MyInput
-                      id='questions'
-                      name='questions'
-                      overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
-                      type='text'
-                      value={questions}
-                      onChange={e => {
-                        const value = e.target.value
-                        const numValue = parseInt(value, 10)
-                        const parsedValue = isNaN(numValue) ? '' : numValue
-                        setquestions(parsedValue)
-                      }}
-                    />
-                  </th>
-                )}
-                {/* ................................................... */}
-                {/* type                                                 */}
-                {/* ................................................... */}
-                {show_type && (
-                  <th scope='col' className=' px-2 text-center'>
-                    <DropdownGeneric
-                      selectedOption={type}
-                      setSelectedOption={settype}
-                      name='type'
-                      table='reftype'
-                      optionLabel='rttitle'
-                      optionValue='rttype'
-                      dropdownWidth='w-24'
-                      includeBlank={true}
-                    />
-                  </th>
-                )}
-                {/* ................................................... */}
-                {/* Quiz                                       */}
-                {/* ................................................... */}
-                <th scope='col' className=' px-2'></th>
-                {/* ................................................... */}
-              </tr>
-            </thead>
-            {/* ---------------------------------------------------------------------------------- */}
-            {/* BODY                                 */}
-            {/* ---------------------------------------------------------------------------------- */}
-            <tbody className='bg-white text-xs'>
-              {tabledata?.map(tabledata => (
-                <tr key={tabledata.lrlid} className='w-full border-b'>
-                  {show_gid && <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>}
-                  {show_owner && <td className=' px-2 pt-2'>{tabledata.lrowner}</td>}
-                  {show_group && <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>}
-                  {show_lid && <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>}
-                  {show_ref && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
-                  <td className='px-2 pt-2'>
-                    {tabledata.lrdesc.length > 40
-                      ? `${tabledata.lrdesc.slice(0, 35)}...`
-                      : tabledata.lrdesc}
+                {show_questions && 'ogcntquestions' in tabledata && (
+                  <td className='px-2 pt-2 text-center'>
+                    {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
-                  {show_who && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
-                  {/* ................................................... */}
-                  {/* Questions                                            */}
-                  {/* ................................................... */}
-                  {show_questions && 'ogcntquestions' in tabledata && (
-                    <td className='px-2 pt-2 text-center'>
-                      {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
-                    </td>
-                  )}
-                  {/* ................................................... */}
-                  {/* MyButton  1                                                 */}
-                  {/* ................................................... */}
-                  <td className='px-2 py-1 text-center'>
-                    <div className='inline-flex justify-center items-center'>
-                      <MyButton
-                        onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
-                        overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
-                          tabledata.lrtype === 'youtube'
-                            ? 'bg-orange-500 hover:bg-orange-600'
-                            : 'bg-green-500 hover:bg-green-600'
-                        }`}
+                )}
+                {/* ................................................... */}
+                {/* MyButton  1                                                 */}
+                {/* ................................................... */}
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
+                      overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
+                        tabledata.lrtype === 'youtube'
+                          ? 'bg-orange-500 hover:bg-orange-600'
+                          : 'bg-green-500 hover:bg-green-600'
+                      }`}
+                    >
+                      {tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
+                    </MyButton>
+                  </div>
+                </td>
+                {/* ................................................... */}
+                {/* MyButton  2                                                 */}
+                {/* ................................................... */}
+                <td className='px-2 py-1 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
+                      <Link
+                        href={{
+                          pathname: `/dashboard/quiz/${tabledata.lrgid}`,
+                          query: { from: 'library' }
+                        }}
+                        className='bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600'
                       >
-                        {tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
-                      </MyButton>
-                    </div>
-                  </td>
-                  {/* ................................................... */}
-                  {/* MyButton  2                                                 */}
-                  {/* ................................................... */}
-                  <td className='px-2 py-1 text-center'>
-                    <div className='inline-flex justify-center items-center'>
-                      {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
-                        <Link
-                          href={{
-                            pathname: `/dashboard/quiz/${tabledata.lrgid}`,
-                            query: { from: 'library' }
-                          }}
-                          className='bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600'
-                        >
-                          Quiz
-                        </Link>
-                      ) : (
-                        ' '
-                      )}
-                    </div>
-                  </td>
-                  {/* ---------------------------------------------------------------------------------- */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {/* ---------------------------------------------------------------------------------- */}
-        {/* Pagination                */}
-        {/* ---------------------------------------------------------------------------------- */}
-        <div className='mt-5 flex w-full justify-center'>
-          <Pagination
-            totalPages={totalPages}
-            statecurrentPage={currentPage}
-            setStateCurrentPage={setcurrentPage}
-          />
-        </div>
-        {/* ---------------------------------------------------------------------------------- */}
-      </>
+                        Quiz
+                      </Link>
+                    ) : (
+                      ' '
+                    )}
+                  </div>
+                </td>
+                {/* ---------------------------------------------------------------------------------- */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Pagination                */}
+      {/* ---------------------------------------------------------------------------------- */}
+      <div className='mt-5 flex w-full justify-center'>
+        <Pagination
+          totalPages={totalPages}
+          statecurrentPage={currentPage}
+          setStateCurrentPage={setcurrentPage}
+        />
+      </div>
+      {/* ---------------------------------------------------------------------------------- */}
     </>
   )
 }

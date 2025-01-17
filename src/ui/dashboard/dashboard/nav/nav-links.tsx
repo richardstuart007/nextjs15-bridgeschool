@@ -64,7 +64,7 @@ export default function NavLinks(props: FormProps): JSX.Element {
             key={link.name}
             href={link.href}
             className={clsx(
-              'flex h-15 grow items-center justify-center gap-2 rounded-md bg-gray-50 p-1 text-xs font-medium hover:bg-sky-200 hover:text-red-600 md:flex-none md:p-2 md:px-2',
+              'flex h-8 grow items-center justify-center gap-2 rounded-md bg-gray-50 p-1 text-xs font-medium hover:bg-sky-200 hover:text-red-600 md:flex-none md:p-2 md:px-2',
               {
                 'bg-sky-100 text-blue-600': pathname === link.href
               }
