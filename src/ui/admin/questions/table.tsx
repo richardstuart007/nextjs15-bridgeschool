@@ -16,9 +16,11 @@ import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  gid?: string | null
+  selected_gid?: number | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
 }
-export default function Table({ gid }: FormProps) {
+export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
   const rowsPerPage = 17
   //
   //  Selection
@@ -72,7 +74,7 @@ export default function Table({ gid }: FormProps) {
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, owner, group, detail])
+  }, [currentPage, shouldFetchData, selected_gid, owner, group, detail])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -96,7 +98,7 @@ export default function Table({ gid }: FormProps) {
     //
     //  Selected gid ?
     //
-    if (gid) filtersToUpdate.push({ column: 'qgid', value: gid, operator: '=' })
+    if (selected_gid) filtersToUpdate.push({ column: 'qgid', value: selected_gid, operator: '=' })
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -297,7 +299,9 @@ export default function Table({ gid }: FormProps) {
               {/* OWNER                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2'>
-                {!gid && (
+                {selected_owner ? (
+                  <h1>{selected_owner}</h1>
+                ) : (
                   <DropdownGeneric
                     selectedOption={owner}
                     setSelectedOption={setowner}
@@ -315,7 +319,9 @@ export default function Table({ gid }: FormProps) {
               {/* GROUP                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                {!gid && owner && owner !== '' && (
+                {selected_group ? (
+                  <h1>{selected_group}</h1>
+                ) : owner === '' ? null : (
                   <DropdownGeneric
                     selectedOption={group}
                     setSelectedOption={setgroup}
@@ -325,12 +331,17 @@ export default function Table({ gid }: FormProps) {
                     tableColumnValue={owner}
                     optionLabel='ogtitle'
                     optionValue='oggroup'
-                    dropdownWidth='w-36'
+                    dropdownWidth='w-72'
                     includeBlank={true}
                   />
                 )}
               </th>
-              <th scope='col' className='text-xs  px-2'></th>
+              {/* ................................................... */}
+              {/* GID                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='text-xs  px-2'>
+                {selected_gid ? <h1>{selected_gid}</h1> : null}
+              </th>
               <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* detail                                                 */}
@@ -343,7 +354,7 @@ export default function Table({ gid }: FormProps) {
                   id='detail'
                   name='detail'
                   overrideClass={`w-60  py-2`}
-                  type='detail'
+                  type='text'
                   value={detail}
                   onChange={e => {
                     const value = e.target.value.split(' ')[0]
@@ -451,7 +462,7 @@ export default function Table({ gid }: FormProps) {
       {/* Edit Modal */}
       {selectedRow && (
         <MaintPopup_detail
-          record={selectedRow}
+          questionRecord={selectedRow}
           isOpen={isModelOpenEdit_detail}
           onClose={handleModalCloseEdit_detail}
         />
@@ -482,7 +493,8 @@ export default function Table({ gid }: FormProps) {
       {/* Add Modal */}
       {isModelOpenAdd_detail && (
         <MaintPopup_detail
-          record={null}
+          selected_owner={selected_owner}
+          selected_group={selected_group}
           isOpen={isModelOpenAdd_detail}
           onClose={handleModalCloseAdd_detail}
         />

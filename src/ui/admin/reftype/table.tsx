@@ -241,7 +241,7 @@ export default function Table() {
                   id='type'
                   name='type'
                   overrideClass={`w-60  py-2 `}
-                  type='type'
+                  type='text'
                   value={type}
                   onChange={e => {
                     const value = e.target.value.split(' ')[0]
@@ -260,7 +260,7 @@ export default function Table() {
                   id='title'
                   name='title'
                   overrideClass={`w-60 py-2  `}
-                  type='title'
+                  type='text'
                   value={title}
                   onChange={e => {
                     const value = e.target.value.split(' ')[0]

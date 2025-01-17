@@ -191,7 +191,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 const inputValue = (hand_value[rowIndex * 4 + colIndex] || '') as string
 
                 return (
-                  <div key={`${label}-${colIndex}`} className='col-span-1 mb-2'>
+                  <div key={inputName} className='col-span-1 mb-2'>
                     <MyInput
                       name={inputName}
                       value={inputValue}

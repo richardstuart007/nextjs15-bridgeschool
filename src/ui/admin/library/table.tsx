@@ -13,9 +13,9 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  selected_gid?: number | null
-  selected_owner?: string | null
-  selected_group?: string | null
+  selected_gid?: number | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
 }
 export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
   const rowsPerPage = 17
@@ -53,8 +53,8 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   // Reset the group when the owner changes
   //......................................................................................
   useEffect(() => {
-    setgroup('')
-  }, [owner])
+    if (!selected_group) setgroup('')
+  }, [selected_group, owner])
   //
   // Reset currentPage to 1 when fetching new data
   //
@@ -125,7 +125,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
         { table: 'usersowner', on: 'lrowner = uoowner' },
         { table: 'ownergroup', on: 'lrgid = oggid' }
       ]
-
       //
       // Calculate the offset for pagination
       //
@@ -176,7 +175,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit() {
-    setIsModelOpenEdit(false)
+    setTimeout(() => setIsModelOpenEdit(false), 0)
     setSelectedRow(null)
     setTimeout(() => setShouldFetchData(true), 0)
   }
@@ -268,7 +267,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 Owner
               </th>
               <th scope='col' className='text-xs   px-2'>
-                Group-name
+                Group
               </th>
               <th scope='col' className='text-xs   px-2'>
                 Lid
@@ -331,7 +330,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               <th scope='col' className='text-xs  px-2'>
                 {selected_group ? (
                   <h1>{selected_group}</h1>
-                ) : owner === undefined || owner === '' ? null : (
+                ) : owner === '' ? null : (
                   <DropdownGeneric
                     selectedOption={group}
                     setSelectedOption={setgroup}
@@ -341,7 +340,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     tableColumnValue={owner}
                     optionLabel='ogtitle'
                     optionValue='oggroup'
-                    dropdownWidth='w-36'
+                    dropdownWidth='w-72'
                     includeBlank={true}
                   />
                 )}
@@ -529,7 +528,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       {/* Add Modal */}
       {isModelOpenAdd && (
         <MaintPopup
-          libraryRecord={null}
           selected_owner={selected_owner}
           selected_group={selected_group}
           isOpen={isModelOpenAdd}

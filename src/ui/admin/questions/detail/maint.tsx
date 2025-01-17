@@ -9,22 +9,30 @@ import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  record: table_Questions | null
+  questionRecord: table_Questions | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
   onSuccess: () => void
   shouldCloseOnUpdate?: boolean
 }
 
-export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: FormProps) {
+export default function Form({
+  questionRecord,
+  selected_owner,
+  selected_group,
+  onSuccess,
+  shouldCloseOnUpdate = true
+}: FormProps) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
   const [formState, formAction] = useActionState(Maint_detail, initialState)
   //
   //  State and Initial values
   //
-  const qqid = record?.qqid || 0
-  const qseq = record?.qseq || 0
-  const [qowner, setqowner] = useState(record?.qowner || '')
-  const [qgroup, setqgroup] = useState(record?.qgroup || '')
-  const [qdetail, setqdetail] = useState(record?.qdetail || '')
+  const qqid = questionRecord?.qqid || 0
+  const qseq = questionRecord?.qseq || 0
+  const [qowner, setqowner] = useState<string>(questionRecord?.qowner || selected_owner || '')
+  const [qgroup, setqgroup] = useState<string>(questionRecord?.qgroup || selected_group || '')
+  const [qdetail, setqdetail] = useState(questionRecord?.qdetail || '')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -69,7 +77,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
-        {qqid === 0 ? (
+        {qqid === 0 && !selected_owner ? (
           <DropdownGeneric
             selectedOption={qowner}
             setSelectedOption={setqowner}
@@ -100,7 +108,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         {/*   Owner Group */}
         {/*  ...................................................................................*/}
-        {qqid === 0 && qowner ? (
+        {qqid === 0 && !selected_group && qowner ? (
           <DropdownGeneric
             selectedOption={qgroup}
             setSelectedOption={setqgroup}
@@ -167,7 +175,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
               </p>
             ))}
         </div>
-
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}
         {/*  ...................................................................................*/}

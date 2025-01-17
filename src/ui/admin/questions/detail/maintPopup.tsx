@@ -4,12 +4,20 @@ import Form from '@/src/ui/admin/questions/detail/maint'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
 interface Props {
-  record: table_Questions | null
+  questionRecord?: table_Questions | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
   isOpen: boolean
   onClose: () => void
 }
 
-export default function MaintPopup({ record, isOpen, onClose }: Props) {
+export default function MaintPopup({
+  questionRecord,
+  selected_owner,
+  selected_group,
+  isOpen,
+  onClose
+}: Props) {
   //
   // Close the popup on success
   //
@@ -18,7 +26,13 @@ export default function MaintPopup({ record, isOpen, onClose }: Props) {
   }
   return (
     <Popup isOpen={isOpen} onClose={onClose}>
-      <Form record={record} onSuccess={handleSuccess} shouldCloseOnUpdate={true} />
+      <Form
+        questionRecord={questionRecord}
+        selected_owner={selected_owner}
+        selected_group={selected_group}
+        onSuccess={handleSuccess}
+        shouldCloseOnUpdate={true}
+      />
     </Popup>
   )
 }

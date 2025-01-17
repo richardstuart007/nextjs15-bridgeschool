@@ -51,7 +51,7 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
               <MyInput
                 overrideClass='w-72  px-4  py-[9px]   '
                 id='uppwd'
-                type='uppwd'
+                type='text'
                 name='uppwd'
                 value={uppwd}
                 onChange={e => setUppwd(e.target.value)}

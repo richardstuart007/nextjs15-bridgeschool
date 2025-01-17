@@ -6,14 +6,15 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function MyButton({ children, overrideClass = '', ...rest }: Props) {
-  const defaultClass =
-    'flex h-10 px-4 ' +
-    'items-center ' +
-    'rounded-md bg-blue-500 hover:bg-blue-600 ' +
-    'text-xs font-medium text-white ' +
-    'transition-colors ' +
-    'focus-visible:outline focus-visible:outline-blue-500 ' +
+  const defaultClass = clsx(
+    'flex h-10 px-4',
+    'items-center',
+    'rounded-md bg-blue-500 hover:bg-blue-600',
+    'text-xs font-medium text-white',
+    'transition-colors',
+    'focus-visible:outline focus-visible:outline-blue-500',
     'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
+  )
   const classValue = clsx(defaultClass, overrideClass)
   return (
     <button {...rest} className={classValue}>

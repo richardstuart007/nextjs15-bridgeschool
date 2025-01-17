@@ -3,9 +3,9 @@ import Popup from '@/src/ui/utils/popup'
 import Table from '@/src/ui/admin/library/table'
 
 interface Props {
-  gid: number | null
-  owner: string | null
-  group: string | null
+  gid: number | undefined
+  owner: string | undefined
+  group: string | undefined
   isOpen: boolean
   onClose: () => void
 }

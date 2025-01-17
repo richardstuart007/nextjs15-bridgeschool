@@ -71,7 +71,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
               <MyInput
                 overrideClass='w-72  px-4  py-[9px]'
                 id='rttype'
-                type='rttype'
+                type='text'
                 name='rttype'
                 value={rttype}
                 onChange={e => setrttype(e.target.value.replace(/\s+/g, ''))}
@@ -108,7 +108,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             <MyInput
               overrideClass='w-72  px-4  py-[9px]  '
               id='rttitle'
-              type='rttitle'
+              type='text'
               name='rttitle'
               value={rttitle}
               onChange={e => setrttitle(e.target.value)}

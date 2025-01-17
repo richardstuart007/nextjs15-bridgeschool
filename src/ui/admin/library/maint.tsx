@@ -9,9 +9,9 @@ import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  libraryRecord?: table_Library | null
-  selected_owner?: string | null | undefined
-  selected_group?: string | null | undefined
+  libraryRecord?: table_Library | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
   onSuccess: () => void
   shouldCloseOnUpdate?: boolean
 }

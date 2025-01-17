@@ -137,17 +137,19 @@ export default function Table() {
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_ownergroup() {
-    setIsModelOpenEdit_ownergroup(false)
+    setTimeout(() => setIsModelOpenEdit_ownergroup(false), 0)
     setSelectedRow(null)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_library() {
-    setIsModelOpenEdit_library(false)
+    setTimeout(() => setIsModelOpenEdit_library(false), 0)
+
     setSelectedRow(null)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_questions() {
-    setIsModelOpenEdit_questions(false)
+    setTimeout(() => setIsModelOpenEdit_questions(false), 0)
+
     setSelectedRow(null)
     setTimeout(() => setShouldFetchData(true), 0)
   }
@@ -155,7 +157,7 @@ export default function Table() {
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd_ownergroup() {
-    setIsModelOpenAdd_ownergroup(false)
+    setTimeout(() => setIsModelOpenAdd_ownergroup(false), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
@@ -248,19 +250,19 @@ export default function Table() {
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Title
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Library Count
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Questions Count
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 ID
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Edit
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Delete
               </th>
             </tr>
@@ -295,7 +297,7 @@ export default function Table() {
                   id='group'
                   name='group'
                   overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
-                  type='group'
+                  type='text'
                   value={group}
                   onChange={e => {
                     const value = e.target.value.split(' ')[0]
@@ -314,7 +316,7 @@ export default function Table() {
                   id='title'
                   name='title'
                   overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
-                  type='grtitleoup'
+                  type='text'
                   value={title}
                   onChange={e => {
                     const value = e.target.value.split(' ')[0]
@@ -333,38 +335,48 @@ export default function Table() {
                 <td className='text-xs px-2 py-1  '>{row.ogowner}</td>
                 <td className='text-xs px-2 py-1  '>{row.oggroup}</td>
                 <td className='text-xs px-2 py-1  '>{row.ogtitle}</td>
-                <td className='text-xs px-2 py-1  '>
-                  <MyButton
-                    onClick={() => handleClickEdit_library(row)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    {row.ogcntlibrary}
-                  </MyButton>
+                <td className='text-xs px-2 py-1'>
+                  <div className='flex justify-center'>
+                    <MyButton
+                      onClick={() => handleClickEdit_library(row)}
+                      overrideClass=' h-6  px-2 py-1'
+                    >
+                      {row.ogcntlibrary}
+                    </MyButton>
+                  </div>
                 </td>
                 <td className='text-xs px-2 py-1  '>
-                  <MyButton
-                    onClick={() => handleClickEdit_questions(row)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    {row.ogcntquestions}
-                  </MyButton>
+                  <div className='flex justify-center'>
+                    <MyButton
+                      onClick={() => handleClickEdit_questions(row)}
+                      overrideClass=' h-6  px-2 py-1'
+                    >
+                      {row.ogcntquestions}
+                    </MyButton>
+                  </div>
                 </td>
-                <td className='text-xs px-2 py-1  '>{row.oggid}</td>
-                <td className='text-xs px-2 py-1 '>
-                  <MyButton
-                    onClick={() => handleClickEdit_ownergroup(row)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    Edit
-                  </MyButton>
+                <td className='text-xs px-2 py-1  '>
+                  <div className='flex justify-center'>{row.oggid}</div>
                 </td>
                 <td className='text-xs px-2 py-1 '>
-                  <MyButton
-                    onClick={() => handleDeleteClick_ownergroup(row)}
-                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
-                  >
-                    Delete
-                  </MyButton>
+                  <div className='flex justify-center'>
+                    <MyButton
+                      onClick={() => handleClickEdit_ownergroup(row)}
+                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                    >
+                      Edit
+                    </MyButton>
+                  </div>
+                </td>
+                <td className='text-xs px-2 py-1 '>
+                  <div className='flex justify-center'>
+                    <MyButton
+                      onClick={() => handleDeleteClick_ownergroup(row)}
+                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                    >
+                      Delete
+                    </MyButton>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -403,7 +415,9 @@ export default function Table() {
       )}
       {selectedRow && (
         <MaintPopup_Questions
-          gid={String(selectedRow.oggid)}
+          gid={selectedRow.oggid}
+          owner={selectedRow.ogowner}
+          group={selectedRow.oggroup}
           isOpen={isModelOpenEdit_questions}
           onClose={handleModalCloseEdit_questions}
         />

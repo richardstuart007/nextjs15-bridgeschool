@@ -1,17 +1,19 @@
 'use client'
 import Popup from '@/src/ui/utils/popup'
-import Form from '@/src/ui/admin/questions/table'
+import Table from '@/src/ui/admin/questions/table'
 
 interface Props {
-  gid: string | null
+  gid: number | undefined
+  owner: string | undefined
+  group: string | undefined
   isOpen: boolean
   onClose: () => void
 }
 
-export default function MaintPopup({ gid, isOpen, onClose }: Props) {
+export default function MaintPopup({ gid, owner, group, isOpen, onClose }: Props) {
   return (
     <Popup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
-      <Form gid={gid} />
+      <Table selected_gid={gid} selected_owner={owner} selected_group={group} />
     </Popup>
   )
 }

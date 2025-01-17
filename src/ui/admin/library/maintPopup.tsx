@@ -4,10 +4,9 @@ import Form from '@/src/ui/admin/library/maint'
 import { table_Library } from '@/src/lib/tables/definitions'
 
 interface Props {
-  libraryRecord: table_Library | null
-  selected_gid?: number | null | undefined
-  selected_owner?: string | null | undefined
-  selected_group?: string | null | undefined
+  libraryRecord?: table_Library | undefined
+  selected_owner?: string | undefined
+  selected_group?: string | undefined
   isOpen: boolean
   onClose: () => void
 }

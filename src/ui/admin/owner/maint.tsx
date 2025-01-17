@@ -48,14 +48,14 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='oowner'>
+          <label className='text-xs mb-1 mt-5' htmlFor='oowner'>
             Owner
           </label>
           <div className='relative'>
             <MyInput
-              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-xs '
+              overrideClass='w-72 '
               id='oowner'
-              type='oowner'
+              type='text'
               name='oowner'
               value={oowner}
               onChange={e => setoowner(e.target.value.replace(/\s+/g, ''))}
