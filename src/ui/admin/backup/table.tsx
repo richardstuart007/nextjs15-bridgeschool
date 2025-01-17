@@ -909,6 +909,413 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
+  // Render table header row 1
+  //----------------------------------------------------------------------------------------------
+  function render_tr1() {
+    return (
+      <tr>
+        <th className='pb-2 px-2' colSpan={2}>
+          <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+            Postgres Base Tables
+          </div>
+        </th>
+        <th className='pb-2 px-2' colSpan={8}>
+          <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+            Postgres Backup Tables
+          </div>
+        </th>
+        <th className='pb-2 px-8' colSpan={3}>
+          <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
+            {`PC Folder (${dirPathPrefix}${dataDirectory})`}
+          </div>
+        </th>
+        <th></th>
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table header row 2
+  //----------------------------------------------------------------------------------------------
+  function render_tr2() {
+    return (
+      <tr>
+        <th scope='col' className='text-xs   px-2'>
+          Table
+        </th>
+        <th scope='col' className='text-xs   px-2 text-right'>
+          Records
+        </th>
+        <th scope='col' className='text-xs   px-2'>
+          Table
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Exists
+        </th>
+        <th scope='col' className='text-xs   px-2 text-right'>
+          Records
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Drop
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Duplicate
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Clear
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Copy
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          ToBase
+        </th>
+        <th scope='col' className='text-xs  px-2 text-center'>
+          <label htmlFor='dataDirectory' className='sr-only'>
+            Directory
+          </label>
+          <MyInput
+            id='dataDirectory'
+            name='dataDirectory'
+            overrideClass={`w-40  text-center`}
+            type='text'
+            value={dataDirectory}
+            onChange={e => setDataDirectory(e.target.value)}
+          />
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Exists
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Upload
+        </th>
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table header row 3
+  //----------------------------------------------------------------------------------------------
+  function render_tr3() {
+    return (
+      <tr className=' align-bottom'>
+        <th scope='col' className='text-xs  px-2'></th>
+        {/* ................................................... */}
+        {/* Refresh                                       */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-right'>
+          <div className='inline-flex justify-center items-center'>
+            <MyButton
+              onClick={() => fetchbase()}
+              overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+            >
+              Refresh
+            </MyButton>
+          </div>
+        </th>
+        {/* ................................................... */}
+        {/* Backup prefixZ                                       */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs  px-2 text-left'>
+          <label htmlFor='prefixZ' className='sr-only'>
+            prefixZ
+          </label>
+          <MyInput
+            id='prefixZ'
+            name='prefixZ'
+            overrideClass={`w-20 `}
+            type='text'
+            value={prefix_Z}
+            onChange={e => {
+              const value = e.target.value.split(' ')[0]
+              setprefix_Z(value)
+            }}
+          />
+        </th>
+        {/* ................................................... */}
+        {/* Refresh - backup                                      */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          <div className='inline-flex justify-center items-center'>
+            <MyButton
+              onClick={() => fetchbackup()}
+              overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+            >
+              Refresh
+            </MyButton>
+          </div>
+        </th>
+        <th scope='col' className='text-xs px-2'></th>
+        {/* ................................................... */}
+        {/* DROP button                                    */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata_Z.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleDropClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Drop ALL
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Dup button                                      */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata_Z.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleDupClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Dup ALL
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Clear button                                       */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata_Z.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleClearClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Clear ALL
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Copy                                       */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata_Z.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleCopyClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Copy ALL
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* ToBase ALL                                    */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleToBaseClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                ToBase
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Download                                       */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleDownClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Down ALL
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Refresh directory                                      */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => fetchdirectory()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Refresh
+              </MyButton>
+            </div>
+          )}
+        </th>
+        {/* ................................................... */}
+        {/* Upload ALL                                    */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          {tabledata.length > 0 && (
+            <div className='inline-flex justify-center items-center'>
+              <MyButton
+                onClick={() => handleUploadClick_ALL()}
+                overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+              >
+                Upload
+              </MyButton>
+            </div>
+          )}
+        </th>
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table body
+  //----------------------------------------------------------------------------------------------
+  function render_body() {
+    return (
+      <tbody className='bg-white '>
+        {tabledata?.map((row_tabledata, index) => {
+          //
+          // Create map constants
+          //
+          const row_existsInZ = exists_Z[index] || false
+          const row_existsInD = exists_D[index] || false
+          const row_existsInB = tabledata_count[index] || false
+          const row_tabledata_Z = tabledata_Z[index]
+          const row_tabledata_count = tabledata_count[index]
+          const row_tabledata_count_Z = tabledata_count_Z[index]
+          //
+          // Return the table row
+          //
+          return (
+            <tr key={row_tabledata} className='w-full border-b'>
+              {/* Table Name */}
+              <td className='text-xs px-2 pt-2'>{row_tabledata}</td>
+              <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count}</td>
+              <td className='text-xs px-2 pt-2'>{row_tabledata_Z}</td>
+              <td className='text-xs px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
+              <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
+
+              {/* Drop MyButton - Only if Z table exists */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInZ && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleDropClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Drop
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* Duplicate MyButton - Only if Z table does not exist */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {!row_existsInZ && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleDupClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Duplicate
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* Clear MyButton - Only if Z table exists */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInZ && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleClearClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Clear
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* Copy MyButton - Only if Z table exists */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInZ && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleCopyClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Copy
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* ToBase MyButton -  */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInZ && row_tabledata_count_Z > 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleToBaseClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      ToBase
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* Down MyButton -  */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInB && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleDownClick(row_tabledata)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Down
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+
+              {/* Exists flag -  */}
+              <td className='text-xs px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
+
+              {/* Upload MyButton -  */}
+              <td className='text-xs px-2 py-1 text-center'>
+                {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() => handleUploadClick(row_tabledata, row_tabledata_Z)}
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Upload
+                    </MyButton>
+                  </div>
+                )}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render pagination
+  //----------------------------------------------------------------------------------------------
+  function render_pagination() {
+    return (
+      <div className='mt-5 flex w-full justify-center'>
+        <Pagination
+          totalPages={totalPages}
+          statecurrentPage={currentPage}
+          setStateCurrentPage={setcurrentPage}
+        />
+      </div>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
   if (loading) return <p>Loading....</p>
@@ -917,420 +1324,25 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** TABLE                                                                */}
-      {/** -------------------------------------------------------------------- */}
       <div className='mt-4 py-2 px-2 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto '>
-          {/* --------------------------------------------------------------------- */}
-          {/** HEADING                                                             */}
-          {/** -------------------------------------------------------------------- */}
           <thead className='rounded-lg text-left font-normal text-xs '>
-            {/* --------------------------------------------------------------------- */}
-            {/** ROW                                                                  */}
-            {/** -------------------------------------------------------------------- */}
-            <tr>
-              <th className='pb-2 px-2' colSpan={2}>
-                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
-                  Postgres Base Tables
-                </div>
-              </th>
-              <th className='pb-2 px-2' colSpan={8}>
-                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
-                  Postgres Backup Tables
-                </div>
-              </th>
-              {/** ................................................................ */}
-              <th className='pb-2 px-8' colSpan={3}>
-                <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
-                  {`PC Folder (${dirPathPrefix}${dataDirectory})`}
-                </div>
-              </th>
-              <th></th>
-            </tr>
-            {/* --------------------------------------------------------------------- */}
-            {/** ROW - Headings                                                       */}
-            {/** -------------------------------------------------------------------- */}
-            <tr>
-              <th scope='col' className='text-xs   px-2'>
-                Table
-              </th>
-              <th scope='col' className='text-xs   px-2 text-right'>
-                Records
-              </th>
-              <th scope='col' className='text-xs   px-2'>
-                Table
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Exists
-              </th>
-              <th scope='col' className='text-xs   px-2 text-right'>
-                Records
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Drop
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Duplicate
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Clear
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Copy
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                ToBase
-              </th>
-              {/** ................................................................ */}
-              <th scope='col' className='text-xs font-bold px-2 text-center'>
-                <label htmlFor='dataDirectory' className='sr-only'>
-                  Data Directory
-                </label>
-                <MyInput
-                  id='dataDirectory'
-                  name='dataDirectory'
-                  overrideClass={`w-40  text-center`}
-                  type='text'
-                  value={dataDirectory}
-                  onChange={e => setDataDirectory(e.target.value)}
-                />
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Exists
-              </th>
-              <th scope='col' className='text-xs   px-2 text-center'>
-                Upload
-              </th>
-            </tr>
-            {/* --------------------------------------------------------------------- */}
-            {/** ROW - DROPDOWN & SEARCHES                                            */}
-            {/** -------------------------------------------------------------------- */}
-            <tr className=' align-bottom'>
-              <th scope='col' className='text-xs  px-2'></th>
-              {/* ................................................... */}
-              {/* Refresh                                       */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-right'>
-                <div className='inline-flex justify-center items-center'>
-                  <MyButton
-                    onClick={() => fetchbase()}
-                    overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                  >
-                    Refresh
-                  </MyButton>
-                </div>
-              </th>
-              {/* ................................................... */}
-              {/* Backup prefixZ                                       */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs  px-2 text-left'>
-                <label htmlFor='prefixZ' className='sr-only'>
-                  prefixZ
-                </label>
-                <MyInput
-                  id='prefixZ'
-                  name='prefixZ'
-                  overrideClass={`w-20 `}
-                  type='text'
-                  value={prefix_Z}
-                  onChange={e => {
-                    const value = e.target.value.split(' ')[0]
-                    setprefix_Z(value)
-                  }}
-                />
-              </th>
-              {/* ................................................... */}
-              {/* Refresh - backup                                      */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                <div className='inline-flex justify-center items-center'>
-                  <MyButton
-                    onClick={() => fetchbackup()}
-                    overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                  >
-                    Refresh
-                  </MyButton>
-                </div>
-              </th>
-              <th scope='col' className='text-xs px-2'></th>
-              {/* ................................................... */}
-              {/* DROP button                                    */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata_Z.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleDropClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Drop ALL
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Dup button                                      */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata_Z.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleDupClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Dup ALL
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Clear button                                       */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata_Z.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleClearClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Clear ALL
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Copy                                       */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata_Z.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleCopyClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Copy ALL
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* ToBase ALL                                    */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleToBaseClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      ToBase
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Download                                       */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleDownClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Down ALL
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Refresh directory                                      */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => fetchdirectory()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Refresh
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-              {/* ................................................... */}
-              {/* Upload ALL                                    */}
-              {/* ................................................... */}
-              <th scope='col' className='text-xs   px-2 text-center'>
-                {tabledata.length > 0 && (
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => handleUploadClick_ALL()}
-                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
-                    >
-                      Upload
-                    </MyButton>
-                  </div>
-                )}
-              </th>
-            </tr>
+            {render_tr1()}
+            {render_tr2()}
+            {render_tr3()}
           </thead>
-          {/* ---------------------------------------------------------------------------------- */}
-          {/* BODY                                 */}
-          {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white '>
-            {tabledata?.map((row_tabledata, index) => {
-              //
-              // Create map constants
-              //
-              const row_existsInZ = exists_Z[index] || false
-              const row_existsInD = exists_D[index] || false
-              const row_existsInB = tabledata_count[index] || false
-              const row_tabledata_Z = tabledata_Z[index]
-              const row_tabledata_count = tabledata_count[index]
-              const row_tabledata_count_Z = tabledata_count_Z[index]
-              //
-              // Return the table row
-              //
-              return (
-                <tr key={row_tabledata} className='w-full border-b'>
-                  {/* Table Name */}
-                  <td className='text-xs px-2 pt-2'>{row_tabledata}</td>
-                  <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count}</td>
-                  <td className='text-xs px-2 pt-2'>{row_tabledata_Z}</td>
-                  <td className='text-xs px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
-                  <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
-
-                  {/* Drop MyButton - Only if Z table exists */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInZ && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleDropClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Drop
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Duplicate MyButton - Only if Z table does not exist */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {!row_existsInZ && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleDupClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Duplicate
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Clear MyButton - Only if Z table exists */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInZ && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleClearClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Clear
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Copy MyButton - Only if Z table exists */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInZ && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleCopyClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Copy
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* ToBase MyButton -  */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInZ && row_tabledata_count_Z > 0 && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleToBaseClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          ToBase
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Down MyButton -  */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInB && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleDownClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Down
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-
-                  {/* Exists flag -  */}
-                  <td className='text-xs px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
-
-                  {/* Upload MyButton -  */}
-                  <td className='text-xs px-2 py-1 text-center'>
-                    {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyButton
-                          onClick={() => handleUploadClick(row_tabledata, row_tabledata_Z)}
-                          overrideClass='h-6 px-2 py-2 '
-                        >
-                          Upload
-                        </MyButton>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
+          {render_body()}
         </table>
       </div>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
-      {/* ---------------------------------------------------------------------------------- */}
-      <div className='mt-5 flex w-full justify-center'>
-        <Pagination
-          totalPages={totalPages}
-          statecurrentPage={currentPage}
-          setStateCurrentPage={setcurrentPage}
-        />
-      </div>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Loading                */}
-      {/* ---------------------------------------------------------------------------------- */}
+      {render_pagination()}
+
       {message && (
-        <div className='mt-5 flex w-full justify-center  text-red-700'>
+        <div className='mt-5 flex w-full justify-center  text-red-700 text-xs'>
           <p>{message}</p>
         </div>
       )}
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Confirmation Dialog */}
-      {/* ---------------------------------------------------------------------------------- */}
+
       <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
-      {/* ---------------------------------------------------------------------------------- */}
     </>
   )
 }
