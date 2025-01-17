@@ -8,10 +8,12 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
   const rowsPerPage = 17
+  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
@@ -107,17 +109,15 @@ export default function Table() {
       })
       setTotalPages(fetchedTotalPages)
       //
+      //  Data loading ready
+      //
+      setLoading(false)
+      //
       //  Errors
       //
     } catch (error) {
       console.log('Error fetching library:', error)
     }
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Add
-  //----------------------------------------------------------------------------------------------
-  function handleClickAdd() {
-    setIsModelOpenAdd(true)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
@@ -179,6 +179,12 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -188,13 +194,13 @@ export default function Table() {
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                       */}
         {/** -------------------------------------------------------------------- */}
-        <h1 className='px-2 py-1 text-xs'>
-          <Button
-            onClick={() => handleClickAdd()}
-            overrideClass='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
+        <h1 className='px-2 py-1 '>
+          <MyButton
+            onClick={() => setIsModelOpenAdd(true)}
+            overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
           >
             Add
-          </Button>
+          </MyButton>
         </h1>
       </div>
       {/** -------------------------------------------------------------------- */}
@@ -207,31 +213,31 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
                 Owner
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
                 ID
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* Name                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   Owner
                 </label>
-                <input
+                <MyInput
                   id='owner'
                   name='owner'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60 py-2`}
                   type='text'
                   value={owner}
                   onChange={e => {
@@ -247,19 +253,16 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {data?.map(row => (
-              <tr
-                key={row.ooid}
-                className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
-              >
-                <td className='px-2 py-1 text-xs '>{row.oowner}</td>
-                <td className='px-2 py-1 text-xs '>{row.ooid}</td>
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+              <tr key={row.ooid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1 text-xs '>{row.oowner}</td>
+                <td className='text-xs px-2 py-1 text-xs '>{row.ooid}</td>
+                <td className='text-xs px-2 py-1 text-xs'>
+                  <MyButton
                     onClick={() => handleDeleteClick(row)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                   >
                     Delete
-                  </Button>
+                  </MyButton>
                 </td>
               </tr>
             ))}

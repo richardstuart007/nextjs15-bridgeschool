@@ -1,7 +1,7 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { ActionUsersowner } from '@/src/ui/admin/usersowner/maint-action'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -23,14 +23,14 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
   const [uid, setuid] = useState<number>(0)
   const [owner, setowner] = useState<string>('')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         Create
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -79,9 +79,9 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
           />
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -89,7 +89,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

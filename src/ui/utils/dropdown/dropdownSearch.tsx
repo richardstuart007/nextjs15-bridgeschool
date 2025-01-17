@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 type DropdownProps = {
   label?: string
@@ -48,8 +49,8 @@ export default function DropdownSearch({
       {/* Search Input */}
       {/*  ...................................................................................*/}
       {searchEnabled && (
-        <input
-          className={`${dropdownWidth} md:max-w-md px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
+        <MyInput
+          overrideClass={`${dropdownWidth}  px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
           type='text'
           placeholder='Search...'
           value={searchTerm}
@@ -64,7 +65,7 @@ export default function DropdownSearch({
           {name}
         </label>
         <select
-          className={`${dropdownWidth} md:max-w-md px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
+          className={`${dropdownWidth}  px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
           id={name}
           name={name}
           value={selectedOption}

@@ -11,8 +11,9 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   gid?: string | null
@@ -47,7 +48,23 @@ export default function Table({ gid }: FormProps) {
     subTitle: '',
     onConfirm: () => {}
   })
-
+  //......................................................................................
+  // UseEffect
+  //......................................................................................
+  //
+  // Reset currentPage to 1 when fetching new data
+  //
+  useEffect(() => {
+    if (shouldFetchData) setcurrentPage(1)
+  }, [shouldFetchData])
+  //
+  // Adjust currentPage if it exceeds totalPages
+  //
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setcurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
   //
   // Change of current page or should fetch data
   //
@@ -176,9 +193,6 @@ export default function Table({ gid }: FormProps) {
   //----------------------------------------------------------------------------------------------
   //  Add
   //----------------------------------------------------------------------------------------------
-  function handleClickAdd() {
-    setIsModelOpenAdd_detail(true)
-  }
   function handleModalCloseAdd_detail() {
     setIsModelOpenAdd_detail(false)
     setTimeout(() => setShouldFetchData(true), 0)
@@ -225,13 +239,13 @@ export default function Table({ gid }: FormProps) {
   return (
     <>
       <div className='flex w-full items-center justify-between'>
-        <h1 className='px-2 py-1 text-xs'>
-          <Button
-            onClick={() => handleClickAdd()}
-            overrideClass='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
+        <h1 className='px-2 py-1 '>
+          <MyButton
+            onClick={() => setIsModelOpenAdd_detail(true)}
+            overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
           >
             Add
-          </Button>
+          </MyButton>
         </h1>
       </div>
       {/** -------------------------------------------------------------------- */}
@@ -239,50 +253,50 @@ export default function Table({ gid }: FormProps) {
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Owner
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Group
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 GroupID
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Seq
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Detail
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Answers
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Hands
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Bidding
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 ID
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 {!gid && (
                   <DropdownGeneric
                     selectedOption={owner}
@@ -300,7 +314,7 @@ export default function Table({ gid }: FormProps) {
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'>
+              <th scope='col' className='text-xs  px-2'>
                 {!gid && owner && owner !== '' && (
                   <DropdownGeneric
                     selectedOption={group}
@@ -316,19 +330,19 @@ export default function Table({ gid }: FormProps) {
                   />
                 )}
               </th>
-              <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* detail                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <label htmlFor='detail' className='sr-only'>
                   Detail
                 </label>
-                <input
+                <MyInput
                   id='detail'
                   name='detail'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  py-2`}
                   type='detail'
                   value={detail}
                   onChange={e => {
@@ -344,45 +358,42 @@ export default function Table({ gid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr
-                key={record.qqid}
-                className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
-              >
-                <td className='px-2 py-1 text-xs '>{record.qowner}</td>
-                <td className='px-2 py-1 text-xs '>{record.qgroup}</td>
-                <td className='px-2 py-1 text-xs '>{record.qgid}</td>
-                <td className='px-2 py-1 text-xs '>{record.qseq}</td>
+              <tr key={record.qqid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1  '>{record.qowner}</td>
+                <td className='text-xs px-2 py-1  '>{record.qgroup}</td>
+                <td className='text-xs px-2 py-1  '>{record.qgid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qseq}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs '>
-                  <Button
+                <td className='text-xs px-2 py-1  '>
+                  <MyButton
                     onClick={() => handleClickEdit_detail(record)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass='h-6 w-[40rem]  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
-                    {record.qdetail.length > 75
-                      ? `${record.qdetail.slice(0, 75)}...`
+                    {record.qdetail.length > 100
+                      ? `${record.qdetail.slice(0, 100)}...`
                       : record.qdetail}
-                  </Button>
+                  </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs '>
-                  <Button
+                <td className='text-xs px-2 py-1  '>
+                  <MyButton
                     onClick={() => handleClickEdit_answers(record)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     {record.qans && record.qans.length > 0 ? 'Y' : 'N'}
-                  </Button>
+                  </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Hands                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+                <td className='text-xs px-2 py-1 '>
+                  <MyButton
                     onClick={() => handleClickEdit_hands(record)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     {(record.qnorth?.length ?? 0) > 0 ||
                     (record.qeast?.length ?? 0) > 0 ||
@@ -390,33 +401,33 @@ export default function Table({ gid }: FormProps) {
                     (record.qwest?.length ?? 0) > 0
                       ? 'Y'
                       : 'N'}
-                  </Button>
+                  </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Bidding                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+                <td className='text-xs px-2 py-1 '>
+                  <MyButton
                     onClick={() => handleClickEdit_bidding(record)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     {record.qrounds && record.qrounds.length > 0 ? 'Y' : 'N'}
-                  </Button>
+                  </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* ID                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs '>{record.qqid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Delete                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+                <td className='text-xs px-2 py-1 '>
+                  <MyButton
                     onClick={() => handleDeleteClick(record)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                   >
                     Delete
-                  </Button>
+                  </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
               </tr>

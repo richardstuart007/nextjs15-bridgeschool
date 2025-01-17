@@ -170,7 +170,7 @@ function buildSqlQuery({
     const whereConditions = filters.map(({ column, operator, value }) => {
       if (operator === 'IN' || operator === 'NOT IN') {
         if (!Array.isArray(value)) {
-          throw new Error(`Value for operator "${operator}" must be an array.`)
+          throw new Error(`Value for operator ${operator} must be an array.`)
         }
 
         // Push individual values into queryValues
@@ -198,7 +198,7 @@ function buildSqlQuery({
           : value
 
       if (typeof adjustedValue !== 'string' && typeof adjustedValue !== 'number') {
-        throw new Error(`Invalid value type for operator "${operator}": ${typeof adjustedValue}`)
+        throw new Error(`Invalid value type for operator ${operator}: ${typeof adjustedValue}`)
       }
 
       queryValues.push(adjustedValue)

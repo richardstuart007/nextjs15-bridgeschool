@@ -1,9 +1,10 @@
 'use client'
-import { useState, useActionState } from 'react';
+import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
+import { MyButton } from '@/src/ui/utils/myButton'
+import { useFormStatus } from 'react-dom'
 import { OwnerMaint } from '@/src/ui/admin/owner/maint-action'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   onSuccess: () => void
@@ -18,17 +19,17 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
   //
   const [oowner, setoowner] = useState('')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         Create
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -47,12 +48,12 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='oowner'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='oowner'>
             Owner
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm'
+            <MyInput
+              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-xs '
               id='oowner'
               type='oowner'
               name='oowner'
@@ -65,15 +66,15 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.oowner &&
             formState.errors.oowner.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -81,7 +82,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

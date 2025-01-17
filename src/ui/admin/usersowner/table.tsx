@@ -8,21 +8,14 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 
 interface FormProps {
   selected_uid?: number | null
 }
 export default function Table({ selected_uid }: FormProps) {
-  //
-  // Define the structure for filters
-  //
-  type Filter = {
-    column: string
-    value: string | number
-    operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-  }
-  const [filters, setFilters] = useState<Filter[]>([])
+  const rowsPerPage = 17
+  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
@@ -35,7 +28,7 @@ export default function Table({ selected_uid }: FormProps) {
   const [tabledata, setTabledata] = useState<table_Usersowner[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
-  const rowsPerPage = 15
+
   //
   //  Maintenance
   //
@@ -46,53 +39,6 @@ export default function Table({ selected_uid }: FormProps) {
     subTitle: '',
     onConfirm: () => {}
   })
-  //......................................................................................
-  //  Update the filters array based on selected values
-  //......................................................................................
-  useEffect(() => {
-    //
-    // Construct filters dynamically from input fields
-    //
-    const filtersToUpdate: Filter[] = [
-      { column: 'uouid', value: uid, operator: '=' },
-      { column: 'uoowner', value: owner, operator: '=' }
-    ]
-    //
-    // Filter out any entries where `value` is not defined or empty
-    //
-    const updatedFilters = filtersToUpdate.filter(filter => filter.value)
-    //
-    //  Update filter to fetch data
-    //
-    setFilters(updatedFilters)
-    setShouldFetchData(true)
-  }, [uid, owner])
-  //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
-  //......................................................................................
-  //
-  //  Change of filters
-  //
-  useEffect(() => {
-    if (filters.length > 0) {
-      setcurrentPage(1)
-      setShouldFetchData(true)
-    }
-  }, [filters])
-  //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
-  //
-  // Adjust currentPage if it exceeds totalPages
-  //
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
   //
   // Change of current page or should fetch data
   //
@@ -100,11 +46,27 @@ export default function Table({ selected_uid }: FormProps) {
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData])
+  }, [currentPage, shouldFetchData, owner])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
+    //
+    // Define the structure for filters
+    //
+    type Filter = {
+      column: string
+      value: string | number
+      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
+    }
+    //
+    // Construct filters dynamically from input fields
+    //
+    const filtersToUpdate: Filter[] = [{ column: 'oowner', value: owner, operator: 'LIKE' }]
+    //
+    // Filter out any entries where `value` is not defined or empty
+    //
+    const filters = filtersToUpdate.filter(filter => filter.value)
     //
     //  Continue to get data
     //
@@ -138,18 +100,41 @@ export default function Table({ selected_uid }: FormProps) {
       })
       setTotalPages(fetchedTotalPages)
       //
+      //  Data loading ready
+      //
+      setLoading(false)
+      //
       //  Errors
       //
     } catch (error) {
       console.log('Error fetching usersowner:', error)
     }
   }
-  //----------------------------------------------------------------------------------------------
-  //  Add
-  //----------------------------------------------------------------------------------------------
-  function handleClickAdd() {
-    setIsModelOpenAdd(true)
-  }
+  //......................................................................................
+  // Fetch on mount and when shouldFetchData changes
+  //......................................................................................
+  //
+  // Reset currentPage to 1 when fetching new data
+  //
+  useEffect(() => {
+    if (shouldFetchData) setcurrentPage(1)
+  }, [shouldFetchData])
+  //
+  // Adjust currentPage if it exceeds totalPages
+  //
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setcurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
+  //
+  // Change of current page or should fetch data
+  //
+  useEffect(() => {
+    fetchdata()
+    setShouldFetchData(false)
+    // eslint-disable-next-line
+  }, [currentPage, shouldFetchData])
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
@@ -198,6 +183,12 @@ export default function Table({ selected_uid }: FormProps) {
     setConfirmDialog({ ...confirmDialog, isOpen: false })
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -207,41 +198,41 @@ export default function Table({ selected_uid }: FormProps) {
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}
-        <Button
-          onClick={() => handleClickAdd()}
-          overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
+        <MyButton
+          onClick={() => setIsModelOpenAdd(true)}
+          overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
         >
           Add
-        </Button>
+        </MyButton>
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs'>
-              <th scope='col' className=' font-medium px-2 text-center'>
+            <tr className=''>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 User
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Owner
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* USER                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2 text-center'>
+              <th scope='col' className='text-xs px-2 text-center'>
                 {selected_uid ? (
                   <h1>{selected_uid}</h1>
                 ) : (
@@ -261,7 +252,7 @@ export default function Table({ selected_uid }: FormProps) {
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2 text-center'>
+              <th scope='col' className='text-xs px-2 text-center'>
                 <DropdownGeneric
                   selectedOption={owner}
                   setSelectedOption={setowner}
@@ -277,32 +268,32 @@ export default function Table({ selected_uid }: FormProps) {
               {/* ................................................... */}
               {/* Edit                                      */}
               {/* ................................................... */}
-              <th scope='col' className='px-2 text-center'></th>
+              <th scope='col' className='text-xs px-2 text-center'></th>
               {/* ................................................... */}
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
               <tr key={`${tabledata.uouid}${tabledata.uoowner}`} className='w-full border-b'>
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='px-2 py-1 text-center'>{tabledata.uouid}</td>
-                <td className='px-2 py-1 text-center'>{tabledata.uoowner}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uouid}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uoowner}</td>
                 {/* ................................................... */}
-                {/* Button                                                  */}
+                {/* MyButton                                                  */}
                 {/* ................................................... */}
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDeleteClick(tabledata)}
-                      overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                     >
                       Delete
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}

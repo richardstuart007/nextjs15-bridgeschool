@@ -68,5 +68,5 @@ type TableCellProps<T> = {
 }
 
 function TableCell<T>({ value, render }: TableCellProps<T>) {
-  return <td className='border p-2'>{render ? render(value) : String(value)}</td>
+  return <td className='text-xs border p-2'>{render ? render(value) : String(value)}</td>
 }

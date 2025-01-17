@@ -1,11 +1,12 @@
 'use client'
 import { useState, useEffect, useActionState, type JSX } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/dashboard/session/action'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function SessionForm({ id }: { id: number }): JSX.Element {
   //
@@ -65,15 +66,12 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
   //-------------------------------------------------------------------------
   //  Update
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <Button
-        overrideClass='mt-4 w-72 md:max-w-md px-4 flex justify-center'
-        aria-disabled={pending}
-      >
+      <MyButton overrideClass='mt-4 w-72  px-4 flex justify-center' aria-disabled={pending}>
         Update
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -102,8 +100,8 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
               Maximum Number of Questions
             </label>
             <div className='relative'>
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+              <MyInput
+                overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
                 id='bsdftmaxquestions'
                 type='number'
                 name='bsdftmaxquestions'
@@ -129,10 +127,10 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
             Skip Correct on Review
           </div>
           <label className='inline-flex items-center cursor-pointer'>
-            <input
+            <MyInput
               type='checkbox'
               id='bsskipcorrect'
-              className='sr-only peer'
+              overrideClass='sr-only peer'
               name='bsskipcorrect'
               checked={bsskipcorrect}
               onChange={() => setbsskipcorrect(prev => !prev)}
@@ -174,10 +172,10 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
             Random Sort Questions
           </div>
           <label className='inline-flex items-center cursor-pointer'>
-            <input
+            <MyInput
               type='checkbox'
               id='bssortquestions'
-              className='sr-only peer'
+              overrideClass='sr-only peer'
               name='bssortquestions'
               checked={bssortquestions}
               onChange={() => setbssortquestions(prev => !prev)}
@@ -212,9 +210,9 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
           </label>
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}

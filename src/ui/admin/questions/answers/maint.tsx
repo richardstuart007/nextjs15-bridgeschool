@@ -1,10 +1,11 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/questions/answers/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   record: table_Questions | null
@@ -24,17 +25,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     (record?.qpoints || ['', '', '', '']).map(point => point.toString())
   )
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         {qqid === 0 ? 'Create' : 'Update'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -70,11 +71,11 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         <div>
           {qqid !== 0 && (
-            <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qqid'>
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
               ID: {qqid}
             </label>
           )}
-          <input id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}
@@ -88,7 +89,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             <div key={index} className='flex items-center space-x-4 mb-2'>
               {/* Answer Input */}
               <textarea
-                className='w-full px-4 rounded-md border border-blue-500 py-[9px] text-sm'
+                className='w-full px-4 rounded-md border border-blue-500 py-[9px] text-xs '
                 id={`qans${index}`}
                 name={`qans${index}`}
                 value={qans[index] || ''}
@@ -96,8 +97,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 rows={3}
               />
               {/* Points Input */}
-              <input
-                className='w-20 px-4 rounded-md border border-blue-500 py-[9px] text-sm'
+              <MyInput
+                overrideClass='w-20 px-4 rounded-md border border-blue-500 py-[9px] text-xs '
                 id={`qpoints${index}`}
                 type='text'
                 name={`qpoints${index}`}
@@ -112,7 +113,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.qans &&
             formState.errors.qans.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
@@ -122,16 +123,16 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.qpoints &&
             formState.errors.qpoints.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
 
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -139,7 +140,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

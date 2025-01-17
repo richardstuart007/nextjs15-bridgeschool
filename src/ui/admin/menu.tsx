@@ -1,9 +1,32 @@
 'use client'
 import Link from 'next/link'
+import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
+import { logout } from '@/src/ui/utils/user-logout'
+import { useEffect, useState } from 'react'
+
 export default function Page() {
+  const [loading, setLoading] = useState(true)
   //
-  //  Get path name
+  //  Logoff if not admin
   //
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const admin = await isAdmin()
+      if (!admin) {
+        await logout()
+      } else {
+        setLoading(false)
+      }
+    }
+    checkAdmin()
+  }, [])
+  //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       <div className='bg-gray-100 p-3 w-max'>

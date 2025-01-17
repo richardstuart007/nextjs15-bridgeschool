@@ -1,4 +1,5 @@
 import { useState, useEffect, type JSX } from 'react'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface RadioOption {
   id: string
@@ -47,14 +48,14 @@ export default function RadioGroup(props: RadioGroupProps): JSX.Element {
         <div key={option.id} className='flex items-center ml-2'>
           <label htmlFor={option.id} className='flex items-center cursor-pointer'>
             <div className='w-6 h-6 relative'>
-              <input
+              <MyInput
                 type='radio'
                 id={option.id}
                 name='options'
                 value={option.value}
                 checked={selectedValue === option.value}
                 onChange={handleOptionChange}
-                className='sr-only'
+                overrideClass='sr-only'
               />
               <div
                 className={`block rounded-full absolute inset-0 m-auto ${selectedValue === option.value ? 'w-4 h-4 bg-transparent' : 'w-3 h-3 bg-gray-400'}`}

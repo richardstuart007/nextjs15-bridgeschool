@@ -116,7 +116,7 @@ async function log_query(functionName: string, query: string, params: any[]): Pr
   //
   //  Values (if any)
   //
-  const valuesJson = params?.length ? `, Values: ${JSON.stringify(params)}` : ''
+  const valuesJson = params?.length ? `, Values: ${JSON.stringify(params).replace(/"/g, "'")}` : ''
   //
   //  Logging
   //

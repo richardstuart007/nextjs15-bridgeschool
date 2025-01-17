@@ -2,7 +2,7 @@
 import NavLinks from '@/src/ui/admin/nav/nav-links'
 import SchoolLogo from '@/src/ui/utils/school-logo'
 import { logout } from '@/src/ui/utils/user-logout'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 
 export default function NavSide() {
   //--------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ export default function NavSide() {
           <NavLinks />
           <div className='grow invisible'></div>
           <form action={logout}>
-            <Button overrideClass='flex h-15 w-full grow items-center justify-center gap-2 rounded-md bg-gray-700 text-white p-3 text-xs font-medium hover:bg-gray-800 md:flex-none md:p-2 md:px-3'>
+            <MyButton overrideClass='flex h-15 w-full grow items-center justify-center gap-2 rounded-md bg-gray-700 text-white p-3   hover:bg-gray-800 md:flex-none md:p-2 md:px-3'>
               Sign-Out
-            </Button>
+            </MyButton>
           </form>
         </div>
       </>

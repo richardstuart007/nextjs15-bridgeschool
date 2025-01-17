@@ -2,24 +2,19 @@
 
 import { lusitana } from '@/src/fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { action } from '@/src/ui/login/action'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { deleteCookie } from '@/src/lib/cookie_server'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function LoginForm() {
-  const functionName = 'LoginForm'
   //
   //  Router
   //
   const router = useRouter()
-  //
-  //  Get Pathname
-  //
-  const pathname = usePathname()
   //
   // Define the StateSession type
   //
@@ -57,65 +52,31 @@ export default function LoginForm() {
     deleteCookie()
     // eslint-disable-next-line
   }, [])
-  //
-  //  Change of pathname
-  //
-  useEffect(() => {
-    pathChange()
-    // eslint-disable-next-line
-  }, [pathname])
-  //--------------------------------------------------------------------------------
-  //  Every Time
-  //--------------------------------------------------------------------------------
-  function pathChange() {
-    //
-    //  Auth redirect error - fix ???
-    //
-    if (!pathname.includes('/login')) {
-      //
-      //  Logging
-      //
-      const errorMessage = 'nav-side: Auth redirect but not /dashboard'
-      errorLogging({
-        lgfunctionname: functionName,
-        lgmsg: errorMessage,
-        lgseverity: 'W'
-      })
-      router.push('/login')
-    }
-  }
   //-------------------------------------------------------------------------
-  //  Login Button
+  //  Login MyButton
   //-------------------------------------------------------------------------
-  function LoginButton() {
+  function LoginMyButton() {
     return (
-      <Button overrideClass='mt-4 w-full flex justify-center' disabled={submitting} type='submit'>
+      <MyButton overrideClass='mt-4 w-full flex justify-center' disabled={submitting} type='submit'>
         {submitting ? 'Logging In...' : 'Login'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
   //  Go to Register
   //-------------------------------------------------------------------------
-  interface RegisterButtonProps {
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-  }
-  function RegisterButton({ onClick }: RegisterButtonProps) {
+  function RegisterMyButton() {
     return (
-      <Button
+      <MyButton
         overrideClass='mt-4 w-full flex items-center justify-center bg-gray-700 text-white border-none shadow-none hover:bg-gray-900'
-        onClick={onClick}
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          event.preventDefault()
+          router.push('/register')
+        }}
       >
         Not Registered yet? Click here
-      </Button>
+      </MyButton>
     )
-  }
-  //--------------------------------------------------------------------------------
-  //  Register User
-  //--------------------------------------------------------------------------------
-  function onClick_registration(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault()
-    router.push('/register')
   }
   //-------------------------------------------------------------------------
   //  Handle Login
@@ -137,8 +98,8 @@ export default function LoginForm() {
             Email
           </label>
           <div className='relative'>
-            <input
-              className='peer block w-full rounded-md border border-gray-200 py-[9px] text-sm outline-2 placeholder:text-gray-500'
+            <MyInput
+              overrideClass='peer block w-full rounded-md border border-gray-200 py-[9px] text-sm outline-2 placeholder:text-gray-500'
               id='email'
               type='email'
               name='email'
@@ -156,8 +117,8 @@ export default function LoginForm() {
             Password
           </label>
           <div className='relative'>
-            <input
-              className='peer block w-full rounded-md border border-gray-200 py-[9px] text-sm outline-2 placeholder:text-gray-500'
+            <MyInput
+              overrideClass='peer block w-full rounded-md border border-gray-200 py-[9px] text-sm outline-2 placeholder:text-gray-500'
               id='password'
               type='password'
               name='password'
@@ -181,9 +142,9 @@ export default function LoginForm() {
         {/* -------------------------------------------------------------------------------- */}
         {/* buttons */}
         {/* -------------------------------------------------------------------------------- */}
-        <LoginButton />
+        <LoginMyButton />
         {!submitting && <Socials />}
-        {!submitting && <RegisterButton onClick={onClick_registration} />}
+        {!submitting && <RegisterMyButton />}
       </div>
     </form>
   )

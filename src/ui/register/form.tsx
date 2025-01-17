@@ -2,10 +2,11 @@
 
 import { lusitana } from '@/src/fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { action } from '@/src/ui/register/action'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useActionState } from 'react'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function RegisterForm() {
   //
@@ -46,27 +47,27 @@ export default function RegisterForm() {
   //-------------------------------------------------------------------------
   //  Register
   //-------------------------------------------------------------------------
-  function RegisterButton() {
+  function RegisterMyButton() {
     return (
-      <Button overrideClass='mt-4 w-full flex justify-center' disabled={submitting} type='submit'>
+      <MyButton overrideClass='mt-4 w-full flex justify-center' disabled={submitting} type='submit'>
         {submitting ? 'submitting...' : 'Register'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
   //  Go to Login
   //-------------------------------------------------------------------------
-  interface LoginButtonProps {
+  interface LoginMyButtonProps {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
   }
-  function LoginButton({ onClick }: LoginButtonProps) {
+  function LoginMyButton({ onClick }: LoginMyButtonProps) {
     return (
-      <Button
+      <MyButton
         overrideClass='mt-4 w-full flex items-center justify-center bg-gray-700 text-white border-none shadow-none hover:bg-gray-900'
         onClick={onClick}
       >
         Back to Login
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -96,8 +97,8 @@ export default function RegisterForm() {
             Name
           </label>
           <div className='relative'>
-            <input
-              className='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
+            <MyInput
+              overrideClass='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
               id='name'
               type='text'
               name='name'
@@ -114,8 +115,8 @@ export default function RegisterForm() {
             Email
           </label>
           <div className='relative'>
-            <input
-              className='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
+            <MyInput
+              overrideClass='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
               id='email'
               type='email'
               name='email'
@@ -132,8 +133,8 @@ export default function RegisterForm() {
             Password
           </label>
           <div className='relative'>
-            <input
-              className='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
+            <MyInput
+              overrideClass='peer block w-full rounded-md border border-gray-200 py-[9px]  text-sm outline-2 placeholder:text-gray-500'
               id='password'
               type='password'
               name='password'
@@ -156,8 +157,8 @@ export default function RegisterForm() {
         {/* -------------------------------------------------------------------------------- */}
         {/* buttons */}
         {/* -------------------------------------------------------------------------------- */}
-        <RegisterButton />
-        {!submitting && <LoginButton onClick={onClick_login} />}
+        <RegisterMyButton />
+        {!submitting && <LoginMyButton onClick={onClick_login} />}
       </div>
     </form>
   )

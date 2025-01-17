@@ -7,6 +7,7 @@ import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { useUserContext } from '@/UserContext'
 import Link from 'next/link'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
   //
@@ -419,10 +420,10 @@ export default function Table() {
                   {/* ................................................... */}
                   {show_title && (
                     <th scope='col' className='px-2'>
-                      <input
+                      <MyInput
                         id='title'
                         name='title'
-                        className={`w-50 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                        overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                         type='text'
                         value={title}
                         onChange={e => {
@@ -437,10 +438,10 @@ export default function Table() {
                   {/* ................................................... */}
                   {show_uid && (
                     <th scope='col' className='px-2 text-center'>
-                      <input
+                      <MyInput
                         id='uid'
                         name='uid'
-                        className={`w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
                         type='text'
                         value={uid}
                         onChange={e => {
@@ -458,10 +459,10 @@ export default function Table() {
                   {/* ................................................... */}
                   {show_name && (
                     <th scope='col' className='px-2'>
-                      <input
+                      <MyInput
                         id='name'
                         name='name'
-                        className={`w-50 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                        overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                         type='text'
                         value={name}
                         onChange={e => {
@@ -477,10 +478,10 @@ export default function Table() {
                   {/* ................................................... */}
                   {show_questions && (
                     <th scope='col' className='px-2 text-center'>
-                      <input
+                      <MyInput
                         id='questions'
                         name='questions'
-                        className={`w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
                         type='text'
                         value={questions}
                         onChange={e => {
@@ -497,10 +498,10 @@ export default function Table() {
                   {/* ................................................... */}
                   {show_correct && (
                     <th scope='col' className='px-2 text-center'>
-                      <input
+                      <MyInput
                         id='correct'
                         name='correct'
-                        className={`w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
                         type='text'
                         value={correct}
                         onChange={e => {

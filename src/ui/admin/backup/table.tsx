@@ -9,7 +9,8 @@ import { table_truncate } from '@/src/lib/tables/tableGeneric/table_truncate'
 import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
 import Pagination from '@/src/ui/utils/paginationState'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
+import { MyInput } from '@/src/ui/utils/myInput'
 import { basetables } from '@/src/ui/admin/backup/basetables'
 import {
   table_write_toJSON,
@@ -29,13 +30,14 @@ export default function Table() {
   //
   //  Constants
   //
-  const rowsPerPage = 20
+  const rowsPerPage = 17
   const schemaname = 'public'
   const backupStartChar = 'z_'
   const dirPathPrefix = 'C:/backups/'
   //
   //  Base Data
   //
+  const [loading, setLoading] = useState(true)
   const [currentPage, setcurrentPage] = useState(1)
   const [tabledata, settabledata] = useState<string[]>(basetables)
   const [tabledata_count, settabledata_count] = useState<number[]>([])
@@ -84,6 +86,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchbase() {
     setmessage('fetchbase')
+    setLoading(false)
     try {
       //
       // Construct filters dynamically from input fields
@@ -906,6 +909,12 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -943,86 +952,86 @@ export default function Table() {
             {/** ROW - Headings                                                       */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Table
               </th>
-              <th scope='col' className=' font-medium px-2 text-right'>
+              <th scope='col' className='text-xs   px-2 text-right'>
                 Records
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Table
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Exists
               </th>
-              <th scope='col' className=' font-medium px-2 text-right'>
+              <th scope='col' className='text-xs   px-2 text-right'>
                 Records
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Drop
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Duplicate
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Clear
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Copy
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 ToBase
               </th>
               {/** ................................................................ */}
-              <th scope='col' className='font-bold px-2 text-center'>
+              <th scope='col' className='text-xs font-bold px-2 text-center'>
                 <label htmlFor='dataDirectory' className='sr-only'>
                   Data Directory
                 </label>
-                <input
+                <MyInput
                   id='dataDirectory'
                   name='dataDirectory'
-                  className={`w-40 rounded-md border border-blue-500 py-1 px-2 text-xs text-center`}
+                  overrideClass={`w-40  text-center`}
                   type='text'
                   value={dataDirectory}
                   onChange={e => setDataDirectory(e.target.value)}
                 />
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Exists
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Upload
               </th>
             </tr>
             {/* --------------------------------------------------------------------- */}
             {/** ROW - DROPDOWN & SEARCHES                                            */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
-              <th scope='col' className=' px-2'></th>
+            <tr className=' align-bottom'>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* Refresh                                       */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-right'>
+              <th scope='col' className='text-xs   px-2 text-right'>
                 <div className='inline-flex justify-center items-center'>
-                  <Button
+                  <MyButton
                     onClick={() => fetchbase()}
-                    overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                   >
                     Refresh
-                  </Button>
+                  </MyButton>
                 </div>
               </th>
               {/* ................................................... */}
               {/* Backup prefixZ                                       */}
               {/* ................................................... */}
-              <th scope='col' className='font-medium px-2 text-left'>
+              <th scope='col' className='text-xs  px-2 text-left'>
                 <label htmlFor='prefixZ' className='sr-only'>
                   prefixZ
                 </label>
-                <input
+                <MyInput
                   id='prefixZ'
                   name='prefixZ'
-                  className={`w-20 rounded-md border border-blue-500 py-1 px-2 text-xs`}
+                  overrideClass={`w-20 `}
                   type='text'
                   value={prefix_Z}
                   onChange={e => {
@@ -1034,134 +1043,134 @@ export default function Table() {
               {/* ................................................... */}
               {/* Refresh - backup                                      */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 <div className='inline-flex justify-center items-center'>
-                  <Button
+                  <MyButton
                     onClick={() => fetchbackup()}
-                    overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                    overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                   >
                     Refresh
-                  </Button>
+                  </MyButton>
                 </div>
               </th>
-              <th scope='col' className='px-2'></th>
+              <th scope='col' className='text-xs px-2'></th>
               {/* ................................................... */}
               {/* DROP button                                    */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDropClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Drop ALL
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Dup button                                      */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDupClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Dup ALL
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Clear button                                       */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleClearClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Clear ALL
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Copy                                       */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata_Z.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleCopyClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Copy ALL
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* ToBase ALL                                    */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleToBaseClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       ToBase
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Download                                       */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDownClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Down ALL
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Refresh directory                                      */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => fetchdirectory()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Refresh
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
               {/* ................................................... */}
               {/* Upload ALL                                    */}
               {/* ................................................... */}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 {tabledata.length > 0 && (
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleUploadClick_ALL()}
-                      overrideClass='h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600'
+                      overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
                     >
                       Upload
-                    </Button>
+                    </MyButton>
                   </div>
                 )}
               </th>
@@ -1170,7 +1179,7 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white '>
             {tabledata?.map((row_tabledata, index) => {
               //
               // Create map constants
@@ -1187,109 +1196,109 @@ export default function Table() {
               return (
                 <tr key={row_tabledata} className='w-full border-b'>
                   {/* Table Name */}
-                  <td className='px-2 pt-2'>{row_tabledata}</td>
-                  <td className='px-2 pt-2 text-right'>{row_tabledata_count}</td>
-                  <td className='px-2 pt-2'>{row_tabledata_Z}</td>
-                  <td className='px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
-                  <td className='px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
+                  <td className='text-xs px-2 pt-2'>{row_tabledata}</td>
+                  <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count}</td>
+                  <td className='text-xs px-2 pt-2'>{row_tabledata_Z}</td>
+                  <td className='text-xs px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
+                  <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
 
-                  {/* Drop Button - Only if Z table exists */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Drop MyButton - Only if Z table exists */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleDropClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Drop
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
-                  {/* Duplicate Button - Only if Z table does not exist */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Duplicate MyButton - Only if Z table does not exist */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {!row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleDupClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Duplicate
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
-                  {/* Clear Button - Only if Z table exists */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Clear MyButton - Only if Z table exists */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleClearClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Clear
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
-                  {/* Copy Button - Only if Z table exists */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Copy MyButton - Only if Z table exists */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInZ && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleCopyClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Copy
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
-                  {/* ToBase Button -  */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* ToBase MyButton -  */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInZ && row_tabledata_count_Z > 0 && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleToBaseClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           ToBase
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
-                  {/* Down Button -  */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Down MyButton -  */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInB && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleDownClick(row_tabledata)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Down
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
 
                   {/* Exists flag -  */}
-                  <td className='px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
+                  <td className='text-xs px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
 
-                  {/* Upload Button -  */}
-                  <td className='px-2 py-1 text-center'>
+                  {/* Upload MyButton -  */}
+                  <td className='text-xs px-2 py-1 text-center'>
                     {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
                       <div className='inline-flex justify-center items-center'>
-                        <Button
+                        <MyButton
                           onClick={() => handleUploadClick(row_tabledata, row_tabledata_Z)}
-                          overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md bg-blue-500 hover:bg-blue-600'
+                          overrideClass='h-6 px-2 py-2 '
                         >
                           Upload
-                        </Button>
+                        </MyButton>
                       </div>
                     )}
                   </td>
@@ -1313,7 +1322,7 @@ export default function Table() {
       {/* Loading                */}
       {/* ---------------------------------------------------------------------------------- */}
       {message && (
-        <div className='mt-5 flex w-full justify-center text-xs text-red-700'>
+        <div className='mt-5 flex w-full justify-center  text-red-700'>
           <p>{message}</p>
         </div>
       )}

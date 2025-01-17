@@ -1,11 +1,12 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/ownergroup/maint-action'
 import type { table_Ownergroup } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   record: table_Ownergroup | null
@@ -24,17 +25,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   const [oggroup, setoggroup] = useState(record?.oggroup || '')
   const [ogtitle, setogtitle] = useState(record?.ogtitle || '')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         {oggid === 0 ? 'Create' : 'Update'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -54,11 +55,11 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         <div>
           {oggid !== 0 && (
-            <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='oggid'>
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='oggid'>
               ID: {oggid}
             </label>
           )}
-          <input id='oggid' type='hidden' name='oggid' value={oggid} />
+          <MyInput id='oggid' type='hidden' name='oggid' value={oggid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
@@ -79,17 +80,14 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           /* -----------------Edit ------------------*/
           <>
             <div className='mt-2'>
-              <label
-                className='mb-1 mt-5 block text-xs font-medium text-gray-900'
-                htmlFor='ogowner'
-              >
+              <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='ogowner'>
                 Owner
               </label>
               <>
-                <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-[9px] text-sm'>
+                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs'>
                   {ogowner}
                 </span>
-                <input id='ogowner' type='hidden' name='ogowner' value={ogowner} />
+                <MyInput id='ogowner' type='hidden' name='ogowner' value={ogowner} />
               </>
             </div>
           </>
@@ -98,13 +96,13 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Group */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='oggroup'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='oggroup'>
             Group
           </label>
           <div className='relative'>
             {oggid === 0 ? (
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm'
+              <MyInput
+                overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px]'
                 id='oggroup'
                 type='text'
                 name='oggroup'
@@ -117,10 +115,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             ) : (
               /* -----------------Edit ------------------*/
               <>
-                <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-[9px] text-sm'>
+                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
                   {oggroup}
                 </span>
-                <input id='oggroup' type='hidden' name='oggroup' value={oggroup} />
+                <MyInput id='oggroup' type='hidden' name='oggroup' value={oggroup} />
               </>
             )}
           </div>
@@ -129,7 +127,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.oggroup &&
             formState.errors.oggroup.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
@@ -138,12 +136,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Title */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='ogtitle'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='ogtitle'>
             Title
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            <MyInput
+              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-xs  '
               id='ogtitle'
               type='text'
               name='ogtitle'
@@ -156,15 +154,15 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.ogtitle &&
             formState.errors.ogtitle.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -172,7 +170,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

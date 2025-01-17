@@ -95,7 +95,7 @@ export function TableSkeleton() {
 //-----------------------------------------------------------------------------
 function TableRowDesktop() {
   return (
-    <tr className='w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'>
+    <tr className='w-full border-b border-gray-100                   '>
       <td className='whitespace-nowrap px-2 py-2'>
         <div className='h-6 w-32 rounded bg-gray-100'></div>
       </td>
@@ -134,7 +134,7 @@ function TableRowDesktop() {
 //-----------------------------------------------------------------------------
 function TableRowMobile() {
   return (
-    <tr className='w-full border-b border-gray-100 last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'>
+    <tr className='w-full border-b border-gray-100                   '>
       <td className='whitespace-nowrap px-2 py-1'>
         <div className='h-6 w-32 rounded bg-gray-100'></div>
       </td>

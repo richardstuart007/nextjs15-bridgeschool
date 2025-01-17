@@ -1,12 +1,13 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/admin/users/useredit/maint-action'
 import type { table_Users } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { COUNTRIES } from '@/src/ui/utils/countries'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   //
@@ -42,14 +43,14 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const u_uid = UserRecord.u_uid
   const u_email = UserRecord.u_email
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-4 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-4 w-72  px-4' aria-disabled={pending}>
         Update
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -61,23 +62,23 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           {/*  User ID  */}
           {/*  ...................................................................................*/}
           <div>
-            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_uid'>
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='u_uid'>
               ID:{u_uid} Email:{u_email}
             </label>
             <div className='relative'>
-              <input id='u_uid' type='hidden' name='u_uid' value={u_uid} />
+              <MyInput id='u_uid' type='hidden' name='u_uid' value={u_uid} />
             </div>
           </div>
           {/*  ...................................................................................*/}
           {/*  Name */}
           {/*  ...................................................................................*/}
           <div>
-            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_name'>
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='u_name'>
               Name
             </label>
             <div className='relative'>
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+              <MyInput
+                overrideClass='w-72  px-4  py-[9px]  '
                 id='u_name'
                 type='text'
                 name='u_name'
@@ -90,7 +91,7 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           <div id='name-error' aria-live='polite' aria-atomic='true'>
             {formState.errors?.u_name &&
               formState.errors.u_name.map((error: string) => (
-                <p className='mt-2 text-sm text-red-500' key={error}>
+                <p className='mt-2 text-xs  text-red-500' key={error}>
                   {error}
                 </p>
               ))}
@@ -99,12 +100,12 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           {/*  FEDID  */}
           {/*  ...................................................................................*/}
           <div className='mt-4'>
-            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_fedid'>
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='u_fedid'>
               Bridge Federation ID
             </label>
             <div className='relative'>
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+              <MyInput
+                overrideClass='w-72  px-4 py-[9px] '
                 id='u_fedid'
                 type='text'
                 name='u_fedid'
@@ -116,7 +117,7 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           <div id='fedid-error' aria-live='polite' aria-atomic='true'>
             {formState.errors?.u_fedid &&
               formState.errors.u_fedid.map((error: string) => (
-                <p className='mt-2 text-sm text-red-500' key={error}>
+                <p className='mt-2 text-xs  text-red-500' key={error}>
                   {error}
                 </p>
               ))}
@@ -142,12 +143,12 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           {/*   Toggle - Admin */}
           {/*  ...................................................................................*/}
           <div className='mt-4 flex items-center justify-end w-72'>
-            <div className='mr-auto block text-xs font-medium text-gray-900'>Admin User</div>
-            <label className='inline-flex items-center cursor-pointer'>
-              <input
+            <div className='mr-auto block   text-gray-900'>Admin User</div>
+            <label className='text-xs inline-flex items-center cursor-pointer'>
+              <MyInput
                 type='checkbox'
                 id='u_admin'
-                className='sr-only peer'
+                overrideClass='sr-only peer'
                 name='u_admin'
                 checked={u_admin}
                 onChange={() => setU_admin(prev => !prev)}
@@ -182,9 +183,9 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
             </label>
           </div>
           {/*  ...................................................................................*/}
-          {/*   Update Button */}
+          {/*   Update MyButton */}
           {/*  ...................................................................................*/}
-          <UpdateButton />
+          <UpdateMyButton />
           {/*  ...................................................................................*/}
           {/*   Error Messages */}
           {/*  ...................................................................................*/}
@@ -192,7 +193,7 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
             {formState.message && (
               <>
                 <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-                <p className='text-sm text-red-500'>{formState.message}</p>
+                <p className='text-xs  text-red-500'>{formState.message}</p>
               </>
             )}
           </div>

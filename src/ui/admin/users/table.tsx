@@ -8,11 +8,13 @@ import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import Pagination from '@/src/ui/utils/paginationState'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
   const rowsPerPage = 17
+  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
@@ -121,6 +123,10 @@ export default function Table() {
       })
       setTotalPages(fetchedTotalPages)
       //
+      //  Data loading ready
+      //
+      setLoading(false)
+      //
       //  Errors
       //
     } catch (error) {
@@ -206,6 +212,12 @@ export default function Table() {
     })
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -213,64 +225,64 @@ export default function Table() {
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Id
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Name
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Email
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Federation ID
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Admin
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Fed Country
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Provider
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Edit
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Owners
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Pwd
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-center'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* GID                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* Name                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   Name
                 </label>
-                <input
+                <MyInput
                   id='name'
                   name='name'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  py-2  `}
                   type='text'
                   value={name}
                   onChange={e => {
@@ -282,14 +294,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* Email                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   Email
                 </label>
-                <input
+                <MyInput
                   id='email'
                   name='email'
-                  className={`w-60 rounded-md border border-blue-500  py-2 font-normal text-xs `}
+                  overrideClass={`w-60  py-2   `}
                   type='text'
                   value={email}
                   onChange={e => {
@@ -301,14 +313,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* fedid                                         */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   Fed id
                 </label>
-                <input
+                <MyInput
                   id='fedid'
                   name='fedid'
-                  className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-24   py-2  `}
                   type='text'
                   value={fedid}
                   onChange={e => {
@@ -317,19 +329,19 @@ export default function Table() {
                   }}
                 />
               </th>
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* country                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <div className={`text-center`}>
                   <label htmlFor='desc' className='sr-only'>
                     Country
                   </label>
-                  <input
+                  <MyInput
                     id='country'
                     name='country'
-                    className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-24   py-2  `}
                     type='text'
                     value={country}
                     onChange={e => {
@@ -342,14 +354,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* provider                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   provider
                 </label>
-                <input
+                <MyInput
                   id='provider'
                   name='provider'
-                  className={`w-24 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-24   py-2  `}
                   type='text'
                   value={provider}
                   onChange={e => {
@@ -362,66 +374,66 @@ export default function Table() {
               {/* Other                                      */}
               {/* ................................................... */}
 
-              <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white '>
             {users?.map(user => (
-              <tr key={user.u_uid} className='w-full border-b py-2 text-xs'>
-                <td className='px-2 py-1 text-xs'>{user.u_uid}</td>
-                <td className='px-2 py-1 text-xs'>{user.u_name}</td>
-                <td className='px-2 py-1 text-xs'>{user.u_email}</td>
-                <td className='px-2 py-1 text-xs'>{user.u_fedid}</td>
-                <td className='px-2 py-1 text-xs text-center'>{user.u_admin ? 'Y' : ''}</td>
-                <td className='px-2 py-1 text-xs text-center'>{user.u_fedcountry}</td>
-                <td className='px-2 py-1 text-xs'>{user.u_provider}</td>
-                <td className='px-2 py-1 text-center'>
+              <tr key={user.u_uid} className='w-full border-b py-2 '>
+                <td className='text-xs px-2 py-1 '>{user.u_uid}</td>
+                <td className='text-xs px-2 py-1 '>{user.u_name}</td>
+                <td className='text-xs px-2 py-1 '>{user.u_email}</td>
+                <td className='text-xs px-2 py-1 '>{user.u_fedid}</td>
+                <td className='text-xs px-2 py-1  text-center'>{user.u_admin ? 'Y' : ''}</td>
+                <td className='text-xs px-2 py-1  text-center'>{user.u_fedcountry}</td>
+                <td className='text-xs px-2 py-1 '>{user.u_provider}</td>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleEditClick(user)}
-                      overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                     >
                       Edit
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleUsersownerClick(user)}
-                      overrideClass=' h-6 px-2 py-2 text-xs bg-green-500 text-white rounded-md hover:bg-green-600 px-2 py-1'
+                      overrideClass=' h-6 px-2 py-2  bg-green-500  hover:bg-green-600 px-2 py-1'
                     >
                       Owners
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     {user.u_provider === 'email' && (
-                      <Button
+                      <MyButton
                         onClick={() => handlePwdClick(user)}
-                        overrideClass=' h-6 px-2 py-2 text-xs bg-yellow-500 text-white rounded-md hover:bg-yellow-600 px-2 py-1'
+                        overrideClass=' h-6 px-2 py-2  bg-yellow-500  hover:bg-yellow-600 px-2 py-1'
                       >
                         Pwd
-                      </Button>
+                      </MyButton>
                     )}
                   </div>
                 </td>
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDeleteClick(user)}
-                      overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                     >
                       Delete
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
               </tr>

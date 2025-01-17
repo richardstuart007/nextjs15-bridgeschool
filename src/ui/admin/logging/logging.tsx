@@ -27,7 +27,7 @@ export default function Logging() {
     {
       key: 'lgmsg',
       header: 'Message',
-      render: value => <span className='rounded-full bg-gray-100 px-2 py-1 text-sm'>{value}</span>
+      render: value => <span className='rounded-full bg-gray-100 px-2 py-1 text-xs '>{value}</span>
     }
   ]
 

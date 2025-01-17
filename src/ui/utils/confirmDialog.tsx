@@ -1,7 +1,7 @@
 // Libraries
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import Popup from '@/src/ui/utils/popup'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 
 interface ConfirmDialog {
   isOpen: boolean
@@ -30,18 +30,18 @@ export default function ConfirmDialog({ confirmDialog, setConfirmDialog }: Confi
         <p className='text-sm text-gray-600'>{confirmDialog.subTitle}</p>
       </div>
       <div className='flex justify-center space-x-4'>
-        <Button
+        <MyButton
           overrideClass='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none'
           onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
         >
           No
-        </Button>
-        <Button
+        </MyButton>
+        <MyButton
           overrideClass='bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none'
           onClick={confirmDialog.onConfirm}
         >
           Yes
-        </Button>
+        </MyButton>
       </div>
     </Popup>
   )

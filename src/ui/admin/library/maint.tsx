@@ -1,11 +1,12 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/admin/library/maint-action'
 import type { table_Library } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   libraryRecord?: table_Library | null
@@ -59,17 +60,17 @@ export default function Form({
   const [lrtype, setLrtype] = useState(libraryRecord?.lrtype || '')
   const [lrlink, setLrlink] = useState(libraryRecord?.lrlink || '')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         {lrlid === 0 ? 'Create' : 'Update'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -88,11 +89,11 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           {lrlid !== 0 && (
-            <label className='  block text-xs font-medium text-gray-900' htmlFor='lrlid'>
+            <label className='text-xs   block   text-gray-900' htmlFor='lrlid'>
               ID: {lrlid}
             </label>
           )}
-          <input id='lrlid' type='hidden' name='lrlid' value={lrlid} />
+          <MyInput id='lrlid' type='hidden' name='lrlid' value={lrlid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
@@ -113,13 +114,13 @@ export default function Form({
           ) : (
             /* -----------------Edit ------------------*/
             <>
-              <label className='  block text-xs font-medium text-gray-900' htmlFor='lrowner'>
+              <label className='text-xs   block   text-gray-900' htmlFor='lrowner'>
                 Owner
               </label>
-              <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-2 text-sm'>
+              <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-2 text-xs '>
                 {lrowner}
               </span>
-              <input id='lrowner' type='hidden' name='lrowner' value={lrowner} />
+              <MyInput id='lrowner' type='hidden' name='lrowner' value={lrowner} />
             </>
           )}
         </div>
@@ -144,13 +145,13 @@ export default function Form({
           ) : (
             /* -----------------Edit ------------------*/
             <>
-              <label className='  block text-xs font-medium text-gray-900' htmlFor='lrgroup'>
+              <label className='text-xs   block   text-gray-900' htmlFor='lrgroup'>
                 Owner Group
               </label>
-              <span className='block w-72 md:max-w-md  rounded-md bg-gray-200 border-none px-4 py-2 text-sm'>
+              <span className='block w-72   rounded-md bg-gray-200 border-none px-4 py-2 text-xs '>
                 {lrgroup}
               </span>
-              <input id='lrgroup' type='hidden' name='lrgroup' value={lrgroup} />
+              <MyInput id='lrgroup' type='hidden' name='lrgroup' value={lrgroup} />
             </>
           )}
         </div>
@@ -158,13 +159,13 @@ export default function Form({
         {/*   Reference */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <label className=' block text-xs font-medium text-gray-900' htmlFor='lrref'>
+          <label className='text-xs  block   text-gray-900' htmlFor='lrref'>
             Reference
           </label>
           <div className='relative'>
             {lrlid === 0 ? (
-              <input
-                className='w-72 md:max-w-md  rounded-md border border-blue-500 px-4 py-1 text-sm '
+              <MyInput
+                overrideClass='w-72   rounded-md border border-blue-500 px-4 py-1 text-xs  '
                 id='lrref'
                 type='text'
                 name='lrref'
@@ -174,10 +175,10 @@ export default function Form({
             ) : (
               /* -----------------Edit ------------------*/
               <>
-                <span className='block w-72 md:max-w-md  rounded-md bg-gray-200 border-none px-4 py-2 text-sm'>
+                <span className='block w-72   rounded-md bg-gray-200 border-none px-4 py-2 text-xs '>
                   {lrref}
                 </span>
-                <input id='lrref' type='hidden' name='lrref' value={lrref} />
+                <MyInput id='lrref' type='hidden' name='lrref' value={lrref} />
               </>
             )}
           </div>
@@ -186,7 +187,7 @@ export default function Form({
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.lrref &&
             formState.errors.lrref.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
@@ -195,12 +196,12 @@ export default function Form({
         {/*  Description */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <label className=' block text-xs font-medium text-gray-900' htmlFor='lrdesc'>
+          <label className='text-xs  block   text-gray-900' htmlFor='lrdesc'>
             Description
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md rounded-md border border-blue-500 px-4 py-1 text-sm '
+            <MyInput
+              overrideClass='w-72  rounded-md border border-blue-500 px-4 py-1 text-xs  '
               id='lrdesc'
               type='text'
               name='lrdesc'
@@ -212,7 +213,7 @@ export default function Form({
         <div id='name-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.lrdesc &&
             formState.errors.lrdesc.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
@@ -253,12 +254,12 @@ export default function Form({
         {/*  Link */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <label className='  block text-xs font-medium text-gray-900' htmlFor='lrlink'>
+          <label className='text-xs   block   text-gray-900' htmlFor='lrlink'>
             Link
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md  rounded-md border border-blue-500  px-4 py-1 text-sm '
+            <MyInput
+              overrideClass='w-72   rounded-md border border-blue-500  px-4 py-1 text-xs  '
               id='lrlink'
               type='text'
               name='lrlink'
@@ -270,15 +271,15 @@ export default function Form({
         <div id='name-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.lrlink &&
             formState.errors.lrlink.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -286,7 +287,7 @@ export default function Form({
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

@@ -1,11 +1,12 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   record: table_Questions | null
@@ -25,17 +26,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   const [qgroup, setqgroup] = useState(record?.qgroup || '')
   const [qdetail, setqdetail] = useState(record?.qdetail || '')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         {qqid === 0 ? 'Create' : 'Update'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -55,11 +56,11 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         <div>
           {qqid !== 0 && (
-            <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qqid'>
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
               ID: {qqid}
             </label>
           )}
-          <input id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}
@@ -84,14 +85,14 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           /* -----------------Edit ------------------*/
           <>
             <div className='mt-2'>
-              <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qowner'>
+              <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qowner'>
                 Owner
               </label>
               <>
-                <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-[9px] text-sm'>
+                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
                   {qowner}
                 </span>
-                <input id='qowner' type='hidden' name='qowner' value={qowner} />
+                <MyInput id='qowner' type='hidden' name='qowner' value={qowner} />
               </>
             </div>
           </>
@@ -117,14 +118,14 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           /* -----------------Edit ------------------*/
           <>
             <div className='mt-2'>
-              <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qgroup'>
+              <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qgroup'>
                 Owner Group
               </label>
               <>
-                <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-[9px] text-sm'>
+                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
                   {qgroup}
                 </span>
-                <input id='qgroup' type='hidden' name='qgroup' value={qgroup} />
+                <MyInput id='qgroup' type='hidden' name='qgroup' value={qgroup} />
               </>
             </div>
           </>
@@ -134,22 +135,22 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ...................................................................................*/}
         <div>
           {qseq !== 0 && (
-            <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qqid'>
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
               Seq: {qseq}
             </label>
           )}
-          <input id='qseq' type='hidden' name='qseq' value={qseq} />
+          <MyInput id='qseq' type='hidden' name='qseq' value={qseq} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Description */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qdetail'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qdetail'>
             Description
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            <MyInput
+              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-xs  '
               id='qdetail'
               type='text'
               name='qdetail'
@@ -161,16 +162,16 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='name-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.qdetail &&
             formState.errors.qdetail.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
 
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -178,7 +179,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>

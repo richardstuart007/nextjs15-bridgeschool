@@ -7,7 +7,8 @@ import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import Link from 'next/link'
 import { useUserContext } from '@/UserContext'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
   //
@@ -405,10 +406,10 @@ export default function Table() {
                     <label htmlFor='ref' className='sr-only'>
                       Reference
                     </label>
-                    <input
+                    <MyInput
                       id='ref'
                       name='ref'
-                      className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                      overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                       type='text'
                       value={ref}
                       onChange={e => {
@@ -425,10 +426,10 @@ export default function Table() {
                   <label htmlFor='desc' className='sr-only'>
                     Description
                   </label>
-                  <input
+                  <MyInput
                     id='desc'
                     name='desc'
-                    className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
                     value={desc}
                     onChange={e => {
@@ -460,10 +461,10 @@ export default function Table() {
                 {/* ................................................... */}
                 {show_questions && (
                   <th scope='col' className='px-2 text-center'>
-                    <input
+                    <MyInput
                       id='questions'
                       name='questions'
-                      className={`h-8 w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                      overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
                       type='text'
                       value={questions}
                       onChange={e => {
@@ -525,11 +526,11 @@ export default function Table() {
                     </td>
                   )}
                   {/* ................................................... */}
-                  {/* Button  1                                                 */}
+                  {/* MyButton  1                                                 */}
                   {/* ................................................... */}
                   <td className='px-2 py-1 text-center'>
                     <div className='inline-flex justify-center items-center'>
-                      <Button
+                      <MyButton
                         onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
                         overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
                           tabledata.lrtype === 'youtube'
@@ -538,11 +539,11 @@ export default function Table() {
                         }`}
                       >
                         {tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
-                      </Button>
+                      </MyButton>
                     </div>
                   </td>
                   {/* ................................................... */}
-                  {/* Button  2                                                 */}
+                  {/* MyButton  2                                                 */}
                   {/* ................................................... */}
                   <td className='px-2 py-1 text-center'>
                     <div className='inline-flex justify-center items-center'>

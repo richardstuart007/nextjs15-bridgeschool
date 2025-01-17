@@ -1,10 +1,11 @@
 'use client'
-import { useState, useActionState } from 'react';
+import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
-import { useFormStatus } from 'react-dom';
+import { MyButton } from '@/src/ui/utils/myButton'
+import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/reftype/maint-action'
 import type { table_Reftype } from '@/src/lib/tables/definitions'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   record: table_Reftype | null
@@ -22,17 +23,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   const [rttype, setrttype] = useState(record?.rttype || '')
   const [rttitle, setrttitle] = useState(record?.rttitle || '')
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         {rtrid === 0 ? 'Create' : 'Update'}
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -45,30 +46,30 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   }
 
   return (
-    (<form action={formAction} className='space-y-3 '>
+    <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
         {/*  ...................................................................................*/}
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
           {rtrid !== 0 && (
-            <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='rtrid'>
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rtrid'>
               ID: {rtrid}
             </label>
           )}
-          <input id='rtrid' type='hidden' name='rtrid' value={rtrid} />
+          <MyInput id='rtrid' type='hidden' name='rtrid' value={rtrid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Reftype */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='rttype'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rttype'>
             Reftype
           </label>
           <div className='relative'>
             {rtrid === 0 ? (
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm'
+              <MyInput
+                overrideClass='w-72  px-4  py-[9px]'
                 id='rttype'
                 type='rttype'
                 name='rttype'
@@ -77,12 +78,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
               />
             ) : (
               /* -----------------Edit ------------------*/
-              (<>
-                <span className='block w-72 md:max-w-md px-4 rounded-md bg-gray-200 border-none py-[9px] text-sm'>
+              <>
+                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
                   {rttype}
                 </span>
-                <input id='rttype' type='hidden' name='rttype' value={rttype} />
-              </>)
+                <MyInput id='rttype' type='hidden' name='rttype' value={rttype} />
+              </>
             )}
           </div>
         </div>
@@ -90,7 +91,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.rttype &&
             formState.errors.rttype.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
@@ -100,12 +101,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Title */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='rttitle'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rttitle'>
             Title
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            <MyInput
+              overrideClass='w-72  px-4  py-[9px]  '
               id='rttitle'
               type='rttitle'
               name='rttitle'
@@ -117,16 +118,16 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
           {formState.errors?.rttitle &&
             formState.errors.rttitle.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
+              <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
 
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -134,12 +135,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>
         {/*  ...................................................................................*/}
       </div>
-    </form>)
-  );
+    </form>
+  )
 }

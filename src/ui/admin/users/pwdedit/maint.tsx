@@ -1,10 +1,11 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { PwdEdit } from '@/src/ui/admin/users/pwdedit/maint-action'
 import type { table_Users } from '@/src/lib/tables/definitions'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
@@ -13,14 +14,14 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const upuid = UserRecord.u_uid
   const upemail = UserRecord.u_email
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-4 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-4 w-72  px-4' aria-disabled={pending}>
         Update
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -32,23 +33,23 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           {/*  User ID  */}
           {/*  ...................................................................................*/}
           <div>
-            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='upuid'>
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='upuid'>
               ID:{upuid} Email:{upemail}
             </label>
             <div className='relative'>
-              <input id='upuid' type='hidden' name='upuid' value={upuid} />
+              <MyInput id='upuid' type='hidden' name='upuid' value={upuid} />
             </div>
           </div>
           {/*  ...................................................................................*/}
           {/*  Password                                  */}
           {/*  ...................................................................................*/}
           <div>
-            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='uppwd'>
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='uppwd'>
               Password
             </label>
             <div className='relative'>
-              <input
-                className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+              <MyInput
+                overrideClass='w-72  px-4  py-[9px]   '
                 id='uppwd'
                 type='uppwd'
                 name='uppwd'
@@ -60,15 +61,15 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           <div id='name-error' aria-live='polite' aria-atomic='true'>
             {formState.errors?.uppwd &&
               formState.errors.uppwd.map((error: string) => (
-                <p className='mt-2 text-sm text-red-500' key={error}>
+                <p className='mt-2 text-xs  text-red-500' key={error}>
                   {error}
                 </p>
               ))}
           </div>
           {/*  ...................................................................................*/}
-          {/*   Update Button */}
+          {/*   Update MyButton */}
           {/*  ...................................................................................*/}
-          <UpdateButton />
+          <UpdateMyButton />
           {/*  ...................................................................................*/}
           {/*   Error Messages */}
           {/*  ...................................................................................*/}
@@ -76,7 +77,7 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
             {formState.message && (
               <>
                 <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-                <p className='text-sm text-red-500'>{formState.message}</p>
+                <p className='text-xs  text-red-500'>{formState.message}</p>
               </>
             )}
           </div>

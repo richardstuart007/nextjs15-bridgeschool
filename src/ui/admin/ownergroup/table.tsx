@@ -10,8 +10,9 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
   const rowsPerPage = 17
@@ -133,12 +134,6 @@ export default function Table() {
     setIsModelOpenEdit_questions(true)
   }
   //----------------------------------------------------------------------------------------------
-  //  Add
-  //----------------------------------------------------------------------------------------------
-  function handleClickAdd() {
-    setIsModelOpenAdd_ownergroup(true)
-  }
-  //----------------------------------------------------------------------------------------------
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_ownergroup() {
@@ -225,13 +220,13 @@ export default function Table() {
   return (
     <>
       <div className='flex w-full items-center justify-between'>
-        <h1 className='px-2 py-1 text-xs'>
-          <Button
-            onClick={() => handleClickAdd()}
-            overrideClass='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
+        <h1 className='px-2 py-1 '>
+          <MyButton
+            onClick={() => setIsModelOpenAdd_ownergroup(true)}
+            overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
           >
             Add
-          </Button>
+          </MyButton>
         </h1>
       </div>
       {/** -------------------------------------------------------------------- */}
@@ -239,44 +234,44 @@ export default function Table() {
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Owner
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Group
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Title
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Library Count
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Questions Count
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 ID
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Edit
               </th>
-              <th scope='col' className='px-2 py-2 font-medium text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <DropdownGeneric
                   selectedOption={owner}
                   setSelectedOption={setowner}
@@ -292,14 +287,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* Group                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <label htmlFor='group' className='sr-only'>
                   Group
                 </label>
-                <input
+                <MyInput
                   id='group'
                   name='group'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
                   type='group'
                   value={group}
                   onChange={e => {
@@ -311,14 +306,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <label htmlFor='title' className='sr-only'>
                   Title
                 </label>
-                <input
+                <MyInput
                   id='title'
                   name='title'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
                   type='grtitleoup'
                   value={title}
                   onChange={e => {
@@ -334,45 +329,42 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(row => (
-              <tr
-                key={row.oggid}
-                className='w-full border-b py-2 text-xs last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
-              >
-                <td className='px-2 py-1 text-xs '>{row.ogowner}</td>
-                <td className='px-2 py-1 text-xs '>{row.oggroup}</td>
-                <td className='px-2 py-1 text-xs '>{row.ogtitle}</td>
-                <td className='px-2 py-1 text-xs '>
-                  <Button
+              <tr key={row.oggid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1  '>{row.ogowner}</td>
+                <td className='text-xs px-2 py-1  '>{row.oggroup}</td>
+                <td className='text-xs px-2 py-1  '>{row.ogtitle}</td>
+                <td className='text-xs px-2 py-1  '>
+                  <MyButton
                     onClick={() => handleClickEdit_library(row)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     {row.ogcntlibrary}
-                  </Button>
+                  </MyButton>
                 </td>
-                <td className='px-2 py-1 text-xs '>
-                  <Button
+                <td className='text-xs px-2 py-1  '>
+                  <MyButton
                     onClick={() => handleClickEdit_questions(row)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     {row.ogcntquestions}
-                  </Button>
+                  </MyButton>
                 </td>
-                <td className='px-2 py-1 text-xs '>{row.oggid}</td>
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+                <td className='text-xs px-2 py-1  '>{row.oggid}</td>
+                <td className='text-xs px-2 py-1 '>
+                  <MyButton
                     onClick={() => handleClickEdit_ownergroup(row)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 px-2 py-1'
+                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
                     Edit
-                  </Button>
+                  </MyButton>
                 </td>
-                <td className='px-2 py-1 text-xs'>
-                  <Button
+                <td className='text-xs px-2 py-1 '>
+                  <MyButton
                     onClick={() => handleDeleteClick_ownergroup(row)}
-                    overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                   >
                     Delete
-                  </Button>
+                  </MyButton>
                 </td>
               </tr>
             ))}

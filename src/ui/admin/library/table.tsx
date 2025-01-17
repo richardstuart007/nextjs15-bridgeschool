@@ -9,7 +9,8 @@ import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_ogcntlibrary } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
   selected_gid?: number | null
@@ -18,6 +19,7 @@ interface FormProps {
 }
 export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
   const rowsPerPage = 17
+  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
@@ -153,6 +155,10 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       })
       setTotalPages(fetchedTotalPages)
       //
+      //  Data loading ready
+      //
+      setLoading(false)
+      //
       //  Errors
       //
     } catch (error) {
@@ -165,12 +171,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   function handleClickEdit(tabledata: table_Library) {
     setSelectedRow(tabledata)
     setIsModelOpenEdit(true)
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Add
-  //----------------------------------------------------------------------------------------------
-  function handleClickAdd() {
-    setIsModelOpenAdd(true)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Edit
@@ -229,6 +229,12 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     setConfirmDialog({ ...confirmDialog, isOpen: false })
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
@@ -238,71 +244,71 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
         {/** -------------------------------------------------------------------- */}
         {/** Add button                                                        */}
         {/** -------------------------------------------------------------------- */}
-        <Button
-          onClick={() => handleClickAdd()}
-          overrideClass='bg-green-500 text-white px-2 py-1 font-normal text-sm rounded-md hover:bg-green-600'
+        <MyButton
+          onClick={() => setIsModelOpenAdd(true)}
+          overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
         >
           Add
-        </Button>
+        </MyButton>
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs'>
-              <th scope='col' className=' font-medium px-2'>
+            <tr className=''>
+              <th scope='col' className='text-xs   px-2'>
                 Gid
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Owner
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Group-name
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Lid
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Ref
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Description
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Who
               </th>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className='text-xs   px-2'>
                 Type
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Questions
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Edit
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className='text-xs   px-2 text-center'>
                 Delete
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className=' align-bottom'>
               {/* ................................................... */}
               {/* GID                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'>
+              <th scope='col' className='text-xs  px-2'>
                 {selected_gid ? <h1>{selected_gid}</h1> : null}
               </th>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 {selected_owner ? (
                   <h1>{selected_owner}</h1>
                 ) : (
@@ -322,7 +328,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'>
+              <th scope='col' className='text-xs  px-2'>
                 {selected_group ? (
                   <h1>{selected_group}</h1>
                 ) : owner === undefined || owner === '' ? null : (
@@ -343,18 +349,18 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* LIBRARY ID                                          */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2 '>
+              <th scope='col' className='text-xs  px-2 '>
                 <label htmlFor='ref' className='sr-only'>
                   Reference
                 </label>
-                <input
+                <MyInput
                   id='ref'
                   name='ref'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
                   type='text'
                   value={ref}
                   onChange={e => {
@@ -366,14 +372,14 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* DESC                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='px-2'>
+              <th scope='col' className='text-xs px-2'>
                 <label htmlFor='desc' className='sr-only'>
                   Description
                 </label>
-                <input
+                <MyInput
                   id='desc'
                   name='desc'
-                  className={`w-60 md:max-w-md rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -385,7 +391,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* WHO                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'>
+              <th scope='col' className='text-xs  px-2'>
                 <DropdownGeneric
                   selectedOption={who}
                   setSelectedOption={setwho}
@@ -400,7 +406,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* type                                                 */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'>
+              <th scope='col' className='text-xs  px-2'>
                 <DropdownGeneric
                   selectedOption={type}
                   setSelectedOption={settype}
@@ -415,11 +421,11 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              <th scope='col' className='px-2 text-center'>
-                <input
+              <th scope='col' className='text-xs px-2 text-center'>
+                <MyInput
                   id='questions'
                   name='questions'
-                  className={`h-8 w-12 md:max-w-md rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                  overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal  text-center`}
                   type='text'
                   value={questions}
                   onChange={e => {
@@ -433,62 +439,62 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* ................................................... */}
               {/* View/Quiz                                       */}
               {/* ................................................... */}
-              <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.lrlid} className='w-full border-b'>
-                <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>
-                <td className=' px-2 pt-2'>{tabledata.lrowner}</td>
-                <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>
-                <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>
-                <td className=' px-2 pt-2'>{tabledata.lrref}</td>
-                <td className='px-2 pt-2'>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.lrgid}</td>
+                <td className='text-xs  px-2 pt-2'>{tabledata.lrowner}</td>
+                <td className='text-xs  px-2 pt-2'>{tabledata.lrgroup}</td>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.lrlid}</td>
+                <td className='text-xs  px-2 pt-2'>{tabledata.lrref}</td>
+                <td className='text-xs px-2 pt-2'>
                   {tabledata.lrdesc.length > 40
                     ? `${tabledata.lrdesc.slice(0, 35)}...`
                     : tabledata.lrdesc}
                 </td>
-                <td className=' px-2 pt-2'>{tabledata.lrwho}</td>
-                <td className=' px-2 pt-2'>{tabledata.lrtype}</td>
+                <td className='text-xs  px-2 pt-2'>{tabledata.lrwho}</td>
+                <td className='text-xs  px-2 pt-2'>{tabledata.lrtype}</td>
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
                 {'ogcntquestions' in tabledata && (
-                  <td className='px-2 pt-2 text-center'>
+                  <td className='text-xs px-2 pt-2 text-center'>
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
-                {/* Button  1                                                 */}
+                {/* MyButton  1                                                 */}
                 {/* ................................................... */}
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleClickEdit(tabledata)}
-                      overrideClass='h-6 px-2 py-2 text-xs text-white rounded-md
+                      overrideClass='h-6 px-2 py-2
                            bg-blue-500 hover:bg-blue-600'
                     >
                       Edit
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
                 {/* ................................................... */}
-                {/* Button  2                                                 */}
+                {/* MyButton  2                                                 */}
                 {/* ................................................... */}
-                <td className='px-2 py-1 text-center'>
+                <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    <Button
+                    <MyButton
                       onClick={() => handleDeleteClick(tabledata)}
-                      overrideClass=' h-6 px-2 py-2 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 px-2 py-1'
+                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
                     >
                       Delete
-                    </Button>
+                    </MyButton>
                   </div>
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}

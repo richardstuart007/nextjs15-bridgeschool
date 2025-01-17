@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '../../utils/button'
+import { MyButton } from '../../utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/dashboard/user/action'
 import { notFound } from 'next/navigation'
@@ -9,6 +9,7 @@ import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { COUNTRIES } from '@/src/ui/utils/countries'
 import { useUserContext } from '@/UserContext'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Form() {
   //
@@ -83,17 +84,14 @@ export default function Form() {
     fetchUserInfo()
   }, [sessionContext])
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <Button
-        overrideClass='mt-4 w-72 md:max-w-md px-4 flex justify-center'
-        aria-disabled={pending}
-      >
+      <MyButton overrideClass='mt-4 w-72  px-4 flex justify-center' aria-disabled={pending}>
         Update
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -108,7 +106,7 @@ export default function Form() {
             ID:{u_uid} Email:{u_email}
           </label>
           <div className='relative'>
-            <input id='u_uid' type='hidden' name='u_uid' value={u_uid} />
+            <MyInput id='u_uid' type='hidden' name='u_uid' value={u_uid} />
           </div>
         </div>
         {/*  ...................................................................................*/}
@@ -119,8 +117,8 @@ export default function Form() {
             Name
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            <MyInput
+              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
               id='u_name'
               type='text'
               name='u_name'
@@ -163,8 +161,8 @@ export default function Form() {
             Bridge Federation ID
           </label>
           <div className='relative'>
-            <input
-              className='w-72 md:max-w-md px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            <MyInput
+              className='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
               id='u_fedid'
               type='text'
               name='u_fedid'
@@ -182,9 +180,9 @@ export default function Form() {
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}

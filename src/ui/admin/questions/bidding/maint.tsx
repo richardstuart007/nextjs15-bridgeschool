@@ -2,10 +2,11 @@
 import React from 'react'
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@/src/ui/utils/button'
+import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/questions/bidding/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
+import { MyInput } from '@/src/ui/utils/myInput'
 
 const bidding_names = [
   'R1B1',
@@ -99,17 +100,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     setbidding_value(formValues)
   }
   //-------------------------------------------------------------------------
-  //  Update Button
+  //  Update MyButton
   //-------------------------------------------------------------------------
-  function UpdateButton() {
+  function UpdateMyButton() {
     //
     //  Display the button
     //
     const { pending } = useFormStatus()
     return (
-      <Button overrideClass='mt-2 w-72 md:max-w-md px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
         Update
-      </Button>
+      </MyButton>
     )
   }
   //-------------------------------------------------------------------------
@@ -147,10 +148,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-1 mt-5 block text-xs font-medium text-gray-900' htmlFor='qqid'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
             ID: {qqid}
           </label>
-          <input id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}
@@ -180,16 +181,16 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
 
                 return (
                   <div key={`cell-${rowIndex}-${colIndex}`} className='col-span-1 mb-2'>
-                    <input
+                    <MyInput
                       name={inputName}
                       value={inputValue}
                       onChange={handleInputChange}
-                      className='w-full p-2 border border-gray-300 rounded-md'
+                      overrideClass='w-full p-2 border border-gray-300 rounded-md'
                     />
                     {/* Dynamic Error Handling */}
                     <div id={`${inputName}-error`} aria-live='polite' aria-atomic='true'>
                       {formState.errors?.[inputName] && (
-                        <p className='mt-2 text-sm text-red-500'>{formState.errors[inputName]}</p>
+                        <p className='mt-2 text-xs  text-red-500'>{formState.errors[inputName]}</p>
                       )}
                     </div>
                   </div>
@@ -199,9 +200,9 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Update Button */}
+        {/*   Update MyButton */}
         {/*  ...................................................................................*/}
-        <UpdateButton />
+        <UpdateMyButton />
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
@@ -209,7 +210,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
+              <p className='text-xs  text-red-500'>{formState.message}</p>
             </>
           )}
         </div>
