@@ -111,9 +111,9 @@ export default function Table() {
     //
     if (widthNumber >= 1) {
       ref_show_title.current = true
-      ref_show_uid.current = true
     }
     if (widthNumber >= 2) {
+      ref_show_uid.current = true
     }
     if (widthNumber >= 3) {
       ref_show_correct.current = true
@@ -371,7 +371,7 @@ export default function Table() {
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-40  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
                     value={title}
                     onChange={e => {
@@ -410,7 +410,7 @@ export default function Table() {
                   <MyInput
                     id='name'
                     name='name'
-                    overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-40  rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
                     value={name}
                     onChange={e => {

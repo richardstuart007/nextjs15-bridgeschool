@@ -374,7 +374,7 @@ export default function Table() {
                   <MyInput
                     id='ref'
                     name='ref'
-                    overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
                     value={ref}
                     onChange={e => {
@@ -394,7 +394,7 @@ export default function Table() {
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
                   type='text'
                   value={desc}
                   onChange={e => {
