@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { table_UsershistoryGroupUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
@@ -14,12 +14,10 @@ export default function Table() {
   //  User context
   //
   const { sessionContext } = useUserContext()
-
   //
   //  Input selection
   //
   const [uid, setuid] = useState<number | string>(0)
-  const [widthNumber, setWidthNumber] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(99)
   const [owner, setowner] = useState('')
   const [group, setgroup] = useState('')
@@ -48,17 +46,12 @@ export default function Table() {
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
-  // Effect to log changes and perform actions based on state changes
+  //  Screen change
   //......................................................................................
-  //
-  // Ref to store previous values
-  //
-  const widthNumber_Ref = useRef<number | undefined>(undefined)
-  const rowsPerPage_Ref = useRef<number | undefined>(undefined)
   useEffect(() => {
-    widthNumber_Ref.current = widthNumber
-    rowsPerPage_Ref.current = rowsPerPage
-  }, [widthNumber, rowsPerPage])
+    updateColumns()
+    updateRows()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
   //  UID
   //......................................................................................
@@ -68,20 +61,6 @@ export default function Table() {
       setShouldFetchData(true)
     }
   }, [sessionContext])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    screenSize()
-    //
-    // Update on resize
-    //
-    window.addEventListener('resize', screenSize)
-    //
-    // Cleanup event listener on unmount
-    //
-    return () => window.removeEventListener('resize', screenSize)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
   // Reset the group when the owner changes
   //......................................................................................
@@ -113,13 +92,6 @@ export default function Table() {
     setShouldFetchData(false)
     // eslint-disable-next-line
   }, [currentPage, shouldFetchData, uid, owner, group, questions, title, name, correct])
-  //......................................................................................
-  //  Screen size
-  //......................................................................................
-  function screenSize() {
-    updateColumns()
-    updateRows()
-  }
   //----------------------------------------------------------------------------------------------
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
@@ -134,14 +106,6 @@ export default function Table() {
     else if (innerWidth >= 1024) widthNumber_new = 3
     else if (innerWidth >= 768) widthNumber_new = 2
     else widthNumber_new = 1
-    //
-    //  NO Change
-    //
-    if (widthNumber_new === widthNumber_Ref.current) return
-    //
-    //  Update widthNumber
-    //
-    setWidthNumber(widthNumber_new)
     //
     //  Initialize all values to false
     //
@@ -192,10 +156,6 @@ export default function Table() {
     else if (innerHeight >= 576) rowsPerPage_new = 10
     else if (innerHeight >= 512) rowsPerPage_new = 9
     else rowsPerPage_new = 4
-    //
-    //  NO Change
-    //
-    if (rowsPerPage_new === rowsPerPage_Ref.current) return
     //
     //  Set the screenRows per page
     //
@@ -289,316 +249,309 @@ export default function Table() {
     }
   }
   //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <>
       {/** -------------------------------------------------------------------- */}
-      {/** Loading ?                                                        */}
+      {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      {loading ? (
-        <p>Loading....</p>
-      ) : (
-        <>
-          {/** -------------------------------------------------------------------- */}
-          {/** TABLE                                                                */}
-          {/** -------------------------------------------------------------------- */}
-          <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
-            <table className='min-w-full text-gray-900 table-auto'>
-              <thead className='rounded-lg text-left font-normal text-xs'>
-                {/* ---------------------------------------------------------------------------------- */}
-                {/** HEADINGS                                                                */}
-                {/** -------------------------------------------------------------------- */}
-                <tr className='text-xs'>
-                  {show_gid && (
-                    <th scope='col' className=' font-medium px-2'>
-                      Gid
-                    </th>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left font-normal text-xs'>
+            {/* ---------------------------------------------------------------------------------- */}
+            {/** HEADINGS                                                                */}
+            {/** -------------------------------------------------------------------- */}
+            <tr className='text-xs'>
+              {show_gid && (
+                <th scope='col' className=' font-medium px-2'>
+                  Gid
+                </th>
+              )}
+              {show_owner && (
+                <th scope='col' className=' font-medium px-2'>
+                  Owner
+                </th>
+              )}
+              {show_group && (
+                <th scope='col' className=' font-medium px-2'>
+                  Group
+                </th>
+              )}
+              {show_hid && (
+                <th scope='col' className=' font-medium px-2'>
+                  Hid
+                </th>
+              )}
+              {show_title && (
+                <th scope='col' className=' font-medium px-2'>
+                  Title
+                </th>
+              )}
+              {show_uid && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Uid
+                </th>
+              )}
+              {show_name && (
+                <th scope='col' className=' font-medium px-2'>
+                  User-Name
+                </th>
+              )}
+              {show_questions && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Questions
+                </th>
+              )}
+              {show_correct && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  %
+                </th>
+              )}
+
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Review
+              </th>
+
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Quiz
+              </th>
+            </tr>
+            {/* ---------------------------------------------------------------------------------- */}
+            {/* DROPDOWN & SEARCHES             */}
+            {/* ---------------------------------------------------------------------------------- */}
+            <tr className='text-xs align-bottom'>
+              {/* ................................................... */}
+              {/* GID                                                 */}
+              {/* ................................................... */}
+              {show_gid && <th scope='col' className=' px-2'></th>}
+              {/* ................................................... */}
+              {/* OWNER                                                 */}
+              {/* ................................................... */}
+              {show_owner && (
+                <th scope='col' className='px-2'>
+                  <DropdownGeneric
+                    selectedOption={owner}
+                    setSelectedOption={setowner}
+                    searchEnabled={false}
+                    name='owner'
+                    table='usersowner'
+                    tableColumn='uouid'
+                    tableColumnValue={sessionContext.cxuid}
+                    optionLabel='uoowner'
+                    optionValue='uoowner'
+                    dropdownWidth='w-28'
+                    includeBlank={true}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* GROUP                                                 */}
+              {/* ................................................... */}
+              {show_group && (
+                <th scope='col' className=' px-2'>
+                  {owner === undefined || owner === '' ? null : (
+                    <DropdownGeneric
+                      selectedOption={group}
+                      setSelectedOption={setgroup}
+                      name='group'
+                      table='ownergroup'
+                      tableColumn='ogowner'
+                      tableColumnValue={owner}
+                      optionLabel='ogtitle'
+                      optionValue='oggroup'
+                      dropdownWidth='w-36'
+                      includeBlank={true}
+                    />
                   )}
-                  {show_owner && (
-                    <th scope='col' className=' font-medium px-2'>
-                      Owner
-                    </th>
-                  )}
-                  {show_group && (
-                    <th scope='col' className=' font-medium px-2'>
-                      Group
-                    </th>
-                  )}
-                  {show_hid && (
-                    <th scope='col' className=' font-medium px-2'>
-                      Hid
-                    </th>
-                  )}
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* HISTORY ID                                          */}
+              {/* ................................................... */}
+              {show_hid && <th scope='col' className=' px-2'></th>}
+              {/* ................................................... */}
+              {/* Title                                                 */}
+              {/* ................................................... */}
+              {show_title && (
+                <th scope='col' className='px-2'>
+                  <MyInput
+                    id='title'
+                    name='title'
+                    overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    type='text'
+                    value={title}
+                    onChange={e => {
+                      const value = e.target.value.split(' ')[0]
+                      settitle(value)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* uid                                                 */}
+              {/* ................................................... */}
+              {show_uid && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='uid'
+                    name='uid'
+                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    type='text'
+                    value={uid}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = parseInt(value, 10)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      setuid(parsedValue)
+                      setname('')
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* Name                                                 */}
+              {/* ................................................... */}
+              {show_name && (
+                <th scope='col' className='px-2'>
+                  <MyInput
+                    id='name'
+                    name='name'
+                    overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    type='text'
+                    value={name}
+                    onChange={e => {
+                      const value = e.target.value.split(' ')[0]
+                      setname(value)
+                      setuid('')
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* Questions                                           */}
+              {/* ................................................... */}
+              {show_questions && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='questions'
+                    name='questions'
+                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    type='text'
+                    value={questions}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = parseInt(value, 10)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      setquestions(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* correct                                           */}
+              {/* ................................................... */}
+              {show_correct && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='correct'
+                    name='correct'
+                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    type='text'
+                    value={correct}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = parseInt(value, 10)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      setcorrect(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* Review/Quiz                                          */}
+              {/* ................................................... */}
+              <th scope='col' className=' px-2'></th>
+              <th scope='col' className=' px-2'></th>
+            </tr>
+          </thead>
+          {/* ---------------------------------------------------------------------------------- */}
+          {/* BODY                                 */}
+          {/* ---------------------------------------------------------------------------------- */}
+          <tbody className='bg-white text-xs'>
+            {tabledata && tabledata.length > 0 ? (
+              tabledata?.map((tabledata, index) => (
+                <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
+                  {show_gid && <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>}
+                  {show_owner && <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>}
+                  {show_group && <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>}
+                  {show_hid && <td className=' px-2 py-2 text-left'>{tabledata.r_hid}</td>}
                   {show_title && (
-                    <th scope='col' className=' font-medium px-2'>
-                      Title
-                    </th>
+                    <td className='px-2 py-2'>
+                      {tabledata.ogtitle
+                        ? tabledata.ogtitle.length > 35
+                          ? `${tabledata.ogtitle.slice(0, 30)}...`
+                          : tabledata.ogtitle
+                        : ' '}
+                    </td>
                   )}
-                  {show_uid && (
-                    <th scope='col' className=' font-medium px-2 text-center'>
-                      Uid
-                    </th>
-                  )}
-                  {show_name && (
-                    <th scope='col' className=' font-medium px-2'>
-                      User-Name
-                    </th>
-                  )}
+                  {show_uid && <td className='px-2 py-2 text-center'>{tabledata.r_uid}</td>}
+                  {show_name && <td className='px-2 py-2'>{tabledata.u_name}</td>}
                   {show_questions && (
-                    <th scope='col' className=' font-medium px-2 text-center'>
-                      Questions
-                    </th>
+                    <td className='px-2 py-2 text-center'>{tabledata.r_questions}</td>
                   )}
                   {show_correct && (
-                    <th scope='col' className=' font-medium px-2 text-center'>
-                      %
-                    </th>
+                    <td className='px-2 py-2  text-center '>{tabledata.r_correctpercent}</td>
                   )}
+                  <td className='px-2 py-2 text-center'>
+                    <Link
+                      href={{
+                        pathname: `/dashboard/quiz/${tabledata.r_hid}`,
+                        query: { from: 'history' }
+                      }}
+                      className='bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600'
+                    >
+                      Review
+                    </Link>
+                  </td>
 
-                  <th scope='col' className=' font-medium px-2 text-center'>
-                    Review
-                  </th>
-
-                  <th scope='col' className=' font-medium px-2 text-center'>
-                    Quiz
-                  </th>
+                  <td className='px-2 py-2 text-xs text-center'>
+                    <Link
+                      href={{
+                        pathname: `/dashboard/quiz/${tabledata.r_gid}`,
+                        query: { from: 'history' }
+                      }}
+                      className='bg-blue-500 text-white px-2 py-1  rounded-md hover:bg-blue-600'
+                    >
+                      Quiz
+                    </Link>
+                  </td>
+                  {/* ---------------------------------------------------------------------------------- */}
                 </tr>
-                {/* ---------------------------------------------------------------------------------- */}
-                {/* DROPDOWN & SEARCHES             */}
-                {/* ---------------------------------------------------------------------------------- */}
-                <tr className='text-xs align-bottom'>
-                  {/* ................................................... */}
-                  {/* GID                                                 */}
-                  {/* ................................................... */}
-                  {show_gid && <th scope='col' className=' px-2'></th>}
-                  {/* ................................................... */}
-                  {/* OWNER                                                 */}
-                  {/* ................................................... */}
-                  {show_owner && (
-                    <th scope='col' className='px-2'>
-                      <DropdownGeneric
-                        selectedOption={owner}
-                        setSelectedOption={setowner}
-                        searchEnabled={false}
-                        name='owner'
-                        table='usersowner'
-                        tableColumn='uouid'
-                        tableColumnValue={sessionContext.cxuid}
-                        optionLabel='uoowner'
-                        optionValue='uoowner'
-                        dropdownWidth='w-28'
-                        includeBlank={true}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* GROUP                                                 */}
-                  {/* ................................................... */}
-                  {show_group && (
-                    <th scope='col' className=' px-2'>
-                      {owner === undefined || owner === '' ? null : (
-                        <DropdownGeneric
-                          selectedOption={group}
-                          setSelectedOption={setgroup}
-                          name='group'
-                          table='ownergroup'
-                          tableColumn='ogowner'
-                          tableColumnValue={owner}
-                          optionLabel='ogtitle'
-                          optionValue='oggroup'
-                          dropdownWidth='w-36'
-                          includeBlank={true}
-                        />
-                      )}
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* HISTORY ID                                          */}
-                  {/* ................................................... */}
-                  {show_hid && <th scope='col' className=' px-2'></th>}
-                  {/* ................................................... */}
-                  {/* Title                                                 */}
-                  {/* ................................................... */}
-                  {show_title && (
-                    <th scope='col' className='px-2'>
-                      <MyInput
-                        id='title'
-                        name='title'
-                        overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
-                        type='text'
-                        value={title}
-                        onChange={e => {
-                          const value = e.target.value.split(' ')[0]
-                          settitle(value)
-                        }}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* uid                                                 */}
-                  {/* ................................................... */}
-                  {show_uid && (
-                    <th scope='col' className='px-2 text-center'>
-                      <MyInput
-                        id='uid'
-                        name='uid'
-                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
-                        type='text'
-                        value={uid}
-                        onChange={e => {
-                          const value = e.target.value
-                          const numValue = parseInt(value, 10)
-                          const parsedValue = isNaN(numValue) ? '' : numValue
-                          setuid(parsedValue)
-                          setname('')
-                        }}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* Name                                                 */}
-                  {/* ................................................... */}
-                  {show_name && (
-                    <th scope='col' className='px-2'>
-                      <MyInput
-                        id='name'
-                        name='name'
-                        overrideClass={`w-50  rounded-md border border-blue-500  py-2 font-normal text-xs`}
-                        type='text'
-                        value={name}
-                        onChange={e => {
-                          const value = e.target.value.split(' ')[0]
-                          setname(value)
-                          setuid('')
-                        }}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* Questions                                           */}
-                  {/* ................................................... */}
-                  {show_questions && (
-                    <th scope='col' className='px-2 text-center'>
-                      <MyInput
-                        id='questions'
-                        name='questions'
-                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
-                        type='text'
-                        value={questions}
-                        onChange={e => {
-                          const value = e.target.value
-                          const numValue = parseInt(value, 10)
-                          const parsedValue = isNaN(numValue) ? '' : numValue
-                          setquestions(parsedValue)
-                        }}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* correct                                           */}
-                  {/* ................................................... */}
-                  {show_correct && (
-                    <th scope='col' className='px-2 text-center'>
-                      <MyInput
-                        id='correct'
-                        name='correct'
-                        overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
-                        type='text'
-                        value={correct}
-                        onChange={e => {
-                          const value = e.target.value
-                          const numValue = parseInt(value, 10)
-                          const parsedValue = isNaN(numValue) ? '' : numValue
-                          setcorrect(parsedValue)
-                        }}
-                      />
-                    </th>
-                  )}
-                  {/* ................................................... */}
-                  {/* Review/Quiz                                          */}
-                  {/* ................................................... */}
-                  <th scope='col' className=' px-2'></th>
-                  <th scope='col' className=' px-2'></th>
-                </tr>
-              </thead>
-              {/* ---------------------------------------------------------------------------------- */}
-              {/* BODY                                 */}
-              {/* ---------------------------------------------------------------------------------- */}
-              <tbody className='bg-white text-xs'>
-                {tabledata && tabledata.length > 0 ? (
-                  tabledata?.map((tabledata, index) => (
-                    <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
-                      {show_gid && <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>}
-                      {show_owner && (
-                        <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>
-                      )}
-                      {show_group && (
-                        <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>
-                      )}
-                      {show_hid && <td className=' px-2 py-2 text-left'>{tabledata.r_hid}</td>}
-                      {show_title && (
-                        <td className='px-2 py-2'>
-                          {tabledata.ogtitle
-                            ? tabledata.ogtitle.length > 35
-                              ? `${tabledata.ogtitle.slice(0, 30)}...`
-                              : tabledata.ogtitle
-                            : ' '}
-                        </td>
-                      )}
-                      {show_uid && <td className='px-2 py-2 text-center'>{tabledata.r_uid}</td>}
-                      {show_name && <td className='px-2 py-2'>{tabledata.u_name}</td>}
-                      {show_questions && (
-                        <td className='px-2 py-2 text-center'>{tabledata.r_questions}</td>
-                      )}
-                      {show_correct && (
-                        <td className='px-2 py-2  text-center '>{tabledata.r_correctpercent}</td>
-                      )}
-                      <td className='px-2 py-2 text-center'>
-                        <Link
-                          href={{
-                            pathname: `/dashboard/quiz/${tabledata.r_hid}`,
-                            query: { from: 'history' }
-                          }}
-                          className='bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600'
-                        >
-                          Review
-                        </Link>
-                      </td>
-
-                      <td className='px-2 py-2 text-xs text-center'>
-                        <Link
-                          href={{
-                            pathname: `/dashboard/quiz/${tabledata.r_gid}`,
-                            query: { from: 'history' }
-                          }}
-                          className='bg-blue-500 text-white px-2 py-1  rounded-md hover:bg-blue-600'
-                        >
-                          Quiz
-                        </Link>
-                      </td>
-                      {/* ---------------------------------------------------------------------------------- */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={8}>No data available</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {/* ---------------------------------------------------------------------------------- */}
-          {/* Pagination                */}
-          {/* ---------------------------------------------------------------------------------- */}
-          <div className='mt-5 flex w-full justify-center'>
-            <Pagination
-              totalPages={totalPages}
-              statecurrentPage={currentPage}
-              setStateCurrentPage={setcurrentPage}
-            />
-          </div>
-          {/* ---------------------------------------------------------------------------------- */}
-        </>
-      )}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8}>No data available</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Pagination                */}
+      {/* ---------------------------------------------------------------------------------- */}
+      <div className='mt-5 flex w-full justify-center'>
+        <Pagination
+          totalPages={totalPages}
+          statecurrentPage={currentPage}
+          setStateCurrentPage={setcurrentPage}
+        />
+      </div>
+      {/* ---------------------------------------------------------------------------------- */}
     </>
   )
 }

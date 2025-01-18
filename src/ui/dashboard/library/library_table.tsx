@@ -49,6 +49,13 @@ export default function Table() {
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
+  //  Screen change
+  //......................................................................................
+  useEffect(() => {
+    updateColumns()
+    updateRows()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  //......................................................................................
   //  UID - Mandatory to continue
   //......................................................................................
   useEffect(() => {
@@ -57,20 +64,6 @@ export default function Table() {
       setShouldFetchData(true)
     }
   }, [sessionContext])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    screenSize()
-    //
-    // Update on resize
-    //
-    window.addEventListener('resize', screenSize)
-    //
-    // Cleanup event listener on unmount
-    //
-    return () => window.removeEventListener('resize', screenSize)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
   // Reset the group when the owner changes
   //......................................................................................
@@ -102,17 +95,10 @@ export default function Table() {
     setShouldFetchData(false)
     // eslint-disable-next-line
   }, [currentPage, shouldFetchData, uid, owner, group, ref, desc, who, questions, type])
-  //......................................................................................
-  //  Screen size
-  //......................................................................................
-  function screenSize() {
-    updateColumns()
-    updateRows()
-  }
   //----------------------------------------------------------------------------------------------
   //  Width
   //----------------------------------------------------------------------------------------------
-  async function updateColumns() {
+  function updateColumns() {
     //
     //  2xl, xl, lg, md, sm
     //
@@ -167,7 +153,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
   //----------------------------------------------------------------------------------------------
-  async function updateRows() {
+  function updateRows() {
     const innerHeight = window.innerHeight
     //
     //  2xl, xl, lg, md, sm
