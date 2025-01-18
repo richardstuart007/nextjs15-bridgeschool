@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { table_UsershistoryGroupUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
@@ -18,7 +18,6 @@ export default function Table() {
   //  Input selection
   //
   const [uid, setuid] = useState<number | string>(0)
-  const [rowsPerPage, setRowsPerPage] = useState(99)
   const [owner, setowner] = useState('')
   const [group, setgroup] = useState('')
   const [title, settitle] = useState('')
@@ -28,15 +27,16 @@ export default function Table() {
   //
   //  Show flags
   //
-  const [show_gid, setshow_gid] = useState(false)
-  const [show_owner, setshow_owner] = useState(false)
-  const [show_group, setshow_group] = useState(false)
-  const [show_hid, setshow_hid] = useState(false)
-  const [show_uid, setshow_uid] = useState(false)
-  const [show_title, setshow_title] = useState(false)
-  const [show_name, setshow_name] = useState(false)
-  const [show_questions, setshow_questions] = useState(false)
-  const [show_correct, setshow_correct] = useState(false)
+  const ref_rowsPerPage = useRef(0)
+  const ref_show_gid = useRef(false)
+  const ref_show_owner = useRef(false)
+  const ref_show_group = useRef(false)
+  const ref_show_hid = useRef(false)
+  const ref_show_uid = useRef(false)
+  const ref_show_title = useRef(false)
+  const ref_show_name = useRef(false)
+  const ref_show_questions = useRef(false)
+  const ref_show_correct = useRef(false)
   //
   //  Other state
   //
@@ -100,66 +100,53 @@ export default function Table() {
     //  2xl, xl, lg, md, sm
     //
     const innerWidth = window.innerWidth
-    let widthNumber_new = 1
-    if (innerWidth >= 1536) widthNumber_new = 5
-    else if (innerWidth >= 1280) widthNumber_new = 4
-    else if (innerWidth >= 1024) widthNumber_new = 3
-    else if (innerWidth >= 768) widthNumber_new = 2
-    else widthNumber_new = 1
-    //
-    //  Initialize all values to false
-    //
-    setshow_gid(false)
-    setshow_owner(false)
-    setshow_group(false)
-    setshow_hid(false)
-    setshow_uid(false)
-    setshow_title(false)
-    setshow_name(false)
-    setshow_questions(false)
-    setshow_correct(false)
+    let widthNumber = 1
+    if (innerWidth >= 1536) widthNumber = 5
+    else if (innerWidth >= 1280) widthNumber = 4
+    else if (innerWidth >= 1024) widthNumber = 3
+    else if (innerWidth >= 768) widthNumber = 2
+    else widthNumber = 1
     //
     //  Small to large screens
     //
-    if (widthNumber_new >= 1) {
-      setshow_title(true)
-      setshow_uid(true)
+    if (widthNumber >= 1) {
+      ref_show_title.current = true
+      ref_show_uid.current = true
     }
-    if (widthNumber_new >= 2) {
+    if (widthNumber >= 2) {
     }
-    if (widthNumber_new >= 3) {
-      setshow_correct(true)
-      setshow_name(true)
+    if (widthNumber >= 3) {
+      ref_show_correct.current = true
+      ref_show_name.current = true
     }
-    if (widthNumber_new >= 4) {
-      setshow_owner(true)
-      setshow_group(true)
+    if (widthNumber >= 4) {
+      ref_show_owner.current = true
+      ref_show_group.current = true
     }
-    if (widthNumber_new >= 5) {
-      setshow_questions(true)
+    if (widthNumber >= 5) {
+      ref_show_questions.current = true
 
-      setshow_hid(true)
-      setshow_gid(true)
+      ref_show_hid.current = true
+      ref_show_gid.current = true
     }
   }
   //----------------------------------------------------------------------------------------------
   //  Height - update rows & fetch data
   //----------------------------------------------------------------------------------------------
   function updateRows() {
-    const innerHeight = window.innerHeight
     //
     //  2xl, xl, lg, md, sm
     //
-    let rowsPerPage_new = 5
-    if (innerHeight >= 864) rowsPerPage_new = 17
-    else if (innerHeight >= 720) rowsPerPage_new = 13
-    else if (innerHeight >= 576) rowsPerPage_new = 10
-    else if (innerHeight >= 512) rowsPerPage_new = 9
-    else rowsPerPage_new = 4
+    const height = window.screen.height
+    let screenRows = 5
+    if (height >= 1024) screenRows = 20
+    else if (height >= 768) screenRows = 15
+    else if (height >= 600) screenRows = 12
+    else screenRows = 9
     //
     //  Set the screenRows per page
     //
-    setRowsPerPage(rowsPerPage_new)
+    ref_rowsPerPage.current = screenRows
     //
     //  Change of Rows
     //
@@ -214,6 +201,7 @@ export default function Table() {
       //
       // Calculate the offset for pagination
       //
+      const rowsPerPage = ref_rowsPerPage.current
       const offset = (currentPage - 1) * rowsPerPage
       //
       //  Get data
@@ -251,7 +239,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p>Loading....</p>
+  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
@@ -267,47 +255,47 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {show_gid && (
+              {ref_show_gid.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Gid
                 </th>
               )}
-              {show_owner && (
+              {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {show_group && (
+              {ref_show_group.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Group
                 </th>
               )}
-              {show_hid && (
+              {ref_show_hid.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Hid
                 </th>
               )}
-              {show_title && (
+              {ref_show_title.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Title
                 </th>
               )}
-              {show_uid && (
+              {ref_show_uid.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Uid
                 </th>
               )}
-              {show_name && (
+              {ref_show_name.current && (
                 <th scope='col' className=' font-medium px-2'>
                   User-Name
                 </th>
               )}
-              {show_questions && (
+              {ref_show_questions.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
               )}
-              {show_correct && (
+              {ref_show_correct.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   %
                 </th>
@@ -328,11 +316,11 @@ export default function Table() {
               {/* ................................................... */}
               {/* GID                                                 */}
               {/* ................................................... */}
-              {show_gid && <th scope='col' className=' px-2'></th>}
+              {ref_show_gid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {show_owner && (
+              {ref_show_owner.current && (
                 <th scope='col' className='px-2'>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -352,7 +340,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              {show_group && (
+              {ref_show_group.current && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -373,11 +361,11 @@ export default function Table() {
               {/* ................................................... */}
               {/* HISTORY ID                                          */}
               {/* ................................................... */}
-              {show_hid && <th scope='col' className=' px-2'></th>}
+              {ref_show_hid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
-              {show_title && (
+              {ref_show_title.current && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='title'
@@ -395,7 +383,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* uid                                                 */}
               {/* ................................................... */}
-              {show_uid && (
+              {ref_show_uid.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='uid'
@@ -416,7 +404,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* Name                                                 */}
               {/* ................................................... */}
-              {show_name && (
+              {ref_show_name.current && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='name'
@@ -435,7 +423,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {show_questions && (
+              {ref_show_questions.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='questions'
@@ -455,7 +443,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* correct                                           */}
               {/* ................................................... */}
-              {show_correct && (
+              {ref_show_correct.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='correct'
@@ -486,11 +474,19 @@ export default function Table() {
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
                 <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
-                  {show_gid && <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>}
-                  {show_owner && <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>}
-                  {show_group && <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>}
-                  {show_hid && <td className=' px-2 py-2 text-left'>{tabledata.r_hid}</td>}
-                  {show_title && (
+                  {ref_show_gid.current && (
+                    <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>
+                  )}
+                  {ref_show_owner.current && (
+                    <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>
+                  )}
+                  {ref_show_group.current && (
+                    <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>
+                  )}
+                  {ref_show_hid.current && (
+                    <td className=' px-2 py-2 text-left'>{tabledata.r_hid}</td>
+                  )}
+                  {ref_show_title.current && (
                     <td className='px-2 py-2'>
                       {tabledata.ogtitle
                         ? tabledata.ogtitle.length > 35
@@ -499,12 +495,14 @@ export default function Table() {
                         : ' '}
                     </td>
                   )}
-                  {show_uid && <td className='px-2 py-2 text-center'>{tabledata.r_uid}</td>}
-                  {show_name && <td className='px-2 py-2'>{tabledata.u_name}</td>}
-                  {show_questions && (
+                  {ref_show_uid.current && (
+                    <td className='px-2 py-2 text-center'>{tabledata.r_uid}</td>
+                  )}
+                  {ref_show_name.current && <td className='px-2 py-2'>{tabledata.u_name}</td>}
+                  {ref_show_questions.current && (
                     <td className='px-2 py-2 text-center'>{tabledata.r_questions}</td>
                   )}
-                  {show_correct && (
+                  {ref_show_correct.current && (
                     <td className='px-2 py-2  text-center '>{tabledata.r_correctpercent}</td>
                   )}
                   <td className='px-2 py-2 text-center'>

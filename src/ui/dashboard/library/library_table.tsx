@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { table_Library, table_LibraryGroup } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
@@ -19,9 +19,6 @@ export default function Table() {
   //  Selection
   //
   const [uid, setuid] = useState(0)
-  const [widthNumber, setWidthNumber] = useState(2)
-  const [widthDesc, setWidthDesc] = useState(30)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
   const [owner, setowner] = useState('')
   const [group, setgroup] = useState('')
   const [desc, setdesc] = useState('')
@@ -32,14 +29,16 @@ export default function Table() {
   //
   //  Show columns
   //
-  const [show_gid, setshow_gid] = useState(false)
-  const [show_owner, setshow_owner] = useState(false)
-  const [show_group, setshow_group] = useState(false)
-  const [show_lid, setshow_lid] = useState(false)
-  const [show_who, setshow_who] = useState(false)
-  const [show_ref, setshow_ref] = useState(false)
-  const [show_type, setshow_type] = useState(false)
-  const [show_questions, setshow_questions] = useState(true)
+  const ref_widthDesc = useRef(0)
+  const ref_rowsPerPage = useRef(0)
+  const ref_show_gid = useRef(false)
+  const ref_show_owner = useRef(false)
+  const ref_show_group = useRef(false)
+  const ref_show_lid = useRef(false)
+  const ref_show_who = useRef(false)
+  const ref_show_ref = useRef(false)
+  const ref_show_type = useRef(false)
+  const ref_show_questions = useRef(false)
   //
   //  Data
   //
@@ -96,82 +95,57 @@ export default function Table() {
     // eslint-disable-next-line
   }, [currentPage, shouldFetchData, uid, owner, group, ref, desc, who, questions, type])
   //----------------------------------------------------------------------------------------------
-  //  Width
+  //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
   function updateColumns() {
     //
     //  2xl, xl, lg, md, sm
     //
     const innerWidth = window.innerWidth
-    let widthNumber_new = 1
-    if (innerWidth >= 1536) widthNumber_new = 5
-    else if (innerWidth >= 1280) widthNumber_new = 4
-    else if (innerWidth >= 1024) widthNumber_new = 3
-    else if (innerWidth >= 768) widthNumber_new = 2
-    else widthNumber_new = 1
-    //
-    //  NO Change
-    //
-    if (widthNumber_new === widthNumber) return
-    //
-    //  Update widthNumber
-    //
-    setWidthNumber(widthNumber_new)
-    //
-    //  Initialize all values to false
-    //
-    setshow_gid(false)
-    setshow_owner(false)
-    setshow_group(false)
-    setshow_lid(false)
-    setshow_who(false)
-    setshow_ref(false)
-    setshow_type(false)
-    setshow_questions(false)
+    let widthNumber = 1
+    if (innerWidth >= 1536) widthNumber = 5
+    else if (innerWidth >= 1280) widthNumber = 4
+    else if (innerWidth >= 1024) widthNumber = 3
+    else if (innerWidth >= 768) widthNumber = 2
+    else widthNumber = 1
     //
     //  larger screens
     //
-    if (widthNumber_new >= 2) {
-      setshow_gid(true)
-      setshow_owner(true)
-      setshow_group(true)
-      setshow_questions(true)
-      setshow_type(true)
+    if (widthNumber >= 2) {
+      ref_show_gid.current = true
+      ref_show_owner.current = true
+      ref_show_group.current = true
+      ref_show_questions.current = true
+      ref_show_type.current = true
     }
-    if (widthNumber_new >= 3) {
-      setshow_who(true)
+    if (widthNumber >= 3) {
+      ref_show_who.current = true
     }
-    if (widthNumber_new >= 4) {
-      setshow_lid(true)
-      setshow_ref(true)
+    if (widthNumber >= 4) {
+      ref_show_lid.current = true
+      ref_show_ref.current = true
     }
     // Description width
-    setWidthDesc(
-      widthNumber_new >= 4 ? 100 : widthNumber_new >= 3 ? 75 : widthNumber_new >= 2 ? 40 : 30
-    )
+    ref_widthDesc.current =
+      widthNumber >= 4 ? 100 : widthNumber >= 3 ? 75 : widthNumber >= 2 ? 40 : 30
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
   //----------------------------------------------------------------------------------------------
   function updateRows() {
-    const innerHeight = window.innerHeight
     //
     //  2xl, xl, lg, md, sm
     //
+    const height = window.screen.height
     let screenRows = 5
-    if (innerHeight >= 864) screenRows = 17
-    else if (innerHeight >= 720) screenRows = 13
-    else if (innerHeight >= 576) screenRows = 10
-    else if (innerHeight >= 512) screenRows = 9
-    else screenRows = 4
-    //
-    //  NO Change
-    //
-    if (screenRows === rowsPerPage) return
+    if (height >= 1024) screenRows = 20
+    else if (height >= 768) screenRows = 15
+    else if (height >= 600) screenRows = 12
+    else screenRows = 9
     //
     //  Set the screenRows per page
     //
-    setRowsPerPage(screenRows)
+    ref_rowsPerPage.current = screenRows
     //
     //  Change of Rows
     //
@@ -186,7 +160,6 @@ export default function Table() {
     //  The user-id must be set & filters
     //
     if (uid === 0) return
-    console.log('uid', uid)
     //
     // Define the structure for filters
     //
@@ -235,6 +208,7 @@ export default function Table() {
       //
       // Calculate the offset for pagination
       //
+      const rowsPerPage = ref_rowsPerPage.current
       const offset = (currentPage - 1) * rowsPerPage
       //
       //  Get data
@@ -274,7 +248,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p>Loading....</p>
+  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
@@ -290,27 +264,27 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {show_gid && (
+              {ref_show_gid.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Gid
                 </th>
               )}
-              {show_owner && (
+              {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {show_group && (
+              {ref_show_group.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Group-name
                 </th>
               )}
-              {show_lid && (
+              {ref_show_lid.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Lid
                 </th>
               )}
-              {show_ref && (
+              {ref_show_ref.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Ref
                 </th>
@@ -318,12 +292,12 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2'>
                 Description
               </th>
-              {show_who && (
+              {ref_show_who.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Who
                 </th>
               )}
-              {show_questions && (
+              {ref_show_questions.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
@@ -342,11 +316,11 @@ export default function Table() {
               {/* ................................................... */}
               {/* GID                                                 */}
               {/* ................................................... */}
-              {show_gid && <th scope='col' className=' px-2'></th>}
+              {ref_show_gid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {show_owner && (
+              {ref_show_owner.current && (
                 <th scope='col' className='px-2'>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -366,7 +340,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              {show_group && (
+              {ref_show_group.current && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -387,11 +361,11 @@ export default function Table() {
               {/* ................................................... */}
               {/* LIBRARY ID                                          */}
               {/* ................................................... */}
-              {show_lid && <th scope='col' className=' px-2'></th>}
+              {ref_show_lid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
-              {show_ref && (
+              {ref_show_ref.current && (
                 <th scope='col' className=' px-2 '>
                   <label htmlFor='ref' className='sr-only'>
                     Reference
@@ -431,7 +405,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* WHO                                                 */}
               {/* ................................................... */}
-              {show_who && (
+              {ref_show_who.current && (
                 <th scope='col' className=' px-2'>
                   <DropdownGeneric
                     selectedOption={who}
@@ -449,7 +423,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {show_questions && (
+              {ref_show_questions.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='questions'
@@ -469,7 +443,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* type                                                 */}
               {/* ................................................... */}
-              {show_type && (
+              {ref_show_type.current && (
                 <th scope='col' className=' px-2 text-center'>
                   <DropdownGeneric
                     selectedOption={type}
@@ -496,21 +470,25 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.lrlid} className='w-full border-b'>
-                {show_gid && <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>}
-                {show_owner && <td className=' px-2 pt-2'>{tabledata.lrowner}</td>}
-                {show_group && <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>}
-                {show_lid && <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>}
-                {show_ref && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
+                {ref_show_gid.current && (
+                  <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>
+                )}
+                {ref_show_owner.current && <td className=' px-2 pt-2'>{tabledata.lrowner}</td>}
+                {ref_show_group.current && <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>}
+                {ref_show_lid.current && (
+                  <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>
+                )}
+                {ref_show_ref.current && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
                 <td className='px-2 pt-2'>
-                  {tabledata.lrdesc.length > widthDesc
-                    ? `${tabledata.lrdesc.slice(0, widthDesc - 3)}...`
+                  {tabledata.lrdesc.length > ref_widthDesc.current
+                    ? `${tabledata.lrdesc.slice(0, ref_widthDesc.current - 3)}...`
                     : tabledata.lrdesc}
                 </td>
-                {show_who && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
+                {ref_show_who.current && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {show_questions && 'ogcntquestions' in tabledata && (
+                {ref_show_questions.current && 'ogcntquestions' in tabledata && (
                   <td className='px-2 pt-2 text-center'>
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
