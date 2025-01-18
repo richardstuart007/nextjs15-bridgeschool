@@ -138,10 +138,11 @@ export default function Table() {
     //  2xl, xl, lg, md, sm
     //
     const height = window.screen.height
+    const innerheight = window.innerHeight
     let screenRows = 5
     if (height >= 1024) screenRows = 20
-    else if (height >= 768) screenRows = 15
-    else if (height >= 600) screenRows = 12
+    else if (innerheight >= 768) screenRows = 15
+    else if (innerheight >= 600) screenRows = 12
     else screenRows = 9
     //
     //  Set the screenRows per page
