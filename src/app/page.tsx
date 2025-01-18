@@ -15,27 +15,20 @@ export default function Page() {
   }, [])
 
   useEffect(() => {
-    const updateSize = () => {
-      const width = window.innerWidth
-      if (width >= 1536) {
-        setLogoSize(500) // 2XL
-      } else if (width >= 1280) {
-        setLogoSize(400) // XL
-      } else if (width >= 1024) {
-        setLogoSize(300) // Large
-      } else if (width >= 768) {
-        setLogoSize(200) // Medium
-      } else if (width >= 640) {
-        setLogoSize(100) // Small
-      } else {
-        setLogoSize(90) // Extra Small
-      }
+    const width = window.innerWidth
+    if (width >= 1536) {
+      setLogoSize(500) // 2XL
+    } else if (width >= 1280) {
+      setLogoSize(400) // XL
+    } else if (width >= 1024) {
+      setLogoSize(300) // Large
+    } else if (width >= 768) {
+      setLogoSize(200) // Medium
+    } else if (width >= 640) {
+      setLogoSize(100) // Small
+    } else {
+      setLogoSize(90) // Extra Small
     }
-
-    updateSize() // Set initial size
-    window.addEventListener('resize', updateSize) // Update on resize
-
-    return () => window.removeEventListener('resize', updateSize)
   }, [])
 
   return (
