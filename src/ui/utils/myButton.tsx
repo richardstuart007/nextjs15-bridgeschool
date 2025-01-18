@@ -7,8 +7,8 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function MyButton({ children, overrideClass = '', ...rest }: Props) {
   const defaultClass = clsx(
-    'flex h-10 px-4',
-    'items-center',
+    'flex items-center',
+    'h-10 px-4',
     'rounded-md bg-blue-500 hover:bg-blue-600',
     'text-xs font-medium text-white',
     'transition-colors',

@@ -78,12 +78,14 @@ export default function NavSide() {
       {sessionInfo && (
         <>
           <NavSession sessionInfo={sessionInfo} />
-          <div className='flex grow justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
+          <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2'>
             <NavLinks sessionInfo={sessionInfo} />
-            <div className='grow invisible'></div>
-            <form action={logout}>
-              <MyButton overrideClass='h-8 px-1 p-1 w-full grow bg-gray-700'>Logoff</MyButton>
-            </form>
+            {/* <div className='grow invisible'></div> */}
+            <div className='flex grow justify-end'>
+              <form action={logout}>
+                <MyButton overrideClass='h-8 px-1 bg-gray-700'>Logoff</MyButton>
+              </form>
+            </div>
           </div>
         </>
       )}

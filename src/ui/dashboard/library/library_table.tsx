@@ -501,7 +501,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
-                      overrideClass={`h-6 px-2 py-2 text-xs text-white rounded-md ${
+                      overrideClass={`h-6 px-1 py-1 text-white rounded-md ${
                         tabledata.lrtype === 'youtube'
                           ? 'bg-orange-500 hover:bg-orange-600'
                           : 'bg-green-500 hover:bg-green-600'
