@@ -55,7 +55,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //
       //  Update variables
       //
-      const { bsdftmaxquestions, bssortquestions } = SessionInfo
+      const { bsmaxquestions, bssortquestions } = SessionInfo
       //
       //  Deconstruct props
       //
@@ -67,7 +67,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //
       //  Restrict array size
       //
-      questions_work = questions_work.slice(0, bsdftmaxquestions)
+      questions_work = questions_work.slice(0, bsmaxquestions)
       //
       //  Update questions and initial question
       //

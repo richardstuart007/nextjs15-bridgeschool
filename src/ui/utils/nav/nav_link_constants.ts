@@ -2,8 +2,7 @@ export const links_dashboard = [
   { name: 'Dashboard', href: '/dashboard' },
   { name: 'Library', href: '/dashboard/library' },
   { name: 'History', href: '/dashboard/history' },
-  { name: 'User', href: '/dashboard/user' },
-  { name: 'Session', href: '/dashboard/session' }
+  { name: 'User', href: '/dashboard/user' }
 ]
 
 export const links_dashboard_admin = [{ name: 'Admin', href: '/admin' }]

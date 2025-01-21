@@ -13,14 +13,14 @@ export async function fetchSessionInfo(sessionId: number) {
   try {
     const sqlQuery = `
     SELECT
+        s_id,
         u_uid,
         u_name,
         u_email,
         u_admin,
-        s_id,
-        s_sortquestions,
-        s_skipcorrect,
-        s_dftmaxquestions
+        u_sortquestions,
+        u_skipcorrect,
+        u_maxquestions
       FROM sessions
       JOIN users
       ON   s_uid = u_uid
@@ -41,14 +41,14 @@ export async function fetchSessionInfo(sessionId: number) {
     //  Return the session info
     //
     const structure_SessionsInfo: structure_SessionsInfo = {
+      bsid: row.s_id,
       bsuid: row.u_uid,
       bsname: row.u_name,
       bsemail: row.u_email,
       bsadmin: row.u_admin,
-      bsid: row.s_id,
-      bssortquestions: row.s_sortquestions,
-      bsskipcorrect: row.s_skipcorrect,
-      bsdftmaxquestions: row.s_dftmaxquestions
+      bssortquestions: row.u_sortquestions,
+      bsskipcorrect: row.u_skipcorrect,
+      bsmaxquestions: row.u_maxquestions
     }
     return structure_SessionsInfo
     //

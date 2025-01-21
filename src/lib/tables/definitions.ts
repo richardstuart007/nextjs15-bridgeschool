@@ -79,9 +79,6 @@ export type table_Sessions = {
   s_id: number
   s_datetime: DateTime
   s_uid: number
-  s_sortquestions: boolean
-  s_skipcorrect: boolean
-  s_dftmaxquestions: number
 }
 
 export type table_Users = {
@@ -93,6 +90,9 @@ export type table_Users = {
   u_admin: boolean
   u_fedcountry: string
   u_provider: string
+  u_sortquestions: boolean
+  u_skipcorrect: boolean
+  u_maxquestions: number
 }
 
 export type table_Usershistory = {

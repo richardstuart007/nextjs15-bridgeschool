@@ -6,7 +6,7 @@ export type structure_SessionsInfo = {
   bsid: number
   bssortquestions: boolean
   bsskipcorrect: boolean
-  bsdftmaxquestions: number
+  bsmaxquestions: number
 }
 
 export type structure_ContextInfo = {
