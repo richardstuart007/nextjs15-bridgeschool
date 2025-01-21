@@ -66,7 +66,7 @@ export async function table_delete({
   } catch (error) {
     // Logging
     const errorMessage = `Table(${table}) DELETE FAILED`
-    console.log(`${functionName}: ${errorMessage}`, error)
+    console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: errorMessage,

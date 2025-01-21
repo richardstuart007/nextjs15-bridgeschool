@@ -77,7 +77,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //  Errors
       //
     } catch (error) {
-      console.log('An error occurred while fetching data:', error)
+      console.error('An error occurred while fetching data:', error)
     }
   }
   //...................................................................................
@@ -111,7 +111,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   async function handleQuizCompleted() {
     if (!question) {
       // If the question is null, skip the writing process
-      console.log('Question is null, skipping write operation.')
+      console.error('Question is null, skipping write operation.')
       return
     }
     //

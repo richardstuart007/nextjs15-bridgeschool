@@ -20,7 +20,7 @@ export async function table_drop(table: string): Promise<boolean> {
     // Logging
     //
     const errorMessage = `Table(${table}) DROP FAILED`
-    console.log(`${functionName}: ${errorMessage}`, error)
+    console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: errorMessage,

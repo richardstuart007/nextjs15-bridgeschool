@@ -65,7 +65,7 @@ export async function errorLogging({
     //  Errors
     //
   } catch (error) {
-    console.log('ErrorLogging Error')
+    console.error('ErrorLogging Error')
     return false
   }
 }

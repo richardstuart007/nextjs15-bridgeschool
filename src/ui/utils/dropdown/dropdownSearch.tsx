@@ -59,8 +59,6 @@ export default function DropdownSearch({
     'px-2 rounded-md border border-blue-500 py-[2px] text-xs',
     overrideClass_Dropdown
   )
-  console.log('overrideClass_Dropdown', overrideClass_Dropdown)
-  console.log('className_Dropdown', className_Dropdown)
   //
   //  Output
   //

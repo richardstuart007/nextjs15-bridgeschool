@@ -77,7 +77,7 @@ export default async function middleware(req: any): Promise<any> {
     //  Redirect to LOGIN
     //
     if (!isLoggedInCookie) {
-      console.log(`${functionName}: Not logged in: Redirect ${Routes_Login}`)
+      console.error(`${functionName}: Not logged in: Redirect ${Routes_Login}`)
       return Response.redirect(new URL(Routes_Login, nextUrl))
     }
     //

@@ -204,7 +204,7 @@ export async function convertCsvToJson(
     if (shouldOverwrite) {
       processCsv(Path_file_in, Path_file_out)
     } else {
-      console.log('Operation aborted. The file was not overwritten.')
+      console.error('Operation aborted. The file was not overwritten.')
     }
     //
     //  Errors
@@ -278,10 +278,10 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
       .on('end', () => {
         const formattedData = JSON.stringify(results, null, 4)
         fs.writeFileSync(Path_file_out, formattedData, 'utf-8')
-        console.log(`CSV data has been converted and saved to ${Path_file_out}`)
+        console.error(`CSV data has been converted and saved to ${Path_file_out}`)
       })
       .on('error', (error: Error) => {
-        console.log('An error occurred:', error.message)
+        console.error('An error occurred:', error.message)
       })
     //
     //  Errors

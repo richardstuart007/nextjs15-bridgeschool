@@ -63,7 +63,7 @@ export async function table_fetch({
     //
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.log(`${functionName}: ${errorMessage}`, error)
+    console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: errorMessage,

@@ -71,7 +71,7 @@ export async function fetchFiltered({
     return data.rows.length > 0 ? data.rows : []
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.log(`${functionName}: ${errorMessage}`, error)
+    console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: errorMessage,

@@ -16,12 +16,6 @@ interface Props {
 }
 export default function NavLinks(props: Props) {
   //
-  //  Which link
-  //
-  console.log('links_dashboard', links_dashboard)
-  console.log('links_dashboard_admin', links_dashboard_admin)
-  console.log('links_admin', links_admin)
-  //
   //  Deconstruct props
   //
   const { baseURL, sessionInfo } = props

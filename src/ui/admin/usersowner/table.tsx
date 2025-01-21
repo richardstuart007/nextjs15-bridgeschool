@@ -107,7 +107,7 @@ export default function Table({ selected_uid }: FormProps) {
       //  Errors
       //
     } catch (error) {
-      console.log('Error fetching usersowner:', error)
+      console.error('Error fetching usersowner:', error)
     }
   }
   //......................................................................................
@@ -178,7 +178,7 @@ export default function Table({ selected_uid }: FormProps) {
       //
       setConfirmDialog({ ...confirmDialog, isOpen: false })
     } catch (error) {
-      console.log('Error during deletion:', error)
+      console.error('Error during deletion:', error)
     }
     setConfirmDialog({ ...confirmDialog, isOpen: false })
   }

@@ -49,7 +49,7 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.log(`${functionName}: ${errorMessage}`, error)
+    console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: errorMessage,

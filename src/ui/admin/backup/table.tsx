@@ -131,7 +131,7 @@ export default function Table() {
       settabledata_count(rowCounts)
       setmessage('Task completed')
     } catch (error) {
-      console.log('Error in fetchbase:', error)
+      console.error('Error in fetchbase:', error)
       setmessage('Error in fetchbase')
     }
   }
@@ -275,7 +275,7 @@ export default function Table() {
       //
       setmessage('perform_Dup_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Dup_ALL:', error)
+      console.error('Error during perform_Dup_ALL:', error)
       setmessage('Error during perform_Dup_ALL')
     }
   }
@@ -311,7 +311,7 @@ export default function Table() {
       //
       if (!many) setmessage('Task completed')
     } catch (error) {
-      console.log('Error during duplicate:', error)
+      console.error('Error during duplicate:', error)
       setmessage('Error during duplicate')
     }
   }
@@ -363,7 +363,7 @@ export default function Table() {
       //
       setmessage('perform_Copy_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Copy_ALL:', error)
+      console.error('Error during perform_Copy_ALL:', error)
       setmessage('Error during perform_Copy_ALL')
     }
   }
@@ -401,7 +401,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_copy_data:', error)
+      console.error('Error during table_copy_data:', error)
       setmessage('Error during copy_data')
     }
   }
@@ -447,7 +447,7 @@ export default function Table() {
       //
       setmessage('perform_Clear_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Clear_ALL:', error)
+      console.error('Error during perform_Clear_ALL:', error)
       setmessage('Error during perform_Clear_ALL')
     }
   }
@@ -485,7 +485,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_truncate:', error)
+      console.error('Error during table_truncate:', error)
       setmessage('Error during table_truncate')
     }
   }
@@ -534,7 +534,7 @@ export default function Table() {
       //
       setmessage('perform_Drop_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Drop_ALL:', error)
+      console.error('Error during perform_Drop_ALL:', error)
       setmessage('Error during perform_Drop_ALL')
     }
   }
@@ -573,7 +573,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_drop:', error)
+      console.error('Error during table_drop:', error)
       setmessage('Error during table_drop')
     }
   }
@@ -623,7 +623,7 @@ export default function Table() {
       //
       setmessage('perform_Down_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Down_ALL:', error)
+      console.error('Error during perform_Down_ALL:', error)
       setmessage('Error during perform_Down_ALL')
     }
   }
@@ -662,7 +662,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_copy_data:', error)
+      console.error('Error during table_copy_data:', error)
       setmessage('Error during copy_data')
     }
   }
@@ -716,7 +716,7 @@ export default function Table() {
       //
       setmessage('perform_Upload_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Upload_ALL:', error)
+      console.error('Error during perform_Upload_ALL:', error)
       setmessage('Error during perform_Upload_ALL')
     }
   }
@@ -746,7 +746,7 @@ export default function Table() {
       //
 
       const count = await table_write_fromJSON(filePath, tablebackup)
-      console.log('count:', count)
+      console.error('count:', count)
       //
       // Update count
       //
@@ -759,7 +759,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_copy_data:', error)
+      console.error('Error during table_copy_data:', error)
       setmessage('Error during copy_data')
     }
   }
@@ -810,7 +810,7 @@ export default function Table() {
       //
       setmessage('perform_Copy_ALL completed')
     } catch (error) {
-      console.log('Error during perform_Copy_ALL:', error)
+      console.error('Error during perform_Copy_ALL:', error)
       setmessage('Error during perform_Copy_ALL')
     }
   }
@@ -852,7 +852,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error during table_copy_data:', error)
+      console.error('Error during table_copy_data:', error)
       setmessage('Error during copy_data')
     }
   }

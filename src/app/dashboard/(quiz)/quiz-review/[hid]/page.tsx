@@ -66,7 +66,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Errors
     //
   } catch (error) {
-    console.log('An error occurred while fetching history data:', error)
+    console.error('An error occurred while fetching history data:', error)
     return <div>An error occurred while fetching history data.</div>
   }
 }

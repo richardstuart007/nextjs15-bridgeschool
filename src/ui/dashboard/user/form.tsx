@@ -76,7 +76,7 @@ export default function Form() {
           //  Errors
           //
         } catch (error) {
-          console.log('An error occurred while fetching data:', error)
+          console.error('An error occurred while fetching data:', error)
         }
       }
     }

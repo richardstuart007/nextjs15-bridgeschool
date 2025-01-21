@@ -130,7 +130,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error fetching library:', error)
+      console.error('Error fetching library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------

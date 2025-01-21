@@ -243,7 +243,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.log('Error fetching library:', error)
+      console.error('Error fetching library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
                       optionValue='oggroup'
-                      overrideClass_Dropdown='h-6 w-36'
+                      overrideClass_Dropdown='h-6 w-36 text-xxs'
                       includeBlank={true}
                     />
                   )}
@@ -374,7 +374,7 @@ export default function Table() {
                   <MyInput
                     id='ref'
                     name='ref'
-                    overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xxs`}
                     type='text'
                     value={ref}
                     onChange={e => {
@@ -394,7 +394,7 @@ export default function Table() {
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xss`}
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -415,7 +415,7 @@ export default function Table() {
                     table='who'
                     optionLabel='wtitle'
                     optionValue='wwho'
-                    overrideClass_Dropdown='h-6 w-28'
+                    overrideClass_Dropdown='h-6 w-28 text-xxs'
                     includeBlank={true}
                   />
                 </th>
@@ -429,7 +429,7 @@ export default function Table() {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xxs text-center`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -453,7 +453,7 @@ export default function Table() {
                     table='reftype'
                     optionLabel='rttitle'
                     optionValue='rttype'
-                    overrideClass_Dropdown='h-6 w-24'
+                    overrideClass_Dropdown='h-6 w-24 text-xxs'
                     includeBlank={true}
                   />
                 </th>
