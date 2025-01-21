@@ -73,7 +73,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             table='owner'
             optionLabel='oowner'
             optionValue='oowner'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         ) : (

@@ -310,7 +310,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     table='owner'
                     optionLabel='oowner'
                     optionValue='oowner'
-                    dropdownWidth='w-28'
+                    overrideClass_Dropdown='w-28'
                     includeBlank={true}
                   />
                 )}
@@ -331,7 +331,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     tableColumnValue={owner}
                     optionLabel='ogtitle'
                     optionValue='oggroup'
-                    dropdownWidth='w-72'
+                    overrideClass_Dropdown='w-72'
                     includeBlank={true}
                   />
                 )}

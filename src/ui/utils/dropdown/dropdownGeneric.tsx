@@ -16,6 +16,9 @@ type DropdownProps = {
   optionLabel: string
   optionValue: string
   dropdownWidth?: string
+  overrideClass_Label?: string
+  overrideClass_Search?: string
+  overrideClass_Dropdown?: string
   includeBlank?: boolean
 }
 
@@ -33,6 +36,9 @@ export default function DropdownGeneric({
   optionLabel,
   optionValue,
   dropdownWidth,
+  overrideClass_Label = '',
+  overrideClass_Search = '',
+  overrideClass_Dropdown = '',
   includeBlank = false
 }: DropdownProps) {
   const [dropdownOptions, setDropdownOptions] = useState<{ value: string; label: string }[]>([])
@@ -126,6 +132,9 @@ export default function DropdownGeneric({
           setSelectedOption={setSelectedOption}
           searchEnabled={searchEnabled}
           dropdownWidth={dropdownWidth}
+          overrideClass_Label={overrideClass_Label}
+          overrideClass_Search={overrideClass_Search}
+          overrideClass_Dropdown={overrideClass_Dropdown}
         />
       </div>
     )

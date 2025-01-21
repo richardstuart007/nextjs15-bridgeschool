@@ -13,6 +13,10 @@ const config: Config = {
         //   500: '#0070F3',
         //   600: '#2F6FEB',
         // },
+      },
+      fontSize: {
+        xxs: '0.625rem', // Custom extra-extra-small size (10px)
+        xxx: '0.5rem' // Custom xxx-small size (8px)
       }
     },
     keyframes: {

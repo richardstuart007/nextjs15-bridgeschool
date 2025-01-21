@@ -1,56 +1,36 @@
 'use client'
 import { useEffect, useState } from 'react'
-import NavLinks from '@/src/ui/dashboard/dashboard/nav/nav-links'
-import NavSession from '@/src/ui/dashboard/dashboard/nav/nav-session'
+import NavLinks from '@/src/ui/utils/nav/nav-links'
+import NavSession from '@/src/ui/utils/nav/nav-session'
 import SchoolLogo from '@/src/ui/utils/school-logo'
-import { usePathname, useRouter } from 'next/navigation'
 import { useUserContext } from '@/UserContext'
 import { getAuthSession } from '@/src/lib/data-auth'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/ui/utils/user-logout'
-import { errorLogging } from '@/src/lib/errorLogging'
 import { MyButton } from '@/src/ui/utils/myButton'
 
-export default function NavSide() {
-  const functionName = 'NavSide'
-  //
-  //  Router
-  //
-  const router = useRouter()
+interface Props {
+  baseURL: string
+}
+export default function NavSide(props: Props) {
+  const { baseURL } = props
   //
   //  User context
   //
   const { setSessionContext } = useUserContext()
   //
-  //  Change of pathname - Get session info
+  //  session info
   //
-  const pathname = usePathname()
   const [sessionInfo, setSessionInfo] = useState<structure_SessionsInfo | undefined>(undefined)
   useEffect(() => {
     getSessionInfo()
     // eslint-disable-next-line
-  }, [pathname])
+  }, [])
   //--------------------------------------------------------------------------------
   //  Change of pathname
   //--------------------------------------------------------------------------------
   async function getSessionInfo() {
-    //
-    //  Auth redirect error - fix ???
-    //
-    if (!pathname.includes('/dashboard')) {
-      //
-      //  Logging
-      //
-      const errorMessage = 'nav-side: Auth redirect but not /dashboard'
-      errorLogging({
-        lgfunctionname: functionName,
-        lgmsg: errorMessage,
-        lgseverity: 'W'
-      })
-      router.push(pathname)
-      return
-    }
     //
     //  Auth Session
     //
@@ -79,14 +59,16 @@ export default function NavSide() {
         <>
           <NavSession sessionInfo={sessionInfo} />
           <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2'>
-            <NavLinks sessionInfo={sessionInfo} />
-            {/* <div className='grow invisible'></div> */}
-            <div className='flex grow justify-end'>
-              <form action={logout}>
-                <MyButton overrideClass='h-8 px-1 bg-gray-700'>Logoff</MyButton>
-              </form>
-            </div>
+            <NavLinks sessionInfo={sessionInfo} baseURL={baseURL} />
+            <div className='grow invisible'></div>
+            <MyButton
+              onClick={logout}
+              overrideClass='justify-center h-8 bg-gray-700 hover:bg-gray-800 px:0 md:flex-none md:p-2 md:px-3'
+            >
+              Logoff
+            </MyButton>
           </div>
+          <div className='hidden md:block h-8'></div>
         </>
       )}
     </div>

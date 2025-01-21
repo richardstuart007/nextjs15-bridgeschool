@@ -86,7 +86,7 @@ export default function Form({
             table='owner'
             optionLabel='oowner'
             optionValue='oowner'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         ) : (
@@ -119,7 +119,7 @@ export default function Form({
             tableColumnValue={qowner}
             optionLabel='oggroup'
             optionValue='ogroup'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         ) : (

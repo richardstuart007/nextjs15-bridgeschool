@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
+import { MyLink } from '@/src/ui/utils/myLink'
 
 export default function NotFound() {
   return (
@@ -7,12 +7,12 @@ export default function NotFound() {
       <FaceFrownIcon className='w-10 text-gray-400' />
       <h2 className='text-xl font-semibold'>404 Not Found</h2>
       <p>Could not find the requested quiz questions.</p>
-      <Link
+      <MyLink
         href='/dashboard/library'
-        className='mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400'
+        overrideClass='mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400'
       >
         Go Back
-      </Link>
+      </MyLink>
     </main>
   )
 }

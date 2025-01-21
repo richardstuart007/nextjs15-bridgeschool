@@ -1,5 +1,5 @@
-import SummaryGraphs from '@/src/ui/dashboard/dashboard/summary/summary'
-import { SummarySkeleton } from '@/src/ui/dashboard/dashboard/summary/skeleton'
+import SummaryGraphs from '@/src/ui/dashboard/dashboard/summary'
+import { SummarySkeleton } from '@/src/ui/dashboard/dashboard/skeleton'
 import { Suspense } from 'react'
 
 export default async function Page() {

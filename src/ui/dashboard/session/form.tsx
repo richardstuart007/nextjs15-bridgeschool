@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useActionState, type JSX } from 'react'
+import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
@@ -7,8 +7,13 @@ import { action } from '@/src/ui/dashboard/session/action'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { useUserContext } from '@/UserContext'
 
-export default function SessionForm({ id }: { id: number }): JSX.Element {
+export default function SessionForm() {
+  //
+  //  User context
+  //
+  const { sessionContext } = useUserContext()
   //
   // State variable to hold session data
   //
@@ -20,8 +25,8 @@ export default function SessionForm({ id }: { id: number }): JSX.Element {
   //  Fetch session data when the component mounts or when id changes
   //
   useEffect(() => {
-    getsessionInfo(id)
-  }, [id])
+    getsessionInfo(sessionContext?.cxid)
+  }, [sessionContext])
   //
   // Define the StateSession type
   //

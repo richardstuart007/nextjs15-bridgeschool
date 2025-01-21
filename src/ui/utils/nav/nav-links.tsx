@@ -1,11 +1,31 @@
 'use client'
-
 import { useEffect, useState } from 'react'
-import { MyLink } from '@/src/ui/utils/myLink'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
+import { structure_SessionsInfo } from '@/src/lib/tables/structures'
+import { MyLink } from '@/src/ui/utils/myLink'
+import {
+  links_dashboard,
+  links_dashboard_admin,
+  links_admin
+} from '@/src/ui/utils/nav/nav_link_constants'
 
-export default function Page() {
+interface Props {
+  sessionInfo: structure_SessionsInfo
+  baseURL: string
+}
+export default function NavLinks(props: Props) {
+  //
+  //  Which link
+  //
+  console.log('links_dashboard', links_dashboard)
+  console.log('links_dashboard_admin', links_dashboard_admin)
+  console.log('links_admin', links_admin)
+  //
+  //  Deconstruct props
+  //
+  const { baseURL, sessionInfo } = props
+  const { bsadmin } = sessionInfo
   //
   // Define the Link type
   //
@@ -18,12 +38,15 @@ export default function Page() {
   //
   const [links, setLinks] = useState<Link[]>([])
   useEffect(() => {
-    const hrefAdmin = `/admin`
-    const initialLinks = [
-      { name: 'Dashboard', href: '/dashboard' },
-      { name: 'Admin', href: hrefAdmin }
-    ]
-    setLinks(initialLinks)
+    //
+    //  Links authorised to Admin users only
+    //
+    let linksupdate
+    baseURL === 'admin'
+      ? (linksupdate = links_admin)
+      : (linksupdate = bsadmin ? links_dashboard.concat(links_dashboard_admin) : links_dashboard)
+    setLinks(linksupdate)
+    // eslint-disable-next-line
   }, [])
   //
   //  Get path name

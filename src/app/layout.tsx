@@ -30,10 +30,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   //
   type Environment = 'development' | 'production' | 'localhost' | 'unknown'
   const environmentColors: Record<Environment, string> = {
-    development: 'bg-yellow-100 px-2 py-2',
-    production: 'bg-blue-100 px-2 py-2',
-    localhost: 'bg-green-100 px-2 py-2',
-    unknown: 'bg-red-100 px-2 py-2'
+    development: 'bg-yellow-100',
+    production: 'bg-blue-100',
+    localhost: 'bg-green-100',
+    unknown: 'bg-red-100'
   }
   const backgroundColor = environmentColors[d_name as Environment] || ''
   const classNameColour = `${inter.className} antialiased ${backgroundColor}`

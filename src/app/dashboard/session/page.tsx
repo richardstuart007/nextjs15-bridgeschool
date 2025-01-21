@@ -6,13 +6,11 @@ export const metadata: Metadata = {
   title: 'Session Preferences'
 }
 
-export default async function Page(props: { params: Promise<{ id: number }> }) {
-  const params = await props.params;
+export default async function Page() {
   //
   //  Variables used in the return statement
   //
-  let id: number = params.id
-  const hrefSession = `/dashboard/session/${id}`
+  const hrefSession = `/dashboard/session`
   const hrefDashboard = `/dashboard`
   //---------------------------------------------------
   return (
@@ -27,7 +25,7 @@ export default async function Page(props: { params: Promise<{ id: number }> }) {
           }
         ]}
       />
-      <SessionForm id={id} />
+      <SessionForm />
     </div>
   )
 }

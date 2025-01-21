@@ -149,7 +149,7 @@ export default function Form() {
             tableData={COUNTRIES}
             optionLabel='label'
             optionValue='code'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         </div>

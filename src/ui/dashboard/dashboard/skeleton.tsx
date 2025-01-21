@@ -2,12 +2,12 @@ import {
   fetchTopResultsData,
   fetchRecentResultsData1,
   fetchRecentResultsData5
-} from '@/src/lib/tables/tableSpecific/graphdata'
-import { StackedBarChart } from '@/src/ui/dashboard/dashboard/summary/stackedbarchart'
-import {
-  structure_UsershistoryTopResults,
-  structure_UsershistoryRecentResults
-} from '@/src/lib/tables/structures'
+} from '@/src/ui/dashboard/dashboard/skeletondata'
+import { StackedBarChart } from '@/src/ui/dashboard/dashboard/stackedbarchart'
+import { structure_UsershistoryRecentResults } from '@/src/lib/tables/structures'
+//-----------------------------------------------------------------------------
+//  Graph skeleton
+//--------------------------------------------------------------------------------
 //
 //  Graph Interfaces
 //
@@ -21,19 +21,13 @@ interface GraphStructure {
   datasets: Datasets[]
 }
 //--------------------------------------------------------------------------------
-export default async function SummaryGraphs() {
+export function SummarySkeleton() {
   //
   //  Fetch the data
   //
-  const [dataTop, dataRecent1]: [
-    structure_UsershistoryTopResults[],
-    structure_UsershistoryRecentResults[]
-  ] = await Promise.all([fetchTopResultsData(), fetchRecentResultsData1()])
-  //
-  //  Extract the user IDs and get the data for the last 5 results for each user
-  //
-  const userIds: number[] = dataRecent1.map(item => item.r_uid)
-  const dataRecent5: structure_UsershistoryRecentResults[] = await fetchRecentResultsData5(userIds)
+  const dataTop = fetchTopResultsData()
+  const dataRecent1 = fetchRecentResultsData1()
+  const dataRecent5 = fetchRecentResultsData5()
   //
   // TOP graph
   //
@@ -60,7 +54,7 @@ export default async function SummaryGraphs() {
         {
           label: 'Percentage',
           data: percentages,
-          backgroundColor: 'rgba(255, 165, 0, 0.6)'
+          backgroundColor: 'rgba(200, 200, 200, 0.6)'
         }
       ]
     }
@@ -81,7 +75,7 @@ export default async function SummaryGraphs() {
     //
     //  Derive percentages from the data
     //
-    // const userIds: number[] = dataRecent1.map(item => item.r_uid)
+    const userIds: number[] = dataRecent1.map(item => item.r_uid)
     const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
     //
     //  Datasets
@@ -91,11 +85,13 @@ export default async function SummaryGraphs() {
       datasets: [
         {
           label: 'Latest %',
-          data: individualPercentages
+          data: individualPercentages,
+          backgroundColor: 'rgba(220, 220, 220, 0.6)'
         },
         {
           label: '5-Average %',
-          data: averagePercentages
+          data: averagePercentages,
+          backgroundColor: 'rgba(210, 210, 220, 0.6)'
         }
       ]
     }
@@ -165,30 +161,25 @@ export default async function SummaryGraphs() {
   }
   //--------------------------------------------------------------------------------
   return (
-    <div className='h-screen flex flex-col gap-4'>
+    <div className='h-screen flex flex-col gap-5 md:p-3'>
       {/* --------------------------------------------------------------- */}
-      {/* Top Results Section - TopGraphData  */}
+      {/* Top Results Section */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='box-border' style={{ height: '40%' }}>
+        <div className='w-full max-w-2xl bg-gray-100 h-full'>
           <h2 className='text-lg'>Top Results</h2>
-          <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={TopGraphData} />
-          </div>
+          <StackedBarChart StackedGraphData={TopGraphData} />
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
-      {/* Recent Results Section - RecentGraphData   */}
+      {/* Recent Results Section */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-lg'>Top Results</h2>
-          <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={RecentGraphData} />
-          </div>
+      <div className='box-border' style={{ height: '40%' }}>
+        <div className='w-full max-w-2xl bg-gray-100 h-full'>
+          <h2 className='text-lg'>Recent Results</h2>
+          <StackedBarChart StackedGraphData={RecentGraphData} />
         </div>
       </div>
-      {/* --------------------------------------------------------------- */}
     </div>
   )
 }

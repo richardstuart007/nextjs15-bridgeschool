@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import Link from 'next/link'
 import { lusitana } from '@/src/fonts'
 import { deleteCookie } from '@/src/lib/cookie_server'
+import { MyLink } from '../ui/utils/myLink'
 
 export default function Page() {
   const [logoSize, setLogoSize] = useState(90)
@@ -54,12 +54,12 @@ export default function Page() {
             <strong>Richard Stuart</strong>
           </p>
         </div>
-        <Link
+        <MyLink
+          overrideClass='flex items-center gap-5 self-center rounded-lg bg-blue-500 px-3 py-3 text-sm text-white transition-colors hover:bg-blue-400'
           href='/login'
-          className='flex items-center gap-5 self-center rounded-lg bg-blue-500 px-3 py-3 text-sm text-white transition-colors hover:bg-blue-400'
         >
           <span>Log in</span> <ArrowRightIcon className='w-5' />
-        </Link>
+        </MyLink>
       </div>
     </main>
   )

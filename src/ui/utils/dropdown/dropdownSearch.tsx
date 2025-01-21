@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
 
 type DropdownProps = {
   label?: string
@@ -9,6 +10,9 @@ type DropdownProps = {
   setSelectedOption: (value: string) => void
   searchEnabled?: boolean
   dropdownWidth?: string
+  overrideClass_Label?: string
+  overrideClass_Search?: string
+  overrideClass_Dropdown?: string
 }
 
 export default function DropdownSearch({
@@ -18,7 +22,9 @@ export default function DropdownSearch({
   selectedOption,
   setSelectedOption,
   searchEnabled = true,
-  dropdownWidth = 'w-72'
+  overrideClass_Label = 'w-72',
+  overrideClass_Search = 'w-72',
+  overrideClass_Dropdown = 'w-72'
 }: DropdownProps) {
   const [searchTerm, setSearchTerm] = useState<string>('')
   //
@@ -35,13 +41,36 @@ export default function DropdownSearch({
       setSelectedOption(filteredOptions[0].value)
     }
   }, [filteredOptions, selectedOption, setSelectedOption])
+  //
+  //  Determine Class - Label
+  //
+  const className_Label = myMergeClasses('block text-gray-900 mb-1 text-xs', overrideClass_Label)
+  //
+  //  Determine Class - Search
+  //
+  const className_Search = myMergeClasses(
+    'px-2 rounded-md border border-blue-500 py-[6px] text-xs',
+    overrideClass_Search
+  )
+  //
+  //  Determine Class - Dropdown
+  //
+  const className_Dropdown = myMergeClasses(
+    'px-2 rounded-md border border-blue-500 py-[2px] text-xs',
+    overrideClass_Dropdown
+  )
+  console.log('overrideClass_Dropdown', overrideClass_Dropdown)
+  console.log('className_Dropdown', className_Dropdown)
+  //
+  //  Output
+  //
   return (
-    <div className='mt-2 font-medium '>
+    <div className='font-medium'>
       {/*  ...................................................................................*/}
       {/* Label for the dropdown */}
       {/*  ...................................................................................*/}
       {label && (
-        <label className=' block text-gray-900 mb-1 text-xs' htmlFor={name}>
+        <label className={className_Label} htmlFor={name}>
           {label}
         </label>
       )}
@@ -50,7 +79,7 @@ export default function DropdownSearch({
       {/*  ...................................................................................*/}
       {searchEnabled && (
         <MyInput
-          overrideClass={`${dropdownWidth}  px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
+          overrideClass={className_Search}
           type='text'
           placeholder='Search...'
           value={searchTerm}
@@ -65,7 +94,7 @@ export default function DropdownSearch({
           {name}
         </label>
         <select
-          className={`${dropdownWidth}  px-2 rounded-md border border-blue-500 py-[6px] text-xs `}
+          className={className_Dropdown}
           id={name}
           name={name}
           value={selectedOption}

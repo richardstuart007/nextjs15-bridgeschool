@@ -108,7 +108,7 @@ export default function Form({
               table='owner'
               optionLabel='oowner'
               optionValue='oowner'
-              dropdownWidth='w-72'
+              overrideClass_Dropdown='w-72'
               includeBlank={false}
             />
           ) : (
@@ -139,7 +139,7 @@ export default function Form({
               tableColumnValue={lrowner}
               optionLabel='oggroup'
               optionValue='ogroup'
-              dropdownWidth='w-72'
+              overrideClass_Dropdown='w-72'
               includeBlank={false}
             />
           ) : (
@@ -230,7 +230,7 @@ export default function Form({
             table='who'
             optionLabel='wtitle'
             optionValue='wwho'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         </div>
@@ -246,7 +246,7 @@ export default function Form({
             table='reftype'
             optionLabel='rttitle'
             optionValue='rttype'
-            dropdownWidth='w-72'
+            overrideClass_Dropdown='w-72'
             includeBlank={false}
           />
         </div>

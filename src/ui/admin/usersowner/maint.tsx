@@ -57,7 +57,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
             table='users'
             optionLabel='u_name'
             optionValue='u_uid'
-            dropdownWidth='w-48'
+            overrideClass_Dropdown='w-48'
             includeBlank={true}
           />
         </div>
@@ -74,7 +74,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
             table='owner'
             optionLabel='oowner'
             optionValue='oowner'
-            dropdownWidth='w-48'
+            overrideClass_Dropdown='w-48'
             includeBlank={true}
           />
         </div>

@@ -282,7 +282,7 @@ export default function Table() {
                   table='owner'
                   optionLabel='oowner'
                   optionValue='oowner'
-                  dropdownWidth='w-28'
+                  overrideClass_Dropdown='w-28'
                   includeBlank={true}
                 />
               </th>

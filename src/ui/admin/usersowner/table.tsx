@@ -244,7 +244,7 @@ export default function Table({ selected_uid }: FormProps) {
                     table='users'
                     optionLabel='u_name'
                     optionValue='u_uid'
-                    dropdownWidth='w-48'
+                    overrideClass_Dropdown='w-48'
                     includeBlank={true}
                   />
                 )}
@@ -261,7 +261,7 @@ export default function Table({ selected_uid }: FormProps) {
                   table='owner'
                   optionLabel='oowner'
                   optionValue='oowner'
-                  dropdownWidth='w-48'
+                  overrideClass_Dropdown='w-48'
                   includeBlank={true}
                 />
               </th>

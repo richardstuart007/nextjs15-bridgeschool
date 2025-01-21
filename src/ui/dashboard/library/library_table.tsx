@@ -5,10 +5,10 @@ import { table_Library, table_LibraryGroup } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import Link from 'next/link'
 import { useUserContext } from '@/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { MyLink } from '@/src/ui/utils/myLink'
 
 export default function Table() {
   //
@@ -333,7 +333,7 @@ export default function Table() {
                     tableColumnValue={uid}
                     optionLabel='uoowner'
                     optionValue='uoowner'
-                    dropdownWidth='w-28'
+                    overrideClass_Dropdown='h-6 w-28 text-xxs'
                     includeBlank={true}
                   />
                 </th>
@@ -353,7 +353,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
                       optionValue='oggroup'
-                      dropdownWidth='w-36'
+                      overrideClass_Dropdown='h-6 w-36'
                       includeBlank={true}
                     />
                   )}
@@ -374,7 +374,7 @@ export default function Table() {
                   <MyInput
                     id='ref'
                     name='ref'
-                    overrideClass={`w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
                     type='text'
                     value={ref}
                     onChange={e => {
@@ -394,7 +394,7 @@ export default function Table() {
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={`w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                  overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xs`}
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -415,7 +415,7 @@ export default function Table() {
                     table='who'
                     optionLabel='wtitle'
                     optionValue='wwho'
-                    dropdownWidth='w-28'
+                    overrideClass_Dropdown='h-6 w-28'
                     includeBlank={true}
                   />
                 </th>
@@ -429,7 +429,7 @@ export default function Table() {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -453,7 +453,7 @@ export default function Table() {
                     table='reftype'
                     optionLabel='rttitle'
                     optionValue='rttype'
-                    dropdownWidth='w-24'
+                    overrideClass_Dropdown='h-6 w-24'
                     includeBlank={true}
                   />
                 </th>
@@ -471,37 +471,33 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.lrlid} className='w-full border-b'>
-                {ref_show_gid.current && (
-                  <td className=' px-2 pt-2 text-left'>{tabledata.lrgid}</td>
-                )}
-                {ref_show_owner.current && <td className=' px-2 pt-2'>{tabledata.lrowner}</td>}
-                {ref_show_group.current && <td className=' px-2 pt-2'>{tabledata.lrgroup}</td>}
-                {ref_show_lid.current && (
-                  <td className=' px-2 pt-2 text-left'>{tabledata.lrlid}</td>
-                )}
-                {ref_show_ref.current && <td className=' px-2 pt-2'>{tabledata.lrref}</td>}
-                <td className='px-2 pt-2'>
+                {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.lrgid}</td>}
+                {ref_show_owner.current && <td className=' px-2 '>{tabledata.lrowner}</td>}
+                {ref_show_group.current && <td className=' px-2 '>{tabledata.lrgroup}</td>}
+                {ref_show_lid.current && <td className=' px-2  text-left'>{tabledata.lrlid}</td>}
+                {ref_show_ref.current && <td className=' px-2 '>{tabledata.lrref}</td>}
+                <td className='px-2 '>
                   {tabledata.lrdesc.length > ref_widthDesc.current
                     ? `${tabledata.lrdesc.slice(0, ref_widthDesc.current - 3)}...`
                     : tabledata.lrdesc}
                 </td>
-                {ref_show_who.current && <td className=' px-2 pt-2'>{tabledata.lrwho}</td>}
+                {ref_show_who.current && <td className=' px-2 '>{tabledata.lrwho}</td>}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
                 {ref_show_questions.current && 'ogcntquestions' in tabledata && (
-                  <td className='px-2 pt-2 text-center'>
+                  <td className='px-2  text-center'>
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
                 {/* MyButton  1                                                 */}
                 {/* ................................................... */}
-                <td className='px-2 py-1 text-center'>
+                <td className='px-2 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
-                      overrideClass={`h-6 px-1 py-1 text-white rounded-md ${
+                      overrideClass={`h-6 ${
                         tabledata.lrtype === 'youtube'
                           ? 'bg-orange-500 hover:bg-orange-600'
                           : 'bg-green-500 hover:bg-green-600'
@@ -514,18 +510,18 @@ export default function Table() {
                 {/* ................................................... */}
                 {/* MyButton  2                                                 */}
                 {/* ................................................... */}
-                <td className='px-2 py-1 text-center'>
+                <td className='px-2 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
-                      <Link
+                      <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.lrgid}`,
                           query: { from: 'library' }
                         }}
-                        className='bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600'
+                        overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                       >
                         Quiz
-                      </Link>
+                      </MyLink>
                     ) : (
                       ' '
                     )}

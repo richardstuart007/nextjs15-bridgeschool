@@ -6,7 +6,7 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { useUserContext } from '@/UserContext'
-import Link from 'next/link'
+import { MyLink } from '@/src/ui/utils/myLink'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
@@ -333,7 +333,7 @@ export default function Table() {
                     tableColumnValue={sessionContext.cxuid}
                     optionLabel='uoowner'
                     optionValue='uoowner'
-                    dropdownWidth='w-28'
+                    overrideClass_Dropdown='w-28'
                     includeBlank={true}
                   />
                 </th>
@@ -353,7 +353,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
                       optionValue='oggroup'
-                      dropdownWidth='w-36'
+                      overrideClass_Dropdown='w-36'
                       includeBlank={true}
                     />
                   )}
@@ -371,7 +371,7 @@ export default function Table() {
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass={`w-40  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
                     type='text'
                     value={title}
                     onChange={e => {
@@ -410,7 +410,7 @@ export default function Table() {
                   <MyInput
                     id='name'
                     name='name'
-                    overrideClass={`w-40  rounded-md border border-blue-500  py-2 font-normal text-xs`}
+                    overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
                     type='text'
                     value={name}
                     onChange={e => {
@@ -475,20 +475,16 @@ export default function Table() {
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
                 <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
-                  {ref_show_gid.current && (
-                    <td className=' px-2 py-2 text-left'>{tabledata.r_gid}</td>
-                  )}
+                  {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.r_gid}</td>}
                   {ref_show_owner.current && (
-                    <td className=' px-2 py-2'>{owner ? '' : tabledata.r_owner}</td>
+                    <td className=' px-2 '>{owner ? '' : tabledata.r_owner}</td>
                   )}
                   {ref_show_group.current && (
-                    <td className=' px-2 py-2'>{group ? '' : tabledata.r_group}</td>
+                    <td className=' px-2 '>{group ? '' : tabledata.r_group}</td>
                   )}
-                  {ref_show_hid.current && (
-                    <td className=' px-2 py-2 text-left'>{tabledata.r_hid}</td>
-                  )}
+                  {ref_show_hid.current && <td className=' px-2  text-left'>{tabledata.r_hid}</td>}
                   {ref_show_title.current && (
-                    <td className='px-2 py-2'>
+                    <td className='px-2 '>
                       {tabledata.ogtitle
                         ? tabledata.ogtitle.length > 35
                           ? `${tabledata.ogtitle.slice(0, 30)}...`
@@ -496,38 +492,45 @@ export default function Table() {
                         : ' '}
                     </td>
                   )}
-                  {ref_show_uid.current && (
-                    <td className='px-2 py-2 text-center'>{tabledata.r_uid}</td>
-                  )}
-                  {ref_show_name.current && <td className='px-2 py-2'>{tabledata.u_name}</td>}
+                  {ref_show_uid.current && <td className='px-2  text-center'>{tabledata.r_uid}</td>}
+                  {ref_show_name.current && <td className='px-2 '>{tabledata.u_name}</td>}
                   {ref_show_questions.current && (
-                    <td className='px-2 py-2 text-center'>{tabledata.r_questions}</td>
+                    <td className='px-2  text-center'>{tabledata.r_questions}</td>
                   )}
                   {ref_show_correct.current && (
-                    <td className='px-2 py-2  text-center '>{tabledata.r_correctpercent}</td>
+                    <td className='px-2   text-center '>{tabledata.r_correctpercent}</td>
                   )}
-                  <td className='px-2 py-2 text-center'>
-                    <Link
-                      href={{
-                        pathname: `/dashboard/quiz/${tabledata.r_hid}`,
-                        query: { from: 'history' }
-                      }}
-                      className='bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600'
-                    >
-                      Review
-                    </Link>
+                  {/* ................................................... */}
+                  {/* MyButton  1                                                */}
+                  {/* ................................................... */}
+                  <td className='px-2  text-center'>
+                    <div className='inline-flex justify-center items-center'>
+                      <MyLink
+                        href={{
+                          pathname: `/dashboard/quiz/${tabledata.r_hid}`,
+                          query: { from: 'history' }
+                        }}
+                        overrideClass='h-6 bg-green-500 text-white justify-center hover:bg-green-600 md:w-15'
+                      >
+                        Review
+                      </MyLink>
+                    </div>
                   </td>
-
-                  <td className='px-2 py-2 text-xs text-center'>
-                    <Link
-                      href={{
-                        pathname: `/dashboard/quiz/${tabledata.r_gid}`,
-                        query: { from: 'history' }
-                      }}
-                      className='bg-blue-500 text-white px-2 py-1  rounded-md hover:bg-blue-600'
-                    >
-                      Quiz
-                    </Link>
+                  {/* ................................................... */}
+                  {/* MyButton  2                                                 */}
+                  {/* ................................................... */}
+                  <td className='px-2 text-center'>
+                    <div className='inline-flex justify-center items-center'>
+                      <MyLink
+                        href={{
+                          pathname: `/dashboard/quiz/${tabledata.r_gid}`,
+                          query: { from: 'history' }
+                        }}
+                        overrideClass='h-6 bg-blue-500 text-white justify-center hover:bg-blue-600 md:w-15'
+                      >
+                        Quiz
+                      </MyLink>
+                    </div>
                   </td>
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>

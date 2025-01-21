@@ -1,5 +1,5 @@
 'use client'
-import Link from 'next/link'
+import { MyLink } from '@/src/ui/utils/myLink'
 import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
 import { logout } from '@/src/ui/utils/user-logout'
 import { useEffect, useState } from 'react'
@@ -32,76 +32,68 @@ export default function Page() {
       <div className='bg-gray-100 p-3 w-max'>
         <div className='inline-grid grid-cols-4 gap-y-6 gap-x-8'>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='owner' href='/admin/owner'>
-              Owner
-            </Link>
-          </div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='ownergroup' href='/admin/ownergroup'>
-              Owner Group
-            </Link>
-          </div>
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
+          <MyLink key='owner' href='/admin/owner' overrideClass='w-36 justify-center'>
+            Owner
+          </MyLink>
+
+          <MyLink key='ownergroup' href='/admin/ownergroup' overrideClass='w-36 justify-center'>
+            Owner Group
+          </MyLink>
+
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
+          {/* -------------------------------------------------------------------------------------------------------------------- */}
+          <div className='w-36 '></div>
+
+          <MyLink key='library' href='/admin/library' overrideClass='w-36 justify-center'>
+            Library
+          </MyLink>
+
+          <MyLink key='who' href='/admin/who' overrideClass='w-36 justify-center'>
+            Who
+          </MyLink>
+
+          <MyLink key='reftype' href='/admin/reftype' overrideClass='w-36 justify-center'>
+            Reftype
+          </MyLink>
 
           {/* -------------------------------------------------------------------------------------------------------------------- */}
 
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='library' href='/admin/library'>
-              Library
-            </Link>
-          </div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='who' href='/admin/who'>
-              Who
-            </Link>
-          </div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='reftype' href='/admin/reftype'>
-              Reftype
-            </Link>
-          </div>
+          <div className='w-36 '></div>
+
+          <MyLink key='Questions' href='/admin/questions' overrideClass='w-36 justify-center'>
+            Questions
+          </MyLink>
+
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
 
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='Questions' href='/admin/questions'>
-              Questions
-            </Link>
-          </div>
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
+          <MyLink key='users' href='/admin/users' overrideClass='w-36 justify-center'>
+            Users
+          </MyLink>
+
+          <MyLink key='UsersOwner' href='/admin/usersowner' overrideClass='w-36 justify-center'>
+            Users Owner
+          </MyLink>
+
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='users' href='/admin/users'>
-              Users
-            </Link>
-          </div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='ownergroup' href='/admin/usersowner'>
-              Users Owner
-            </Link>
-          </div>
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
+          <div className='w-36 '></div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
-          <div className='w-48 h-16'></div>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='backuptable' href='/admin/backuptable'>
-              Backup table
-            </Link>
-          </div>
-          <div className='w-48 h-16 bg-blue-700 text-white rounded hover:bg-blue-800  flex items-center justify-center'>
-            <Link key='backuptable' href='/admin/logging'>
-              Logging
-            </Link>
-          </div>
+
+          <MyLink key='backuptable' href='/admin/backuptable' overrideClass='w-36 justify-center'>
+            Backup table
+          </MyLink>
+
+          <MyLink key='Logging' href='/admin/logging' overrideClass='w-36 justify-center'>
+            Logging
+          </MyLink>
+
           {/* -------------------------------------------------------------------------------------------------------------------- */}
         </div>
       </div>
