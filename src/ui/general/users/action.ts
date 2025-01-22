@@ -16,7 +16,8 @@ const FormSchemaSetup = z.object({
   u_fedcountry: z.string(),
   u_maxquestions: z.number().min(3).max(30),
   u_skipcorrect: z.boolean(),
-  u_sortquestions: z.boolean()
+  u_sortquestions: z.boolean(),
+  u_admin: z.boolean()
 })
 //
 //  Errors and Messages
@@ -30,6 +31,7 @@ export type StateSetup = {
     u_maxquestions?: string[]
     u_skipcorrect?: string[]
     u_sortquestions?: string[]
+    u_admin?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -39,7 +41,6 @@ const Setup = FormSchemaSetup
 
 export async function action(_prevState: StateSetup, formData: FormData) {
   const functionName = 'action'
-  console.log('formData', formData)
   //
   //  Validate form data
   //
@@ -49,8 +50,9 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     u_fedid: formData.get('u_fedid'),
     u_fedcountry: formData.get('u_fedcountry'),
     u_maxquestions: Number(formData.get('u_maxquestions')),
-    u_sortquestions: formData.get('u_sortquestions') === 'true', // Convert string to boolean
-    u_skipcorrect: formData.get('u_skipcorrect') === 'true' // Convert string to boolean
+    u_sortquestions: formData.get('u_sortquestions') === 'true',
+    u_skipcorrect: formData.get('u_skipcorrect') === 'true',
+    u_admin: formData.get('u_admin') === 'true'
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -65,10 +67,16 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   //
   // Unpack form data
   //
-  const { u_uid, u_name, u_fedid, u_fedcountry, u_maxquestions, u_sortquestions, u_skipcorrect } =
-    validatedFields.data
-  console.log('u_skipcorrect', u_skipcorrect)
-  console.log('u_sortquestions', u_sortquestions)
+  const {
+    u_uid,
+    u_name,
+    u_fedid,
+    u_fedcountry,
+    u_maxquestions,
+    u_sortquestions,
+    u_skipcorrect,
+    u_admin
+  } = validatedFields.data
   //
   // Update data into the database
   //
@@ -82,7 +90,8 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       { column: 'u_fedcountry', value: u_fedcountry },
       { column: 'u_maxquestions', value: u_maxquestions },
       { column: 'u_sortquestions', value: u_sortquestions },
-      { column: 'u_skipcorrect', value: u_skipcorrect }
+      { column: 'u_skipcorrect', value: u_skipcorrect },
+      { column: 'u_admin', value: u_admin }
     ]
     const updateParams = {
       table: 'users',

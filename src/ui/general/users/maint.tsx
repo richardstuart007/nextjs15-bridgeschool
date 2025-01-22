@@ -3,7 +3,7 @@ import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '../../utils/myButton'
 import { useFormStatus } from 'react-dom'
-import { action } from '@/src/ui/dashboard/user/action'
+import { action } from '@/src/ui/general/users/action'
 import { notFound } from 'next/navigation'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { COUNTRIES } from '@/src/ui/utils/countries'
@@ -12,7 +12,11 @@ import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyCheckbox } from '@/src/ui/utils/myCheckbox'
 
-export default function Form() {
+interface Props {
+  admin_uid?: number
+}
+
+export default function Form({ admin_uid }: Props) {
   //
   //  User context
   //
@@ -29,6 +33,7 @@ export default function Form() {
       u_maxquestions?: string[]
       u_skipcorrect?: string[]
       u_sortquestions?: string[]
+      u_admin?: string[]
     }
     message?: string | null
     databaseUpdated?: boolean
@@ -53,6 +58,7 @@ export default function Form() {
   const [u_maxquestions, setu_maxquestions] = useState<number>(0)
   const [u_skipcorrect, setu_skipcorrect] = useState<boolean>(false)
   const [u_sortquestions, setu_sortquestions] = useState<boolean>(false)
+  const [u_admin, setu_admin] = useState<boolean>(false)
 
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -62,36 +68,50 @@ export default function Form() {
   useEffect(() => {
     if (formState.databaseUpdated) {
       formState.databaseUpdated = false
-      console.log('Database updated')
-      console.log('u_skipcorrect', u_skipcorrect)
-      console.log('u_sortquestions', u_sortquestions)
       setShouldFetchData(true)
     }
-
     // eslint-disable-next-line
   }, [formState.databaseUpdated])
   //......................................................................................
-  //  UID - Mandatory to continue
+  //  Get the UID
   //......................................................................................
   useEffect(() => {
-    if (sessionContext?.cxuid) {
-      const cxuid = sessionContext.cxuid
-      setu_uid(cxuid)
+    //
+    //  Admin is passed from the table maintenance
+    //
+    if (admin_uid) {
+      setu_uid(admin_uid)
       setShouldFetchData(true)
+    } else {
+      //
+      //  Not admin then for the logged on user
+      //
+      if (sessionContext?.cxuid) {
+        const cxuid = sessionContext.cxuid
+        setu_uid(cxuid)
+        setShouldFetchData(true)
+      }
     }
-  }, [sessionContext])
+    // eslint-disable-next-line
+  }, [sessionContext, u_uid])
   //......................................................................................
   //  Get user info
   //......................................................................................
   useEffect(() => {
-    if (shouldFetchData) fetchdata()
-    setShouldFetchData(false)
+    if (shouldFetchData && u_uid !== 0) {
+      fetchdata()
+      setShouldFetchData(false)
+    }
     // eslint-disable-next-line
-  }, [shouldFetchData])
+  }, [shouldFetchData, u_uid])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
+    //
+    //  No uid yet?
+    //
+    if (u_uid === 0) return
     //
     //  Get User Info
     //
@@ -113,6 +133,7 @@ export default function Form() {
       setu_maxquestions(data.u_maxquestions)
       setu_skipcorrect(data.u_skipcorrect)
       setu_sortquestions(data.u_sortquestions)
+      setu_admin(data.u_admin)
       //
       //  Data can be displayed
       //
@@ -142,8 +163,6 @@ export default function Form() {
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
-  console.log('u_skipcorrect', u_skipcorrect)
-  console.log('u_sortquestions', u_sortquestions)
   return (
     <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
@@ -244,8 +263,8 @@ export default function Form() {
               id='u_maxquestions'
               type='number'
               name='u_maxquestions'
-              value={u_maxquestions}
-              onChange={e => setu_maxquestions(Number(e.target.value))}
+              value={u_maxquestions || ''}
+              onChange={e => setu_maxquestions(Number(e.target.value) || 0)}
             />
           </div>
         </div>
@@ -278,6 +297,18 @@ export default function Form() {
           description='Random Sort Questions'
           onChange={() => setu_sortquestions(prev => !prev)}
         />
+        {/*  ...................................................................................*/}
+        {/*   Toggle - Admin */}
+        {/*  ...................................................................................*/}
+        {admin_uid && (
+          <MyCheckbox
+            overrideClass=''
+            inputName='u_admin'
+            inputValue={u_admin}
+            description='Admin'
+            onChange={() => setu_admin(prev => !prev)}
+          />
+        )}
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}
         {/*  ...................................................................................*/}

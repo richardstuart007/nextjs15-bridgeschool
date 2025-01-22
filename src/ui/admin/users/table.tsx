@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import UserEditPopup from '@/src/ui/admin/users/useredit/maintPopup'
+import UserEditPopup from '@/src/ui/general/users/maintPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
@@ -458,7 +458,7 @@ export default function Table() {
 
       {/* User Edit Modal */}
       {selectedUser && (
-        <UserEditPopup userRecord={selectedUser} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <UserEditPopup uid={selectedUser.u_uid} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
 
       {/* User Usersowner Modal */}
