@@ -84,7 +84,7 @@ export default function Table() {
     //
     //  Values to debounce
     //
-  }, [uid, owner, group, questions, title, title, correct])
+  }, [uid, owner, group, questions, title, correct])
   //......................................................................................
   //  Screen change
   //......................................................................................

@@ -25,10 +25,13 @@ export async function errorLogging({
       return false
     }
     //
-    //  Get sessionid
+    // Only call getCookieSessionId() server-side
     //
-    const sessionId = await getCookieSessionId()
-    const lgsession = sessionId ? sessionId : 0
+    let lgsession = 0
+    if (typeof window === 'undefined') {
+      const sessionId = await getCookieSessionId()
+      lgsession = sessionId ? sessionId : 0
+    }
     //
     //  Get datetime
     //
