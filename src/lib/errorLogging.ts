@@ -1,6 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
+import { getCookieSessionId } from '@/src/lib/cookie_server'
 //---------------------------------------------------------------------
 //  Write Logging
 //---------------------------------------------------------------------
@@ -8,14 +9,12 @@ type Props = {
   lgfunctionname: string
   lgmsg: string
   lgseverity?: string
-  lgsession?: number
 }
 
 export async function errorLogging({
   lgfunctionname,
   lgmsg,
-  lgseverity = 'E',
-  lgsession = 0
+  lgseverity = 'E'
 }: Props): Promise<boolean> {
   const functionName = 'errorLogging'
   try {
@@ -25,6 +24,11 @@ export async function errorLogging({
     if (lgseverity === 'I' && process.env.CUSTOM_ENV === 'production') {
       return false
     }
+    //
+    //  Get sessionid
+    //
+    const sessionId = await getCookieSessionId()
+    const lgsession = sessionId ? sessionId : 0
     //
     //  Get datetime
     //

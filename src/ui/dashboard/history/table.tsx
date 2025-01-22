@@ -46,6 +46,46 @@ export default function Table() {
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
+  // Debounce selection
+  //......................................................................................
+  const [debouncedState, setDebouncedState] = useState({
+    uid: 0,
+    owner: '',
+    group: '',
+    questions: 0,
+    title: '',
+    correct: 0
+  })
+  //
+  //  Debounce message
+  //
+  const [message, setMessage] = useState('')
+  //
+  // Debounce the state
+  //
+  useEffect(() => {
+    setMessage('Applying filters...')
+    const handler = setTimeout(() => {
+      setDebouncedState({
+        uid: parseInt(uid as string, 10),
+        owner,
+        group,
+        questions: parseInt(questions as string, 10),
+        title,
+        correct: parseInt(correct as string, 10)
+      })
+    }, 2000)
+    //
+    // Cleanup the timeout on change
+    //
+    return () => {
+      clearTimeout(handler)
+    }
+    //
+    //  Values to debounce
+    //
+  }, [uid, owner, group, questions, title, title, correct])
+  //......................................................................................
   //  Screen change
   //......................................................................................
   useEffect(() => {
@@ -90,8 +130,9 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
+    setMessage('')
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, uid, owner, group, questions, title, name, correct])
+  }, [currentPage, shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
@@ -375,7 +416,7 @@ export default function Table() {
                     type='text'
                     value={title}
                     onChange={e => {
-                      const value = e.target.value.split(' ')[0]
+                      const value = e.target.value
                       settitle(value)
                     }}
                   />
@@ -476,12 +517,8 @@ export default function Table() {
               tabledata?.map((tabledata, index) => (
                 <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
                   {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.r_gid}</td>}
-                  {ref_show_owner.current && (
-                    <td className=' px-2 '>{owner ? '' : tabledata.r_owner}</td>
-                  )}
-                  {ref_show_group.current && (
-                    <td className=' px-2 '>{group ? '' : tabledata.r_group}</td>
-                  )}
+                  {ref_show_owner.current && <td className=' px-2 '>{tabledata.r_owner}</td>}
+                  {ref_show_group.current && <td className=' px-2 '>{tabledata.r_group}</td>}
                   {ref_show_hid.current && <td className=' px-2  text-left'>{tabledata.r_hid}</td>}
                   {ref_show_title.current && (
                     <td className='px-2 '>
@@ -543,6 +580,10 @@ export default function Table() {
           </tbody>
         </table>
       </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Message               */}
+      {/* ---------------------------------------------------------------------------------- */}
+      <p className='text-red-600'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}

@@ -48,6 +48,50 @@ export default function Table() {
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
+  // Debounce selection
+  //......................................................................................
+  const [debouncedState, setDebouncedState] = useState({
+    uid: 0,
+    owner: '',
+    group: '',
+    ref: '',
+    desc: '',
+    who: '',
+    questions: 0,
+    type: ''
+  })
+  //
+  //  Debounce message
+  //
+  const [message, setMessage] = useState('')
+  //
+  // Debounce the state
+  //
+  useEffect(() => {
+    setMessage('Applying filters...')
+    const handler = setTimeout(() => {
+      setDebouncedState({
+        uid,
+        owner,
+        group,
+        ref,
+        desc,
+        who,
+        questions: parseInt(questions as string, 10),
+        type
+      })
+    }, 2000)
+    //
+    // Cleanup the timeout on change
+    //
+    return () => {
+      clearTimeout(handler)
+    }
+    //
+    //  Values to debounce
+    //
+  }, [uid, owner, group, ref, desc, who, questions, type])
+  //......................................................................................
   //  Screen change
   //......................................................................................
   useEffect(() => {
@@ -92,8 +136,9 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
+    setMessage('')
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, uid, owner, group, ref, desc, who, questions, type])
+  }, [currentPage, shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -533,6 +578,10 @@ export default function Table() {
           </tbody>
         </table>
       </div>
+      {/* ---------------------------------------------------------------------------------- */}
+      {/* Message               */}
+      {/* ---------------------------------------------------------------------------------- */}
+      <p className='text-red-600'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}

@@ -94,6 +94,10 @@ export default function Page() {
             Logging
           </MyLink>
 
+          <MyLink key='Sessions' href='/admin/sessions' overrideClass='w-36 justify-center'>
+            Sessions
+          </MyLink>
+
           {/* -------------------------------------------------------------------------------------------------------------------- */}
         </div>
       </div>

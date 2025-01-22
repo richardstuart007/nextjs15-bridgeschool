@@ -19,7 +19,7 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
   //
   const defaultClass = [
     'flex items-center',
-    'h-8 px-1 md:px-4',
+    'h-6 px-1 md:px-2',
     'text-xs font-medium text-black',
     'rounded-md bg-blue-500 hover:bg-blue-600',
     'transition-colors',

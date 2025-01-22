@@ -1,4 +1,4 @@
-import Table from '@/src/ui/dashboard/library/library_table'
+import Table from '@/src/ui/dashboard/library/table'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { TableSkeleton } from '@/src/ui/dashboard/library/skeleton'

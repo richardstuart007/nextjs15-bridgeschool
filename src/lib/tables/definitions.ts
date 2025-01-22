@@ -81,6 +81,22 @@ export type table_Sessions = {
   s_uid: number
 }
 
+export type table_SessionsUser = {
+  s_id: number
+  s_datetime: DateTime
+  s_uid: number
+  u_name: string
+  u_email: string
+  u_joined: DateTime
+  u_fedid: string
+  u_admin: boolean
+  u_fedcountry: string
+  u_provider: string
+  u_sortquestions: boolean
+  u_skipcorrect: boolean
+  u_maxquestions: number
+}
+
 export type table_Users = {
   u_uid: number
   u_name: string

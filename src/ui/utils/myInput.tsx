@@ -9,7 +9,7 @@ export function MyInput({ overrideClass = '', ...rest }: Props) {
   //  Default Class
   //
   const defaultClass = [
-    'h-8 px-1 md:px-2 items-center',
+    'h-6 px-1 md:px-2 items-center',
     'text-xs font-normal',
     'border border-blue-500 rounded-md',
     'focus:border-1 focus:border-blue-500',

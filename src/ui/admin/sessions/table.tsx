@@ -1,19 +1,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { table_Logging } from '@/src/lib/tables/definitions'
+import { table_SessionsUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { format } from 'date-fns'
 
 export default function Table() {
   //
   //  Input selection
   //
-  const [msg, setmsg] = useState('')
-  const [functionname, setfunctionname] = useState('')
-  const [severity, setseverity] = useState('')
-  const [session, setsession] = useState(0)
+  const [uid, setuid] = useState(0)
+  const [id, setid] = useState(0)
+  const [name, setname] = useState('')
+  const [email, setemail] = useState('')
+  const [provider, setprovider] = useState('')
+
   //
   //  Show flags
   //
@@ -22,48 +25,12 @@ export default function Table() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_Logging[]>([])
+  const [tabledata, settabledata] = useState<table_SessionsUser[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
-  // Debounce selection
-  //......................................................................................
-  const [debouncedState, setDebouncedState] = useState({
-    functionname: '',
-    severity: '',
-    session: 0,
-    msg: ''
-  })
-  //
-  //  Debounce message
-  //
-  const [message, setMessage] = useState('')
-  //
-  // Debounce the state
-  //
-  useEffect(() => {
-    setMessage('Applying filters...')
-    const handler = setTimeout(() => {
-      setDebouncedState({
-        functionname,
-        severity,
-        session,
-        msg
-      })
-    }, 2000)
-    //
-    // Cleanup the timeout on change
-    //
-    return () => {
-      clearTimeout(handler)
-    }
-    //
-    //  Values to debounce
-    //
-  }, [functionname, severity, session, msg])
-  //......................................................................................
-  // Fetch Data event
+  // Fetch on mount and when shouldFetchData changes
   //......................................................................................
   //
   // Reset currentPage to 1 when fetching new data
@@ -85,9 +52,8 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-    setMessage('')
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, debouncedState])
+  }, [currentPage, email, provider, id, uid, name])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -104,10 +70,11 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'lgmsg', value: msg, operator: 'LIKE' },
-      { column: 'lgfunctionname', value: functionname, operator: 'LIKE' },
-      { column: 'lgseverity', value: severity, operator: '=' },
-      { column: 'lgsession', value: session, operator: '=' }
+      { column: 'u_name', value: name, operator: 'LIKE' },
+      { column: 'u_email', value: email, operator: 'LIKE' },
+      { column: 'u_provider', value: provider, operator: 'LIKE' },
+      { column: 's_id', value: id, operator: '>=' },
+      { column: 's_uid', value: uid, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -118,7 +85,11 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'logging'
+      const table = 'sessions'
+      //
+      //  Joins
+      //
+      const joins = [{ table: 'users', on: 's_uid = u_uid' }]
       //
       // Calculate the offset for pagination
       //
@@ -128,8 +99,9 @@ export default function Table() {
       //
       const data = await fetchFiltered({
         table,
+        joins,
         filters,
-        orderBy: 'lgid DESC',
+        orderBy: 's_id DESC',
         limit: rowsPerPage,
         offset
       })
@@ -139,6 +111,7 @@ export default function Table() {
       //
       const fetchedTotalPages = await fetchTotalPages({
         table,
+        joins,
         filters,
         items_per_page: rowsPerPage
       })
@@ -151,7 +124,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching history:', error)
+      console.error('Error fetching Sessions:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -173,95 +146,115 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className=''>
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className=' font-medium px-2 text-center'>
                 ID
               </th>
               <th scope='col' className=' font-medium px-2 text-center'>
-                Session
-              </th>
-              <th scope='col' className=' font-medium px-2'>
-                Function Name
+                Date
               </th>
               <th scope='col' className=' font-medium px-2 text-center'>
-                Severity
+                UID
               </th>
               <th scope='col' className=' font-medium px-2'>
-                Message
+                Name
+              </th>
+              <th scope='col' className=' font-medium px-2'>
+                Email
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Provider
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
-              <th scope='col' className='px-2'></th>
               {/* ................................................... */}
-              {/* session                                                 */}
+              {/* id                                                 */}
               {/* ................................................... */}
               <th scope='col' className='px-2'>
                 <div className='text-center'>
                   <MyInput
-                    id='session'
-                    name='session'
+                    id='id'
+                    name='id'
                     overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
                     type='number'
-                    value={session || ''}
+                    value={id || ''}
                     onChange={e => {
                       const value = e.target.value
-                      setsession(parseInt(value, 10) || 0)
+                      setid(parseInt(value, 10) || 0)
                     }}
                   />
                 </div>
               </th>
+              <th scope='col' className=''></th>
               {/* ................................................... */}
-              {/* functionname                                                 */}
-              {/* ................................................... */}
-              <th scope='col' className='px-2'>
-                <MyInput
-                  id='functionname'
-                  name='functionname'
-                  overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
-                  type='text'
-                  value={functionname}
-                  onChange={e => {
-                    const value = e.target.value
-                    setfunctionname(value)
-                  }}
-                />
-              </th>
-
-              {/* ................................................... */}
-              {/* severity                                                 */}
+              {/* uid                                                 */}
               {/* ................................................... */}
               <th scope='col' className='px-2'>
                 <div className='text-center'>
                   <MyInput
-                    id='severity'
-                    name='severity'
+                    id='uid'
+                    name='uid'
                     overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
-                    type='text'
-                    value={severity}
+                    type='number'
+                    value={uid || ''}
                     onChange={e => {
                       const value = e.target.value
-                      setseverity(value)
+                      setuid(parseInt(value, 10) || 0)
                     }}
                   />
                 </div>
               </th>
               {/* ................................................... */}
-              {/* msg                                                 */}
+              {/* name                                                 */}
               {/* ................................................... */}
               <th scope='col' className='px-2'>
                 <MyInput
-                  id='msg'
-                  name='msg'
-                  overrideClass={`w-[950px]  rounded-md border border-blue-500   font-normal text-xs`}
+                  id='name'
+                  name='name'
+                  overrideClass={`w-72  rounded-md border border-blue-500   font-normal text-xs`}
                   type='text'
-                  value={msg}
+                  value={name}
                   onChange={e => {
                     const value = e.target.value
-                    setmsg(value)
+                    setname(value)
                   }}
                 />
+              </th>
+              {/* ................................................... */}
+              {/* email                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='px-2'>
+                <MyInput
+                  id='email'
+                  name='email'
+                  overrideClass={`w-72  rounded-md border border-blue-500   font-normal text-xs`}
+                  type='text'
+                  value={email}
+                  onChange={e => {
+                    const value = e.target.value
+                    setemail(value)
+                  }}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* provider                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='px-2'>
+                <div className='text-center'>
+                  <MyInput
+                    id='provider'
+                    name='provider'
+                    overrideClass={`w-32  rounded-md border border-blue-500   font-normal text-xs text-center `}
+                    type='text'
+                    value={provider}
+                    onChange={e => {
+                      const value = e.target.value
+                      setprovider(value)
+                    }}
+                  />
+                </div>
               </th>
             </tr>
           </thead>
@@ -271,12 +264,16 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.lgid} className='w-full border-b'>
-                  <td className='px-2 '>{tabledata.lgid}</td>
-                  <td className='px-2 text-center   '>{tabledata.lgsession}</td>
-                  <td className='px-2 '>{tabledata.lgfunctionname}</td>
-                  <td className='px-2 text-center   '>{tabledata.lgseverity}</td>
-                  <td className='px-2 '>{tabledata.lgmsg}</td>
+                <tr key={tabledata.s_id} className='w-full border-b'>
+                  <td className='px-2 text-center'>{tabledata.s_id}</td>
+                  <td className='px-2 text-center'>
+                    {format(new Date(tabledata.s_datetime), 'yyyy MMM dd HH:mm')}
+                  </td>
+                  <td className='px-2 text-center'>{tabledata.s_uid}</td>
+                  <td className='px-2 '>{tabledata.u_name}</td>
+                  <td className='px-2 '>{tabledata.u_email}</td>
+                  <td className='px-2 text-center   '>{tabledata.u_provider}</td>
+
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>
               ))
@@ -288,10 +285,6 @@ export default function Table() {
           </tbody>
         </table>
       </div>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Message               */}
-      {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}
