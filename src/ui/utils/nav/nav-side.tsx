@@ -41,8 +41,7 @@ export default function NavSide(props: Props) {
     //  Get Session info from database & update Context
     //
     if (sessionId) {
-      const bsid = parseInt(sessionId, 10)
-      const sessionData = await fetchSessionInfo(bsid)
+      const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
         cxuid: sessionData.bsuid,
         cxid: sessionData.bsid

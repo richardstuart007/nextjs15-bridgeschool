@@ -4,11 +4,16 @@ import { sql } from '@/src/lib/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { getCookieSessionId } from '@/src/lib/cookie_server'
+import { getAuthSessionId } from '@/src/lib/getAuthSessionId'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
-export async function fetchSessionInfo(sessionId: number) {
+export async function fetchSessionInfo() {
   const functionName = 'fetchSessionInfo'
+  //
+  //  Get the session id
+  //
+  const sessionId = await getAuthSessionId()
 
   try {
     const sqlQuery = `
@@ -82,7 +87,7 @@ export async function isAdmin() {
     //
     //  Session info
     //
-    const sessionInfo = await fetchSessionInfo(sessionId)
+    const sessionInfo = await fetchSessionInfo()
     //
     //  Return admin flag
     //

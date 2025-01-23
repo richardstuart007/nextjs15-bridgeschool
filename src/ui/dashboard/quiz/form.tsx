@@ -50,7 +50,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //-------------------------------------------------------------------------
   async function initializeData() {
     try {
-      const SessionInfo = await fetchSessionInfo(cxid)
+      const SessionInfo = await fetchSessionInfo()
       if (!SessionInfo) throw Error('No SessionInfo')
       //
       //  Update variables
