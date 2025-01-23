@@ -17,7 +17,7 @@ export default function Table() {
   //
   //  Show flags
   //
-  const rowsPerPage = 35
+  const rowsPerPage = 15
   //
   //  Other state
   //

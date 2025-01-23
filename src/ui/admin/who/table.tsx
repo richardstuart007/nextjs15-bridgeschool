@@ -245,7 +245,7 @@ export default function Table() {
                   type='text'
                   value={who}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setwho(value)
                   }}
                 />
@@ -264,7 +264,7 @@ export default function Table() {
                   type='text'
                   value={title}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     settitle(value)
                   }}
                 />

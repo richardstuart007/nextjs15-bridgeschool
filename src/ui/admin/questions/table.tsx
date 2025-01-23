@@ -357,7 +357,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                   type='text'
                   value={detail}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setdetail(value)
                   }}
                 />

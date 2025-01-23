@@ -300,7 +300,7 @@ export default function Table() {
                   type='text'
                   value={group}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setgroup(value)
                   }}
                 />
@@ -319,7 +319,7 @@ export default function Table() {
                   type='text'
                   value={title}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     settitle(value)
                   }}
                 />

@@ -241,7 +241,7 @@ export default function Table() {
                   type='text'
                   value={owner}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setowner(value)
                   }}
                 />

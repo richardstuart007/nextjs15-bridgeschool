@@ -455,7 +455,7 @@ export default function Table() {
                     type='text'
                     value={name}
                     onChange={e => {
-                      const value = e.target.value.split(' ')[0]
+                      const value = e.target.value
                       setname(value)
                       setuid('')
                     }}

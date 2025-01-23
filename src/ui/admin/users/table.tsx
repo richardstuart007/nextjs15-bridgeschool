@@ -286,7 +286,7 @@ export default function Table() {
                   type='text'
                   value={name}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setname(value)
                   }}
                 />
@@ -305,7 +305,7 @@ export default function Table() {
                   type='text'
                   value={email}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setemail(value)
                   }}
                 />
@@ -324,7 +324,7 @@ export default function Table() {
                   type='text'
                   value={fedid}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setfedid(value)
                   }}
                 />
@@ -345,7 +345,7 @@ export default function Table() {
                     type='text'
                     value={country}
                     onChange={e => {
-                      const value = e.target.value.split(' ')[0]
+                      const value = e.target.value
                       setcountry(value)
                     }}
                   />

@@ -1025,7 +1025,7 @@ export default function Table() {
             type='text'
             value={prefix_Z}
             onChange={e => {
-              const value = e.target.value.split(' ')[0]
+              const value = e.target.value
               setprefix_Z(value)
             }}
           />

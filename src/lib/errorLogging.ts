@@ -39,8 +39,7 @@ export async function errorLogging({
     //
     //  Trim message
     //
-    const message = lgmsg.length > 250 ? lgmsg.substring(0, 250) + '...' : lgmsg
-    const lgmsgTrim = message.trim()
+    const lgmsgTrim = lgmsg.trim()
     //
     //  Query statement
     //

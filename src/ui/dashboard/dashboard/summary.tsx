@@ -28,7 +28,14 @@ export default async function SummaryGraphs() {
   const [dataTop, dataRecent1]: [
     structure_UsershistoryTopResults[],
     structure_UsershistoryRecentResults[]
-  ] = await Promise.all([fetchTopResultsData(), fetchRecentResultsData1()])
+  ] = await Promise.all([
+    fetchTopResultsData({
+      countRecords_min: 3,
+      countRecords_max: 20,
+      limitRecords: 5
+    }),
+    fetchRecentResultsData1()
+  ])
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
@@ -81,7 +88,6 @@ export default async function SummaryGraphs() {
     //
     //  Derive percentages from the data
     //
-    // const userIds: number[] = dataRecent1.map(item => item.r_uid)
     const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
     //
     //  Datasets
@@ -182,7 +188,7 @@ export default async function SummaryGraphs() {
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[40vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-lg'>Top Results</h2>
+          <h2 className='text-lg'>Recent Results</h2>
           <div className='flex-grow overflow-hidden'>
             <StackedBarChart StackedGraphData={RecentGraphData} />
           </div>

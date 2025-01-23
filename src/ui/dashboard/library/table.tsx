@@ -423,7 +423,7 @@ export default function Table() {
                     type='text'
                     value={ref}
                     onChange={e => {
-                      const value = e.target.value.split(' ')[0]
+                      const value = e.target.value
                       setref(value)
                     }}
                   />
@@ -443,7 +443,7 @@ export default function Table() {
                   type='text'
                   value={desc}
                   onChange={e => {
-                    const value = e.target.value.split(' ')[0]
+                    const value = e.target.value
                     setdesc(value)
                   }}
                 />

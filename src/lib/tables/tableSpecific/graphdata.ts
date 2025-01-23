@@ -5,7 +5,16 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
-export async function fetchTopResultsData() {
+interface Props {
+  countRecords_min?: number
+  countRecords_max?: number
+  limitRecords?: number
+}
+export async function fetchTopResultsData({
+  countRecords_min = 3,
+  countRecords_max = 15,
+  limitRecords = 5
+}: Props = {}) {
   const functionName = 'fetchTopResultsData'
 
   try {
@@ -17,26 +26,37 @@ export async function fetchTopResultsData() {
         SUM(r_totalpoints) AS total_points,
         SUM(r_maxpoints) AS total_maxpoints,
         CASE
-          WHEN SUM(r_maxpoints) > 0 THEN ROUND((SUM(r_totalpoints) / CAST(SUM(r_maxpoints) AS NUMERIC)) * 100)::INTEGER
+          WHEN SUM(r_maxpoints) > 0
+          THEN ROUND((SUM(r_totalpoints) / CAST(SUM(r_maxpoints) AS NUMERIC)) * 100)::INTEGER
           ELSE 0
         END AS percentage
-      FROM
-        usershistory
+        FROM (
+            SELECT
+                r_uid,
+                r_totalpoints,
+                r_maxpoints,
+                ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
+            FROM
+                usershistory
+        ) AS ranked
       JOIN
         users ON r_uid = u_uid
+      WHERE
+        rn <= $2
       GROUP BY
         r_uid, u_name
       HAVING
-        COUNT(*) >= 3
+        COUNT(*) >= $1
       ORDER BY
         percentage DESC
-      LIMIT 5
+      LIMIT $3
   `
     //
     //  Run sql Query
     //
+    const values = [countRecords_min, countRecords_max, limitRecords]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, functionName: functionName })
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
     //  Return rows
     //
@@ -66,18 +86,18 @@ export async function fetchRecentResultsData1() {
     SELECT
       r_hid, r_uid, u_name, r_totalpoints, r_maxpoints, r_correctpercent
       FROM (
-              SELECT
-                r_hid,
-                r_uid,
-                u_name,
-                r_totalpoints,
-                r_maxpoints,
-                r_correctpercent,
-                ROW_NUMBER()
-                OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
-              FROM usershistory
-              JOIN users
-                ON r_uid = u_uid
+          SELECT
+            r_hid,
+            r_uid,
+            u_name,
+            r_totalpoints,
+            r_maxpoints,
+            r_correctpercent,
+            ROW_NUMBER()
+            OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
+          FROM usershistory
+          JOIN users
+            ON r_uid = u_uid
             )
       AS ranked
       WHERE rn = 1
