@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 
 export const metadata: Metadata = {
   title: 'Quiz Review'
@@ -17,6 +18,11 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
   const hid: number = params.hid
   try {
     //
+    //  Get Session Info
+    //
+    const SessionInfo = await fetchSessionInfo()
+    const bsskipcorrect = SessionInfo.bsskipcorrect
+    //
     //  Get History
     //
     const rows = await table_fetch({
@@ -26,6 +32,23 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     const history = rows[0]
     if (!history) {
       notFound()
+    }
+    //
+    //  Process History: Remove correct answers if bsskipcorrect is true
+    //
+    if (bsskipcorrect) {
+      const filteredData = history.r_ans.reduce(
+        (acc: { r_qid: number[]; r_ans: number[] }, ans: number, index: number) => {
+          if (ans !== 0) {
+            acc.r_qid.push(history.r_qid[index])
+            acc.r_ans.push(ans)
+          }
+          return acc
+        },
+        { r_qid: [], r_ans: [] }
+      )
+      history.r_qid = filteredData.r_qid
+      history.r_ans = filteredData.r_ans
     }
     //
     //  Get Questions
@@ -47,6 +70,9 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
       const questionIndex = questions_gid.findIndex(q => q.qqid === qid)
       questions.push(questions_gid[questionIndex])
     })
+    //
+    //  Continue
+    //
     return (
       <div className='w-full md:p-6'>
         <Breadcrumbs
@@ -59,7 +85,11 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
             }
           ]}
         />
-        {questions ? <ReviewForm history={history} questions={questions} /> : null}
+        {questions.length > 0 ? (
+          <ReviewForm history={history} questions={questions} />
+        ) : (
+          <p className='text-xs text-red-600'>All correct. No bad answers to review</p>
+        )}
       </div>
     )
     //

@@ -544,7 +544,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.r_hid}`,
+                          pathname: `/dashboard/quiz-review/${tabledata.r_hid}`,
                           query: { from: 'history' }
                         }}
                         overrideClass='h-6 bg-green-500 text-white justify-center hover:bg-green-600 md:w-15'

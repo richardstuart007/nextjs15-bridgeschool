@@ -20,7 +20,6 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
   const r_qid = history.r_qid
   const r_correctpercent = history.r_correctpercent
   const questionIndex = questions.findIndex(q => q.qqid === r_qid[0])
-
   //
   // Define the State variables
   //
@@ -36,7 +35,6 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
       setAns(r_ans[newPage - 1]) // Adjust for 1-based index
     }
   }
-
   //...................................................................................
   //.  Render the form
   //...................................................................................

@@ -21,7 +21,6 @@ export async function getAuthSessionId() {
   try {
     const authSession = await getAuthSession()
     const sessionId = authSession?.user?.sessionId || 0
-    console.log('sessionId', sessionId)
     return sessionId
     //
     //  Errors
