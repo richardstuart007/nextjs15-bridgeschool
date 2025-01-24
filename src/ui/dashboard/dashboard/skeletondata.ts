@@ -5,7 +5,7 @@ import {
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
-export function fetchTopResultsData() {
+export function fetch_TopResults() {
   const structure_UsershistoryTopResults: structure_UsershistoryTopResults[] = [
     {
       r_uid: 1,
@@ -56,7 +56,7 @@ export function fetchTopResultsData() {
 //---------------------------------------------------------------------
 //  Recent result data last
 //---------------------------------------------------------------------
-export function fetchRecentResultsData1() {
+export function fetch_RecentResults1() {
   const structure_UsershistoryRecentResults: structure_UsershistoryRecentResults[] = [
     {
       r_hid: 101,
@@ -107,7 +107,7 @@ export function fetchRecentResultsData1() {
 //---------------------------------------------------------------------
 //  Recent results data
 //---------------------------------------------------------------------
-export function fetchRecentResultsData5() {
+export function fetch_RecentResultsAverages() {
   const UsershistoryRecentResults5: structure_UsershistoryRecentResults[] = [
     {
       r_hid: 201,

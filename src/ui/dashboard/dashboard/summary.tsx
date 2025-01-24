@@ -1,7 +1,7 @@
 import {
-  fetchTopResultsData,
-  fetchRecentResultsData1,
-  fetchRecentResultsData5
+  fetch_TopResults,
+  fetch_RecentResults1,
+  fetch_RecentResultsAverages
 } from '@/src/lib/tables/tableSpecific/graphdata'
 import { StackedBarChart } from '@/src/ui/dashboard/dashboard/stackedbarchart'
 import {
@@ -20,27 +20,42 @@ interface GraphStructure {
   labels: string[]
   datasets: Datasets[]
 }
+//
+//  Graph variables
+//
+const TopResults_count_min = 2
+const TopResults_count_max = 10
+const TopResults_usersReturned = 6
+const TopResults_limitMonths = 18
+const RecentResults_usersReturned = 7
+const RecentResults_usersAverage = 10
 //--------------------------------------------------------------------------------
 export default async function SummaryGraphs() {
   //
   //  Fetch the data
   //
-  const [dataTop, dataRecent1]: [
+  const [dataTop, dataRecent]: [
     structure_UsershistoryTopResults[],
     structure_UsershistoryRecentResults[]
   ] = await Promise.all([
-    fetchTopResultsData({
-      countRecords_min: 3,
-      countRecords_max: 20,
-      limitRecords: 5
+    fetch_TopResults({
+      TopResults_count_min: TopResults_count_min,
+      TopResults_count_max: TopResults_count_max,
+      TopResults_usersReturned: TopResults_usersReturned,
+      TopResults_limitMonths: TopResults_limitMonths
     }),
-    fetchRecentResultsData1()
+    fetch_RecentResults1({
+      RecentResults_usersReturned: RecentResults_usersReturned
+    })
   ])
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
-  const userIds: number[] = dataRecent1.map(item => item.r_uid)
-  const dataRecent5: structure_UsershistoryRecentResults[] = await fetchRecentResultsData5(userIds)
+  const userIds: number[] = dataRecent.map(item => item.r_uid)
+  const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
+    userIds,
+    RecentResults_usersAverage
+  })
   //
   // TOP graph
   //
@@ -48,7 +63,7 @@ export default async function SummaryGraphs() {
   //
   // Recent graph
   //
-  const RecentGraphData: GraphStructure = recentGraph(dataRecent1, dataRecent5)
+  const RecentGraphData: GraphStructure = recentGraph(dataRecent, dataForAverages)
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
@@ -77,18 +92,18 @@ export default async function SummaryGraphs() {
   //  Generate the data for the RECENT results graph
   //--------------------------------------------------------------------------------
   function recentGraph(
-    dataRecent1: structure_UsershistoryRecentResults[],
-    dataRecent5: structure_UsershistoryRecentResults[]
+    dataRecent: structure_UsershistoryRecentResults[],
+    dataForAverages: structure_UsershistoryRecentResults[]
   ): GraphStructure {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent1.map(item => item.u_name)
-    const individualPercentages: number[] = dataRecent1.map(item => item.r_correctpercent)
+    const names: string[] = dataRecent.map(item => item.u_name)
+    const individualPercentages: number[] = dataRecent.map(item => item.r_correctpercent)
     //
     //  Derive percentages from the data
     //
-    const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
+    const averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
     //
     //  Datasets
     //
@@ -100,7 +115,7 @@ export default async function SummaryGraphs() {
           data: individualPercentages
         },
         {
-          label: '5-Average %',
+          label: `${RecentResults_usersAverage}-Average %`,
           data: averagePercentages
         }
       ]
@@ -111,7 +126,7 @@ export default async function SummaryGraphs() {
   //  Calculate the average and individual percentages for each user
   //--------------------------------------------------------------------------------
   function calculatePercentages(
-    dataRecent5: structure_UsershistoryRecentResults[],
+    dataForAverages: structure_UsershistoryRecentResults[],
     userIds: number[]
   ): number[] {
     //
@@ -124,13 +139,13 @@ export default async function SummaryGraphs() {
     let currentUid = 0
     let sumTotalPoints = 0
     let sumMaxPoints = 0
-    for (const record of dataRecent5) {
+    for (const record of dataForAverages) {
       const { r_uid, r_totalpoints, r_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== r_uid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
+      if (currentUid !== r_uid || dataForAverages.indexOf(record) === dataForAverages.length - 1) {
         //
         //  If not first record
         //

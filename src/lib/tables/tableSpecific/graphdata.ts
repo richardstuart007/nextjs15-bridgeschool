@@ -5,17 +5,19 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
-interface Props {
-  countRecords_min?: number
-  countRecords_max?: number
-  limitRecords?: number
+interface TopResultsProps {
+  TopResults_count_min: number
+  TopResults_count_max: number
+  TopResults_usersReturned: number
+  TopResults_limitMonths: number
 }
-export async function fetchTopResultsData({
-  countRecords_min = 3,
-  countRecords_max = 15,
-  limitRecords = 5
-}: Props = {}) {
-  const functionName = 'fetchTopResultsData'
+export async function fetch_TopResults({
+  TopResults_count_min,
+  TopResults_count_max,
+  TopResults_usersReturned,
+  TopResults_limitMonths
+}: TopResultsProps) {
+  const functionName = 'fetch_TopResults'
 
   try {
     const sqlQuery = `
@@ -38,11 +40,14 @@ export async function fetchTopResultsData({
                 ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
             FROM
                 usershistory
+            WHERE
+                r_datetime >= NOW() - ($4 || ' months')::interval
         ) AS ranked
       JOIN
         users ON r_uid = u_uid
       WHERE
         rn <= $2
+        AND u_admin = false
       GROUP BY
         r_uid, u_name
       HAVING
@@ -54,7 +59,12 @@ export async function fetchTopResultsData({
     //
     //  Run sql Query
     //
-    const values = [countRecords_min, countRecords_max, limitRecords]
+    const values = [
+      TopResults_count_min,
+      TopResults_count_max,
+      TopResults_usersReturned,
+      TopResults_limitMonths
+    ]
     const db = await sql()
     const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
@@ -78,8 +88,12 @@ export async function fetchTopResultsData({
 //---------------------------------------------------------------------
 //  Recent result data last
 //---------------------------------------------------------------------
-export async function fetchRecentResultsData1() {
-  const functionName = 'fetchRecentResultsData1'
+interface RecentResultsProps {
+  RecentResults_usersReturned: number
+}
+
+export async function fetch_RecentResults1({ RecentResults_usersReturned }: RecentResultsProps) {
+  const functionName = 'fetch_RecentResults1'
 
   try {
     const sqlQuery = `
@@ -98,18 +112,21 @@ export async function fetchRecentResultsData1() {
           FROM usershistory
           JOIN users
             ON r_uid = u_uid
+          WHERE
+            u_admin = false
             )
       AS ranked
       WHERE rn = 1
       ORDER BY
         r_hid DESC
-      LIMIT 5
+      LIMIT $1
       `
     //
     //  Run sql Query
     //
+    const values = [RecentResults_usersReturned]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, functionName: functionName })
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
     //
     //  Return rows
     //
@@ -131,11 +148,24 @@ export async function fetchRecentResultsData1() {
 //---------------------------------------------------------------------
 //  Recent results data
 //---------------------------------------------------------------------
-export async function fetchRecentResultsData5(userIds: number[]) {
-  const functionName = 'fetchRecentResultsData5'
+interface AveragesProps {
+  userIds: number[]
+  RecentResults_usersAverage: number
+}
+
+export async function fetch_RecentResultsAverages({
+  userIds,
+  RecentResults_usersAverage
+}: AveragesProps) {
+  const functionName = 'fetch_RecentResultsAverages'
 
   try {
-    const [id1, id2, id3, id4, id5] = userIds
+    //
+    // Generate placeholders dynamically
+    //
+    const placeholders = userIds.map((_, index) => `$${index + 1}`).join(', ')
+    const averagePlaceholderIndex = userIds.length + 1
+
     const sqlQuery = `
     SELECT
       r_hid,
@@ -150,12 +180,15 @@ export async function fetchRecentResultsData5(userIds: number[]) {
           ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
         FROM usershistory
         JOIN users ON r_uid = u_uid
-          WHERE r_uid IN ($1, $2, $3, $4, $5)
+          WHERE r_uid IN (${placeholders})
       ) AS ranked
-      WHERE rn <= 5
+      WHERE rn <= $${averagePlaceholderIndex}
       ORDER BY r_uid;
         `
-    const values = [id1, id2, id3, id4, id5]
+    //
+    // Append RecentResults_usersAverage to the values array
+    //
+    const values = [...userIds, RecentResults_usersAverage]
     //
     //  Run sql Query
     //

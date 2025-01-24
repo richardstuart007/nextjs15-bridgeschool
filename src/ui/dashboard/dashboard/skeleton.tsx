@@ -1,7 +1,7 @@
 import {
-  fetchTopResultsData,
-  fetchRecentResultsData1,
-  fetchRecentResultsData5
+  fetch_TopResults,
+  fetch_RecentResults1,
+  fetch_RecentResultsAverages
 } from '@/src/ui/dashboard/dashboard/skeletondata'
 import { StackedBarChart } from '@/src/ui/dashboard/dashboard/stackedbarchart'
 import { structure_UsershistoryRecentResults } from '@/src/lib/tables/structures'
@@ -25,9 +25,9 @@ export function SummarySkeleton() {
   //
   //  Fetch the data
   //
-  const dataTop = fetchTopResultsData()
-  const dataRecent1 = fetchRecentResultsData1()
-  const dataRecent5 = fetchRecentResultsData5()
+  const dataTop = fetch_TopResults()
+  const dataRecent1 = fetch_RecentResults1()
+  const dataRecent5 = fetch_RecentResultsAverages()
   //
   // TOP graph
   //
