@@ -138,19 +138,19 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_ownergroup() {
     setTimeout(() => setIsModelOpenEdit_ownergroup(false), 0)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_library() {
     setTimeout(() => setIsModelOpenEdit_library(false), 0)
 
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   function handleModalCloseEdit_questions() {
     setTimeout(() => setIsModelOpenEdit_questions(false), 0)
 
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------

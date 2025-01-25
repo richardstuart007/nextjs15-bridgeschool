@@ -11,7 +11,8 @@ type UserContextType = {
 }
 const defaultContext: structure_ContextInfo = {
   cxid: 0,
-  cxuid: 0
+  cxuid: 0,
+  cxdbName: ''
 }
 //
 // Create the context

@@ -170,26 +170,26 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_detail() {
     setIsModelOpenEdit_detail(false)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_answers() {
     setIsModelOpenEdit_answers(false)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_hands() {
     setIsModelOpenEdit_hands(false)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_bidding() {
     setIsModelOpenEdit_bidding(false)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------

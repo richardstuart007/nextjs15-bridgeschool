@@ -176,7 +176,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit() {
     setTimeout(() => setIsModelOpenEdit(false), 0)
-    setSelectedRow(null)
+    setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------

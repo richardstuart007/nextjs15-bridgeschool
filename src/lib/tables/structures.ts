@@ -12,6 +12,7 @@ export type structure_SessionsInfo = {
 export type structure_ContextInfo = {
   cxuid: number
   cxid: number
+  cxdbName: string
 }
 
 export type structure_UserAuth = {
