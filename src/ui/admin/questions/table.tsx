@@ -169,26 +169,26 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //  Close Modal close
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_detail() {
-    setIsModelOpenEdit_detail(false)
+    setTimeout(() => setIsModelOpenEdit_detail(false), 0)
     setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_answers() {
-    setIsModelOpenEdit_answers(false)
+    setTimeout(() => setIsModelOpenEdit_answers(false), 0)
     setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
 
   function handleModalCloseEdit_hands() {
-    setIsModelOpenEdit_hands(false)
+    setTimeout(() => setIsModelOpenEdit_hands(false), 0)
     setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //  Close Modal Edit
   //----------------------------------------------------------------------------------------------
   function handleModalCloseEdit_bidding() {
-    setIsModelOpenEdit_bidding(false)
+    setTimeout(() => setIsModelOpenEdit_bidding(false), 0)
     setTimeout(() => setSelectedRow(null), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
@@ -196,7 +196,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //  Add
   //----------------------------------------------------------------------------------------------
   function handleModalCloseAdd_detail() {
-    setIsModelOpenAdd_detail(false)
+    setTimeout(() => setIsModelOpenAdd_detail(false), 0)
     setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
