@@ -50,10 +50,15 @@ export default function DropdownGeneric({
   const fetchOptions = useCallback(
     async function () {
       async function determineRows(): Promise<Array<{ [key: string]: any }>> {
+        //
+        //  Passed data
+        //
         if (tableData) {
           return tableData
         }
-
+        //
+        //  Get data
+        //
         if (table) {
           const fetchParams: any = {
             table,
@@ -72,16 +77,33 @@ export default function DropdownGeneric({
       }
 
       try {
+        //
+        //  Ensure nothing is displayed whilst loading data
+        //
         setLoading(true)
-
+        //
+        //  Get the data
+        //
         const rows = await determineRows()
-
+        //
+        //  Load the options
+        //
         const options = rows.map(row => ({
           value: row[optionValue]?.toString() || '',
           label: row[optionLabel]?.toString() || ''
         }))
-
-        setDropdownOptions(includeBlank ? [{ value: '', label: '' }, ...options] : options)
+        //
+        //  Deal with just 1 option, no need to dropdown
+        //
+        if (options.length === 1) {
+          setSelectedOption(options[0].value)
+          setDropdownOptions(options)
+        } else {
+          //
+          //  Add the optional black option
+          //
+          setDropdownOptions(includeBlank ? [{ value: '', label: '' }, ...options] : options)
+        }
       } catch (error) {
         console.error('Error fetching dropdown options:', error)
       } finally {
@@ -96,17 +118,16 @@ export default function DropdownGeneric({
       table,
       tableColumn,
       tableColumnValue,
-      orderBy
+      orderBy,
+      setSelectedOption
     ]
   )
-
   //---------------------------------------------------------------------
   //  Fetch options on component mount and whenever dependencies change
   //---------------------------------------------------------------------
   useEffect(() => {
     fetchOptions()
   }, [fetchOptions])
-
   //---------------------------------------------------------------------
   //  Handle loading and empty states
   //---------------------------------------------------------------------
@@ -117,7 +138,6 @@ export default function DropdownGeneric({
   function renderEmptyState() {
     return <p className='font-medium'>No options available</p>
   }
-
   //---------------------------------------------------------------------
   //  Render dropdown
   //---------------------------------------------------------------------
@@ -139,7 +159,6 @@ export default function DropdownGeneric({
       </div>
     )
   }
-
   //---------------------------------------------------------------------
   //  Return based on state
   //---------------------------------------------------------------------

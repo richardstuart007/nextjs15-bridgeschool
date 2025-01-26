@@ -72,7 +72,6 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     if (!sequenceName) {
       const message = `No sequence found for ${tableName}`
-      console.log(message)
       errorLogging({
         lgfunctionname: functionName,
         lgmsg: message,
@@ -84,7 +83,6 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //  Sequence found - message
     //
     const message = `Sequence found: ${sequenceName} for ${tableName}.${columnName}`
-    console.log(message)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: message,
@@ -104,7 +102,6 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     if (!maxValue) {
       const message = `No maxValue found for Table ${tableName} column ${columnName}`
-      console.log(message)
       errorLogging({
         lgfunctionname: functionName,
         lgmsg: message,
@@ -116,7 +113,6 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //  maxValue found - message
     //
     const message1 = `maxValue found: ${sequenceName} for ${tableName}.${columnName} with maxValue(${maxValue})`
-    console.log(message1)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: message1,

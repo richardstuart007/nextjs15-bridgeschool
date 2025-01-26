@@ -374,7 +374,7 @@ export default function Table() {
                     tableColumnValue={sessionContext.cxuid}
                     optionLabel='uoowner'
                     optionValue='uoowner'
-                    overrideClass_Dropdown='w-28'
+                    overrideClass_Dropdown='h-6 w-28 text-xxs'
                     includeBlank={true}
                   />
                 </th>
@@ -394,7 +394,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
                       optionValue='oggroup'
-                      overrideClass_Dropdown='w-36'
+                      overrideClass_Dropdown='w-36 h-6 text-xxs'
                       includeBlank={true}
                     />
                   )}
@@ -412,7 +412,7 @@ export default function Table() {
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
+                    overrideClass='w-40  rounded-md border border-blue-500 font-normal h-6 text-xxs'
                     type='text'
                     value={title}
                     onChange={e => {
@@ -430,7 +430,7 @@ export default function Table() {
                   <MyInput
                     id='uid'
                     name='uid'
-                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
                     type='text'
                     value={uid}
                     onChange={e => {
@@ -451,7 +451,7 @@ export default function Table() {
                   <MyInput
                     id='name'
                     name='name'
-                    overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
+                    overrideClass='w-40  rounded-md border border-blue-500   font-normal h-6 text-xxs'
                     type='text'
                     value={name}
                     onChange={e => {
@@ -470,7 +470,7 @@ export default function Table() {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -490,7 +490,7 @@ export default function Table() {
                   <MyInput
                     id='correct'
                     name='correct'
-                    overrideClass={`w-12  rounded-md border border-blue-500  px-2 font-normal text-xs text-center`}
+                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
                     type='text'
                     value={correct}
                     onChange={e => {

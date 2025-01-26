@@ -41,7 +41,6 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     //  Completion message
     //
     const message = `Sequence ${sequenceName} for ${tableName}.${columnName} updated with maxValue ${maxValue} `
-    console.log(message)
     errorLogging({
       lgfunctionname: functionName,
       lgmsg: message,

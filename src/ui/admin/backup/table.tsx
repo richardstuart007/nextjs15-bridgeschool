@@ -595,8 +595,6 @@ export default function Table() {
   }
 
   function handleRunClick_ALL({ routine }: Props_Click_ALL) {
-    const functionName = 'handleRunClick_ALL'
-    console.log('functionName, routine', functionName, routine)
     //
     //  Run the dailog confirmation
     //
@@ -616,7 +614,6 @@ export default function Table() {
 
   async function perform_Run_ALL({ routine }: Props_Run_all) {
     const functionName = 'perform_Run_ALL'
-    console.log('functionName, routine', functionName, routine)
     //
     //  Reset dialog
     //
@@ -759,16 +756,6 @@ export default function Table() {
     tablebackup_count
   }: Props_run) {
     const functionName = 'perform_Run1'
-    console.log(
-      'functionName,routine,tablebase, tablebase_count,tablebackup_exists,tablebackup,tablebackup_count',
-      functionName,
-      routine,
-      tablebase,
-      tablebase_count,
-      tablebackup_exists,
-      tablebackup,
-      tablebackup_count
-    )
     try {
       switch (routine) {
         case 'DUP':
@@ -810,7 +797,6 @@ export default function Table() {
           }
           break
         default:
-          console.log('routine', routine)
           return Promise.resolve()
       }
       //
