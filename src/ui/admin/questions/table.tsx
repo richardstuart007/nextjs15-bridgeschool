@@ -240,15 +240,17 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <div className='flex w-full items-center justify-between'>
-        <h1 className='px-2 py-1 '>
-          <MyButton
-            onClick={() => setIsModelOpenAdd_detail(true)}
-            overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
-          >
-            Add
-          </MyButton>
-        </h1>
+      {/** -------------------------------------------------------------------- */}
+      {/** Display Label                                                        */}
+      {/** -------------------------------------------------------------------- */}
+      <div className='py-1 flex flex-row'>
+        <MyButton
+          onClick={() => setIsModelOpenAdd_detail(true)}
+          overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
+        >
+          Add
+        </MyButton>
+        <p className='text-purple-600 pl-3'>Questions</p>
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}

@@ -190,18 +190,14 @@ export default function Table() {
       {/** -------------------------------------------------------------------- */}
       {/** Display Label                                                        */}
       {/** -------------------------------------------------------------------- */}
-      <div className='flex w-full items-center justify-between'>
-        {/** -------------------------------------------------------------------- */}
-        {/** Add button                                                       */}
-        {/** -------------------------------------------------------------------- */}
-        <h1 className='px-2 py-1 '>
-          <MyButton
-            onClick={() => setIsModelOpenAdd(true)}
-            overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
-          >
-            Add
-          </MyButton>
-        </h1>
+      <div className='py-1 flex flex-row'>
+        <MyButton
+          onClick={() => setIsModelOpenAdd(true)}
+          overrideClass='h-6 py-1  bg-green-500  hover:bg-green-600'
+        >
+          Add
+        </MyButton>
+        <p className='text-purple-600 pl-3'>Owner</p>
       </div>
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}

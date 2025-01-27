@@ -28,16 +28,6 @@ export default function RadioGroup(props: RadioGroupProps): JSX.Element {
   function handleOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
     const int = parseInt(value, 10)
-    //
-    //  If the value is not a number, throw an error in development mode
-    //
-    if (isNaN(int)) {
-      if (process.env.CUSTOM_ENV !== 'production') {
-        throw new Error(`Invalid value "${value}" for radio button option`)
-      }
-      return
-    }
-
     setSelectedValue(int)
     onChange(int)
   }

@@ -7,20 +7,28 @@ import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 export const metadata: Metadata = {
   title: 'Library'
 }
-//
-//  Breadcrumbs
-//
-const href = `/dashboard/library`
-const hrefParent = `/dashboard`
-export default async function Page() {
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
+  //
+  // Await the params promise
+  //
+  const resolvedSearchParams = await searchParams
+  //
+  //  Variables used in the return statement
+  //
+  const from = resolvedSearchParams?.from || 'unknown'
+  const From = from.charAt(0).toUpperCase() + from.slice(1)
+  //
+  //  user interface
+  //
   return (
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Dashboard', href: hrefParent },
+          { label: From, href: `/dashboard/${from}` },
           {
             label: 'Library',
-            href: href,
+            href: '/dashboard/library',
             active: true
           }
         ]}

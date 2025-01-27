@@ -21,7 +21,7 @@ export async function errorLogging({
     //
     // Skip logging for 'I' severity in production mode
     //
-    if (lgseverity === 'I' && process.env.CUSTOM_ENV === 'production') {
+    if (lgseverity === 'I' && process.env.ISDEV_ENV === 'false') {
       return false
     }
     //

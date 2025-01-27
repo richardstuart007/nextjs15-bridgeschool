@@ -13,8 +13,6 @@ import { getCookieSessionId } from '@/src/lib/cookie_server'
 export default async function middleware(req: any): Promise<any> {
   const functionName = 'middleware'
   const { nextUrl } = req
-
-  // if (process.env.CUSTOM_ENV === 'localhost') return null
   //
   //  Requested path name
   //

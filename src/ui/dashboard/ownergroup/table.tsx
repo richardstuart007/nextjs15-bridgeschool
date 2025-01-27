@@ -1,12 +1,11 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { table_Library, table_LibraryGroup } from '@/src/lib/tables/definitions'
+import { table_Ownergroup } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { useUserContext } from '@/UserContext'
-import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
 
@@ -21,10 +20,6 @@ export default function Table() {
   const [uid, setuid] = useState(0)
   const [owner, setowner] = useState('')
   const [group, setgroup] = useState('')
-  const [desc, setdesc] = useState('')
-  const [who, setwho] = useState('')
-  const [ref, setref] = useState('')
-  const [type, settype] = useState('')
   const [questions, setquestions] = useState<number | string>(1)
   //
   //  Show columns
@@ -34,16 +29,12 @@ export default function Table() {
   const ref_show_gid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_group = useRef(false)
-  const ref_show_lid = useRef(false)
-  const ref_show_who = useRef(false)
-  const ref_show_ref = useRef(false)
-  const ref_show_type = useRef(false)
   const ref_show_questions = useRef(false)
   //
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<(table_Library | table_LibraryGroup)[]>([])
+  const [tabledata, setTabledata] = useState<table_Ownergroup[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -54,11 +45,7 @@ export default function Table() {
     uid: 0,
     owner: '',
     group: '',
-    ref: '',
-    desc: '',
-    who: '',
-    questions: 0,
-    type: ''
+    questions: 0
   })
   //
   //  Debounce message
@@ -74,11 +61,7 @@ export default function Table() {
         uid,
         owner,
         group,
-        ref,
-        desc,
-        who,
-        questions: parseInt(questions as string, 10),
-        type
+        questions: parseInt(questions as string, 10)
       })
     }, 2000)
     //
@@ -90,7 +73,7 @@ export default function Table() {
     //
     //  Values to debounce
     //
-  }, [uid, owner, group, ref, desc, who, questions, type])
+  }, [uid, owner, group, questions])
   //......................................................................................
   //  Screen change
   //......................................................................................
@@ -160,15 +143,9 @@ export default function Table() {
       ref_show_owner.current = true
       ref_show_group.current = true
       ref_show_questions.current = true
-      ref_show_type.current = true
     }
     if (widthNumber >= 3) {
-      ref_show_who.current = true
-    }
-    if (widthNumber >= 4) {
       ref_show_gid.current = true
-      ref_show_lid.current = true
-      ref_show_ref.current = true
     }
     // Description width
     ref_widthDesc.current =
@@ -215,16 +192,12 @@ export default function Table() {
       operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
     }
     //
-    // Construct filters dynamically from input fields
+    // Construct filters dynamically from input fields ?????????
     //
     const filtersToUpdate: Filter[] = [
       { column: 'uouid', value: uid, operator: '=' },
-      { column: 'lrowner', value: owner, operator: '=' },
-      { column: 'lrgroup', value: group, operator: '=' },
-      { column: 'lrwho', value: who, operator: '=' },
-      { column: 'lrtype', value: type, operator: '=' },
-      { column: 'lrref', value: ref, operator: 'LIKE' },
-      { column: 'lrdesc', value: desc, operator: 'LIKE' },
+      { column: 'ogowner', value: owner, operator: '=' },
+      { column: 'oggroup', value: group, operator: '=' },
       { column: 'ogcntquestions', value: questions, operator: '>=' }
     ]
     //
@@ -238,7 +211,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'library'
+      const table = 'ownergroup'
       //
       //  Distinct - no uid selected
       //
@@ -246,11 +219,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [
-        { table: 'usersowner', on: 'lrowner = uoowner' },
-        { table: 'ownergroup', on: 'lrgid = oggid' }
-      ]
-
+      const joins = [{ table: 'usersowner', on: 'ogowner = uoowner' }]
       //
       // Calculate the offset for pagination
       //
@@ -263,7 +232,7 @@ export default function Table() {
         table,
         joins,
         filters,
-        orderBy: 'lrowner, lrgroup, lrref',
+        orderBy: 'ogowner, oggroup',
         limit: rowsPerPage,
         offset,
         distinctColumns
@@ -322,7 +291,7 @@ export default function Table() {
               )}
               {ref_show_group.current && (
                 <th scope='col' className=' font-medium px-2'>
-                  Group-name
+                  Group
                 </th>
               )}
               {ref_show_questions.current && (
@@ -330,30 +299,11 @@ export default function Table() {
                   Questions
                 </th>
               )}
-              {ref_show_lid.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Lid
-                </th>
-              )}
-              {ref_show_ref.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Ref
-                </th>
-              )}
-              <th scope='col' className=' font-medium px-2'>
-                Description
-              </th>
-              {ref_show_who.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Who
-                </th>
-              )}
-
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Type
-              </th>
               <th scope='col' className=' font-medium px-2 text-center'>
                 Quiz
+              </th>
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Library
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
@@ -399,7 +349,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
                       optionValue='oggroup'
-                      overrideClass_Dropdown='h-6 w-36 text-xxs'
+                      overrideClass_Dropdown='h-6 w-40 text-xxs'
                       includeBlank={true}
                     />
                   )}
@@ -426,85 +376,6 @@ export default function Table() {
                 </th>
               )}
               {/* ................................................... */}
-              {/* LIBRARY ID                                          */}
-              {/* ................................................... */}
-              {ref_show_lid.current && <th scope='col' className=' px-2'></th>}
-              {/* ................................................... */}
-              {/* REF                                                 */}
-              {/* ................................................... */}
-              {ref_show_ref.current && (
-                <th scope='col' className=' px-2 '>
-                  <label htmlFor='ref' className='sr-only'>
-                    Reference
-                  </label>
-                  <MyInput
-                    id='ref'
-                    name='ref'
-                    overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xxs`}
-                    type='text'
-                    value={ref}
-                    onChange={e => {
-                      const value = e.target.value
-                      setref(value)
-                    }}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* DESC                                                 */}
-              {/* ................................................... */}
-              <th scope='col' className='px-2'>
-                <label htmlFor='desc' className='sr-only'>
-                  Description
-                </label>
-                <MyInput
-                  id='desc'
-                  name='desc'
-                  overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xss`}
-                  type='text'
-                  value={desc}
-                  onChange={e => {
-                    const value = e.target.value
-                    setdesc(value)
-                  }}
-                />
-              </th>
-              {/* ................................................... */}
-              {/* WHO                                                 */}
-              {/* ................................................... */}
-              {ref_show_who.current && (
-                <th scope='col' className=' px-2'>
-                  <DropdownGeneric
-                    selectedOption={who}
-                    setSelectedOption={setwho}
-                    name='who'
-                    table='who'
-                    optionLabel='wtitle'
-                    optionValue='wwho'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs'
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-
-              {/* ................................................... */}
-              {/* type                                                 */}
-              {/* ................................................... */}
-              {ref_show_type.current && (
-                <th scope='col' className=' px-2 text-center'>
-                  <DropdownGeneric
-                    selectedOption={type}
-                    setSelectedOption={settype}
-                    name='type'
-                    table='reftype'
-                    optionLabel='rttitle'
-                    optionValue='rttype'
-                    overrideClass_Dropdown='h-6 w-24 text-xxs'
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
               {/* Quiz                                       */}
               {/* ................................................... */}
               <th scope='col' className=' px-2'></th>
@@ -516,10 +387,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
-              <tr key={tabledata.lrlid} className='w-full border-b'>
-                {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.lrgid}</td>}
-                {ref_show_owner.current && <td className=' px-2 '>{tabledata.lrowner}</td>}
-                {ref_show_group.current && <td className=' px-2 '>{tabledata.lrgroup}</td>}
+              <tr key={tabledata.oggid} className='w-full border-b'>
+                {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.oggid}</td>}
+                {ref_show_owner.current && <td className=' px-2 '>{tabledata.ogowner}</td>}
+                {ref_show_group.current && <td className=' px-2 '>{tabledata.ogtitle}</td>}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
@@ -528,40 +399,15 @@ export default function Table() {
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
                 )}
-                {ref_show_lid.current && <td className=' px-2  text-left'>{tabledata.lrlid}</td>}
-                {ref_show_ref.current && <td className=' px-2 '>{tabledata.lrref}</td>}
-                <td className='px-2 '>
-                  {tabledata.lrdesc.length > ref_widthDesc.current
-                    ? `${tabledata.lrdesc.slice(0, ref_widthDesc.current - 3)}...`
-                    : tabledata.lrdesc}
-                </td>
-                {ref_show_who.current && <td className=' px-2 '>{tabledata.lrwho}</td>}
                 {/* ................................................... */}
-                {/* MyButton  1                                                 */}
-                {/* ................................................... */}
-                <td className='px-2 text-center'>
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => window.open(`${tabledata.lrlink}`, '_blank')}
-                      overrideClass={`h-6 ${
-                        tabledata.lrtype === 'youtube'
-                          ? 'bg-orange-500 hover:bg-orange-600'
-                          : 'bg-green-500 hover:bg-green-600'
-                      }`}
-                    >
-                      {tabledata.lrtype === 'youtube' ? 'Video' : 'Read'}
-                    </MyButton>
-                  </div>
-                </td>
-                {/* ................................................... */}
-                {/* MyButton  2                                                 */}
+                {/* MyButton  1                                                */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.lrgid}`,
+                          pathname: `/dashboard/quiz/${tabledata.oggid}`,
                           query: { from: 'library' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
@@ -571,6 +417,22 @@ export default function Table() {
                     ) : (
                       ' '
                     )}
+                  </div>
+                </td>
+                {/* ................................................... */}
+                {/* MyButton  2                                               */}
+                {/* ................................................... */}
+                <td className='px-2 text-center'>
+                  <div className='inline-flex justify-center items-center'>
+                    <MyLink
+                      href={{
+                        pathname: `/dashboard/library`,
+                        query: { from: 'ownergroup' }
+                      }}
+                      overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
+                    >
+                      Library
+                    </MyLink>
                   </div>
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}

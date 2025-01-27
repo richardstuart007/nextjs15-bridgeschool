@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(URL_current)
 }
 //
-//  Load the environment variables
+//  Load the Database variables
 //
 dotenv.config()
 //
@@ -28,15 +28,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   //
   // Determine the background color class based on d_name
   //
-  type Environment = 'development' | 'production' | 'localhost' | 'unknown'
-  const environmentColors: Record<Environment, string> = {
-    development: 'bg-yellow-100',
+  type Database = 'Vercel_DEV' | 'production' | 'localhost' | 'unknown'
+  const DatabaseColors: Record<Database, string> = {
+    Vercel_DEV: 'bg-yellow-100',
     production: 'bg-blue-100',
     localhost: 'bg-green-100',
     unknown: 'bg-red-100'
   }
 
-  const backgroundColor = environmentColors[d_name as Environment] ?? 'bg-red-100'
+  const backgroundColor = DatabaseColors[d_name as Database] ?? 'bg-red-100'
   const classNameColour = `${inter.className} antialiased ${backgroundColor}`
   //-----------------------------------------------------------------------------
   //  Get the database
