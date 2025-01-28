@@ -9,8 +9,13 @@ import { useUserContext } from '@/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
+import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 
-export default function Table() {
+interface FormProps {
+  selected_oggid?: string | undefined
+}
+
+export default function Table({ selected_oggid }: FormProps) {
   //
   //  User context
   //
@@ -26,15 +31,14 @@ export default function Table() {
   const [ref, setref] = useState('')
   const [type, settype] = useState('')
   const [questions, setquestions] = useState<number | string>(1)
+  const [libraries, setlibraries] = useState<number | string>(0)
   //
   //  Show columns
   //
   const ref_widthDesc = useRef(0)
   const ref_rowsPerPage = useRef(0)
-  const ref_show_gid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_group = useRef(false)
-  const ref_show_lid = useRef(false)
   const ref_show_who = useRef(false)
   const ref_show_ref = useRef(false)
   const ref_show_type = useRef(false)
@@ -46,6 +50,7 @@ export default function Table() {
   const [tabledata, setTabledata] = useState<(table_Library | table_LibraryGroup)[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
+  const [initialised, setinitialised] = useState(false)
   const [loading, setLoading] = useState(true)
   //......................................................................................
   // Debounce selection
@@ -99,20 +104,31 @@ export default function Table() {
     updateRows()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
-  //  UID - Mandatory to continue
+  //  Initilaisation
   //......................................................................................
   useEffect(() => {
+    //
+    //  Get current user -UID mandatory
+    //
     if (sessionContext?.cxuid) {
       setuid(sessionContext.cxuid)
+      //
+      //  Get selected ownergroup
+      //
+      if (selected_oggid) selectedOwnerGroup()
+      //
+      //  Data selection initialisation
+      //
+      setinitialised(true)
       setShouldFetchData(true)
     }
-  }, [sessionContext])
+  }, [sessionContext, selected_oggid]) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
   // Reset the group when the owner changes
   //......................................................................................
   useEffect(() => {
-    setgroup('')
-  }, [owner])
+    if (!selected_oggid) setgroup('')
+  }, [owner, selected_oggid])
   //......................................................................................
   // Fetch on mount and when shouldFetchData changes
   //......................................................................................
@@ -134,9 +150,11 @@ export default function Table() {
   // Change of current page or should fetch data
   //
   useEffect(() => {
-    fetchdata()
-    setShouldFetchData(false)
-    setMessage('')
+    if (initialised) {
+      fetchdata()
+      setShouldFetchData(false)
+      setMessage('')
+    }
     // eslint-disable-next-line
   }, [currentPage, shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
@@ -157,17 +175,15 @@ export default function Table() {
     //  smaller screens
     //
     if (widthNumber >= 2) {
-      ref_show_owner.current = true
-      ref_show_group.current = true
-      ref_show_questions.current = true
+      if (!selected_oggid) ref_show_owner.current = true
+      if (!selected_oggid) ref_show_group.current = true
+      if (!selected_oggid) ref_show_questions.current = true
       ref_show_type.current = true
     }
     if (widthNumber >= 3) {
       ref_show_who.current = true
     }
     if (widthNumber >= 4) {
-      ref_show_gid.current = true
-      ref_show_lid.current = true
       ref_show_ref.current = true
     }
     // Description width
@@ -197,6 +213,36 @@ export default function Table() {
     //
     setcurrentPage(1)
     setTimeout(() => setShouldFetchData(true), 0)
+  }
+  //----------------------------------------------------------------------------------------------
+  // Selected ownergroup
+  //----------------------------------------------------------------------------------------------
+  async function selectedOwnerGroup() {
+    //
+    //  Continue to get data
+    //
+    try {
+      //
+      //  Get the ownergroup id
+      //
+      if (selected_oggid) {
+        const oggid = parseInt(selected_oggid, 10)
+        const rows = await table_fetch({
+          table: 'ownergroup',
+          whereColumnValuePairs: [{ column: 'oggid', value: oggid }]
+        })
+        const row = rows[0]
+        setowner(row.ogowner)
+        setgroup(row.oggroup)
+        setquestions(row.ogcntquestions)
+        setlibraries(row.ogcntlibrary)
+      }
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.error('Error fetching library:', error)
+    }
   }
   //----------------------------------------------------------------------------------------------
   // fetchdata
@@ -304,17 +350,30 @@ export default function Table() {
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        {/** -------------------------------------------------------------------- */}
+        {/** Selected Values                                                      */}
+        {/** -------------------------------------------------------------------- */}
+        {selected_oggid && (
+          <div className='pl-2 py-2 text-xs'>
+            <span className='font-bold'>Owner: </span>
+            <span className='text-green-500'>{owner}</span>
+            <span className='pl-2 font-bold'> Group: </span>
+            <span className='text-green-500'>{group}</span>
+            <span className='pl-2 font-bold'> Questions: </span>
+            <span className='text-green-500'>{questions}</span>
+            <span className='pl-2 font-bold'> Libraries: </span>
+            <span className='text-green-500'>{libraries}</span>
+          </div>
+        )}
+        {/** -------------------------------------------------------------------- */}
+        {/** TABLE                                                                */}
+        {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
           <thead className='rounded-lg text-left font-normal text-xs'>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {ref_show_gid.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Gid
-                </th>
-              )}
               {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
@@ -328,11 +387,6 @@ export default function Table() {
               {ref_show_questions.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
-                </th>
-              )}
-              {ref_show_lid.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Lid
                 </th>
               )}
               {ref_show_ref.current && (
@@ -360,10 +414,6 @@ export default function Table() {
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
-              {/* ................................................... */}
-              {/* GID                                                 */}
-              {/* ................................................... */}
-              {ref_show_gid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
@@ -425,10 +475,6 @@ export default function Table() {
                   />
                 </th>
               )}
-              {/* ................................................... */}
-              {/* LIBRARY ID                                          */}
-              {/* ................................................... */}
-              {ref_show_lid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
@@ -517,7 +563,6 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.lrlid} className='w-full border-b'>
-                {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.lrgid}</td>}
                 {ref_show_owner.current && <td className=' px-2 '>{tabledata.lrowner}</td>}
                 {ref_show_group.current && <td className=' px-2 '>{tabledata.lrgroup}</td>}
                 {/* ................................................... */}
@@ -528,7 +573,6 @@ export default function Table() {
                     {tabledata.ogcntquestions > 0 ? tabledata.ogcntquestions : ' '}
                   </td>
                 )}
-                {ref_show_lid.current && <td className=' px-2  text-left'>{tabledata.lrlid}</td>}
                 {ref_show_ref.current && <td className=' px-2 '>{tabledata.lrref}</td>}
                 <td className='px-2 '>
                   {tabledata.lrdesc.length > ref_widthDesc.current

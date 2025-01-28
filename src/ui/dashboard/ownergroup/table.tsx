@@ -26,10 +26,10 @@ export default function Table() {
   //
   const ref_widthDesc = useRef(0)
   const ref_rowsPerPage = useRef(0)
-  const ref_show_gid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_group = useRef(false)
   const ref_show_questions = useRef(false)
+  const ref_show_libraries = useRef(false)
   //
   //  Data
   //
@@ -143,9 +143,7 @@ export default function Table() {
       ref_show_owner.current = true
       ref_show_group.current = true
       ref_show_questions.current = true
-    }
-    if (widthNumber >= 3) {
-      ref_show_gid.current = true
+      ref_show_libraries.current = true
     }
     // Description width
     ref_widthDesc.current =
@@ -279,11 +277,6 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {ref_show_gid.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  Gid
-                </th>
-              )}
               {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
@@ -302,6 +295,11 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Quiz
               </th>
+              {ref_show_libraries.current && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Libraries
+                </th>
+              )}
               <th scope='col' className=' font-medium px-2 text-center'>
                 Library
               </th>
@@ -310,10 +308,6 @@ export default function Table() {
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
-              {/* ................................................... */}
-              {/* GID                                                 */}
-              {/* ................................................... */}
-              {ref_show_gid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
@@ -376,8 +370,10 @@ export default function Table() {
                 </th>
               )}
               {/* ................................................... */}
-              {/* Quiz                                       */}
+              {/* Other                                       */}
               {/* ................................................... */}
+              <th scope='col' className=' px-2'></th>
+              <th scope='col' className=' px-2'></th>
               <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
             </tr>
@@ -388,7 +384,6 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.oggid} className='w-full border-b'>
-                {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.oggid}</td>}
                 {ref_show_owner.current && <td className=' px-2 '>{tabledata.ogowner}</td>}
                 {ref_show_group.current && <td className=' px-2 '>{tabledata.ogtitle}</td>}
                 {/* ................................................... */}
@@ -403,8 +398,8 @@ export default function Table() {
                 {/* MyButton  1                                                */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
-                  <div className='inline-flex justify-center items-center'>
-                    {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
+                  {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 && (
+                    <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.oggid}`,
@@ -414,26 +409,37 @@ export default function Table() {
                       >
                         Quiz
                       </MyLink>
-                    ) : (
-                      ' '
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </td>
+                {/* ................................................... */}
+                {/* Libraries                                            */}
+                {/* ................................................... */}
+                {ref_show_libraries.current && 'ogcntquestions' in tabledata && (
+                  <td className='px-2  text-center'>
+                    {tabledata.ogcntlibrary > 0 ? tabledata.ogcntlibrary : ' '}
+                  </td>
+                )}
                 {/* ................................................... */}
                 {/* MyButton  2                                               */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
-                  <div className='inline-flex justify-center items-center'>
-                    <MyLink
-                      href={{
-                        pathname: `/dashboard/library`,
-                        query: { from: 'ownergroup' }
-                      }}
-                      overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
-                    >
-                      Library
-                    </MyLink>
-                  </div>
+                  {'ogcntlibrary' in tabledata && tabledata.ogcntlibrary > 0 && (
+                    <div className='inline-flex justify-center items-center'>
+                      <MyLink
+                        href={{
+                          pathname: `/dashboard/library`,
+                          query: {
+                            from: 'ownergroup',
+                            selected_oggid: JSON.stringify(tabledata.oggid)
+                          }
+                        }}
+                        overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
+                      >
+                        Library
+                      </MyLink>
+                    </div>
+                  )}
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}
               </tr>

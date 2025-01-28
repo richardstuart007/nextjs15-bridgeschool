@@ -1,4 +1,5 @@
 import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
+import Link from 'next/link'
 
 // Define a custom type for the href to accept both string and object.
 interface LinkHref {
@@ -45,8 +46,8 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
   //  Output
   //
   return (
-    <a href={hrefValue} {...rest} className={classValue}>
+    <Link href={hrefValue} {...rest} className={classValue}>
       {children}
-    </a>
+    </Link>
   )
 }

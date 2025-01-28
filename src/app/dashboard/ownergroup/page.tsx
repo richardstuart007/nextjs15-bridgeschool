@@ -15,10 +15,10 @@ export default async function Page() {
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard/ownergroup' },
+          { label: 'Dashboard', href: '/dashboard' },
           {
             label: 'Ownergroup',
-            href: '/dashboard',
+            href: '/dashboard/ownergroup',
             active: true
           }
         ]}

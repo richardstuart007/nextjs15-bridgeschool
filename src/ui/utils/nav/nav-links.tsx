@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyLink } from '@/src/ui/utils/myLink'
+import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import {
   links_dashboard,
   links_dashboard_admin,
@@ -60,11 +61,32 @@ export default function NavLinks(props: Props) {
           'md:flex-none md:p-2 md:px-2',
           `${isActiveColour}`
         )
-        return (
-          <MyLink key={link.name} href={link.href} overrideClass={overrideClass}>
-            <p className='text-xs'>{link.name}</p>
-          </MyLink>
+
+        const iconClass = clsx(
+          'flex items-center justify-center',
+          'h-8',
+          'bg-gray-50 ',
+          'hover:bg-sky-200 hover:text-red-600',
+          'md:flex-none md:p-2 md:px-2',
+          `${isActiveColour}`
         )
+
+        // Conditionally render Link or MyLink
+        if (link.name === 'User') {
+          return (
+            <div key={link.name} className='h-8 w-full flex items-center justify-center'>
+              <MyLink key={link.name} href={link.href} overrideClass={iconClass}>
+                <Cog6ToothIcon className='h-5 w-5' />
+              </MyLink>
+            </div>
+          )
+        } else {
+          return (
+            <MyLink key={link.name} href={link.href} overrideClass={overrideClass}>
+              <p className='text-xs'>{link.name}</p>
+            </MyLink>
+          )
+        }
       })}
     </>
   )
