@@ -5,9 +5,9 @@ import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
 type DropdownProps = {
   label?: string
   name: string
-  options: { value: string; label: string }[]
-  selectedOption: string
-  setSelectedOption: (value: string) => void
+  options: { value: string | number; label: string }[]
+  selectedOption: string | number
+  setSelectedOption: (value: string | number) => void
   searchEnabled?: boolean
   dropdownWidth?: string
   overrideClass_Label?: string
@@ -38,7 +38,9 @@ export default function DropdownSearch({
   //
   useEffect(() => {
     if (!selectedOption && filteredOptions.length > 0) {
-      setSelectedOption(filteredOptions[0].value)
+      const value = filteredOptions[0].value
+      const numericValue = isNaN(Number(value)) ? value : Number(value)
+      setSelectedOption(numericValue)
     }
   }, [filteredOptions, selectedOption, setSelectedOption])
   //
@@ -96,7 +98,11 @@ export default function DropdownSearch({
           id={name}
           name={name}
           value={selectedOption}
-          onChange={e => setSelectedOption(e.target.value)}
+          onChange={e => {
+            const value = e.target.value
+            const numericValue = isNaN(Number(value)) ? value : Number(value)
+            setSelectedOption(numericValue)
+          }}
         >
           {filteredOptions.length > 0 ? (
             filteredOptions.map(option => (

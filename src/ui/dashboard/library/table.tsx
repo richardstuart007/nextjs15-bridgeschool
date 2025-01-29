@@ -24,12 +24,12 @@ export default function Table({ selected_oggid }: FormProps) {
   //  Selection
   //
   const [uid, setuid] = useState(0)
-  const [owner, setowner] = useState('')
-  const [group, setgroup] = useState('')
+  const [owner, setowner] = useState<number | string>('')
+  const [group, setgroup] = useState<number | string>('')
   const [desc, setdesc] = useState('')
-  const [who, setwho] = useState('')
+  const [who, setwho] = useState<number | string>('')
   const [ref, setref] = useState('')
-  const [type, settype] = useState('')
+  const [type, settype] = useState<number | string>('')
   const [questions, setquestions] = useState<number | string>(1)
   const [libraries, setlibraries] = useState<number | string>(0)
   //
@@ -55,7 +55,18 @@ export default function Table({ selected_oggid }: FormProps) {
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  const [debouncedState, setDebouncedState] = useState({
+  type DebouncedState = {
+    uid: string | number
+    owner: string | number
+    group: string | number
+    ref: string | number
+    desc: string | number
+    who: string | number
+    questions: string | number
+    type: string | number
+  }
+
+  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     uid: 0,
     owner: '',
     group: '',
@@ -65,6 +76,7 @@ export default function Table({ selected_oggid }: FormProps) {
     questions: 0,
     type: ''
   })
+
   //
   //  Debounce message
   //

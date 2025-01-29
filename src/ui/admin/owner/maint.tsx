@@ -27,7 +27,8 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
     //
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
         Create
       </MyButton>
     )

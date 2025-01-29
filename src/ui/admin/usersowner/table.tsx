@@ -19,8 +19,8 @@ export default function Table({ selected_uid }: FormProps) {
   //
   //  Selection
   //
-  const [uid, setuid] = useState(selected_uid ? selected_uid : 0)
-  const [owner, setowner] = useState('')
+  const [uid, setuid] = useState<string | number>(selected_uid ? selected_uid : 0)
+  const [owner, setowner] = useState<string | number>('')
   //
   //  Data
   //
@@ -235,8 +235,8 @@ export default function Table({ selected_uid }: FormProps) {
                   <h1>{selected_uid}</h1>
                 ) : (
                   <DropdownGeneric
-                    selectedOption={uid.toString()}
-                    setSelectedOption={(value: string) => setuid(Number(value))}
+                    selectedOption={uid}
+                    setSelectedOption={setuid}
                     searchEnabled={false}
                     name='uid'
                     table='users'

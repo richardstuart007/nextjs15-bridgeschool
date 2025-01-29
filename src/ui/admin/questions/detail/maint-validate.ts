@@ -7,6 +7,7 @@ export type StateSetup = {
     qgroup?: string[]
     qowner?: string[]
     qdetail?: string[]
+    qlid?: string[]
   }
   message?: string | null
 }
@@ -18,9 +19,10 @@ type Table = {
   qowner: string
   qgroup: string
   qseq: number
+  qlid: number
 }
 export default async function validate(record: Table): Promise<StateSetup> {
-  const { qqid, qowner, qgroup, qseq } = record
+  const { qqid, qowner, qgroup, qseq, qlid } = record
   //
   // Initialise errors return
   //
@@ -41,6 +43,19 @@ export default async function validate(record: Table): Promise<StateSetup> {
     ]
     const exists = await table_check(tableColumnValuePairs)
     if (exists.found) errors.qowner = ['questions must be unique']
+  }
+  //
+  //  Check for Add duplicate
+  //
+  if (qlid > 0) {
+    const tableColumnValuePairs = [
+      {
+        table: 'library',
+        whereColumnValuePairs: [{ column: 'lrlid', value: qlid }]
+      }
+    ]
+    const exists = await table_check(tableColumnValuePairs)
+    if (!exists.found) errors.qlid = ['Library id must exist']
   }
   //
   // Return error messages

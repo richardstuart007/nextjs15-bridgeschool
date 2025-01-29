@@ -67,6 +67,7 @@ export type table_Questions = {
   qsouth: string[] | null
   qwest: string[] | null
   qgid: number
+  qlid: number
 }
 
 export type table_Reftype = {

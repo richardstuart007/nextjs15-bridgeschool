@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type JSX } from 'react';
+import React, { useEffect, useState, type JSX } from 'react'
 import RadioGroup from '@/src/ui/dashboard/quizreview/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -28,9 +28,7 @@ export default function QuizReviewChoice(props: QuizReviewChoiceProps): JSX.Elem
   //...................................................................................
   function loadChoices(): void {
     const qdetail = question.qdetail
-    const hyperLink = qdetail.substring(0, 8) === 'https://'
-    const text = hyperLink ? 'Select your answer' : qdetail
-    setQuestionText(text)
+    setQuestionText(qdetail)
     //
     //  Answers
     //

@@ -21,7 +21,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //  State and Initial values
   //
   const oggid = record?.oggid || 0
-  const [ogowner, setogowner] = useState(record?.ogowner || '')
+  const [ogowner, setogowner] = useState<string | number>(record?.ogowner || '')
   const [oggroup, setoggroup] = useState(record?.oggroup || '')
   const [ogtitle, setogtitle] = useState(record?.ogtitle || '')
   //-------------------------------------------------------------------------
@@ -33,7 +33,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     //
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
         {oggid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )

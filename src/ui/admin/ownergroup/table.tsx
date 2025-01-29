@@ -19,9 +19,9 @@ export default function Table() {
   //
   //  Selection
   //
-  const [owner, setowner] = useState('')
-  const [group, setgroup] = useState('')
-  const [title, settitle] = useState('')
+  const [owner, setowner] = useState<string | number>('')
+  const [group, setgroup] = useState<string | number>('')
+  const [title, settitle] = useState<string | number>('')
   //
   //  Data
   //

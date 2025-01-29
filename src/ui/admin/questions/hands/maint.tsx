@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useState, useEffect, useActionState } from 'react'
+import React, { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
@@ -104,7 +104,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     //
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
         Update
       </MyButton>
     )
@@ -179,7 +180,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {/* Row Label */}
           {/*  ...................................................................................*/}
           {['North', 'East', 'South', 'West'].map((label, rowIndex) => (
-            <>
+            <React.Fragment key={label}>
               <div className='flex items-center justify-center font-bold'>{label}</div>
               {/*  ...................................................................................*/}
               {/* Row of Inputs */}
@@ -207,7 +208,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                   </div>
                 )
               })}
-            </>
+            </React.Fragment>
           ))}
         </div>
 

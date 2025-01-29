@@ -52,7 +52,7 @@ export default function Form({ admin_uid }: Props) {
   //
   const [u_name, setu_name] = useState('')
   const [u_fedid, setu_fedid] = useState('')
-  const [u_fedcountry, setu_fedcountry] = useState('')
+  const [u_fedcountry, setu_fedcountry] = useState<string | number>('')
   const [u_uid, setu_uid] = useState(0)
   const [u_email, setu_email] = useState('')
   const [u_maxquestions, setu_maxquestions] = useState<number>(0)

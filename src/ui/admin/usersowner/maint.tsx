@@ -20,15 +20,16 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
   //
   //  State and Initial values
   //
-  const [uid, setuid] = useState<number>(0)
-  const [owner, setowner] = useState<string>('')
+  const [uid, setuid] = useState<string | number>(0)
+  const [owner, setowner] = useState<string | number>('')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
   function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
         Create
       </MyButton>
     )
@@ -49,8 +50,8 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/* ................................................... */}
         <div className='px-2'>
           <DropdownGeneric
-            selectedOption={uid.toString()}
-            setSelectedOption={(value: string) => setuid(Number(value))}
+            selectedOption={uid}
+            setSelectedOption={setuid}
             searchEnabled={false}
             name='uid'
             label='UserId'

@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS public.questions
     qeast text[] ,
     qsouth text[] ,
     qwest text[] ,
+    qlid integer DEFAULT 0,
     CONSTRAINT questions_pkey PRIMARY KEY (qowner, qgroup, qseq),
     CONSTRAINT questions_qqid_key UNIQUE (qqid)
 );

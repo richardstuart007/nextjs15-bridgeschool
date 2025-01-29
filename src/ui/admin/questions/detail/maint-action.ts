@@ -27,6 +27,7 @@ export type StateSetup = {
     qowner?: string[]
     qgroup?: string[]
     qdetail?: string[]
+    qlid?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -68,6 +69,9 @@ export async function Maint_detail(
 
   const qseqString = formData.get('qseq') as string | 0
   let qseq = Number(qseqString)
+
+  const qlidString = formData.get('qlid') as string | 0
+  const qlid = Number(qlidString)
   //
   // Validate fields
   //
@@ -75,7 +79,8 @@ export async function Maint_detail(
     qqid: qqid,
     qowner: qowner,
     qgroup: qgroup,
-    qseq: qseq
+    qseq: qseq,
+    qlid: qlid
   }
   const errorMessages = await validate(Table)
   if (errorMessages.message) {
@@ -98,7 +103,10 @@ export async function Maint_detail(
       //
       const updateParams = {
         table: 'questions',
-        columnValuePairs: [{ column: 'qdetail', value: qdetail }],
+        columnValuePairs: [
+          { column: 'qdetail', value: qdetail },
+          { column: 'qlid', value: qlid }
+        ],
         whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
       }
       await table_update(updateParams)
@@ -132,7 +140,8 @@ export async function Maint_detail(
           { column: 'qgroup', value: qgroup },
           { column: 'qseq', value: qseq },
           { column: 'qdetail', value: qdetail },
-          { column: 'qgid', value: oggid }
+          { column: 'qgid', value: oggid },
+          { column: 'qlid', value: qlid }
         ]
       }
       await table_write(writeParams)

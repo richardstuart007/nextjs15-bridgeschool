@@ -18,8 +18,8 @@ export default function Table() {
   //  Input selection
   //
   const [uid, setuid] = useState<number | string>(0)
-  const [owner, setowner] = useState('')
-  const [group, setgroup] = useState('')
+  const [owner, setowner] = useState<string | number>('')
+  const [group, setgroup] = useState<string | number>('')
   const [title, settitle] = useState('')
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
@@ -48,7 +48,15 @@ export default function Table() {
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  const [debouncedState, setDebouncedState] = useState({
+  type DebouncedState = {
+    uid: string | number
+    owner: string | number
+    group: string | number
+    questions: string | number
+    title: string | number
+    correct: string | number
+  }
+  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     uid: 0,
     owner: '',
     group: '',

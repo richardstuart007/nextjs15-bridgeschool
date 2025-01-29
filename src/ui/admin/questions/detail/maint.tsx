@@ -28,11 +28,17 @@ export default function Form({
   //
   //  State and Initial values
   //
+  const qgid = questionRecord?.qgid || 0
   const qqid = questionRecord?.qqid || 0
   const qseq = questionRecord?.qseq || 0
-  const [qowner, setqowner] = useState<string>(questionRecord?.qowner || selected_owner || '')
-  const [qgroup, setqgroup] = useState<string>(questionRecord?.qgroup || selected_group || '')
+  const [qowner, setqowner] = useState<string | number>(
+    questionRecord?.qowner || selected_owner || ''
+  )
+  const [qgroup, setqgroup] = useState<string | number>(
+    questionRecord?.qgroup || selected_group || ''
+  )
   const [qdetail, setqdetail] = useState(questionRecord?.qdetail || '')
+  const [qlid, setqlid] = useState<string | number>(questionRecord?.qlid || 0)
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -42,9 +48,11 @@ export default function Form({
     //
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
-        {qqid === 0 ? 'Create' : 'Update'}
-      </MyButton>
+      <div className='pt-2'>
+        <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+          {qqid === 0 ? 'Create' : 'Update'}
+        </MyButton>
+      </div>
     )
   }
   //-------------------------------------------------------------------------
@@ -60,105 +68,120 @@ export default function Form({
     <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
         {/*  ...................................................................................*/}
+        {/*  Title */}
+        {/*  ...................................................................................*/}
+        <div className='pt-2 block text-xl font-semibold text-green-500'>Details</div>
+        {/*  ...................................................................................*/}
         {/*  ID  */}
         {/*  ...................................................................................*/}
-        <div>
+        <div className='pt-2'>
           {qqid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
+            <label className='text-xs block   text-gray-900' htmlFor='qqid'>
               ID: {qqid}
             </label>
           )}
           <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
         </div>
         {/*  ...................................................................................*/}
-        {/*  Title */}
-        {/*  ...................................................................................*/}
-        <div className='mb-1 mt-5 block text-xl font-bold text-green-500'>Details</div>
-        {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
-        {qqid === 0 && !selected_owner ? (
-          <DropdownGeneric
-            selectedOption={qowner}
-            setSelectedOption={setqowner}
-            name='qowner'
-            label='Owner'
-            table='owner'
-            optionLabel='oowner'
-            optionValue='oowner'
-            overrideClass_Dropdown='w-72'
-            includeBlank={false}
-          />
-        ) : (
-          /* -----------------Edit ------------------*/
-          <>
-            <div className='mt-2'>
-              <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qowner'>
-                Owner
-              </label>
-              <>
-                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
-                  {qowner}
-                </span>
-                <MyInput id='qowner' type='hidden' name='qowner' value={qowner} />
-              </>
-            </div>
-          </>
-        )}
+        <div className='pt-2'>
+          {qqid === 0 && !selected_owner ? (
+            <DropdownGeneric
+              selectedOption={qowner}
+              setSelectedOption={setqowner}
+              name='qowner'
+              label='Owner'
+              table='owner'
+              optionLabel='oowner'
+              optionValue='oowner'
+              overrideClass_Dropdown='w-72'
+              includeBlank={false}
+            />
+          ) : (
+            /* -----------------Edit ------------------*/
+            <>
+              <div className='mt-2'>
+                <label className='text-xs font-semibold mb-1block   text-gray-900' htmlFor='qowner'>
+                  Owner
+                </label>
+                <>
+                  <span className='block w-72  px-4 py-2 rounded-md bg-gray-200 border-none  text-xs '>
+                    {qowner}
+                  </span>
+                  <MyInput id='qowner' type='hidden' name='qowner' value={qowner} />
+                </>
+              </div>
+            </>
+          )}
+        </div>
         {/*  ...................................................................................*/}
         {/*   Owner Group */}
         {/*  ...................................................................................*/}
-        {qqid === 0 && !selected_group && qowner ? (
-          <DropdownGeneric
-            selectedOption={qgroup}
-            setSelectedOption={setqgroup}
-            name='qgroup'
-            label='Group'
-            table='ownergroup'
-            tableColumn='ogowner'
-            tableColumnValue={qowner}
-            optionLabel='oggroup'
-            optionValue='ogroup'
-            overrideClass_Dropdown='w-72'
-            includeBlank={false}
-          />
-        ) : (
-          /* -----------------Edit ------------------*/
-          <>
-            <div className='mt-2'>
-              <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qgroup'>
-                Owner Group
-              </label>
-              <>
-                <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
-                  {qgroup}
-                </span>
-                <MyInput id='qgroup' type='hidden' name='qgroup' value={qgroup} />
-              </>
-            </div>
-          </>
-        )}
+        <div className='pt-2'>
+          {qqid === 0 && !selected_group && qowner ? (
+            <DropdownGeneric
+              selectedOption={qgroup}
+              setSelectedOption={setqgroup}
+              name='qgroup'
+              label='Group'
+              table='ownergroup'
+              tableColumn='ogowner'
+              tableColumnValue={qowner}
+              optionLabel='oggroup'
+              optionValue='ogroup'
+              overrideClass_Dropdown='w-72'
+              includeBlank={false}
+            />
+          ) : (
+            /* -----------------Edit ------------------*/
+            <>
+              <div className='mt-2'>
+                <label
+                  className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
+                  htmlFor='qgroup'
+                >
+                  Owner Group
+                </label>
+                <>
+                  <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
+                    {qgroup}
+                  </span>
+                  <MyInput id='qgroup' type='hidden' name='qgroup' value={qgroup} />
+                </>
+              </div>
+            </>
+          )}
+        </div>
         {/*  ...................................................................................*/}
         {/*  Seq  */}
         {/*  ...................................................................................*/}
-        <div>
+        <div className='pt-2'>
           {qseq !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
-              Seq: {qseq}
+            <label className='text-xs font-semibold mb-1 pt-2 block   text-gray-900' htmlFor='qqid'>
+              Seq
             </label>
           )}
-          <MyInput id='qseq' type='hidden' name='qseq' value={qseq} />
+          <>
+            <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
+              {qseq}
+            </span>
+            <MyInput id='qseq' type='hidden' name='qseq' value={qseq} />
+          </>
         </div>
         {/*  ...................................................................................*/}
         {/*  Description */}
         {/*  ...................................................................................*/}
-        <div>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qdetail'>
-            Description
+        <div className='pt-2'>
+          <label
+            className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
+            htmlFor='qdetail'
+          >
+            Question
           </label>
           <div className='relative'>
             <MyInput
-              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-xs  '
+              overrideClass='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
               id='qdetail'
               type='text'
               name='qdetail'
@@ -167,13 +190,41 @@ export default function Form({
             />
           </div>
         </div>
-        <div id='name-error' aria-live='polite' aria-atomic='true'>
+        <div id='error-qdetail' aria-live='polite' aria-atomic='true'>
           {formState.errors?.qdetail &&
             formState.errors.qdetail.map((error: string) => (
-              <p className='mt-2 text-xs  text-red-500' key={error}>
+              <p className='pt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
+        </div>
+        {/*  ...................................................................................*/}
+        {/*  Library id */}
+        {/*  ...................................................................................*/}
+        <div className='pt-2'>
+          <DropdownGeneric
+            overrideClass_Label='font-semibold pt-2'
+            selectedOption={qlid}
+            setSelectedOption={setqlid}
+            searchEnabled={true}
+            name='qlid'
+            label='Library Reference'
+            table='library'
+            tableColumn='lrgid'
+            tableColumnValue={qgid}
+            optionLabel='lrdesc'
+            optionValue='lrlid'
+            overrideClass_Dropdown='w-96'
+            includeBlank={true}
+          />
+          <div id='error-qlid' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.qlid &&
+              formState.errors.qlid.map((error: string) => (
+                <p className='pt-2 text-xs  text-red-500' key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
         </div>
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}

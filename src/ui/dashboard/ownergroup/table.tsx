@@ -17,9 +17,9 @@ export default function Table() {
   //
   //  Selection
   //
-  const [uid, setuid] = useState(0)
-  const [owner, setowner] = useState('')
-  const [group, setgroup] = useState('')
+  const [uid, setuid] = useState<string | number>(0)
+  const [owner, setowner] = useState<string | number>('')
+  const [group, setgroup] = useState<string | number>('')
   const [questions, setquestions] = useState<number | string>(1)
   //
   //  Show columns
@@ -41,7 +41,14 @@ export default function Table() {
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  const [debouncedState, setDebouncedState] = useState({
+  type DebouncedState = {
+    uid: string | number
+    owner: string | number
+    group: string | number
+    questions: string | number
+  }
+
+  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     uid: 0,
     owner: '',
     group: '',

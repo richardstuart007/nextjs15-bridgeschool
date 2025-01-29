@@ -3,8 +3,8 @@ import DropdownSearch from '@/src/ui/utils/dropdown/dropdownSearch'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 type DropdownProps = {
-  selectedOption: string
-  setSelectedOption: (value: string) => void
+  selectedOption: string | number
+  setSelectedOption: (value: string | number) => void
   searchEnabled?: boolean
   name: string
   label?: string
@@ -14,7 +14,7 @@ type DropdownProps = {
   tableColumnValue?: string | number
   orderBy?: string
   optionLabel: string
-  optionValue: string
+  optionValue: string | number
   dropdownWidth?: string
   overrideClass_Label?: string
   overrideClass_Search?: string
@@ -41,7 +41,9 @@ export default function DropdownGeneric({
   overrideClass_Dropdown = '',
   includeBlank = false
 }: DropdownProps) {
-  const [dropdownOptions, setDropdownOptions] = useState<{ value: string; label: string }[]>([])
+  const [dropdownOptions, setDropdownOptions] = useState<
+    { value: string | number; label: string }[]
+  >([])
   const [loading, setLoading] = useState(true)
 
   //---------------------------------------------------------------------
@@ -89,7 +91,7 @@ export default function DropdownGeneric({
         //  Load the options
         //
         const options = rows.map(row => ({
-          value: row[optionValue]?.toString() || '',
+          value: row[optionValue],
           label: row[optionLabel]?.toString() || ''
         }))
         //

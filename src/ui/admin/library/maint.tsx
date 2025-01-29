@@ -52,12 +52,16 @@ export default function Form({
   //  State and Initial values
   //
   const lrlid = libraryRecord?.lrlid || 0
-  const [lrowner, setLrowner] = useState<string>(libraryRecord?.lrowner || selected_owner || '')
-  const [lrgroup, setLrgroup] = useState<string>(libraryRecord?.lrgroup || selected_group || '')
-  const [lrref, setLrref] = useState(libraryRecord?.lrref || '')
+  const [lrowner, setLrowner] = useState<string | number>(
+    libraryRecord?.lrowner || selected_owner || ''
+  )
+  const [lrgroup, setLrgroup] = useState<string | number>(
+    libraryRecord?.lrgroup || selected_group || ''
+  )
+  const [lrref, setLrref] = useState<string | number>(libraryRecord?.lrref || '')
   const [lrdesc, setLrdesc] = useState(libraryRecord?.lrdesc || '')
-  const [lrwho, setLrwho] = useState(libraryRecord?.lrwho || '')
-  const [lrtype, setLrtype] = useState(libraryRecord?.lrtype || '')
+  const [lrwho, setLrwho] = useState<string | number>(libraryRecord?.lrwho || '')
+  const [lrtype, setLrtype] = useState<string | number>(libraryRecord?.lrtype || '')
   const [lrlink, setLrlink] = useState(libraryRecord?.lrlink || '')
   //-------------------------------------------------------------------------
   //  Update MyButton
@@ -68,7 +72,8 @@ export default function Form({
     //
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-2 w-72  px-4' aria-disabled={pending}>
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
         {lrlid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )

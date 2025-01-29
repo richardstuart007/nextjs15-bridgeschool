@@ -23,12 +23,12 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //
   //  Selection
   //
-  const [owner, setowner] = useState(selected_owner ? selected_owner : '')
-  const [group, setgroup] = useState(selected_group ? selected_group : '')
+  const [owner, setowner] = useState<string | number>(selected_owner ? selected_owner : '')
+  const [group, setgroup] = useState<string | number>(selected_group ? selected_group : '')
   const [desc, setdesc] = useState('')
-  const [who, setwho] = useState('')
+  const [who, setwho] = useState<string | number>('')
   const [ref, setref] = useState('')
-  const [type, settype] = useState('')
+  const [type, settype] = useState<string | number>('')
   const [questions, setquestions] = useState<number | string>('')
   //
   //  Data

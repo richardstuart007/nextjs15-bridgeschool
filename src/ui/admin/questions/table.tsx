@@ -25,8 +25,8 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //
   //  Selection
   //
-  const [owner, setowner] = useState('')
-  const [group, setgroup] = useState('')
+  const [owner, setowner] = useState<string | number>('')
+  const [group, setgroup] = useState<string | number>('')
   const [detail, setdetail] = useState('')
   //
   //  Data
@@ -53,12 +53,6 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
   //......................................................................................
   // UseEffect
   //......................................................................................
-  //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
   //
   // Adjust currentPage if it exceeds totalPages
   //
@@ -275,7 +269,13 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 Seq
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
+                ID
+              </th>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Detail
+              </th>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
+                Library ID
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Answers
@@ -286,9 +286,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Bidding
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
-                ID
-              </th>
+
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Delete
               </th>
@@ -345,6 +343,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 {selected_gid ? <h1>{selected_gid}</h1> : null}
               </th>
               <th scope='col' className='text-xs  px-2'></th>
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* detail                                                 */}
               {/* ................................................... */}
@@ -376,6 +375,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 <td className='text-xs px-2 py-1  '>{record.qgroup}</td>
                 <td className='text-xs px-2 py-1  '>{record.qgid}</td>
                 <td className='text-xs px-2 py-1  '>{record.qseq}</td>
+                <td className='text-xs px-2 py-1  '>{record.qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -389,6 +389,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                       : record.qdetail}
                   </MyButton>
                 </td>
+                <td className='text-xs px-2 py-1  '>{record.qlid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -427,10 +428,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     {record.qrounds && record.qrounds.length > 0 ? 'Y' : 'N'}
                   </MyButton>
                 </td>
-                {/* --------------------------------------------------------------------- */}
-                {/* ID                                                               */}
-                {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1  '>{record.qqid}</td>
+
                 {/* --------------------------------------------------------------------- */}
                 {/* Delete                                                               */}
                 {/* --------------------------------------------------------------------- */}
