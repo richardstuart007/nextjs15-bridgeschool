@@ -19,7 +19,7 @@ export default async function Page() {
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Dashboard', href: hrefParent },
+          { label: 'Home', href: hrefParent },
           {
             label: 'History',
             href: href,

@@ -24,7 +24,7 @@ export default async function Page({
   //  From
   //
   const from = resolvedSearchParams?.from
-  const parent_label = from ? from.charAt(0).toUpperCase() + from.slice(1) : 'Dashboard'
+  const parent_label = from ? from.charAt(0).toUpperCase() + from.slice(1) : 'Home'
   const parent_href = from ? `/dashboard/${from}` : '/dashboard'
   //
   //  Ownergroup

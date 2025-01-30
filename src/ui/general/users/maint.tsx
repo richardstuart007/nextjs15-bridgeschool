@@ -276,7 +276,6 @@ export default function Form({ admin_uid }: Props) {
               </p>
             ))}
         </div>
-
         {/*  ...................................................................................*/}
         {/*   Toggle - SKIP Correct */}
         {/*  ...................................................................................*/}
@@ -300,7 +299,7 @@ export default function Form({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         {/*   Toggle - Admin */}
         {/*  ...................................................................................*/}
-        {admin_uid && (
+        {admin_uid ? (
           <MyCheckbox
             overrideClass=''
             inputName='u_admin'
@@ -308,6 +307,10 @@ export default function Form({ admin_uid }: Props) {
             description='Admin'
             onChange={() => setu_admin(prev => !prev)}
           />
+        ) : (
+          <div className='relative'>
+            <MyInput id='u_admin' type='hidden' name='u_admin' value={u_admin.toString()} />
+          </div>
         )}
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}

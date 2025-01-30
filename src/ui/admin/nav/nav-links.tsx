@@ -20,7 +20,7 @@ export default function Page() {
   useEffect(() => {
     const hrefAdmin = `/admin`
     const initialLinks = [
-      { name: 'Dashboard', href: '/dashboard' },
+      { name: 'Home', href: '/dashboard' },
       { name: 'Admin', href: hrefAdmin }
     ]
     setLinks(initialLinks)

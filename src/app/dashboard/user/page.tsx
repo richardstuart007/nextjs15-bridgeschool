@@ -11,7 +11,7 @@ export default async function Page() {
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Dashboard', href: '/dashboard' },
+          { label: 'Home', href: '/dashboard' },
           {
             label: 'User',
             href: `/dashboard/user`,
