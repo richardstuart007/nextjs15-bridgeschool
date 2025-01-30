@@ -427,7 +427,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                   value={questions}
                   onChange={e => {
                     const value = e.target.value
-                    const numValue = parseInt(value, 10)
+                    const numValue = Number(value)
                     const parsedValue = isNaN(numValue) ? '' : numValue
                     setquestions(parsedValue)
                   }}

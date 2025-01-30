@@ -27,7 +27,7 @@ export default function RadioGroup(props: RadioGroupProps): JSX.Element {
   //---------------------------------------------------------------------------
   function handleOptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value
-    const int = parseInt(value, 10)
+    const int = Number(value)
     setSelectedValue(int)
     onChange(int)
   }

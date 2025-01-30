@@ -75,12 +75,12 @@ export default function Table() {
     setMessage('Applying filters...')
     const handler = setTimeout(() => {
       setDebouncedState({
-        uid: parseInt(uid as string, 10),
+        uid: Number(uid as string),
         owner,
         group,
-        questions: parseInt(questions as string, 10),
+        questions: Number(questions as string),
         title,
-        correct: parseInt(correct as string, 10)
+        correct: Number(correct as string)
       })
     }, 2000)
     //
@@ -443,7 +443,7 @@ export default function Table() {
                     value={uid}
                     onChange={e => {
                       const value = e.target.value
-                      const numValue = parseInt(value, 10)
+                      const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
                       setuid(parsedValue)
                       setname('')
@@ -483,7 +483,7 @@ export default function Table() {
                     value={questions}
                     onChange={e => {
                       const value = e.target.value
-                      const numValue = parseInt(value, 10)
+                      const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
                       setquestions(parsedValue)
                     }}
@@ -503,7 +503,7 @@ export default function Table() {
                     value={correct}
                     onChange={e => {
                       const value = e.target.value
-                      const numValue = parseInt(value, 10)
+                      const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
                       setcorrect(parsedValue)
                     }}

@@ -207,7 +207,7 @@ export default function Table() {
                     value={session || ''}
                     onChange={e => {
                       const value = e.target.value
-                      setsession(parseInt(value, 10) || 0)
+                      setsession(Number(value) || 0)
                     }}
                   />
                 </div>

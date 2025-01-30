@@ -182,7 +182,7 @@ export default function Table() {
                     value={id || ''}
                     onChange={e => {
                       const value = e.target.value
-                      setid(parseInt(value, 10) || 0)
+                      setid(Number(value) || 0)
                     }}
                   />
                 </div>
@@ -201,7 +201,7 @@ export default function Table() {
                     value={uid || ''}
                     onChange={e => {
                       const value = e.target.value
-                      setuid(parseInt(value, 10) || 0)
+                      setuid(Number(value) || 0)
                     }}
                   />
                 </div>

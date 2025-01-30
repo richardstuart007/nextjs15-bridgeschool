@@ -68,7 +68,7 @@ export async function getCookieSessionId(cookieName: string = 'SessionId'): Prom
     //
     //  Return JSON
     //
-    const session = parseInt(JSON_cookie, 10)
+    const session = Number(JSON_cookie)
     return session
     //
     //  Errors

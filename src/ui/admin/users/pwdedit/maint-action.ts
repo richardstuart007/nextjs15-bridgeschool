@@ -50,7 +50,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   // Unpack form data
   //
   const { upuid, uppwd } = validatedFields.data
-  const userid = parseInt(upuid, 10)
+  const userid = Number(upuid)
   //
   // Update data into the database
   //

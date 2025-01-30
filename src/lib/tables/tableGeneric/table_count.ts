@@ -45,7 +45,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     //
     // Return the count
     //
-    const rowCount = parseInt(data.rows[0].count, 10)
+    const rowCount = Number(data.rows[0].count)
     return rowCount
     //
     //  Errors

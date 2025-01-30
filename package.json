@@ -5,6 +5,7 @@
     "start": "next start",
     "dev": "next dev --turbopack",
     "locallocal": "set PORT=3000 && copy /Y .env.locallocal .env && next dev",
+    "locallocalprod": "set PORT=3000 && copy /Y .env.locallocalprod .env && next dev",
     "localdev": "set PORT=3001 && copy /Y .env.localdev .env && next dev",
     "localprod": "set PORT=3002 && copy /Y .env.localproduction .env && next dev",
     "lint": "next lint",

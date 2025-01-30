@@ -43,6 +43,7 @@ export default function Table({ selected_oggid }: FormProps) {
   const ref_show_ref = useRef(false)
   const ref_show_type = useRef(false)
   const ref_show_questions = useRef(false)
+  const ref_show_quiz = useRef(false)
   //
   //  Data
   //
@@ -50,8 +51,44 @@ export default function Table({ selected_oggid }: FormProps) {
   const [tabledata, setTabledata] = useState<(table_Library | table_LibraryGroup)[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
-  const [initialised, setinitialised] = useState(false)
+  //
+  //  Initialisation
+  //
   const [loading, setLoading] = useState(true)
+  const ref_initialised = useRef(false)
+  const ref_initialisedSelection = useRef(false)
+
+  //......................................................................................
+  //  Screen change
+  //......................................................................................
+  useEffect(() => {
+    updateColumns()
+    updateRows()
+    // eslint-disable-next-line
+  }, [])
+  //......................................................................................
+  //  Initilaisation
+  //......................................................................................
+  useEffect(() => {
+    const initialize = async () => {
+      //
+      //  Ensure the userid is set
+      //
+      if (sessionContext?.cxuid) {
+        setuid(sessionContext.cxuid)
+      }
+      //
+      //  Set the selected values
+      //
+      if (selected_oggid) await selectedOwnerGroup()
+      ref_initialisedSelection.current = true
+    }
+    //
+    //  Initialise the data
+    //
+    initialize()
+    // eslint-disable-next-line
+  }, [sessionContext])
   //......................................................................................
   // Debounce selection
   //......................................................................................
@@ -76,80 +113,72 @@ export default function Table({ selected_oggid }: FormProps) {
     questions: 0,
     type: ''
   })
-
   //
   //  Debounce message
   //
   const [message, setMessage] = useState('')
   //
+  //  First render do not debounce
+  //
+  const firstRender = useRef(true)
+  //
   // Debounce the state
   //
   useEffect(() => {
-    setMessage('Applying filters...')
-    const handler = setTimeout(() => {
-      setDebouncedState({
-        uid,
-        owner,
-        group,
-        ref,
-        desc,
-        who,
-        questions: parseInt(questions as string, 10),
-        type
-      })
-    }, 2000)
     //
-    // Cleanup the timeout on change
+    //  Data initialised
     //
-    return () => {
-      clearTimeout(handler)
+    if (uid > 0 && ref_initialisedSelection.current) ref_initialised.current = true
+    //
+    //  Only debounce if the data is initialised
+    //
+    if (ref_initialised.current) {
+      setMessage('Applying filters...')
+      //
+      //  Do not timeout on first render
+      //
+      const timeout = firstRender.current ? 1 : 1000
+      //
+      //  Debounce
+      //
+      const handler = setTimeout(() => {
+        setDebouncedState({
+          uid,
+          owner,
+          group,
+          ref,
+          desc,
+          who,
+          questions: Number(questions as string),
+          type
+        })
+        //
+        //  Normal debounce if data initialised
+        //
+        setShouldFetchData(true)
+        //
+        //  Default timeout after first render
+        //
+        firstRender.current = false
+      }, timeout)
+      //
+      // Cleanup the timeout on change
+      //
+      return () => {
+        clearTimeout(handler)
+      }
     }
     //
     //  Values to debounce
     //
+    // eslint-disable-next-line
   }, [uid, owner, group, ref, desc, who, questions, type])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    updateColumns()
-    updateRows()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  //......................................................................................
-  //  Initilaisation
-  //......................................................................................
-  useEffect(() => {
-    //
-    //  Get current user -UID mandatory
-    //
-    if (sessionContext?.cxuid) {
-      setuid(sessionContext.cxuid)
-      //
-      //  Get selected ownergroup
-      //
-      if (selected_oggid) selectedOwnerGroup()
-      //
-      //  Data selection initialisation
-      //
-      setinitialised(true)
-      setShouldFetchData(true)
-    }
-  }, [sessionContext, selected_oggid]) // eslint-disable-line react-hooks/exhaustive-deps
   //......................................................................................
   // Reset the group when the owner changes
   //......................................................................................
   useEffect(() => {
     if (!selected_oggid) setgroup('')
   }, [owner, selected_oggid])
-  //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
-  //......................................................................................
-  //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
   //
   // Adjust currentPage if it exceeds totalPages
   //
@@ -159,16 +188,22 @@ export default function Table({ selected_oggid }: FormProps) {
     }
   }, [currentPage, totalPages])
   //
+  // Change of current page
+  //
+  useEffect(() => {
+    setShouldFetchData(true)
+  }, [currentPage])
+  //
   // Change of current page or should fetch data
   //
   useEffect(() => {
-    if (initialised) {
+    if (ref_initialised.current && shouldFetchData) {
       fetchdata()
       setShouldFetchData(false)
       setMessage('')
     }
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, debouncedState])
+  }, [shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -186,6 +221,7 @@ export default function Table({ selected_oggid }: FormProps) {
     //
     //  smaller screens
     //
+    ref_show_quiz.current = !selected_oggid ? true : false
     if (widthNumber >= 2) {
       if (!selected_oggid) ref_show_owner.current = true
       if (!selected_oggid) ref_show_group.current = true
@@ -220,11 +256,6 @@ export default function Table({ selected_oggid }: FormProps) {
     //  Set the screenRows per page
     //
     ref_rowsPerPage.current = screenRows
-    //
-    //  Change of Rows
-    //
-    setcurrentPage(1)
-    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   // Selected ownergroup
@@ -237,18 +268,16 @@ export default function Table({ selected_oggid }: FormProps) {
       //
       //  Get the ownergroup id
       //
-      if (selected_oggid) {
-        const oggid = parseInt(selected_oggid, 10)
-        const rows = await table_fetch({
-          table: 'ownergroup',
-          whereColumnValuePairs: [{ column: 'oggid', value: oggid }]
-        })
-        const row = rows[0]
-        setowner(row.ogowner)
-        setgroup(row.oggroup)
-        setquestions(row.ogcntquestions)
-        setlibraries(row.ogcntlibrary)
-      }
+      const oggid = Number(selected_oggid)
+      const rows = await table_fetch({
+        table: 'ownergroup',
+        whereColumnValuePairs: [{ column: 'oggid', value: oggid }]
+      })
+      const row = rows[0]
+      setowner(row.ogowner)
+      setgroup(row.oggroup)
+      setquestions(row.ogcntquestions)
+      setlibraries(row.ogcntlibrary)
       //
       //  Errors
       //
@@ -371,10 +400,25 @@ export default function Table({ selected_oggid }: FormProps) {
             <span className='text-green-500'>{owner}</span>
             <span className='pl-2 font-bold'> Group: </span>
             <span className='text-green-500'>{group}</span>
-            <span className='pl-2 font-bold'> Questions: </span>
-            <span className='text-green-500'>{questions}</span>
             <span className='pl-2 font-bold'> Libraries: </span>
             <span className='text-green-500'>{libraries}</span>
+            <span className='pl-2 font-bold'> Questions: </span>
+            <span className='text-green-500'>{questions}</span>
+            {Number(questions) > 0 && (
+              <span>
+                <div className='pl-2 inline-flex justify-center items-center'>
+                  <MyLink
+                    href={{
+                      pathname: `/dashboard/quiz/${selected_oggid}`,
+                      query: { from: 'library' }
+                    }}
+                    overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                  >
+                    Quiz
+                  </MyLink>
+                </div>
+              </span>
+            )}
           </div>
         )}
         {/** -------------------------------------------------------------------- */}
@@ -414,13 +458,14 @@ export default function Table({ selected_oggid }: FormProps) {
                   Who
                 </th>
               )}
-
               <th scope='col' className=' font-medium px-2 text-center'>
                 Type
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Quiz
-              </th>
+              {ref_show_quiz.current && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Quiz
+                </th>
+              )}
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
@@ -480,7 +525,7 @@ export default function Table({ selected_oggid }: FormProps) {
                     value={questions}
                     onChange={e => {
                       const value = e.target.value
-                      const numValue = parseInt(value, 10)
+                      const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
                       setquestions(parsedValue)
                     }}
@@ -612,23 +657,25 @@ export default function Table({ selected_oggid }: FormProps) {
                 {/* ................................................... */}
                 {/* MyButton  2                                                 */}
                 {/* ................................................... */}
-                <td className='px-2 text-center'>
-                  <div className='inline-flex justify-center items-center'>
-                    {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
-                      <MyLink
-                        href={{
-                          pathname: `/dashboard/quiz/${tabledata.lrgid}`,
-                          query: { from: 'library' }
-                        }}
-                        overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
-                      >
-                        Quiz
-                      </MyLink>
-                    ) : (
-                      ' '
-                    )}
-                  </div>
-                </td>
+                {ref_show_quiz.current && (
+                  <td className='px-2 text-center'>
+                    <div className='inline-flex justify-center items-center'>
+                      {'ogcntquestions' in tabledata && tabledata.ogcntquestions > 0 ? (
+                        <MyLink
+                          href={{
+                            pathname: `/dashboard/quiz/${tabledata.lrgid}`,
+                            query: { from: 'library' }
+                          }}
+                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                        >
+                          Quiz
+                        </MyLink>
+                      ) : (
+                        ' '
+                      )}
+                    </div>
+                  </td>
+                )}
                 {/* ---------------------------------------------------------------------------------- */}
               </tr>
             ))}
@@ -638,7 +685,7 @@ export default function Table({ selected_oggid }: FormProps) {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600'>{message}</p>
+      <p className='text-red-600 text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}

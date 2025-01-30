@@ -59,23 +59,47 @@ export default function Table() {
   //
   const [message, setMessage] = useState('')
   //
+  //  First render do not debounce
+  //
+  const firstRender = useRef(true)
+  //
   // Debounce the state
   //
   useEffect(() => {
-    setMessage('Applying filters...')
-    const handler = setTimeout(() => {
-      setDebouncedState({
-        uid,
-        owner,
-        group,
-        questions: parseInt(questions as string, 10)
-      })
-    }, 2000)
     //
-    // Cleanup the timeout on change
+    //  Only debounce if the data is initialised
     //
-    return () => {
-      clearTimeout(handler)
+    if (Number(uid) > 0) {
+      setMessage('Applying filters...')
+      //
+      //  Do not timeout on first render
+      //
+      const timeout = firstRender.current ? 1 : 1000
+      //
+      //  Debounce
+      //
+      const handler = setTimeout(() => {
+        setDebouncedState({
+          uid,
+          owner,
+          group,
+          questions: Number(questions as string)
+        })
+        //
+        //  Normal debounce if data initialised
+        //
+        setShouldFetchData(true)
+        //
+        //  Default timeout after first render
+        //
+        firstRender.current = false
+      }, timeout)
+      //
+      // Cleanup the timeout on change
+      //
+      return () => {
+        clearTimeout(handler)
+      }
     }
     //
     //  Values to debounce
@@ -107,12 +131,6 @@ export default function Table() {
   // Fetch on mount and when shouldFetchData changes
   //......................................................................................
   //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
-  //
   // Adjust currentPage if it exceeds totalPages
   //
   useEffect(() => {
@@ -121,14 +139,22 @@ export default function Table() {
     }
   }, [currentPage, totalPages])
   //
+  // Change of current page
+  //
+  useEffect(() => {
+    setShouldFetchData(true)
+  }, [currentPage])
+  //
   // Change of current page or should fetch data
   //
   useEffect(() => {
-    fetchdata()
-    setShouldFetchData(false)
-    setMessage('')
+    if (shouldFetchData) {
+      fetchdata()
+      setShouldFetchData(false)
+      setMessage('')
+    }
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, debouncedState])
+  }, [shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -174,11 +200,6 @@ export default function Table() {
     //  Set the screenRows per page
     //
     ref_rowsPerPage.current = screenRows
-    //
-    //  Change of Rows
-    //
-    setcurrentPage(1)
-    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   // fetchdata
@@ -369,7 +390,7 @@ export default function Table() {
                     value={questions}
                     onChange={e => {
                       const value = e.target.value
-                      const numValue = parseInt(value, 10)
+                      const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
                       setquestions(parsedValue)
                     }}
@@ -410,7 +431,7 @@ export default function Table() {
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.oggid}`,
-                          query: { from: 'library' }
+                          query: { from: 'ownergroup' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                       >
@@ -435,7 +456,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/library`,
+                          pathname: `/dashboard/library_select`,
                           query: {
                             from: 'ownergroup',
                             selected_oggid: JSON.stringify(tabledata.oggid)
@@ -457,7 +478,7 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600'>{message}</p>
+      <p className='text-red-600 text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}

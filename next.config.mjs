@@ -32,11 +32,11 @@ const redirectsConfig = {
 }
 
 const config = {
-  ...redirectsConfig,
   env: {
     CUSTOM_ENV: process.env.CUSTOM_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL
-  }
+  },
+  ...redirectsConfig
 }
 
 export default config

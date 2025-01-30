@@ -8,28 +8,7 @@ export const metadata: Metadata = {
   title: 'Library'
 }
 
-export default async function Page({
-  searchParams
-}: {
-  searchParams: Promise<{
-    from?: string
-    selected_oggid?: string
-  }>
-}) {
-  //
-  // Await the params promise
-  //
-  const resolvedSearchParams = await searchParams
-  //
-  //  From
-  //
-  const from = resolvedSearchParams?.from
-  const parent_label = from ? from.charAt(0).toUpperCase() + from.slice(1) : 'Dashboard'
-  const parent_href = from ? `/dashboard/${from}` : '/dashboard'
-  //
-  //  Ownergroup
-  //
-  const selected_oggid = resolvedSearchParams?.selected_oggid
+export default async function Page() {
   //
   //  user interface
   //
@@ -37,7 +16,7 @@ export default async function Page({
     <div className='w-full md:p-6'>
       <Breadcrumbs
         breadcrumbs={[
-          { label: parent_label, href: parent_href },
+          { label: 'Dashboard', href: '/dashboard' },
           {
             label: 'Library',
             href: '/dashboard/library',
@@ -46,7 +25,7 @@ export default async function Page({
         ]}
       />
       <Suspense fallback={<TableSkeleton />}>
-        <Table selected_oggid={selected_oggid} />
+        <Table />
       </Suspense>
     </div>
   )
