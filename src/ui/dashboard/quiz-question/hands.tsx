@@ -1,7 +1,7 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 import Image from 'next/image'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 interface QuizHandsProps {
   question: table_Questions
@@ -13,6 +13,11 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
   //
   if (!question.qnorth && !question.qeast && !question.qsouth && !question.qwest) return null
   //
+  // Helper function to check if all values in the hand are 'n' or 'N'
+  //
+  type Hand = string[]
+  const isEmptyHand = (hand: Hand) => hand.every(card => card === 'n' || card === 'N')
+  //
   //  Build Hand Data for Positions
   //
   const handData = [
@@ -21,7 +26,7 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
     { position: 'South', hand: question.qsouth },
     { position: 'West', hand: question.qwest }
   ]
-    .filter(handObj => handObj.hand) // Exclude undefined hands
+    .filter(handObj => handObj.hand && !isEmptyHand(handObj.hand as Hand))
     .map(handObj => ({
       ...handObj,
       hand: handObj.hand?.map(card => (card === 'n' || card === 'N' ? '' : card)) || []

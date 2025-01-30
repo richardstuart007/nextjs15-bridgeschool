@@ -69,10 +69,21 @@ export default function Table() {
   //
   const [message, setMessage] = useState('')
   //
+  //  First render do not debounce
+  //
+  const firstRender = useRef(true)
+  //
   // Debounce the state
   //
   useEffect(() => {
     setMessage('Applying filters...')
+    //
+    //  Do not timeout on first render
+    //
+    const timeout = firstRender.current ? 1 : 1000
+    //
+    //  Debounce
+    //
     const handler = setTimeout(() => {
       setDebouncedState({
         uid: Number(uid as string),
@@ -82,7 +93,15 @@ export default function Table() {
         title,
         correct: Number(correct as string)
       })
-    }, 2000)
+      //
+      //  Normal debounce if data initialised
+      //
+      setShouldFetchData(true)
+      //
+      //  Default timeout after first render
+      //
+      firstRender.current = false
+    }, timeout)
     //
     // Cleanup the timeout on change
     //
@@ -99,7 +118,8 @@ export default function Table() {
   useEffect(() => {
     updateColumns()
     updateRows()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
+  }, [])
   //......................................................................................
   //  UID
   //......................................................................................
@@ -119,12 +139,6 @@ export default function Table() {
   // Fetch on mount and when shouldFetchData changes
   //......................................................................................
   //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
-  //
   // Adjust currentPage if it exceeds totalPages
   //
   useEffect(() => {
@@ -133,14 +147,22 @@ export default function Table() {
     }
   }, [currentPage, totalPages])
   //
+  // Change of current page
+  //
+  useEffect(() => {
+    setShouldFetchData(true)
+  }, [currentPage])
+  //
   // Change of current page or should fetch data
   //
   useEffect(() => {
-    fetchdata()
-    setShouldFetchData(false)
-    setMessage('')
+    if (shouldFetchData) {
+      fetchdata()
+      setShouldFetchData(false)
+      setMessage('')
+    }
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, debouncedState])
+  }, [shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
@@ -197,20 +219,11 @@ export default function Table() {
     //  Set the screenRows per page
     //
     ref_rowsPerPage.current = screenRows
-    //
-    //  Change of Rows
-    //
-    setcurrentPage(1)
-    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    //  uid has not been set, do do not fetch data
-    //
-    if (uid === 0) return
     //
     // Define the structure for filters
     //
@@ -591,7 +604,7 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600'>{message}</p>
+      <p className='text-red-600 text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}
