@@ -18,7 +18,7 @@ export default async function validateOwner(oowner: string): Promise<StateSetup>
   //
   const tableColumnValuePairs = [
     {
-      table: 'owner',
+      table: 'tow_owner',
       whereColumnValuePairs: [{ column: 'oowner', value: oowner }]
     }
   ]

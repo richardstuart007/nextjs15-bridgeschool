@@ -118,7 +118,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'logging'
+      const table = 'tlg_logging'
       //
       // Calculate the offset for pagination
       //

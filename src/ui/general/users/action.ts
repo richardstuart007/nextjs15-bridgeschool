@@ -94,7 +94,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       { column: 'u_admin', value: u_admin }
     ]
     const updateParams = {
-      table: 'users',
+      table: 'tus_users',
       columnValuePairs,
       whereColumnValuePairs: [{ column: 'u_uid', value: u_uid }]
     }

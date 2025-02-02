@@ -1,0 +1,378 @@
+[
+  {
+    "oggid": 5,
+    "ogowner": "Richard",
+    "oggroup": "BergenRaises",
+    "ogtitle": "Bergen Raises",
+    "ogcntquestions": 34,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 7,
+    "ogowner": "Richard",
+    "oggroup": "Doubles",
+    "ogtitle": "Doubles",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 0
+  },
+  {
+    "oggid": 6,
+    "ogowner": "Richard",
+    "oggroup": "Cue1st2ndControls",
+    "ogtitle": "Cue 1st and 2nd Controls",
+    "ogcntquestions": 17,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 1004,
+    "ogowner": "Richard",
+    "oggroup": "WBF",
+    "ogtitle": "World Bridge Federation",
+    "ogcntquestions": 36,
+    "ogcntlibrary": 36
+  },
+  {
+    "oggid": 4,
+    "ogowner": "Richard",
+    "oggroup": "AndyRobson",
+    "ogtitle": "Andrew Robson",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 0
+  },
+  {
+    "oggid": 11,
+    "ogowner": "Richard",
+    "oggroup": "MichaelsCueBid",
+    "ogtitle": "Michaels Cue Bid",
+    "ogcntquestions": 25,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 12,
+    "ogowner": "Richard",
+    "oggroup": "NOQUIZ",
+    "ogtitle": "No Quiz Questions",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 10
+  },
+  {
+    "oggid": 13,
+    "ogowner": "Richard",
+    "oggroup": "Play",
+    "ogtitle": "Play",
+    "ogcntquestions": 6,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 14,
+    "ogowner": "Richard",
+    "oggroup": "Points Schmoints",
+    "ogtitle": "Points Schmoints",
+    "ogcntquestions": 19,
+    "ogcntlibrary": 0
+  },
+  {
+    "oggid": 15,
+    "ogowner": "Richard",
+    "oggroup": "Quantitative4NT",
+    "ogtitle": "Quantitative 4NT",
+    "ogcntquestions": 10,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 16,
+    "ogowner": "Richard",
+    "oggroup": "Redoubles",
+    "ogtitle": "Re-doubles",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 17,
+    "ogowner": "Richard",
+    "oggroup": "TwoWayCheckback",
+    "ogtitle": "Two Way Checkback",
+    "ogcntquestions": 24,
+    "ogcntlibrary": 1
+  },
+  {
+    "oggid": 55,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP01",
+    "ogtitle": "NZB Improver 01 Stayman",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 56,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP02",
+    "ogtitle": "NZB Improver 02 Blackwood",
+    "ogcntquestions": 12,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 57,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP03",
+    "ogtitle": "NZB Improver 03 Play Techniques",
+    "ogcntquestions": 9,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 58,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP04",
+    "ogtitle": "NZB Improver 04 No Trump Play",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 59,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP05",
+    "ogtitle": "NZB Improver 05 Declarer Suit Play",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 60,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP06",
+    "ogtitle": "NZB Improver 06 Opening Leads",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 61,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP07",
+    "ogtitle": "NZB Improver 07 Signals and Discards",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 62,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP08",
+    "ogtitle": "NZB Improver 08 Defensive 2nd and 3rd hand play",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 63,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP09",
+    "ogtitle": "NZB Improver 09 Minimum Invite Game Force Bids",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 64,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBIMP10",
+    "ogtitle": "NZB Improver 10 Types of Doubles",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 65,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT01",
+    "ogtitle": "NZB Intermediate 01 Transfers",
+    "ogcntquestions": 13,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 66,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT02",
+    "ogtitle": "NZB Intermediate 02 Checkback",
+    "ogcntquestions": 20,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 67,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT03",
+    "ogtitle": "NZB Intermediate 03 Escaping 1NTX",
+    "ogcntquestions": 13,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 68,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT04",
+    "ogtitle": "NZB Intermediate 04 1NT Interference",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 69,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT05",
+    "ogtitle": "NZB Intermediate 05 1NT Landy",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 70,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT06",
+    "ogtitle": "NZB Intermediate 06 Responding",
+    "ogcntquestions": 20,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 71,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT07",
+    "ogtitle": "NZB Intermediate 07 Overcall",
+    "ogcntquestions": 20,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 72,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT08",
+    "ogtitle": "NZB Intermediate 08 Michaels & UNT",
+    "ogcntquestions": 20,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 73,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT09",
+    "ogtitle": "NZB Intermediate 09 High Level Bidding",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 74,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT10",
+    "ogtitle": "NZB Intermediate 10 Pre-empt Defence",
+    "ogcntquestions": 18,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 75,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT11",
+    "ogtitle": "NZB Intermediate 11 Multi-2D Opening and Defence",
+    "ogcntquestions": 20,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 76,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT12",
+    "ogtitle": "NZB Intermediate 12 Weak 2 Suiter Openers",
+    "ogcntquestions": 24,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 77,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBINT13",
+    "ogtitle": "NZB Intermediate 13 RKC and Splinters",
+    "ogcntquestions": 16,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 78,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG01",
+    "ogtitle": "NZB Beginners Lesson 01",
+    "ogcntquestions": 49,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 79,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG04",
+    "ogtitle": "NZB Begginers Lesson 04",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 80,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG07",
+    "ogtitle": "NZB Begginers Lesson 07",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 81,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG10",
+    "ogtitle": "NZB Begginers Lesson 10",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 82,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG03",
+    "ogtitle": "NZB Begginers Lesson 03",
+    "ogcntquestions": 15,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 83,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG02",
+    "ogtitle": "NZB Begginers Lesson 02",
+    "ogcntquestions": 15,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 84,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG05",
+    "ogtitle": "NZB Begginers Lesson 05",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 85,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG06",
+    "ogtitle": "NZB Begginers Lesson 06",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 86,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG08",
+    "ogtitle": "NZB Begginers Lesson 08",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 87,
+    "ogowner": "NZBridge",
+    "oggroup": "NZBBEG09",
+    "ogtitle": "NZB Begginers Lesson 09",
+    "ogcntquestions": 0,
+    "ogcntlibrary": 2
+  },
+  {
+    "oggid": 1006,
+    "ogowner": "Richard",
+    "oggroup": "Lebensohl",
+    "ogtitle": "Lebensohl",
+    "ogcntquestions": 36,
+    "ogcntlibrary": 5
+  },
+  {
+    "oggid": 96,
+    "ogowner": "Richard",
+    "oggroup": "Wolpert21",
+    "ogtitle": "Gavin Wolpert 2/1",
+    "ogcntquestions": 3,
+    "ogcntlibrary": 3
+  }
+]

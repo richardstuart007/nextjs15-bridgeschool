@@ -1,15 +1,14 @@
 export const basetables = [
-  'database',
-  'library',
-  'logging',
-  'owner',
-  'ownergroup',
-  'questions',
-  'reftype',
-  'sessions',
-  'users',
-  'usershistory',
-  'usersowner',
-  'userspwd',
-  'who'
+  'tdb_database',
+  'tlr_library',
+  'tow_owner',
+  'tog_ownergroup',
+  'tqq_questions',
+  'trf_reftype',
+  'tss_sessions',
+  'tus_users',
+  'ths_usershistory',
+  'tuo_usersowner',
+  'tup_userspwd',
+  'twh_who'
 ]

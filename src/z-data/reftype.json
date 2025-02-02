@@ -1,0 +1,17 @@
+[
+  {
+    "rtrid": 3,
+    "rttype": "pdf",
+    "rttitle": "PDF "
+  },
+  {
+    "rtrid": 1,
+    "rttype": "youtube",
+    "rttitle": "YouTube"
+  },
+  {
+    "rtrid": 2,
+    "rttype": "webdoc",
+    "rttitle": "Web Page"
+  }
+]

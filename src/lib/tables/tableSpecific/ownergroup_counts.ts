@@ -11,14 +11,14 @@ export async function update_ogcntquestions(gid: number) {
 
   try {
     const rowCount = await table_count({
-      table: 'questions',
+      table: 'tqq_questions',
       whereColumnValuePairs: [{ column: 'qgid', value: gid }]
     })
     //
     //  update Ownergroup
     //
     const updateParams = {
-      table: 'ownergroup',
+      table: 'tog_ownergroup',
       columnValuePairs: [{ column: 'ogcntquestions', value: rowCount }],
       whereColumnValuePairs: [{ column: 'oggid', value: gid }]
     }
@@ -49,14 +49,14 @@ export async function update_ogcntlibrary(gid: number) {
 
   try {
     const rowCount = await table_count({
-      table: 'library',
+      table: 'tlr_library',
       whereColumnValuePairs: [{ column: 'lrgid', value: gid }]
     })
     //
     //  update Ownergroup
     //
     const updateParams = {
-      table: 'ownergroup',
+      table: 'tog_ownergroup',
       columnValuePairs: [{ column: 'ogcntlibrary', value: rowCount }],
       whereColumnValuePairs: [{ column: 'oggid', value: gid }]
     }

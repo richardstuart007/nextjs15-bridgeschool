@@ -60,7 +60,7 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   //
   try {
     const writeParams = {
-      table: 'owner',
+      table: 'tow_owner',
       columnValuePairs: [{ column: 'oowner', value: oowner }]
     }
     await table_write(writeParams)

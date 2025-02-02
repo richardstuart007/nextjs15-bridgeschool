@@ -237,7 +237,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'ownergroup'
+      const table = 'tog_ownergroup'
       //
       //  Distinct - no uid selected
       //
@@ -245,7 +245,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [{ table: 'usersowner', on: 'ogowner = uoowner' }]
+      const joins = [{ table: 'tuo_usersowner', on: 'ogowner = uoowner' }]
       //
       // Calculate the offset for pagination
       //
@@ -283,7 +283,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -346,7 +346,7 @@ export default function Table() {
                     setSelectedOption={setowner}
                     searchEnabled={false}
                     name='owner'
-                    table='usersowner'
+                    table='tuo_usersowner'
                     tableColumn='uouid'
                     tableColumnValue={uid}
                     optionLabel='uoowner'
@@ -366,7 +366,7 @@ export default function Table() {
                       selectedOption={group}
                       setSelectedOption={setgroup}
                       name='group'
-                      table='ownergroup'
+                      table='tog_ownergroup'
                       tableColumn='ogowner'
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
@@ -431,7 +431,7 @@ export default function Table() {
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.oggid}`,
-                          query: { from: 'ownergroup' }
+                          query: { from: 'tog_ownergroup' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                       >
@@ -458,7 +458,7 @@ export default function Table() {
                         href={{
                           pathname: `/dashboard/library_select`,
                           query: {
-                            from: 'ownergroup',
+                            from: 'tog_ownergroup',
                             selected_oggid: JSON.stringify(tabledata.oggid)
                           }
                         }}

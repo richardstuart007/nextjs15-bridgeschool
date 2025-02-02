@@ -102,7 +102,7 @@ export async function Maint_detail(
       //  update parameters
       //
       const updateParams = {
-        table: 'questions',
+        table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qdetail', value: qdetail },
           { column: 'qlid', value: qlid }
@@ -123,7 +123,7 @@ export async function Maint_detail(
       //  Get group id - qgid
       //
       const rows = await table_fetch({
-        table: 'ownergroup',
+        table: 'tog_ownergroup',
         whereColumnValuePairs: [
           { column: 'ogowner', value: qowner },
           { column: 'oggroup', value: qgroup }
@@ -134,7 +134,7 @@ export async function Maint_detail(
       //  Write Parameters
       //
       const writeParams = {
-        table: 'questions',
+        table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qowner', value: qowner },
           { column: 'qgroup', value: qgroup },

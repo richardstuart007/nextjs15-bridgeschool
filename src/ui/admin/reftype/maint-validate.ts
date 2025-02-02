@@ -22,7 +22,7 @@ export default async function validate(record: table_Reftype): Promise<StateSetu
   if (rtrid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'reftype',
+        table: 'trf_reftype',
         whereColumnValuePairs: [{ column: 'rttype', value: rttype }]
       }
     ]

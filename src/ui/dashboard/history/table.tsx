@@ -253,13 +253,13 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'usershistory'
+      const table = 'ths_usershistory'
       //
       //  Joins
       //
       const joins = [
-        { table: 'ownergroup', on: 'r_gid = oggid' },
-        { table: 'users', on: 'r_uid = u_uid' }
+        { table: 'tog_ownergroup', on: 'r_gid = oggid' },
+        { table: 'tus_users', on: 'r_uid = u_uid' }
       ]
       //
       // Calculate the offset for pagination
@@ -390,7 +390,7 @@ export default function Table() {
                     setSelectedOption={setowner}
                     searchEnabled={false}
                     name='owner'
-                    table='usersowner'
+                    table='tuo_usersowner'
                     tableColumn='uouid'
                     tableColumnValue={sessionContext.cxuid}
                     optionLabel='uoowner'
@@ -410,7 +410,7 @@ export default function Table() {
                       selectedOption={group}
                       setSelectedOption={setgroup}
                       name='group'
-                      table='ownergroup'
+                      table='tog_ownergroup'
                       tableColumn='ogowner'
                       tableColumnValue={owner}
                       optionLabel='ogtitle'

@@ -39,12 +39,12 @@ export async function fetch_TopResults({
                 r_maxpoints,
                 ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
             FROM
-                usershistory
+                ths_usershistory
             WHERE
                 r_datetime >= NOW() - ($4 || ' months')::interval
         ) AS ranked
       JOIN
-        users ON r_uid = u_uid
+        tus_users ON r_uid = u_uid
       WHERE
         rn <= $2
         AND u_admin = false
@@ -109,8 +109,8 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
             r_correctpercent,
             ROW_NUMBER()
             OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
-          FROM usershistory
-          JOIN users
+          FROM ths_usershistory
+          JOIN tus_users
             ON r_uid = u_uid
           WHERE
             u_admin = false
@@ -178,8 +178,8 @@ export async function fetch_RecentResultsAverages({
         SELECT
           r_hid, r_uid, u_name, r_totalpoints, r_maxpoints, r_correctpercent,
           ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
-        FROM usershistory
-        JOIN users ON r_uid = u_uid
+        FROM ths_usershistory
+        JOIN tus_users ON r_uid = u_uid
           WHERE r_uid IN (${placeholders})
       ) AS ranked
       WHERE rn <= $${averagePlaceholderIndex}

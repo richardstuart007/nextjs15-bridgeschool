@@ -83,7 +83,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'owner'
+      const table = 'tow_owner'
       //
       // Calculate the offset for pagination
       //
@@ -116,7 +116,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -140,11 +140,11 @@ export default function Table() {
         //
         const tableColumnValuePairs = [
           {
-            table: 'ownergroup',
+            table: 'tog_ownergroup',
             whereColumnValuePairs: [{ column: 'ogowner', value: owner.oowner }]
           },
           {
-            table: 'usersowner',
+            table: 'tuo_usersowner',
             whereColumnValuePairs: [{ column: 'uoowner', value: owner.oowner }]
           }
         ]
@@ -163,7 +163,7 @@ export default function Table() {
         // Call the server function to delete
         //
         const Params = {
-          table: 'owner',
+          table: 'tow_owner',
           whereColumnValuePairs: [{ column: 'ooid', value: owner.ooid }]
         }
         await table_delete(Params)

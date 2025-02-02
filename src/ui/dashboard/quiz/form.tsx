@@ -157,7 +157,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //  Create parameters
     //
     const writeParams = {
-      table: 'usershistory',
+      table: 'ths_usershistory',
       columnValuePairs: [
         { column: 'r_datetime', value: r_datetime },
         { column: 'r_owner', value: question.qowner },

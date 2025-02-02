@@ -19,7 +19,7 @@ export default async function validateUsersowner(record: table_Usersowner): Prom
   //
   const tableColumnValuePairs = [
     {
-      table: 'usersowner',
+      table: 'tuo_usersowner',
       whereColumnValuePairs: [
         { column: 'uouid', value: uouid },
         { column: 'uoowner', value: uoowner }

@@ -92,7 +92,7 @@ export default function Form({
               setSelectedOption={setqowner}
               name='qowner'
               label='Owner'
-              table='owner'
+              table='tow_owner'
               optionLabel='oowner'
               optionValue='oowner'
               overrideClass_Dropdown='w-72'
@@ -125,11 +125,11 @@ export default function Form({
               setSelectedOption={setqgroup}
               name='qgroup'
               label='Group'
-              table='ownergroup'
+              table='tog_ownergroup'
               tableColumn='ogowner'
               tableColumnValue={qowner}
               optionLabel='oggroup'
-              optionValue='ogroup'
+              optionValue='oggroup'
               overrideClass_Dropdown='w-72'
               includeBlank={false}
             />
@@ -209,7 +209,7 @@ export default function Form({
             searchEnabled={true}
             name='qlid'
             label='Library Reference'
-            table='library'
+            table='tlr_library'
             tableColumn='lrgid'
             tableColumnValue={qgid}
             optionLabel='lrdesc'

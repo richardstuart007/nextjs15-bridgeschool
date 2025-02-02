@@ -21,7 +21,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //  Get User record
     //
     const fetchParams = {
-      table: 'users',
+      table: 'tus_users',
       whereColumnValuePairs: [{ column: 'u_email', value: email }]
     }
     const rows = await table_fetch(fetchParams)
@@ -68,7 +68,7 @@ async function newUser(provider: string, email: string, name: string) {
   const u_fedcountry = 'ZZ'
   const u_provider = provider
   const userRecords = await table_write({
-    table: 'users',
+    table: 'tus_users',
     columnValuePairs: [
       { column: 'u_email', value: u_email },
       { column: 'u_name', value: u_name },
@@ -89,7 +89,7 @@ async function newUser(provider: string, email: string, name: string) {
   const uouid = userRecord.u_uid
   const uoowner = 'Richard'
   await table_write({
-    table: 'usersowner',
+    table: 'tuo_usersowner',
     columnValuePairs: [
       { column: 'uouid', value: uouid },
       { column: 'uoowner', value: uoowner }
@@ -107,7 +107,7 @@ async function newSession(s_uid: number) {
   //
   const s_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
   const sessionsRecords = await table_write({
-    table: 'sessions',
+    table: 'tss_sessions',
     columnValuePairs: [
       { column: 's_datetime', value: s_datetime },
       { column: 's_uid', value: s_uid }

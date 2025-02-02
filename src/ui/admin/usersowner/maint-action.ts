@@ -80,7 +80,7 @@ export async function ActionUsersowner(
     //  Write
     //
     const writeParams = {
-      table: 'usersowner',
+      table: 'tuo_usersowner',
       columnValuePairs: [
         { column: 'uouid', value: uid },
         { column: 'uoowner', value: owner }

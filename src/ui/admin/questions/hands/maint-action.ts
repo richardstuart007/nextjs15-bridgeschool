@@ -252,7 +252,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       //  update parameters
       //
       const updateParams = {
-        table: 'questions',
+        table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qnorth', value: northString },
           { column: 'qeast', value: eastString },

@@ -24,7 +24,7 @@ export default async function validateLibrary(record: table_Library): Promise<St
   if (lrlid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'library',
+        table: 'tlr_library',
         whereColumnValuePairs: [
           { column: 'lrowner', value: lrowner },
           { column: 'lrgroup', value: lrgroup },

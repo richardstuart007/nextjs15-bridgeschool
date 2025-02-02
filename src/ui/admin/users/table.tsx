@@ -97,7 +97,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'users'
+      const table = 'tus_users'
       //
       // Calculate the offset for pagination
       //
@@ -130,7 +130,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -181,23 +181,23 @@ export default function Table() {
         // Call the server function to delete
         //
         await table_delete({
-          table: 'usershistory',
+          table: 'ths_usershistory',
           whereColumnValuePairs: [{ column: 'r_uid', value: uid }]
         })
         await table_delete({
-          table: 'sessions',
+          table: 'tss_sessions',
           whereColumnValuePairs: [{ column: 's_uid', value: uid }]
         })
         await table_delete({
-          table: 'usersowner',
+          table: 'tuo_usersowner',
           whereColumnValuePairs: [{ column: 'uouid', value: uid }]
         })
         await table_delete({
-          table: 'userspwd',
+          table: 'tup_userspwd',
           whereColumnValuePairs: [{ column: 'upuid', value: uid }]
         })
         await table_delete({
-          table: 'users',
+          table: 'tus_users',
           whereColumnValuePairs: [{ column: 'u_uid', value: uid }]
         })
         //

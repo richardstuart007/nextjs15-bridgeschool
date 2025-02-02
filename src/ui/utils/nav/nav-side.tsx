@@ -37,12 +37,12 @@ export default function NavSide(props: Props) {
     //  Fetch database name
     //
     const rows = await table_fetch({
-      table: 'database',
+      table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'd_did', value: 1 }]
     })
     const row = rows[0]
-    const database = row?.d_name ?? 'unknown'
-    setdbName(database)
+    const tdb_database = row?.d_name ?? 'unknown'
+    setdbName(tdb_database)
     //
     //  Auth Session
     //

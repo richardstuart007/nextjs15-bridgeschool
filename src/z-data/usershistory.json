@@ -1,0 +1,5429 @@
+[
+  {
+    "r_hid": 617,
+    "r_datetime": "2023-03-04T21:54:36.643",
+    "r_gid": null,
+    "r_owner": "Richard",
+    "r_group": "WBF",
+    "r_qid": [
+      206
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 602,
+    "r_datetime": "2023-02-20T04:01:30.464",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      236,
+      240,
+      225,
+      227,
+      221
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      4,
+      2,
+      4,
+      4,
+      1
+    ],
+    "r_points": [
+      0,
+      0,
+      0,
+      0,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 10,
+    "r_correctpercent": 20,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 603,
+    "r_datetime": "2023-02-20T04:02:09.474",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      230,
+      223,
+      243
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      3,
+      3,
+      3
+    ],
+    "r_points": [
+      0,
+      0,
+      0
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 605,
+    "r_datetime": "2023-03-04T03:29:06.899",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      228,
+      235,
+      221,
+      229,
+      241,
+      226,
+      240
+    ],
+    "r_questions": 7,
+    "r_ans": [
+      3,
+      2,
+      3,
+      3,
+      1,
+      2,
+      2
+    ],
+    "r_points": [
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0
+    ],
+    "r_maxpoints": 70,
+    "r_totalpoints": 10,
+    "r_correctpercent": 15,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 606,
+    "r_datetime": "2023-03-04T04:27:48.306",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      234,
+      227
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      2,
+      4
+    ],
+    "r_points": [
+      0,
+      0
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 609,
+    "r_datetime": "2023-03-04T20:06:14.864",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      238
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 610,
+    "r_datetime": "2023-03-04T20:07:22.335",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      233
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 611,
+    "r_datetime": "2023-03-04T20:46:42.809",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      223
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 613,
+    "r_datetime": "2023-03-04T21:02:48.437",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      269
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 614,
+    "r_datetime": "2023-03-04T21:29:13.339",
+    "r_gid": 6,
+    "r_owner": "Richard",
+    "r_group": "Cue1st2ndControls",
+    "r_qid": [
+      302,
+      300
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      2,
+      2
+    ],
+    "r_points": [
+      0,
+      0
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 615,
+    "r_datetime": "2023-03-04T21:30:17.142",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      267
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 619,
+    "r_datetime": "2023-03-05T21:02:26.488",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      221
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 620,
+    "r_datetime": "2023-03-08T19:44:08.54",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      263,
+      244,
+      253,
+      268
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 30,
+    "r_correctpercent": 75,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 621,
+    "r_datetime": "2023-03-08T22:40:23.064",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      221
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 623,
+    "r_datetime": "2023-03-16T05:41:03.414",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      277
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 624,
+    "r_datetime": "2023-03-16T10:42:16.663",
+    "r_gid": 78,
+    "r_owner": "NZBridge",
+    "r_group": "NZBBEG01",
+    "r_qid": [
+      713,
+      715,
+      712,
+      710,
+      719,
+      711,
+      717,
+      714,
+      720,
+      716,
+      718
+    ],
+    "r_questions": 11,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 110,
+    "r_totalpoints": 100,
+    "r_correctpercent": 91,
+    "r_uid": 65,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 625,
+    "r_datetime": "2023-03-16T11:50:48.883",
+    "r_gid": 78,
+    "r_owner": "NZBridge",
+    "r_group": "NZBBEG01",
+    "r_qid": [
+      715,
+      714,
+      720,
+      710,
+      716,
+      718,
+      719,
+      717,
+      713,
+      712,
+      711
+    ],
+    "r_questions": 11,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 110,
+    "r_totalpoints": 110,
+    "r_correctpercent": 100,
+    "r_uid": 65,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 626,
+    "r_datetime": "2023-03-16T21:19:50.585",
+    "r_gid": 78,
+    "r_owner": "NZBridge",
+    "r_group": "NZBBEG01",
+    "r_qid": [
+      754,
+      759,
+      730,
+      712,
+      755,
+      760,
+      744,
+      745,
+      763,
+      739,
+      723,
+      711,
+      715,
+      718,
+      749,
+      710,
+      758,
+      762,
+      714,
+      727
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 200,
+    "r_correctpercent": 100,
+    "r_uid": 65,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 629,
+    "r_datetime": "2023-04-04T03:18:20.7",
+    "r_gid": 78,
+    "r_owner": "NZBridge",
+    "r_group": "NZBBEG01",
+    "r_qid": [
+      730,
+      763,
+      754,
+      722,
+      733,
+      717,
+      716,
+      748,
+      755,
+      753,
+      710,
+      750,
+      736,
+      738,
+      758,
+      740,
+      720,
+      713,
+      711,
+      723
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      4,
+      1,
+      1,
+      4,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 160,
+    "r_correctpercent": 80,
+    "r_uid": 65,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 630,
+    "r_datetime": "2023-04-10T09:55:32.08",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      236
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 631,
+    "r_datetime": "2023-04-10T10:40:31.279",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      258
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 632,
+    "r_datetime": "2023-04-12T00:37:40.051",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      275
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 636,
+    "r_datetime": "2023-04-15T08:09:24.026",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      232
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 640,
+    "r_datetime": "2023-04-16T01:46:41.42",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      221,
+      223,
+      227,
+      222,
+      240,
+      220,
+      237,
+      228,
+      232,
+      234,
+      233,
+      242,
+      243,
+      235,
+      225,
+      229,
+      231,
+      224,
+      241,
+      236
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      3,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      3
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      0,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 150,
+    "r_correctpercent": 75,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 641,
+    "r_datetime": "2023-04-16T23:37:08.87",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      241,
+      235,
+      234,
+      236,
+      222,
+      221,
+      227,
+      226,
+      228,
+      240,
+      233,
+      220,
+      229,
+      223,
+      239,
+      225,
+      231,
+      230,
+      243,
+      224
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      2,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 160,
+    "r_correctpercent": 80,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 650,
+    "r_datetime": "2023-04-19T10:36:13.874",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 651,
+    "r_datetime": "2023-04-19T10:37:50.8",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 20,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 652,
+    "r_datetime": "2023-04-19T10:39:03.664",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220,
+      221
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 30,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 653,
+    "r_datetime": "2023-04-19T10:44:29.989",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220,
+      221,
+      222,
+      223,
+      224,
+      226,
+      227,
+      228
+    ],
+    "r_questions": 9,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 90,
+    "r_totalpoints": 80,
+    "r_correctpercent": 89,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 654,
+    "r_datetime": "2023-04-19T10:45:34.057",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220,
+      221,
+      222,
+      223,
+      224
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      4
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 50,
+    "r_correctpercent": 84,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 655,
+    "r_datetime": "2023-04-19T10:54:25.247",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220,
+      221,
+      222,
+      223,
+      224,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 170,
+    "r_correctpercent": 85,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 656,
+    "r_datetime": "2023-04-19T10:56:52.81",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      225,
+      220,
+      221,
+      222,
+      223,
+      224,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 230,
+    "r_correctpercent": 96,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 658,
+    "r_datetime": "2023-05-19T11:09:55.655",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      221
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 659,
+    "r_datetime": "2023-05-22T22:52:22.079",
+    "r_gid": 16,
+    "r_owner": "Richard",
+    "r_group": "Redoubles",
+    "r_qid": [
+      131,
+      133,
+      130,
+      132,
+      135,
+      139,
+      136,
+      127,
+      126,
+      129,
+      128,
+      137,
+      141,
+      138,
+      134,
+      140
+    ],
+    "r_questions": 16,
+    "r_ans": [
+      1,
+      1,
+      2,
+      2,
+      1,
+      3,
+      3,
+      1,
+      1,
+      2,
+      3,
+      1,
+      1,
+      2,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      0,
+      10,
+      0,
+      0,
+      10,
+      10,
+      0,
+      0,
+      10,
+      10,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 160,
+    "r_totalpoints": 80,
+    "r_correctpercent": 50,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 660,
+    "r_datetime": "2023-08-11T17:05:38.042",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      270,
+      244
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 20,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 642,
+    "r_datetime": "2023-04-17T05:01:28.487",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      339
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 677,
+    "r_datetime": "2023-11-06T04:06:15.833",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      242
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 678,
+    "r_datetime": "2023-11-06T04:06:15.833",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      242
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 679,
+    "r_datetime": "2023-11-06T04:17:21.922",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      231,
+      220,
+      238,
+      235,
+      239,
+      230,
+      228,
+      232,
+      242,
+      237,
+      243,
+      224,
+      225,
+      241,
+      234,
+      233,
+      226,
+      227,
+      223,
+      229
+    ],
+    "r_questions": 20,
+    "r_ans": [
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      4,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 160,
+    "r_correctpercent": 80,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 680,
+    "r_datetime": "2023-11-06T09:44:42.863",
+    "r_gid": 6,
+    "r_owner": "Richard",
+    "r_group": "Cue1st2ndControls",
+    "r_qid": [
+      293,
+      297,
+      302,
+      290,
+      296,
+      301,
+      289,
+      292,
+      288,
+      295,
+      300,
+      304,
+      291,
+      303,
+      294,
+      299,
+      298
+    ],
+    "r_questions": 17,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      4,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 170,
+    "r_totalpoints": 150,
+    "r_correctpercent": 89,
+    "r_uid": 264,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 681,
+    "r_datetime": "2023-11-13T01:47:20.33",
+    "r_gid": 3,
+    "r_owner": "Richard",
+    "r_group": "WBF35",
+    "r_qid": [
+      219
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 682,
+    "r_datetime": "2023-11-13T01:54:53.315",
+    "r_gid": 27,
+    "r_owner": "Richard",
+    "r_group": "WBF37",
+    "r_qid": [
+      802
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 683,
+    "r_datetime": "2023-11-13T08:15:54.171",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 684,
+    "r_datetime": "2023-11-13T08:17:18.939",
+    "r_gid": 21,
+    "r_owner": "Richard",
+    "r_group": "WBF02",
+    "r_qid": [
+      187
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 685,
+    "r_datetime": "2023-11-13T08:18:13.002",
+    "r_gid": 22,
+    "r_owner": "Richard",
+    "r_group": "WBF03",
+    "r_qid": [
+      188
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 686,
+    "r_datetime": "2023-11-13T08:20:55.129",
+    "r_gid": 23,
+    "r_owner": "Richard",
+    "r_group": "WBF04",
+    "r_qid": [
+      189
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 687,
+    "r_datetime": "2023-11-13T08:24:01.106",
+    "r_gid": 24,
+    "r_owner": "Richard",
+    "r_group": "WBF05",
+    "r_qid": [
+      190
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 688,
+    "r_datetime": "2023-11-13T08:24:53.133",
+    "r_gid": 25,
+    "r_owner": "Richard",
+    "r_group": "WBF06",
+    "r_qid": [
+      191
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 689,
+    "r_datetime": "2023-11-13T08:25:59.59",
+    "r_gid": 28,
+    "r_owner": "Richard",
+    "r_group": "WBF07",
+    "r_qid": [
+      192
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 690,
+    "r_datetime": "2023-11-13T08:27:02.054",
+    "r_gid": 29,
+    "r_owner": "Richard",
+    "r_group": "WBF08",
+    "r_qid": [
+      193
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 691,
+    "r_datetime": "2023-11-13T08:28:24.158",
+    "r_gid": 30,
+    "r_owner": "Richard",
+    "r_group": "WBF10",
+    "r_qid": [
+      194
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 692,
+    "r_datetime": "2023-11-13T08:44:56.069",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 693,
+    "r_datetime": "2023-11-13T09:16:33.931",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 694,
+    "r_datetime": "2023-11-13T09:49:01.391",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 695,
+    "r_datetime": "2023-11-13T09:56:19.117",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 696,
+    "r_datetime": "2023-11-13T09:58:04.652",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 697,
+    "r_datetime": "2023-11-13T20:36:55.273",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      270
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 698,
+    "r_datetime": "2023-11-14T00:31:25.553",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      253
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 712,
+    "r_datetime": "2023-11-14T21:30:06.228",
+    "r_gid": 20,
+    "r_owner": "Richard",
+    "r_group": "WBF01",
+    "r_qid": [
+      186
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 713,
+    "r_datetime": "2023-11-14T21:30:56.291",
+    "r_gid": 21,
+    "r_owner": "Richard",
+    "r_group": "WBF02",
+    "r_qid": [
+      187
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 714,
+    "r_datetime": "2023-11-14T21:31:59.892",
+    "r_gid": 22,
+    "r_owner": "Richard",
+    "r_group": "WBF03",
+    "r_qid": [
+      188
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 715,
+    "r_datetime": "2023-11-14T21:32:48.73",
+    "r_gid": 23,
+    "r_owner": "Richard",
+    "r_group": "WBF04",
+    "r_qid": [
+      189
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 716,
+    "r_datetime": "2023-11-14T21:34:03.639",
+    "r_gid": 24,
+    "r_owner": "Richard",
+    "r_group": "WBF05",
+    "r_qid": [
+      190
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 717,
+    "r_datetime": "2023-11-14T21:36:14.875",
+    "r_gid": 25,
+    "r_owner": "Richard",
+    "r_group": "WBF06",
+    "r_qid": [
+      191
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 718,
+    "r_datetime": "2023-11-14T21:36:51.938",
+    "r_gid": 28,
+    "r_owner": "Richard",
+    "r_group": "WBF07",
+    "r_qid": [
+      192
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 719,
+    "r_datetime": "2023-11-20T04:35:27.408",
+    "r_gid": 27,
+    "r_owner": "Richard",
+    "r_group": "WBF37",
+    "r_qid": [
+      802
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 263,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 720,
+    "r_datetime": "2023-11-20T04:37:07.433",
+    "r_gid": 26,
+    "r_owner": "Richard",
+    "r_group": "WBF36",
+    "r_qid": [
+      800
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 263,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 722,
+    "r_datetime": "2023-12-17T23:16:32.545",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      374,
+      372,
+      373,
+      378,
+      388,
+      384,
+      381,
+      377,
+      387,
+      383,
+      380,
+      382,
+      379,
+      385
+    ],
+    "r_questions": 14,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 140,
+    "r_totalpoints": 130,
+    "r_correctpercent": 93,
+    "r_uid": 300,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 723,
+    "r_datetime": "2024-01-08T20:05:09.862",
+    "r_gid": 57,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP03",
+    "r_qid": [
+      470,
+      471,
+      476,
+      477,
+      472,
+      478,
+      473,
+      479
+    ],
+    "r_questions": 8,
+    "r_ans": [
+      1,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 80,
+    "r_totalpoints": 70,
+    "r_correctpercent": 88,
+    "r_uid": 319,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 724,
+    "r_datetime": "2024-01-21T00:37:13.764",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      387,
+      377,
+      373,
+      375,
+      379,
+      385,
+      384,
+      372,
+      383,
+      381,
+      382,
+      388,
+      386,
+      374,
+      378,
+      380
+    ],
+    "r_questions": 16,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 160,
+    "r_totalpoints": 160,
+    "r_correctpercent": 100,
+    "r_uid": 323,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 725,
+    "r_datetime": "2024-01-21T00:37:44.922",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      384
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 323,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 726,
+    "r_datetime": "2024-01-21T19:48:56.756",
+    "r_gid": 57,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP03",
+    "r_qid": [
+      476,
+      470,
+      477,
+      471,
+      478,
+      473,
+      479,
+      475,
+      472
+    ],
+    "r_questions": 9,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 90,
+    "r_totalpoints": 90,
+    "r_correctpercent": 100,
+    "r_uid": 335,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 727,
+    "r_datetime": "2024-01-21T22:32:43.657",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      374,
+      381,
+      373,
+      372
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 40,
+    "r_correctpercent": 100,
+    "r_uid": 364,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 728,
+    "r_datetime": "2024-01-21T22:33:28.806",
+    "r_gid": 65,
+    "r_owner": "NZBridge",
+    "r_group": "NZBINT01",
+    "r_qid": [
+      404,
+      410
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 20,
+    "r_correctpercent": 100,
+    "r_uid": 364,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 730,
+    "r_datetime": "2024-01-24T17:51:45.602",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      381
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 395,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 731,
+    "r_datetime": "2024-01-28T02:25:32.865",
+    "r_gid": 82,
+    "r_owner": "NZBridge",
+    "r_group": "NZBBEG03",
+    "r_qid": [
+      826,
+      834,
+      830,
+      821,
+      825,
+      827,
+      833,
+      831,
+      824,
+      820,
+      822,
+      832,
+      829,
+      828,
+      823
+    ],
+    "r_questions": 15,
+    "r_ans": [
+      3,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      3
+    ],
+    "r_points": [
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 150,
+    "r_totalpoints": 110,
+    "r_correctpercent": 74,
+    "r_uid": 323,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 732,
+    "r_datetime": "2024-02-17T04:29:15.936",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      272,
+      247,
+      276
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      2,
+      1,
+      1
+    ],
+    "r_points": [
+      0,
+      10,
+      10
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 20,
+    "r_correctpercent": 67,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 733,
+    "r_datetime": "2024-03-03T03:05:22.124",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      272,
+      247,
+      268,
+      267,
+      257,
+      259,
+      246
+    ],
+    "r_questions": 7,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10
+    ],
+    "r_maxpoints": 70,
+    "r_totalpoints": 60,
+    "r_correctpercent": 86,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 734,
+    "r_datetime": "2024-03-03T06:30:29.622",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      258,
+      244
+    ],
+    "r_questions": 2,
+    "r_ans": [
+      2,
+      1
+    ],
+    "r_points": [
+      0,
+      10
+    ],
+    "r_maxpoints": 20,
+    "r_totalpoints": 10,
+    "r_correctpercent": 50,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 780,
+    "r_datetime": "2024-05-09T07:20:55.035",
+    "r_gid": 65,
+    "r_owner": "NZBridge",
+    "r_group": "NZBINT01",
+    "r_qid": [
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      413
+    ],
+    "r_questions": 13,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 130,
+    "r_totalpoints": 120,
+    "r_correctpercent": 93,
+    "r_uid": 23,
+    "r_sid": 593
+  },
+  {
+    "r_hid": 781,
+    "r_datetime": "2024-05-10T20:32:21.425",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 782,
+    "r_datetime": "2024-05-10T20:32:22.557",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 783,
+    "r_datetime": "2024-05-10T20:32:26.575",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 784,
+    "r_datetime": "2024-05-10T20:32:26.826",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 785,
+    "r_datetime": "2024-05-10T20:32:27.959",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 786,
+    "r_datetime": "2024-05-10T20:32:29.325",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 787,
+    "r_datetime": "2024-05-10T20:32:29.542",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243
+    ],
+    "r_questions": 24,
+    "r_ans": [
+      2,
+      0,
+      1,
+      2,
+      3,
+      2,
+      0,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      3,
+      2,
+      1,
+      1,
+      1,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 240,
+    "r_totalpoints": 70,
+    "r_correctpercent": 30,
+    "r_uid": 525,
+    "r_sid": 594
+  },
+  {
+    "r_hid": 796,
+    "r_datetime": "2024-06-10T11:17:15.954",
+    "r_gid": 6,
+    "r_owner": "Richard",
+    "r_group": "Cue1st2ndControls",
+    "r_qid": [
+      293,
+      297,
+      288,
+      304,
+      295,
+      303,
+      301,
+      294
+    ],
+    "r_questions": 8,
+    "r_ans": [
+      0,
+      2,
+      0,
+      0,
+      1,
+      2,
+      0,
+      2
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      10,
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 80,
+    "r_totalpoints": 40,
+    "r_correctpercent": 50,
+    "r_uid": 23,
+    "r_sid": 723
+  },
+  {
+    "r_hid": 797,
+    "r_datetime": "2024-06-11T10:02:09.808",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      240,
+      223,
+      224,
+      235,
+      228,
+      239,
+      226,
+      232,
+      227,
+      220,
+      222,
+      221,
+      230,
+      238,
+      233,
+      236,
+      234,
+      229,
+      243,
+      225
+    ],
+    "r_questions": 21,
+    "r_ans": [
+      2,
+      1,
+      2,
+      3,
+      2,
+      3,
+      0,
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      3
+    ],
+    "r_points": [
+      0,
+      0,
+      0,
+      0,
+      10,
+      10,
+      10,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 110,
+    "r_correctpercent": 55,
+    "r_uid": 256,
+    "r_sid": 732
+  },
+  {
+    "r_hid": 798,
+    "r_datetime": "2024-06-11T10:17:25.78",
+    "r_gid": 55,
+    "r_owner": "NZBridge",
+    "r_group": "NZBIMP01",
+    "r_qid": [
+      379,
+      375,
+      372,
+      384,
+      385,
+      373,
+      382,
+      388,
+      381,
+      380,
+      378,
+      387,
+      377,
+      386,
+      374,
+      383
+    ],
+    "r_questions": 16,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      0,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 160,
+    "r_totalpoints": 130,
+    "r_correctpercent": 82,
+    "r_uid": 256,
+    "r_sid": 732
+  },
+  {
+    "r_hid": 799,
+    "r_datetime": "2024-06-23T08:04:18.226",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      221,
+      225,
+      239,
+      226,
+      223
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      2,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      0,
+      10,
+      0,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 30,
+    "r_correctpercent": 60,
+    "r_uid": 548,
+    "r_sid": 911
+  },
+  {
+    "r_hid": 806,
+    "r_datetime": "2024-10-09T21:37:58.369",
+    "r_gid": 17,
+    "r_owner": "Richard",
+    "r_group": "TwoWayCheckback",
+    "r_qid": [
+      240,
+      233,
+      228,
+      231,
+      222,
+      234,
+      232,
+      223,
+      224,
+      230,
+      236,
+      221,
+      225,
+      227,
+      243,
+      241,
+      229,
+      220,
+      238,
+      226
+    ],
+    "r_questions": 22,
+    "r_ans": [
+      2,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      3,
+      2,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      0,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      0,
+      10,
+      0,
+      10,
+      10,
+      10,
+      0,
+      0,
+      10,
+      10
+    ],
+    "r_maxpoints": 200,
+    "r_totalpoints": 120,
+    "r_correctpercent": 60,
+    "r_uid": 634,
+    "r_sid": 1094
+  },
+  {
+    "r_hid": 1000,
+    "r_datetime": "2025-01-24T00:04:56.311",
+    "r_gid": 5,
+    "r_owner": "Richard",
+    "r_group": "BergenRaises",
+    "r_qid": [
+      277,
+      273,
+      267,
+      259,
+      254
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      2,
+      1,
+      3,
+      3
+    ],
+    "r_points": [
+      10,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": null,
+    "r_correctpercent": 20,
+    "r_uid": 548,
+    "r_sid": 1006
+  },
+  {
+    "r_hid": 1008,
+    "r_datetime": "2025-01-26T21:05:05.878",
+    "r_gid": 1004,
+    "r_owner": "Richard",
+    "r_group": "WBF",
+    "r_qid": [
+      1013,
+      1019,
+      1036,
+      1020,
+      1011
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      2,
+      1,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      0,
+      0,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": null,
+    "r_correctpercent": 60,
+    "r_uid": 548,
+    "r_sid": 1093
+  },
+  {
+    "r_hid": 604,
+    "r_datetime": "2023-02-20T19:45:50.356",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      356,
+      354,
+      351,
+      358
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      3,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 30,
+    "r_correctpercent": 75,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 607,
+    "r_datetime": "2023-03-04T05:47:18.662",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      349
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 612,
+    "r_datetime": "2023-03-04T20:49:35.167",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      355
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      4
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 616,
+    "r_datetime": "2023-03-04T21:32:32.753",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      3
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 618,
+    "r_datetime": "2023-03-04T21:55:47.855",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 622,
+    "r_datetime": "2023-03-09T01:24:58.241",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      361
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 633,
+    "r_datetime": "2023-04-14T21:54:35.097",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      339,
+      340,
+      338,
+      337,
+      341,
+      336
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 60,
+    "r_correctpercent": 100,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 634,
+    "r_datetime": "2023-04-14T22:06:43.466",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      342,
+      344,
+      345,
+      343
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      0
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 20,
+    "r_correctpercent": 50,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 635,
+    "r_datetime": "2023-04-14T22:31:06.536",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      346,
+      347,
+      357,
+      350,
+      360,
+      349,
+      351,
+      356,
+      348,
+      352,
+      358,
+      359,
+      353,
+      354,
+      355
+    ],
+    "r_questions": 15,
+    "r_ans": [
+      1,
+      2,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 150,
+    "r_totalpoints": 130,
+    "r_correctpercent": 87,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 637,
+    "r_datetime": "2023-04-15T22:16:47.844",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      355,
+      360,
+      352,
+      356,
+      349,
+      346,
+      353,
+      347,
+      358,
+      348,
+      357,
+      359,
+      351,
+      354,
+      350
+    ],
+    "r_questions": 15,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 150,
+    "r_totalpoints": 150,
+    "r_correctpercent": 100,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 638,
+    "r_datetime": "2023-04-15T22:32:04.81",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      362,
+      364,
+      361,
+      363,
+      365,
+      366
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      3,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      0,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 50,
+    "r_correctpercent": 84,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 639,
+    "r_datetime": "2023-04-15T23:02:28.651",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      371,
+      370,
+      367,
+      368,
+      369
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 50,
+    "r_correctpercent": 100,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 643,
+    "r_datetime": "2023-04-17T05:04:03.158",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      339,
+      336,
+      337,
+      341,
+      340,
+      338
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 60,
+    "r_correctpercent": 100,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 644,
+    "r_datetime": "2023-04-17T05:04:28.612",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      337,
+      339,
+      340,
+      338,
+      341
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 60,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 645,
+    "r_datetime": "2023-04-17T05:04:28.612",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      337,
+      339,
+      340,
+      338,
+      341
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 60,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 646,
+    "r_datetime": "2023-04-17T05:08:30.331",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      344,
+      345,
+      342,
+      343
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 40,
+    "r_correctpercent": 100,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 647,
+    "r_datetime": "2023-04-17T05:08:41.535",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      344,
+      345,
+      343,
+      342
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 30,
+    "r_correctpercent": 75,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 648,
+    "r_datetime": "2023-04-17T05:12:08.809",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      346,
+      347,
+      357
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      1,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 20,
+    "r_correctpercent": 67,
+    "r_uid": 247,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 649,
+    "r_datetime": "2023-04-19T10:31:09.409",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      346,
+      347,
+      355,
+      348
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      2,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 30,
+    "r_correctpercent": 75,
+    "r_uid": 246,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 661,
+    "r_datetime": "2023-11-01T22:58:43.614",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      340
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 662,
+    "r_datetime": "2023-11-01T23:08:37.754",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      345
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 663,
+    "r_datetime": "2023-11-01T23:21:16.128",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      349
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 664,
+    "r_datetime": "2023-11-01T23:31:09.712",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      361
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 665,
+    "r_datetime": "2023-11-02T23:43:51.189",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      337
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      1
+    ],
+    "r_points": [
+      10
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 10,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 666,
+    "r_datetime": "2023-11-02T23:45:52.368",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      339,
+      338,
+      337,
+      336
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      4,
+      3,
+      1,
+      2
+    ],
+    "r_points": [
+      0,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 10,
+    "r_correctpercent": 25,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 667,
+    "r_datetime": "2023-11-02T23:49:19.511",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      339,
+      338,
+      337,
+      340,
+      336,
+      341
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 60,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 668,
+    "r_datetime": "2023-11-04T19:14:03.318",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      345,
+      342,
+      343,
+      344
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 40,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 669,
+    "r_datetime": "2023-11-04T19:36:00.506",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      357,
+      349,
+      352,
+      356,
+      355,
+      358,
+      354,
+      350,
+      351,
+      347,
+      346,
+      348,
+      353,
+      359
+    ],
+    "r_questions": 14,
+    "r_ans": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      0,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 140,
+    "r_totalpoints": 110,
+    "r_correctpercent": 79,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 670,
+    "r_datetime": "2023-11-04T19:37:52.331",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      358
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 671,
+    "r_datetime": "2023-11-04T19:39:17.054",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      348,
+      355,
+      357
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      1,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 20,
+    "r_correctpercent": 67,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 672,
+    "r_datetime": "2023-11-04T19:40:46.832",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      348
+    ],
+    "r_questions": 1,
+    "r_ans": [
+      2
+    ],
+    "r_points": [
+      0
+    ],
+    "r_maxpoints": 10,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 808,
+    "r_datetime": "2024-11-19T23:24:52.42",
+    "r_gid": 96,
+    "r_owner": "Richard",
+    "r_group": "Wolpert21",
+    "r_qid": [
+      916,
+      908,
+      907
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 30,
+    "r_correctpercent": 100,
+    "r_uid": 547,
+    "r_sid": 1194
+  },
+  {
+    "r_hid": 809,
+    "r_datetime": "2024-11-19T23:26:43.019",
+    "r_gid": 96,
+    "r_owner": "Richard",
+    "r_group": "Wolpert21",
+    "r_qid": [
+      907,
+      916,
+      908
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": 30,
+    "r_correctpercent": 100,
+    "r_uid": 547,
+    "r_sid": 1194
+  },
+  {
+    "r_hid": 673,
+    "r_datetime": "2023-11-04T19:42:28.877",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      347,
+      349,
+      355,
+      351,
+      346
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      3
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 674,
+    "r_datetime": "2023-11-04T19:46:32.027",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      350,
+      346,
+      356,
+      347,
+      354,
+      359,
+      352,
+      360,
+      349,
+      353,
+      355,
+      351,
+      357,
+      348,
+      358
+    ],
+    "r_questions": 15,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      0,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 150,
+    "r_totalpoints": 140,
+    "r_correctpercent": 94,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 675,
+    "r_datetime": "2023-11-04T19:56:51.027",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      363,
+      362,
+      366,
+      361,
+      364,
+      365
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      3,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 50,
+    "r_correctpercent": 84,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 676,
+    "r_datetime": "2023-11-04T20:08:31.023",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      370,
+      369,
+      368,
+      367,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 50,
+    "r_correctpercent": 100,
+    "r_uid": 257,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 721,
+    "r_datetime": "2023-11-21T23:31:16.149",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      341,
+      336,
+      337,
+      339,
+      338,
+      340
+    ],
+    "r_questions": 6,
+    "r_ans": [
+      1,
+      1,
+      1,
+      1,
+      3,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 60,
+    "r_totalpoints": 50,
+    "r_correctpercent": 84,
+    "r_uid": 23,
+    "r_sid": 0
+  },
+  {
+    "r_hid": 775,
+    "r_datetime": "2024-05-06T02:45:52.318",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      2,
+      1,
+      2,
+      0
+    ],
+    "r_points": [
+      10,
+      0,
+      0,
+      0,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 20,
+    "r_correctpercent": 40,
+    "r_uid": 23,
+    "r_sid": 574
+  },
+  {
+    "r_hid": 788,
+    "r_datetime": "2024-05-16T05:04:15.287",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      342,
+      343,
+      344,
+      345
+    ],
+    "r_questions": 4,
+    "r_ans": [
+      0,
+      1,
+      2,
+      0
+    ],
+    "r_points": [
+      10,
+      0,
+      0,
+      10
+    ],
+    "r_maxpoints": 40,
+    "r_totalpoints": 20,
+    "r_correctpercent": 50,
+    "r_uid": 23,
+    "r_sid": 630
+  },
+  {
+    "r_hid": 789,
+    "r_datetime": "2024-05-21T00:29:27.356",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 23,
+    "r_sid": 667
+  },
+  {
+    "r_hid": 792,
+    "r_datetime": "2024-06-09T12:50:36.923",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      1,
+      2,
+      2,
+      1,
+      2
+    ],
+    "r_points": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 0,
+    "r_correctpercent": 0,
+    "r_uid": 23,
+    "r_sid": 719
+  },
+  {
+    "r_hid": 793,
+    "r_datetime": "2024-06-09T12:55:22.498",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      2,
+      3,
+      1,
+      2
+    ],
+    "r_points": [
+      10,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 10,
+    "r_correctpercent": 20,
+    "r_uid": 23,
+    "r_sid": 719
+  },
+  {
+    "r_hid": 794,
+    "r_datetime": "2024-06-09T15:32:06.539",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 30,
+    "r_correctpercent": 60,
+    "r_uid": 23,
+    "r_sid": 720
+  },
+  {
+    "r_hid": 795,
+    "r_datetime": "2024-06-09T15:35:28.306",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      367,
+      368,
+      369,
+      370,
+      371
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      1,
+      0,
+      2,
+      1
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      0,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 20,
+    "r_correctpercent": 40,
+    "r_uid": 23,
+    "r_sid": 720
+  },
+  {
+    "r_hid": 800,
+    "r_datetime": "2024-06-23T18:18:39.63",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      337,
+      338,
+      339,
+      340
+    ],
+    "r_questions": 7,
+    "r_ans": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      2
+    ],
+    "r_points": [
+      0,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 30,
+    "r_correctpercent": 60,
+    "r_uid": 547,
+    "r_sid": 913
+  },
+  {
+    "r_hid": 801,
+    "r_datetime": "2024-06-23T18:27:12.111",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      337,
+      338,
+      339,
+      340
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 547,
+    "r_sid": 913
+  },
+  {
+    "r_hid": 802,
+    "r_datetime": "2024-06-23T18:35:39.57",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      338,
+      339,
+      341,
+      340
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      2
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      0
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 547,
+    "r_sid": 913
+  },
+  {
+    "r_hid": 803,
+    "r_datetime": "2024-06-23T18:41:35.582",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      336,
+      340,
+      337,
+      341,
+      339
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 547,
+    "r_sid": 913
+  },
+  {
+    "r_hid": 804,
+    "r_datetime": "2024-06-23T19:26:59.55",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      341,
+      340,
+      336,
+      339,
+      337
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      0,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 40,
+    "r_correctpercent": 80,
+    "r_uid": 547,
+    "r_sid": 913
+  },
+  {
+    "r_hid": 805,
+    "r_datetime": "2024-10-06T11:05:39.357",
+    "r_gid": 1006,
+    "r_owner": "Richard",
+    "r_group": "Lebensohl",
+    "r_qid": [
+      370,
+      369,
+      371,
+      368,
+      367
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      10,
+      10,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": 50,
+    "r_correctpercent": 100,
+    "r_uid": 23,
+    "r_sid": 1051
+  },
+  {
+    "r_hid": 1009,
+    "r_datetime": "2025-01-27T20:11:22.792",
+    "r_gid": 96,
+    "r_owner": "Richard",
+    "r_group": "Wolpert21",
+    "r_qid": [
+      916,
+      907,
+      908
+    ],
+    "r_questions": 3,
+    "r_ans": [
+      0,
+      1,
+      0
+    ],
+    "r_points": [
+      10,
+      0,
+      10
+    ],
+    "r_maxpoints": 30,
+    "r_totalpoints": null,
+    "r_correctpercent": 67,
+    "r_uid": 23,
+    "r_sid": 1099
+  },
+  {
+    "r_hid": 1010,
+    "r_datetime": "2025-01-30T20:22:52.557",
+    "r_gid": 1004,
+    "r_owner": "Richard",
+    "r_group": "WBF",
+    "r_qid": [
+      1004,
+      1007,
+      1010,
+      1014,
+      1006
+    ],
+    "r_questions": 5,
+    "r_ans": [
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    "r_points": [
+      10,
+      10,
+      0,
+      10,
+      10
+    ],
+    "r_maxpoints": 50,
+    "r_totalpoints": null,
+    "r_correctpercent": 80,
+    "r_uid": 548,
+    "r_sid": 1105
+  }
+]

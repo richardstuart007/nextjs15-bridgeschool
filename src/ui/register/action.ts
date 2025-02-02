@@ -52,7 +52,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   const tableColumnValuePairs = [
     {
-      table: 'users',
+      table: 'tus_users',
       whereColumnValuePairs: [{ column: 'u_email', value: email }]
     }
   ]
@@ -77,7 +77,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   const u_fedcountry = 'ZZ'
   const u_provider = provider
   const userRecords = await table_write({
-    table: 'users',
+    table: 'tus_users',
     columnValuePairs: [
       { column: 'u_email', value: u_email },
       { column: 'u_name', value: u_name },
@@ -100,7 +100,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   const upemail = email
 
   await table_write({
-    table: 'userspwd',
+    table: 'tup_userspwd',
     columnValuePairs: [
       { column: 'upuid', value: upuid },
       { column: 'uphash', value: uphash },
@@ -113,7 +113,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   const uouid = userRecord.u_uid
   const uoowner = 'Richard'
   await table_write({
-    table: 'usersowner',
+    table: 'tuo_usersowner',
     columnValuePairs: [
       { column: 'uouid', value: uouid },
       { column: 'uoowner', value: uoowner }

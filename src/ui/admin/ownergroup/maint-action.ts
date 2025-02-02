@@ -82,12 +82,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   try {
     const updateParams = {
-      table: 'ownergroup',
+      table: 'tog_ownergroup',
       columnValuePairs: [{ column: 'ogtitle', value: ogtitle }],
       whereColumnValuePairs: [{ column: 'oggid', value: oggid }]
     }
     const writeParams = {
-      table: 'ownergroup',
+      table: 'tog_ownergroup',
       columnValuePairs: [
         { column: 'ogowner', value: ogowner },
         { column: 'oggroup', value: oggroup },

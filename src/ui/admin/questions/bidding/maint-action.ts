@@ -288,7 +288,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       //  update parameters
       //
       const updateParams = {
-        table: 'questions',
+        table: 'tqq_questions',
         columnValuePairs: [{ column: 'qrounds', value: qrounds }],
         whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
       }

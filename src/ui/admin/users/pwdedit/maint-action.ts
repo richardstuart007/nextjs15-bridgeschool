@@ -61,7 +61,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
     const upuid = userid
     const uphash = await bcrypt.hash(uppwd, 10)
     const updateParams = {
-      table: 'userspwd',
+      table: 'tup_userspwd',
       columnValuePairs: [{ column: 'uphash', value: uphash }],
       whereColumnValuePairs: [{ column: 'upuid', value: upuid }]
     }

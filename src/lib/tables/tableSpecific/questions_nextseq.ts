@@ -10,7 +10,7 @@ export async function getNextSeq(qowner: string, qgroup: string) {
   try {
     const sqlQuery = `
       SELECT COALESCE(MAX(qseq) + 1, 1) AS next_qseq
-      FROM questions
+      FROM tqq_questions
       WHERE qowner = $1
         AND qgroup = $2
     `

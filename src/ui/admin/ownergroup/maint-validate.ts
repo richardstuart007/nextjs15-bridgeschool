@@ -24,7 +24,7 @@ export default async function validateOwnergroup(record: table_Ownergroup): Prom
   if (oggid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'ownergroup',
+        table: 'tog_ownergroup',
         whereColumnValuePairs: [
           { column: 'ogowner', value: ogowner },
           { column: 'oggroup', value: oggroup }

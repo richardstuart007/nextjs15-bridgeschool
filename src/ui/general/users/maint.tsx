@@ -117,7 +117,7 @@ export default function Form({ admin_uid }: Props) {
     //
     try {
       const fetchParams = {
-        table: 'users',
+        table: 'tus_users',
         whereColumnValuePairs: [{ column: 'u_uid', value: u_uid }]
       }
       const rows = await table_fetch(fetchParams)

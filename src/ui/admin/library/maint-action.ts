@@ -102,7 +102,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     //  Get the ownergroup id
     //
     const fetchParams = {
-      table: 'ownergroup',
+      table: 'tog_ownergroup',
       whereColumnValuePairs: [
         { column: 'ogowner', value: lrowner },
         { column: 'oggroup', value: lrgroup }
@@ -128,7 +128,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     //
     if (lrlid === 0) {
       const params = {
-        table: 'library',
+        table: 'tlr_library',
         columnValuePairs
       }
       await table_write(params)
@@ -142,7 +142,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     //
     else {
       const updateParams = {
-        table: 'library',
+        table: 'tlr_library',
         columnValuePairs,
         whereColumnValuePairs: [{ column: 'lrlid', value: lrlid }]
       }

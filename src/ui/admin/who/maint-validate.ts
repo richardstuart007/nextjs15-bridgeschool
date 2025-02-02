@@ -22,7 +22,7 @@ export default async function validate(record: table_Who): Promise<StateSetup> {
   if (wwid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'who',
+        table: 'twh_who',
         whereColumnValuePairs: [{ column: 'wwho', value: wwho }]
       }
     ]

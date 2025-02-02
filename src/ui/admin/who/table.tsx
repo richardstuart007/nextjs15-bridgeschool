@@ -76,7 +76,7 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'who'
+      const table = 'twh_who'
       //
       // Calculate the offset for pagination
       //
@@ -87,7 +87,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'who',
+        orderBy: 'wwho',
         limit: rowsPerPage,
         offset
       })
@@ -125,7 +125,7 @@ export default function Table() {
   function handleModalCloseEdit() {
     setTimeout(() => setIsModelOpenEdit(false), 0)
     setTimeout(() => setSelectedRow(null), 0)
-    setShouldFetchData(true)
+    setTimeout(() => setShouldFetchData(true), 0)
   }
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
@@ -148,7 +148,7 @@ export default function Table() {
         //
         const tableColumnValuePairs = [
           {
-            table: 'library',
+            table: 'tlr_library',
             whereColumnValuePairs: [{ column: 'lrwho', value: who.wwho }]
           }
         ]
@@ -167,7 +167,7 @@ export default function Table() {
         // Call the server function to delete
         //
         const Params = {
-          table: 'who',
+          table: 'twh_who',
           whereColumnValuePairs: [{ column: 'wwid', value: who.wwid }]
         }
         await table_delete(Params)

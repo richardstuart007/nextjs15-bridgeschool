@@ -101,7 +101,7 @@ export const {
           //  Get User record
           //
           const pwdParams = {
-            table: 'userspwd',
+            table: 'tup_userspwd',
             whereColumnValuePairs: [{ column: 'upemail', value: email }]
           }
           const pwdRows = await table_fetch(pwdParams)
@@ -120,7 +120,7 @@ export const {
           //  Get User record
           //
           const fetchParams = {
-            table: 'users',
+            table: 'tus_users',
             whereColumnValuePairs: [{ column: 'u_email', value: email }]
           }
           const rows = await table_fetch(fetchParams)

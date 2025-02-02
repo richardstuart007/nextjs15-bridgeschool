@@ -74,7 +74,7 @@ export default function Table({ selected_uid }: FormProps) {
       //
       //  Table
       //
-      const table = 'usersowner'
+      const table = 'tuo_usersowner'
       //
       // Calculate the offset for pagination
       //
@@ -107,7 +107,7 @@ export default function Table({ selected_uid }: FormProps) {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching usersowner:', error)
+      console.error('Error fetching tuo_usersowner:', error)
     }
   }
   //......................................................................................
@@ -162,7 +162,7 @@ export default function Table({ selected_uid }: FormProps) {
       // Call the server function to delete
       //
       const Params = {
-        table: 'usersowner',
+        table: 'tuo_usersowner',
         whereColumnValuePairs: [
           { column: 'uouid', value: tabledata.uouid },
           { column: 'uoowner', value: tabledata.uoowner }
@@ -239,7 +239,7 @@ export default function Table({ selected_uid }: FormProps) {
                     setSelectedOption={setuid}
                     searchEnabled={false}
                     name='uid'
-                    table='users'
+                    table='tus_users'
                     optionLabel='u_name'
                     optionValue='u_uid'
                     overrideClass_Dropdown='w-48'
@@ -256,7 +256,7 @@ export default function Table({ selected_uid }: FormProps) {
                   setSelectedOption={setowner}
                   searchEnabled={false}
                   name='owner'
-                  table='owner'
+                  table='tow_owner'
                   optionLabel='oowner'
                   optionValue='oowner'
                   overrideClass_Dropdown='w-48'

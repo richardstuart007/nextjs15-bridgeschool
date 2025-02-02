@@ -104,7 +104,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //
       //  Table
       //
-      const table = 'questions'
+      const table = 'tqq_questions'
       //
       // Calculate the offset for pagination
       //
@@ -137,7 +137,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
         // Call the server function to delete
         //
         const Params = {
-          table: 'questions',
+          table: 'tqq_questions',
           whereColumnValuePairs: [{ column: 'qqid', value: questions.qqid }]
         }
         await table_delete(Params)
@@ -307,7 +307,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     setSelectedOption={setowner}
                     searchEnabled={false}
                     name='owner'
-                    table='owner'
+                    table='tow_owner'
                     optionLabel='oowner'
                     optionValue='oowner'
                     overrideClass_Dropdown='w-28'
@@ -326,7 +326,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     selectedOption={group}
                     setSelectedOption={setgroup}
                     name='group'
-                    table='ownergroup'
+                    table='tog_ownergroup'
                     tableColumn='ogowner'
                     tableColumnValue={owner}
                     optionLabel='ogtitle'

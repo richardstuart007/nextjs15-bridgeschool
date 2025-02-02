@@ -54,7 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     //  Fetch database name
     //
     const rows = await table_fetch({
-      table: 'database',
+      table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'd_did', value: 1 }]
     })
     const row = rows[0]

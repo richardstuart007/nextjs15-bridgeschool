@@ -79,12 +79,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Write/Update
     //
     const updateParams = {
-      table: 'who',
+      table: 'twh_who',
       columnValuePairs: [{ column: 'wtitle', value: wtitle }],
       whereColumnValuePairs: [{ column: 'wwho', value: wwho }]
     }
     const writeParams = {
-      table: 'who',
+      table: 'twh_who',
       columnValuePairs: [
         { column: 'wwho', value: wwho },
         { column: 'wtitle', value: wtitle }

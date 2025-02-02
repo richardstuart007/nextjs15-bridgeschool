@@ -26,7 +26,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Get History
     //
     const rows = await table_fetch({
-      table: 'usershistory',
+      table: 'ths_usershistory',
       whereColumnValuePairs: [{ column: 'r_hid', value: hid }]
     })
     const history = rows[0]

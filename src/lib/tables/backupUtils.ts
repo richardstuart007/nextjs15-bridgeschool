@@ -297,7 +297,7 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
   }
 }
 //--------------------------------------------------------------------------
-//  Downloads data from the PostgreSQL database and saves it as a JSON file
+//  Downloads data from the PostgreSQL tdb_database and saves it as a JSON file
 //--------------------------------------------------------------------------
 /**
  * @param table - table to read
@@ -432,7 +432,7 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
   }
 }
 //--------------------------------------------------------------------------
-//  Uploads the content of a JSON file to the PostgreSQL database
+//  Uploads the content of a JSON file to the PostgreSQL tdb_database
 //--------------------------------------------------------------------------
 /**
  * @param filePath - The path to the JSON file to upload.

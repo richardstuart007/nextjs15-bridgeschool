@@ -139,7 +139,7 @@ export default function Form({
               setSelectedOption={setLrgroup}
               name='lrgroup'
               label='Group'
-              table='ownergroup'
+              table='tog_ownergroup'
               tableColumn='ogowner'
               tableColumnValue={lrowner}
               optionLabel='oggroup'
@@ -232,7 +232,7 @@ export default function Form({
             setSelectedOption={setLrwho}
             name='lrwho'
             label='Who'
-            table='who'
+            table='twh_who'
             optionLabel='wtitle'
             optionValue='wwho'
             overrideClass_Dropdown='w-72'
@@ -248,7 +248,7 @@ export default function Form({
             setSelectedOption={setLrtype}
             name='lrtype'
             label='Type'
-            table='reftype'
+            table='trf_reftype'
             optionLabel='rttitle'
             optionValue='rttype'
             overrideClass_Dropdown='w-72'

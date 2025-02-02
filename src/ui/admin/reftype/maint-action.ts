@@ -79,12 +79,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Write/Update
     //
     const updateParams = {
-      table: 'reftype',
+      table: 'trf_reftype',
       columnValuePairs: [{ column: 'rttitle', value: rttitle }],
       whereColumnValuePairs: [{ column: 'rttype', value: rttype }]
     }
     const writeParams = {
-      table: 'reftype',
+      table: 'trf_reftype',
       columnValuePairs: [
         { column: 'rttype', value: rttype },
         { column: 'rttitle', value: rttitle }

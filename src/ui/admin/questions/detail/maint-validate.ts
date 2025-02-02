@@ -33,7 +33,7 @@ export default async function validate(record: Table): Promise<StateSetup> {
   if (qqid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'questions',
+        table: 'tqq_questions',
         whereColumnValuePairs: [
           { column: 'qowner', value: qowner },
           { column: 'qgroup', value: qgroup },
@@ -50,7 +50,7 @@ export default async function validate(record: Table): Promise<StateSetup> {
   if (qlid > 0) {
     const tableColumnValuePairs = [
       {
-        table: 'library',
+        table: 'tlr_library',
         whereColumnValuePairs: [{ column: 'lrlid', value: qlid }]
       }
     ]

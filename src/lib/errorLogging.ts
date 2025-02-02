@@ -44,7 +44,7 @@ export async function errorLogging({
     //  Query statement
     //
     const sqlQueryStatement = `
-    INSERT INTO logging (
+    INSERT INTO tlg_logging (
       lgdatetime,
       lgmsg,
       lgfunctionname,

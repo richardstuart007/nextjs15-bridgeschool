@@ -85,11 +85,11 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'sessions'
+      const table = 'tss_sessions'
       //
       //  Joins
       //
-      const joins = [{ table: 'users', on: 's_uid = u_uid' }]
+      const joins = [{ table: 'tus_users', on: 's_uid = u_uid' }]
       //
       // Calculate the offset for pagination
       //

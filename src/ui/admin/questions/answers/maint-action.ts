@@ -110,7 +110,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Update database
     //
     const updateParams = {
-      table: 'questions',
+      table: 'tqq_questions',
       columnValuePairs: [
         { column: 'qans', value: qansValue },
         { column: 'qpoints', value: qpointsValue }

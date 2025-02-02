@@ -40,7 +40,7 @@ export default async function Page({
     //  Get Questions
     //
     const fetchParams = {
-      table: 'questions',
+      table: 'tqq_questions',
       whereColumnValuePairs: [{ column: 'qgid', value: gid }]
     }
     const questionsData = await table_fetch(fetchParams)

@@ -108,7 +108,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ export default function Table() {
         //
         const tableColumnValuePairs = [
           {
-            table: 'library',
+            table: 'tlr_library',
             whereColumnValuePairs: [{ column: 'lrtype', value: reftype.rttype }]
           }
         ]

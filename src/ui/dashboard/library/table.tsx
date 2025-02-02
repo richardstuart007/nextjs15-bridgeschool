@@ -270,7 +270,7 @@ export default function Table({ selected_oggid }: FormProps) {
       //
       const oggid = Number(selected_oggid)
       const rows = await table_fetch({
-        table: 'ownergroup',
+        table: 'tog_ownergroup',
         whereColumnValuePairs: [{ column: 'oggid', value: oggid }]
       })
       const row = rows[0]
@@ -282,7 +282,7 @@ export default function Table({ selected_oggid }: FormProps) {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ export default function Table({ selected_oggid }: FormProps) {
       //
       //  Table
       //
-      const table = 'library'
+      const table = 'tlr_library'
       //
       //  Distinct - no uid selected
       //
@@ -334,8 +334,8 @@ export default function Table({ selected_oggid }: FormProps) {
       //  Joins
       //
       const joins = [
-        { table: 'usersowner', on: 'lrowner = uoowner' },
-        { table: 'ownergroup', on: 'lrgid = oggid' }
+        { table: 'tuo_usersowner', on: 'lrowner = uoowner' },
+        { table: 'tog_ownergroup', on: 'lrgid = oggid' }
       ]
 
       //
@@ -375,7 +375,7 @@ export default function Table({ selected_oggid }: FormProps) {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching library:', error)
+      console.error('Error fetching tlr_library:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -410,7 +410,7 @@ export default function Table({ selected_oggid }: FormProps) {
                   <MyLink
                     href={{
                       pathname: `/dashboard/quiz/${selected_oggid}`,
-                      query: { from: 'library' }
+                      query: { from: 'tlr_library' }
                     }}
                     overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                   >
@@ -481,7 +481,7 @@ export default function Table({ selected_oggid }: FormProps) {
                     setSelectedOption={setowner}
                     searchEnabled={false}
                     name='owner'
-                    table='usersowner'
+                    table='tuo_usersowner'
                     tableColumn='uouid'
                     tableColumnValue={uid}
                     optionLabel='uoowner'
@@ -501,7 +501,7 @@ export default function Table({ selected_oggid }: FormProps) {
                       selectedOption={group}
                       setSelectedOption={setgroup}
                       name='group'
-                      table='ownergroup'
+                      table='tog_ownergroup'
                       tableColumn='ogowner'
                       tableColumnValue={owner}
                       optionLabel='ogtitle'
@@ -581,7 +581,7 @@ export default function Table({ selected_oggid }: FormProps) {
                     selectedOption={who}
                     setSelectedOption={setwho}
                     name='who'
-                    table='who'
+                    table='twh_who'
                     optionLabel='wtitle'
                     optionValue='wwho'
                     overrideClass_Dropdown='h-6 w-28 text-xxs'
@@ -664,7 +664,7 @@ export default function Table({ selected_oggid }: FormProps) {
                         <MyLink
                           href={{
                             pathname: `/dashboard/quiz/${tabledata.lrgid}`,
-                            query: { from: 'library' }
+                            query: { from: 'tlr_library' }
                           }}
                           overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                         >

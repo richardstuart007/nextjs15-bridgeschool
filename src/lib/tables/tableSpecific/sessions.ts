@@ -26,8 +26,8 @@ export async function fetchSessionInfo() {
         u_sortquestions,
         u_skipcorrect,
         u_maxquestions
-      FROM sessions
-      JOIN users
+      FROM tss_sessions
+      JOIN tus_users
       ON   s_uid = u_uid
       WHERE s_id = $1
     `
