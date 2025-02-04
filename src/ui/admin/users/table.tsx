@@ -80,11 +80,11 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'u_name', value: name, operator: 'LIKE' },
-      { column: 'u_email', value: email, operator: 'LIKE' },
-      { column: 'u_fedid', value: fedid, operator: 'LIKE' },
-      { column: 'u_provider', value: provider, operator: 'LIKE' },
-      { column: 'u_fedcountry', value: country, operator: 'LIKE' }
+      { column: 'us_name', value: name, operator: 'LIKE' },
+      { column: 'us_email', value: email, operator: 'LIKE' },
+      { column: 'us_fedid', value: fedid, operator: 'LIKE' },
+      { column: 'us_provider', value: provider, operator: 'LIKE' },
+      { column: 'us_fedcountry', value: country, operator: 'LIKE' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -108,7 +108,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'u_name',
+        orderBy: 'us_name',
         limit: rowsPerPage,
         offset
       })
@@ -130,7 +130,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching tlr_library:', error)
+      console.error('Error fetching trf_reference:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -171,34 +171,34 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${user.u_uid}) : ${user.u_name}?`,
+      subTitle: `Are you sure you want to delete (${user.us_uid}) : ${user.us_name}?`,
       onConfirm: async () => {
         //
         //  User ID
         //
-        const uid = user.u_uid
+        const uid = user.us_uid
         //
         // Call the server function to delete
         //
         await table_delete({
-          table: 'ths_usershistory',
-          whereColumnValuePairs: [{ column: 'r_uid', value: uid }]
+          table: 'ths_history',
+          whereColumnValuePairs: [{ column: 'hs_uid', value: uid }]
         })
         await table_delete({
           table: 'tss_sessions',
-          whereColumnValuePairs: [{ column: 's_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'ss_uid', value: uid }]
         })
         await table_delete({
           table: 'tuo_usersowner',
-          whereColumnValuePairs: [{ column: 'uouid', value: uid }]
+          whereColumnValuePairs: [{ column: 'uo_uid', value: uid }]
         })
         await table_delete({
           table: 'tup_userspwd',
-          whereColumnValuePairs: [{ column: 'upuid', value: uid }]
+          whereColumnValuePairs: [{ column: 'up_uid', value: uid }]
         })
         await table_delete({
           table: 'tus_users',
-          whereColumnValuePairs: [{ column: 'u_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'us_uid', value: uid }]
         })
         //
         //  Reload the page
@@ -386,14 +386,14 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {users?.map(user => (
-              <tr key={user.u_uid} className='w-full border-b py-2 '>
-                <td className='text-xs px-2 py-1 '>{user.u_uid}</td>
-                <td className='text-xs px-2 py-1 '>{user.u_name}</td>
-                <td className='text-xs px-2 py-1 '>{user.u_email}</td>
-                <td className='text-xs px-2 py-1 '>{user.u_fedid}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.u_admin ? 'Y' : ''}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.u_fedcountry}</td>
-                <td className='text-xs px-2 py-1 '>{user.u_provider}</td>
+              <tr key={user.us_uid} className='w-full border-b py-2 '>
+                <td className='text-xs px-2 py-1 '>{user.us_uid}</td>
+                <td className='text-xs px-2 py-1 '>{user.us_name}</td>
+                <td className='text-xs px-2 py-1 '>{user.us_email}</td>
+                <td className='text-xs px-2 py-1 '>{user.us_fedid}</td>
+                <td className='text-xs px-2 py-1  text-center'>{user.us_admin ? 'Y' : ''}</td>
+                <td className='text-xs px-2 py-1  text-center'>{user.us_fedcountry}</td>
+                <td className='text-xs px-2 py-1 '>{user.us_provider}</td>
                 <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
@@ -416,7 +416,7 @@ export default function Table() {
                 </td>
                 <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
-                    {user.u_provider === 'email' && (
+                    {user.us_provider === 'email' && (
                       <MyButton
                         onClick={() => handlePwdClick(user)}
                         overrideClass=' h-6 px-2 py-2  bg-yellow-500  hover:bg-yellow-600 px-2 py-1'
@@ -458,13 +458,13 @@ export default function Table() {
 
       {/* User Edit Modal */}
       {selectedUser && (
-        <UserEditPopup uid={selectedUser.u_uid} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <UserEditPopup uid={selectedUser.us_uid} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
 
       {/* User Usersowner Modal */}
       {selectedUsersowner && (
         <UserownertablePopup
-          uid={selectedUsersowner.u_uid}
+          uid={selectedUsersowner.us_uid}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
         />

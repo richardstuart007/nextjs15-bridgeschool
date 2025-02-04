@@ -265,8 +265,8 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
     //  Convert hidden fields value to numeric
     //
-    const qqidString = formData.get('qqid') as string | 0
-    const qqid = Number(qqidString)
+    const qq_qidString = formData.get('qq_qid') as string | 0
+    const qq_qid = Number(qq_qidString)
     //
     // Update data into the database
     //
@@ -283,14 +283,14 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       }
 
       // Format the rounds as a string
-      const qrounds = `{${rounds.map(round => `{${round.join(',')}}`).join(',')}}`
+      const qq_rounds = `{${rounds.map(round => `{${round.join(',')}}`).join(',')}}`
       //
       //  update parameters
       //
       const updateParams = {
         table: 'tqq_questions',
-        columnValuePairs: [{ column: 'qrounds', value: qrounds }],
-        whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
+        columnValuePairs: [{ column: 'qq_rounds', value: qq_rounds }],
+        whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
       }
       //
       //  Update the database
@@ -306,9 +306,9 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       message = 'Database Error: Failed to Update.'
       const errorMessage = 'Database Error: Failed to Update Bidding.'
       errorLogging({
-        lgfunctionname: functionName,
-        lgmsg: errorMessage,
-        lgseverity: 'E'
+        lg_functionname: functionName,
+        lg_msg: errorMessage,
+        lg_severity: 'E'
       })
       return {
         message: errorMessage,

@@ -52,12 +52,12 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
           <DropdownGeneric
             selectedOption={uid}
             setSelectedOption={setuid}
-            searchEnabled={false}
+            searchEnabled={true}
             name='uid'
-            label='UserId'
+            label='User'
             table='tus_users'
-            optionLabel='u_name'
-            optionValue='u_uid'
+            optionLabel='us_name'
+            optionValue='us_uid'
             overrideClass_Dropdown='w-48'
             includeBlank={true}
           />
@@ -69,12 +69,12 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
           <DropdownGeneric
             selectedOption={owner}
             setSelectedOption={setowner}
-            searchEnabled={false}
+            searchEnabled={true}
             name='owner'
             label='Owner'
             table='tow_owner'
-            optionLabel='oowner'
-            optionValue='oowner'
+            optionLabel='ow_owner'
+            optionValue='ow_owner'
             overrideClass_Dropdown='w-48'
             includeBlank={true}
           />

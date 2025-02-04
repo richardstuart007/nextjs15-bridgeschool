@@ -24,9 +24,9 @@ dotenv.config()
 //  Root Layout
 //
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const d_name: string = await getDatabaseName()
+  const db_name: string = await getDatabaseName()
   //
-  // Determine the background color class based on d_name
+  // Determine the background color class based on db_name
   //
   type Database = 'Vercel_DEV' | 'production' | 'localhost' | 'unknown'
   const DatabaseColors: Record<Database, string> = {
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     unknown: 'bg-red-100'
   }
 
-  const backgroundColor = DatabaseColors[d_name as Database] ?? 'bg-red-100'
+  const backgroundColor = DatabaseColors[db_name as Database] ?? 'bg-red-100'
   const classNameColour = `${inter.className} antialiased ${backgroundColor}`
   //-----------------------------------------------------------------------------
   //  Get the database
@@ -55,10 +55,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     //
     const rows = await table_fetch({
       table: 'tdb_database',
-      whereColumnValuePairs: [{ column: 'd_did', value: 1 }]
+      whereColumnValuePairs: [{ column: 'db_did', value: 1 }]
     })
     const row = rows[0]
-    const dbName = row?.d_name ?? 'unknown'
+    const dbName = row?.db_name ?? 'unknown'
     //
     // Store the database name in globalThis for future requests
     //

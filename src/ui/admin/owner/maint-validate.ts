@@ -4,11 +4,11 @@ import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 //
 export type StateSetup = {
   errors?: {
-    oowner?: string[]
+    ow_owner?: string[]
   }
   message?: string | null
 }
-export default async function validateOwner(oowner: string): Promise<StateSetup> {
+export default async function validateOwner(ow_owner: string): Promise<StateSetup> {
   //
   // Initialise errors return
   //
@@ -19,11 +19,11 @@ export default async function validateOwner(oowner: string): Promise<StateSetup>
   const tableColumnValuePairs = [
     {
       table: 'tow_owner',
-      whereColumnValuePairs: [{ column: 'oowner', value: oowner }]
+      whereColumnValuePairs: [{ column: 'ow_owner', value: ow_owner }]
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists.found) errors.oowner = ['Owner must be unique']
+  if (exists.found) errors.ow_owner = ['Owner must be unique']
   //
   // Return error messages
   //

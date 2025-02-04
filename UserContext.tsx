@@ -10,9 +10,9 @@ type UserContextType = {
   setSessionContext: React.Dispatch<React.SetStateAction<structure_ContextInfo>>
 }
 const defaultContext: structure_ContextInfo = {
-  cxid: 0,
-  cxuid: 0,
-  cxdbName: ''
+  cx_id: 0,
+  cx_uid: 0,
+  cx_dbName: ''
 }
 //
 // Create the context

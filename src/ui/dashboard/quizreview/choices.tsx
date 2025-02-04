@@ -1,5 +1,5 @@
 import React, { useEffect, useState, type JSX } from 'react'
-import RadioGroup from '@/src/ui/dashboard/quizreview/radiobuttons'
+import RadioSubject from '@/src/ui/dashboard/quizreview/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
 interface RadioOption {
@@ -27,15 +27,15 @@ export default function QuizReviewChoice(props: QuizReviewChoiceProps): JSX.Elem
   //  Load the Choices
   //...................................................................................
   function loadChoices(): void {
-    const qdetail = question.qdetail
-    setQuestionText(qdetail)
+    const qq_detail = question.qq_detail
+    setQuestionText(qq_detail)
     //
     //  Answers
     //
-    const newOptions = question.qans.map((option, index) => ({
+    const newOptions = question.qq_ans.map((option, index) => ({
       id: index.toString(),
       label: option.toString(),
-      value: question.qans.indexOf(option)
+      value: question.qq_ans.indexOf(option)
     }))
     setAnswers(newOptions)
   }
@@ -43,7 +43,11 @@ export default function QuizReviewChoice(props: QuizReviewChoiceProps): JSX.Elem
   return (
     <div className='my-1 p-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
       <p className='text-xs italic font-bold text-yellow-500 break-words w-full'>{questionText}</p>
-      <RadioGroup options={answers} selectedOption={selectedAnswer} correctOption={correctAnswer} />
+      <RadioSubject
+        options={answers}
+        selectedOption={selectedAnswer}
+        correctOption={correctAnswer}
+      />
     </div>
   )
 }

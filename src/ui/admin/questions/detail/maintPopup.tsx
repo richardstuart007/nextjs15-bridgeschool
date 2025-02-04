@@ -6,7 +6,7 @@ import { table_Questions } from '@/src/lib/tables/definitions'
 interface Props {
   questionRecord?: table_Questions | undefined
   selected_owner?: string | undefined
-  selected_group?: string | undefined
+  selected_subject?: string | undefined
   isOpen: boolean
   onClose: () => void
 }
@@ -14,7 +14,7 @@ interface Props {
 export default function MaintPopup({
   questionRecord,
   selected_owner,
-  selected_group,
+  selected_subject,
   isOpen,
   onClose
 }: Props) {
@@ -29,7 +29,7 @@ export default function MaintPopup({
       <Form
         questionRecord={questionRecord}
         selected_owner={selected_owner}
-        selected_group={selected_group}
+        selected_subject={selected_subject}
         onSuccess={handleSuccess}
         shouldCloseOnUpdate={true}
       />

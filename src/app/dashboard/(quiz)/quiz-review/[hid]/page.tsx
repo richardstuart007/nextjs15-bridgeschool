@@ -26,8 +26,8 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Get History
     //
     const rows = await table_fetch({
-      table: 'ths_usershistory',
-      whereColumnValuePairs: [{ column: 'r_hid', value: hid }]
+      table: 'ths_history',
+      whereColumnValuePairs: [{ column: 'hs_hid', value: hid }]
     })
     const history = rows[0]
     if (!history) {
@@ -37,26 +37,26 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Process History: Remove correct answers if bsskipcorrect is true
     //
     if (bsskipcorrect) {
-      const filteredData = history.r_ans.reduce(
-        (acc: { r_qid: number[]; r_ans: number[] }, ans: number, index: number) => {
+      const filteredData = history.hs_ans.reduce(
+        (acc: { hs_qid: number[]; hs_ans: number[] }, ans: number, index: number) => {
           if (ans !== 0) {
-            acc.r_qid.push(history.r_qid[index])
-            acc.r_ans.push(ans)
+            acc.hs_qid.push(history.hs_qid[index])
+            acc.hs_ans.push(ans)
           }
           return acc
         },
-        { r_qid: [], r_ans: [] }
+        { hs_qid: [], hs_ans: [] }
       )
-      history.r_qid = filteredData.r_qid
-      history.r_ans = filteredData.r_ans
+      history.hs_qid = filteredData.hs_qid
+      history.hs_ans = filteredData.hs_ans
     }
     //
     //  Get Questions
     //
-    const qgid = history.r_gid
+    const qq_gid = history.hs_gid
     const questions_gid = await table_fetch({
-      table: 'questions',
-      whereColumnValuePairs: [{ column: 'qgid', value: qgid }]
+      table: 'tqq_questions',
+      whereColumnValuePairs: [{ column: 'qq_gid', value: qq_gid }]
     })
     if (!questions_gid || questions_gid.length === 0) {
       notFound()
@@ -65,9 +65,9 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Strip out questions not answered
     //
     let questions: table_Questions[] = []
-    const qidArray: number[] = history.r_qid
+    const qidArray: number[] = history.hs_qid
     qidArray.forEach((qid: number) => {
-      const questionIndex = questions_gid.findIndex(q => q.qqid === qid)
+      const questionIndex = questions_gid.findIndex(q => q.qq_qid === qid)
       questions.push(questions_gid[questionIndex])
     })
     //

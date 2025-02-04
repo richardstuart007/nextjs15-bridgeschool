@@ -30,7 +30,7 @@ export type StateSetup = {
 //
 //  hand names
 //
-const hand_name = [
+const handb_name = [
   'NS',
   'NH',
   'ND',
@@ -54,7 +54,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   // Retrieve values from formData and store them in an array
   //
-  const values = hand_name.map(name => formData.get(name) as string | null)
+  const values = handb_name.map(name => formData.get(name) as string | null)
   //
   // Initialize an errors object to accumulate any validation errors
   //
@@ -113,7 +113,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
     // Step 3: Check each hand for available cards
     //
-    hand_name.forEach((hand, index) => {
+    handb_name.forEach((hand, index) => {
       const handValue = values[index] || ''
       const handCards = handValue.split('')
       //
@@ -220,7 +220,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
         // Check if the total card count exceeds 13
         //
         if (totalCardsForHand > 13) {
-          const handName = hand_name[i]
+          const handName = handb_name[i]
           errors[handName as keyof StateSetup['errors']] = `Too many cards in hand`
           ok = false
           break
@@ -235,8 +235,8 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
     //  Convert hidden fields value to numeric
     //
-    const qqidString = formData.get('qqid') as string | 0
-    const qqid = Number(qqidString)
+    const qq_qidString = formData.get('qq_qid') as string | 0
+    const qq_qid = Number(qq_qidString)
     //
     // Update data into the database
     //
@@ -254,12 +254,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       const updateParams = {
         table: 'tqq_questions',
         columnValuePairs: [
-          { column: 'qnorth', value: northString },
-          { column: 'qeast', value: eastString },
-          { column: 'qsouth', value: southString },
-          { column: 'qwest', value: westString }
+          { column: 'qq_north', value: northString },
+          { column: 'qq_east', value: eastString },
+          { column: 'qq_south', value: southString },
+          { column: 'qq_west', value: westString }
         ],
-        whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
+        whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
       }
       //
       //  Update the database
@@ -267,11 +267,11 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       await table_update(updateParams)
       message = `Database updated successfully.`
       databaseUpdated = true
-      const errorMessage = 'Database Error: Failed to Update Library.'
+      const errorMessage = 'Database Error: Failed to Update.'
       errorLogging({
-        lgfunctionname: functionName,
-        lgmsg: errorMessage,
-        lgseverity: 'E'
+        lg_functionname: functionName,
+        lg_msg: errorMessage,
+        lg_severity: 'E'
       })
       return {
         message: errorMessage,

@@ -19,9 +19,9 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const rtrid = record?.rtrid || 0
-  const [rttype, setrttype] = useState(record?.rttype || '')
-  const [rttitle, setrttitle] = useState(record?.rttitle || '')
+  const rt_rid = record?.rt_rid || 0
+  const [rt_type, setrt_type] = useState(record?.rt_type || '')
+  const [rt_title, setrt_title] = useState(record?.rt_title || '')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -33,7 +33,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {rtrid === 0 ? 'Create' : 'Update'}
+        {rt_rid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -53,45 +53,45 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {rtrid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rtrid'>
-              ID: {rtrid}
+          {rt_rid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rt_rid'>
+              ID: {rt_rid}
             </label>
           )}
-          <MyInput id='rtrid' type='hidden' name='rtrid' value={rtrid} />
+          <MyInput id='rt_rid' type='hidden' name='rt_rid' value={rt_rid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Reftype */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rttype'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rt_type'>
             Reftype
           </label>
           <div className='relative'>
-            {rtrid === 0 ? (
+            {rt_rid === 0 ? (
               <MyInput
                 overrideClass='w-72  px-4  py-[9px]'
-                id='rttype'
+                id='rt_type'
                 type='text'
-                name='rttype'
-                value={rttype}
-                onChange={e => setrttype(e.target.value.replace(/\s+/g, ''))}
+                name='rt_type'
+                value={rt_type}
+                onChange={e => setrt_type(e.target.value.replace(/\s+/g, ''))}
               />
             ) : (
               /* -----------------Edit ------------------*/
               <>
                 <span className='block w-72  px-4 rounded-md bg-gray-200 border-none py-[9px] text-xs '>
-                  {rttype}
+                  {rt_type}
                 </span>
-                <MyInput id='rttype' type='hidden' name='rttype' value={rttype} />
+                <MyInput id='rt_type' type='hidden' name='rt_type' value={rt_type} />
               </>
             )}
           </div>
         </div>
         {/*   Errors */}
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.rttype &&
-            formState.errors.rttype.map((error: string) => (
+          {formState.errors?.rt_type &&
+            formState.errors.rt_type.map((error: string) => (
               <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
@@ -102,23 +102,23 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Title */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rttitle'>
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rt_title'>
             Title
           </label>
           <div className='relative'>
             <MyInput
               overrideClass='w-72  px-4  py-[9px]  '
-              id='rttitle'
+              id='rt_title'
               type='text'
-              name='rttitle'
-              value={rttitle}
-              onChange={e => setrttitle(e.target.value)}
+              name='rt_title'
+              value={rt_title}
+              onChange={e => setrt_title(e.target.value)}
             />
           </div>
         </div>
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.rttitle &&
-            formState.errors.rttitle.map((error: string) => (
+          {formState.errors?.rt_title &&
+            formState.errors.rt_title.map((error: string) => (
               <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>

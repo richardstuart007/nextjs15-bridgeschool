@@ -71,7 +71,7 @@ export default function Table() {
     //
     // Construct filters dynamically from input fields
     //
-    const filtersToUpdate: Filter[] = [{ column: 'oowner', value: owner, operator: 'LIKE' }]
+    const filtersToUpdate: Filter[] = [{ column: 'ow_owner', value: owner, operator: 'LIKE' }]
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -94,7 +94,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'oowner',
+        orderBy: 'ow_owner',
         limit: rowsPerPage,
         offset
       })
@@ -116,7 +116,7 @@ export default function Table() {
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching tlr_library:', error)
+      console.error('Error fetching trf_reference:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -133,19 +133,19 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${owner.ooid}) ?`,
+      subTitle: `Are you sure you want to delete (${owner.ow_oid}) ?`,
       onConfirm: async () => {
         //
         // Check a list of tables if owner changes
         //
         const tableColumnValuePairs = [
           {
-            table: 'tog_ownergroup',
-            whereColumnValuePairs: [{ column: 'ogowner', value: owner.oowner }]
+            table: 'tsb_subject',
+            whereColumnValuePairs: [{ column: 'sb_owner', value: owner.ow_owner }]
           },
           {
             table: 'tuo_usersowner',
-            whereColumnValuePairs: [{ column: 'uoowner', value: owner.oowner }]
+            whereColumnValuePairs: [{ column: 'uo_owner', value: owner.ow_owner }]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -164,7 +164,7 @@ export default function Table() {
         //
         const Params = {
           table: 'tow_owner',
-          whereColumnValuePairs: [{ column: 'ooid', value: owner.ooid }]
+          whereColumnValuePairs: [{ column: 'ow_oid', value: owner.ow_oid }]
         }
         await table_delete(Params)
         //
@@ -249,9 +249,9 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {data?.map(row => (
-              <tr key={row.ooid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1 text-xs '>{row.oowner}</td>
-                <td className='text-xs px-2 py-1 text-xs '>{row.ooid}</td>
+              <tr key={row.ow_oid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1 text-xs '>{row.ow_owner}</td>
+                <td className='text-xs px-2 py-1 text-xs '>{row.ow_oid}</td>
                 <td className='text-xs px-2 py-1 text-xs'>
                   <MyButton
                     onClick={() => handleDeleteClick(row)}

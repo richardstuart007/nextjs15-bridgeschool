@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { table_UsershistoryGroupUser } from '@/src/lib/tables/definitions'
+import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -19,7 +19,7 @@ export default function Table() {
   //
   const [uid, setuid] = useState<number | string>(0)
   const [owner, setowner] = useState<string | number>('')
-  const [group, setgroup] = useState<string | number>('')
+  const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
@@ -30,7 +30,7 @@ export default function Table() {
   const ref_rowsPerPage = useRef(0)
   const ref_show_gid = useRef(false)
   const ref_show_owner = useRef(false)
-  const ref_show_group = useRef(false)
+  const ref_show_subject = useRef(false)
   const ref_show_hid = useRef(false)
   const ref_show_uid = useRef(false)
   const ref_show_title = useRef(false)
@@ -41,7 +41,7 @@ export default function Table() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_UsershistoryGroupUser[]>([])
+  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -51,7 +51,7 @@ export default function Table() {
   type DebouncedState = {
     uid: string | number
     owner: string | number
-    group: string | number
+    subject: string | number
     questions: string | number
     title: string | number
     correct: string | number
@@ -59,7 +59,7 @@ export default function Table() {
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     uid: 0,
     owner: '',
-    group: '',
+    subject: '',
     questions: 0,
     title: '',
     correct: 0
@@ -88,7 +88,7 @@ export default function Table() {
       setDebouncedState({
         uid: Number(uid as string),
         owner,
-        group,
+        subject,
         questions: Number(questions as string),
         title,
         correct: Number(correct as string)
@@ -111,7 +111,7 @@ export default function Table() {
     //
     //  Values to debounce
     //
-  }, [uid, owner, group, questions, title, correct])
+  }, [uid, owner, subject, questions, title, correct])
   //......................................................................................
   //  Screen change
   //......................................................................................
@@ -124,16 +124,16 @@ export default function Table() {
   //  UID
   //......................................................................................
   useEffect(() => {
-    if (sessionContext?.cxuid) {
-      setuid(sessionContext.cxuid)
+    if (sessionContext?.cx_uid) {
+      setuid(sessionContext.cx_uid)
       setShouldFetchData(true)
     }
   }, [sessionContext])
   //......................................................................................
-  // Reset the group when the owner changes
+  // Reset the subject when the owner changes
   //......................................................................................
   useEffect(() => {
-    setgroup('')
+    setsubject('')
   }, [owner])
   //......................................................................................
   // Fetch on mount and when shouldFetchData changes
@@ -192,7 +192,7 @@ export default function Table() {
     }
     if (widthNumber >= 4) {
       ref_show_owner.current = true
-      ref_show_group.current = true
+      ref_show_subject.current = true
     }
     if (widthNumber >= 5) {
       ref_show_questions.current = true
@@ -236,13 +236,13 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'r_uid', value: uid, operator: '=' },
-      { column: 'r_owner', value: owner, operator: '=' },
-      { column: 'r_group', value: group, operator: '=' },
-      { column: 'ogtitle', value: title, operator: 'LIKE' },
-      { column: 'r_questions', value: questions, operator: '>=' },
-      { column: 'r_correctpercent', value: correct, operator: '>=' },
-      { column: 'u_name', value: name, operator: 'LIKE' }
+      { column: 'hs_uid', value: uid, operator: '=' },
+      { column: 'hs_owner', value: owner, operator: '=' },
+      { column: 'hs_subject', value: subject, operator: '=' },
+      { column: 'sb_title', value: title, operator: 'LIKE' },
+      { column: 'hs_questions', value: questions, operator: '>=' },
+      { column: 'hs_correctpercent', value: correct, operator: '>=' },
+      { column: 'us_name', value: name, operator: 'LIKE' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -253,13 +253,13 @@ export default function Table() {
       //
       //  Table
       //
-      const table = 'ths_usershistory'
+      const table = 'ths_history'
       //
       //  Joins
       //
       const joins = [
-        { table: 'tog_ownergroup', on: 'r_gid = oggid' },
-        { table: 'tus_users', on: 'r_uid = u_uid' }
+        { table: 'tsb_subject', on: 'hs_gid = sb_sid' },
+        { table: 'tus_users', on: 'hs_uid = us_uid' }
       ]
       //
       // Calculate the offset for pagination
@@ -273,7 +273,7 @@ export default function Table() {
         table,
         joins,
         filters,
-        orderBy: 'r_hid DESC',
+        orderBy: 'hs_hid DESC',
         limit: rowsPerPage,
         offset
       })
@@ -328,9 +328,9 @@ export default function Table() {
                   Owner
                 </th>
               )}
-              {ref_show_group.current && (
+              {ref_show_subject.current && (
                 <th scope='col' className=' font-medium px-2'>
-                  Group
+                  Subject
                 </th>
               )}
               {ref_show_hid.current && (
@@ -391,10 +391,10 @@ export default function Table() {
                     searchEnabled={false}
                     name='owner'
                     table='tuo_usersowner'
-                    tableColumn='uouid'
-                    tableColumnValue={sessionContext.cxuid}
-                    optionLabel='uoowner'
-                    optionValue='uoowner'
+                    tableColumn='uo_uid'
+                    tableColumnValue={sessionContext.cx_uid}
+                    optionLabel='uo_owner'
+                    optionValue='uo_owner'
                     overrideClass_Dropdown='h-6 w-28 text-xxs'
                     includeBlank={true}
                   />
@@ -403,18 +403,18 @@ export default function Table() {
               {/* ................................................... */}
               {/* GROUP                                                 */}
               {/* ................................................... */}
-              {ref_show_group.current && (
+              {ref_show_subject.current && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
-                      selectedOption={group}
-                      setSelectedOption={setgroup}
-                      name='group'
-                      table='tog_ownergroup'
-                      tableColumn='ogowner'
+                      selectedOption={subject}
+                      setSelectedOption={setsubject}
+                      name='subject'
+                      table='tsb_subject'
+                      tableColumn='sb_owner'
                       tableColumnValue={owner}
-                      optionLabel='ogtitle'
-                      optionValue='oggroup'
+                      optionLabel='sb_title'
+                      optionValue='sb_subject'
                       overrideClass_Dropdown='w-36 h-6 text-xxs'
                       includeBlank={true}
                     />
@@ -536,27 +536,29 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
-                <tr key={`${tabledata.r_hid}-${index}`} className='w-full border-b'>
-                  {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.r_gid}</td>}
-                  {ref_show_owner.current && <td className=' px-2 '>{tabledata.r_owner}</td>}
-                  {ref_show_group.current && <td className=' px-2 '>{tabledata.r_group}</td>}
-                  {ref_show_hid.current && <td className=' px-2  text-left'>{tabledata.r_hid}</td>}
+                <tr key={`${tabledata.hs_hid}-${index}`} className='w-full border-b'>
+                  {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.hs_gid}</td>}
+                  {ref_show_owner.current && <td className=' px-2 '>{tabledata.hs_owner}</td>}
+                  {ref_show_subject.current && <td className=' px-2 '>{tabledata.hs_subject}</td>}
+                  {ref_show_hid.current && <td className=' px-2  text-left'>{tabledata.hs_hid}</td>}
                   {ref_show_title.current && (
                     <td className='px-2 '>
-                      {tabledata.ogtitle
-                        ? tabledata.ogtitle.length > 35
-                          ? `${tabledata.ogtitle.slice(0, 30)}...`
-                          : tabledata.ogtitle
+                      {tabledata.sb_title
+                        ? tabledata.sb_title.length > 35
+                          ? `${tabledata.sb_title.slice(0, 30)}...`
+                          : tabledata.sb_title
                         : ' '}
                     </td>
                   )}
-                  {ref_show_uid.current && <td className='px-2  text-center'>{tabledata.r_uid}</td>}
-                  {ref_show_name.current && <td className='px-2 '>{tabledata.u_name}</td>}
+                  {ref_show_uid.current && (
+                    <td className='px-2  text-center'>{tabledata.hs_uid}</td>
+                  )}
+                  {ref_show_name.current && <td className='px-2 '>{tabledata.us_name}</td>}
                   {ref_show_questions.current && (
-                    <td className='px-2  text-center'>{tabledata.r_questions}</td>
+                    <td className='px-2  text-center'>{tabledata.hs_questions}</td>
                   )}
                   {ref_show_correct.current && (
-                    <td className='px-2   text-center '>{tabledata.r_correctpercent}</td>
+                    <td className='px-2   text-center '>{tabledata.hs_correctpercent}</td>
                   )}
                   {/* ................................................... */}
                   {/* MyButton  1                                                */}
@@ -565,7 +567,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz-review/${tabledata.r_hid}`,
+                          pathname: `/dashboard/quiz-review/${tabledata.hs_hid}`,
                           query: { from: 'history' }
                         }}
                         overrideClass='h-6 bg-green-500 text-white justify-center hover:bg-green-600 md:w-15'
@@ -581,7 +583,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.r_gid}`,
+                          pathname: `/dashboard/quiz/${tabledata.hs_gid}`,
                           query: { from: 'history' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white justify-center hover:bg-blue-600 md:w-15'

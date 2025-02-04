@@ -52,9 +52,9 @@ export async function table_check(
       if (data.rows.length > 0) {
         const errorMessage = `Keys exist in ${table} with conditions: ${JSON.stringify(whereColumnValuePairs)}`
         errorLogging({
-          lgfunctionname: functionName,
-          lgmsg: errorMessage,
-          lgseverity: 'I'
+          lg_functionname: functionName,
+          lg_msg: errorMessage,
+          lg_severity: 'I'
         })
         return { found: true, message: errorMessage }
       }
@@ -69,9 +69,9 @@ export async function table_check(
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

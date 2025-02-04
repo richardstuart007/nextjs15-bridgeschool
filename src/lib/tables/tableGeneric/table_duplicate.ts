@@ -33,9 +33,9 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     return false

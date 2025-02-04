@@ -39,11 +39,11 @@ export function SummarySkeleton() {
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
-  function topGraph(dataTop: { u_name: string; percentage: number }[]): GraphStructure {
+  function topGraph(dataTop: { us_name: string; percentage: number }[]): GraphStructure {
     //
     //  Derive the names and percentages from the data
     //
-    const names: string[] = dataTop.map(item => item.u_name)
+    const names: string[] = dataTop.map(item => item.us_name)
     const percentages: number[] = dataTop.map(item => item.percentage)
     //
     //  Datasets
@@ -70,12 +70,12 @@ export function SummarySkeleton() {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent1.map(item => item.u_name)
-    const individualPercentages: number[] = dataRecent1.map(item => item.r_correctpercent)
+    const names: string[] = dataRecent1.map(item => item.us_name)
+    const individualPercentages: number[] = dataRecent1.map(item => item.hs_correctpercent)
     //
     //  Derive percentages from the data
     //
-    const userIds: number[] = dataRecent1.map(item => item.r_uid)
+    const userIds: number[] = dataRecent1.map(item => item.hs_uid)
     const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
     //
     //  Datasets
@@ -115,12 +115,12 @@ export function SummarySkeleton() {
     let sumTotalPoints = 0
     let sumMaxPoints = 0
     for (const record of dataRecent5) {
-      const { r_uid, r_totalpoints, r_maxpoints } = record
+      const { hs_uid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== r_uid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
+      if (currentUid !== hs_uid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
         //
         //  If not first record
         //
@@ -140,13 +140,13 @@ export function SummarySkeleton() {
         //
         //  Current user
         //
-        currentUid = r_uid
+        currentUid = hs_uid
       }
       //
       //  Increment the sum and count
       //
-      sumTotalPoints += r_totalpoints
-      sumMaxPoints += r_maxpoints
+      sumTotalPoints += hs_totalpoints
+      sumMaxPoints += hs_maxpoints
     }
     //
     //  End of data

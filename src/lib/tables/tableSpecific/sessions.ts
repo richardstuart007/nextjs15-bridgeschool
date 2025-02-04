@@ -18,18 +18,18 @@ export async function fetchSessionInfo() {
   try {
     const sqlQuery = `
     SELECT
-        s_id,
-        u_uid,
-        u_name,
-        u_email,
-        u_admin,
-        u_sortquestions,
-        u_skipcorrect,
-        u_maxquestions
+        ss_id,
+        us_uid,
+        us_name,
+        us_email,
+        us_admin,
+        us_sortquestions,
+        us_skipcorrect,
+        us_maxquestions
       FROM tss_sessions
       JOIN tus_users
-      ON   s_uid = u_uid
-      WHERE s_id = $1
+      ON   ss_uid = us_uid
+      WHERE ss_id = $1
     `
     const queryValues = [sessionId]
     //
@@ -46,14 +46,14 @@ export async function fetchSessionInfo() {
     //  Return the session info
     //
     const structure_SessionsInfo: structure_SessionsInfo = {
-      bsid: row.s_id,
-      bsuid: row.u_uid,
-      bsname: row.u_name,
-      bsemail: row.u_email,
-      bsadmin: row.u_admin,
-      bssortquestions: row.u_sortquestions,
-      bsskipcorrect: row.u_skipcorrect,
-      bsmaxquestions: row.u_maxquestions
+      bsid: row.ss_id,
+      bsuid: row.us_uid,
+      bsname: row.us_name,
+      bsemail: row.us_email,
+      bsadmin: row.us_admin,
+      bssortquestions: row.us_sortquestions,
+      bsskipcorrect: row.us_skipcorrect,
+      bsmaxquestions: row.us_maxquestions
     }
     return structure_SessionsInfo
     //
@@ -62,9 +62,9 @@ export async function fetchSessionInfo() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
@@ -98,9 +98,9 @@ export async function isAdmin() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

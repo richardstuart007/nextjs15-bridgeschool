@@ -73,9 +73,9 @@ export async function fetchFiltered({
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     throw new Error(`${functionName}, ${errorMessage}`)
   }
@@ -128,9 +128,9 @@ export async function fetchTotalPages({
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

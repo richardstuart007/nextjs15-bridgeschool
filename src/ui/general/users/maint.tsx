@@ -26,14 +26,14 @@ export default function Form({ admin_uid }: Props) {
   //
   type actionState = {
     errors?: {
-      u_uid?: string[]
-      u_name?: string[]
-      u_fedid?: string[]
-      u_fedcountry?: string[]
-      u_maxquestions?: string[]
-      u_skipcorrect?: string[]
-      u_sortquestions?: string[]
-      u_admin?: string[]
+      us_uid?: string[]
+      us_name?: string[]
+      us_fedid?: string[]
+      us_fedcountry?: string[]
+      us_maxquestions?: string[]
+      us_skipcorrect?: string[]
+      us_sortquestions?: string[]
+      us_admin?: string[]
     }
     message?: string | null
     databaseUpdated?: boolean
@@ -50,15 +50,15 @@ export default function Form({ admin_uid }: Props) {
   //
   //  User State
   //
-  const [u_name, setu_name] = useState('')
-  const [u_fedid, setu_fedid] = useState('')
-  const [u_fedcountry, setu_fedcountry] = useState<string | number>('')
-  const [u_uid, setu_uid] = useState(0)
-  const [u_email, setu_email] = useState('')
-  const [u_maxquestions, setu_maxquestions] = useState<number>(0)
-  const [u_skipcorrect, setu_skipcorrect] = useState<boolean>(false)
-  const [u_sortquestions, setu_sortquestions] = useState<boolean>(false)
-  const [u_admin, setu_admin] = useState<boolean>(false)
+  const [us_name, setus_name] = useState('')
+  const [us_fedid, setus_fedid] = useState('')
+  const [us_fedcountry, setus_fedcountry] = useState<string | number>('')
+  const [us_uid, setus_uid] = useState(0)
+  const [us_email, setus_email] = useState('')
+  const [us_maxquestions, setus_maxquestions] = useState<number>(0)
+  const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
+  const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
+  const [us_admin, setus_admin] = useState<boolean>(false)
 
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -80,30 +80,30 @@ export default function Form({ admin_uid }: Props) {
     //  Admin is passed from the table maintenance
     //
     if (admin_uid) {
-      setu_uid(admin_uid)
+      setus_uid(admin_uid)
       setShouldFetchData(true)
     } else {
       //
       //  Not admin then for the logged on user
       //
-      if (sessionContext?.cxuid) {
-        const cxuid = sessionContext.cxuid
-        setu_uid(cxuid)
+      if (sessionContext?.cx_uid) {
+        const cx_uid = sessionContext.cx_uid
+        setus_uid(cx_uid)
         setShouldFetchData(true)
       }
     }
     // eslint-disable-next-line
-  }, [sessionContext, u_uid])
+  }, [sessionContext, us_uid])
   //......................................................................................
   //  Get user info
   //......................................................................................
   useEffect(() => {
-    if (shouldFetchData && u_uid !== 0) {
+    if (shouldFetchData && us_uid !== 0) {
       fetchdata()
       setShouldFetchData(false)
     }
     // eslint-disable-next-line
-  }, [shouldFetchData, u_uid])
+  }, [shouldFetchData, us_uid])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -111,14 +111,14 @@ export default function Form({ admin_uid }: Props) {
     //
     //  No uid yet?
     //
-    if (u_uid === 0) return
+    if (us_uid === 0) return
     //
     //  Get User Info
     //
     try {
       const fetchParams = {
         table: 'tus_users',
-        whereColumnValuePairs: [{ column: 'u_uid', value: u_uid }]
+        whereColumnValuePairs: [{ column: 'us_uid', value: us_uid }]
       }
       const rows = await table_fetch(fetchParams)
       const data = rows[0]
@@ -126,14 +126,14 @@ export default function Form({ admin_uid }: Props) {
       //
       // Set initial state with fetched data
       //
-      setu_name(data.u_name)
-      setu_fedid(data.u_fedid)
-      setu_fedcountry(data.u_fedcountry)
-      setu_email(data.u_email)
-      setu_maxquestions(data.u_maxquestions)
-      setu_skipcorrect(data.u_skipcorrect)
-      setu_sortquestions(data.u_sortquestions)
-      setu_admin(data.u_admin)
+      setus_name(data.us_name)
+      setus_fedid(data.us_fedid)
+      setus_fedcountry(data.us_fedcountry)
+      setus_email(data.us_email)
+      setus_maxquestions(data.us_maxquestions)
+      setus_skipcorrect(data.us_skipcorrect)
+      setus_sortquestions(data.us_sortquestions)
+      setus_admin(data.us_admin)
       //
       //  Data can be displayed
       //
@@ -170,35 +170,35 @@ export default function Form({ admin_uid }: Props) {
         {/*  User ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_uid'>
-            ID:{u_uid} Email:{u_email}
+          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_uid'>
+            ID:{us_uid} Email:{us_email}
           </label>
           <div className='relative'>
-            <MyInput id='u_uid' type='hidden' name='u_uid' value={u_uid} />
+            <MyInput id='us_uid' type='hidden' name='us_uid' value={us_uid} />
           </div>
         </div>
         {/*  ...................................................................................*/}
         {/*  Name */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_name'>
+          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_name'>
             Name
           </label>
           <div className='relative'>
             <MyInput
               overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='u_name'
+              id='us_name'
               type='text'
-              name='u_name'
+              name='us_name'
               autoComplete='name'
-              value={u_name}
-              onChange={e => setu_name(e.target.value)}
+              value={us_name}
+              onChange={e => setus_name(e.target.value)}
             />
           </div>
         </div>
         <div id='name-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.u_name &&
-            formState.errors.u_name.map((error: string) => (
+          {formState.errors?.us_name &&
+            formState.errors.us_name.map((error: string) => (
               <p className='mt-2 text-sm text-red-500' key={error}>
                 {error}
               </p>
@@ -209,11 +209,11 @@ export default function Form({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           <DropdownGeneric
-            selectedOption={u_fedcountry}
-            setSelectedOption={setu_fedcountry}
+            selectedOption={us_fedcountry}
+            setSelectedOption={setus_fedcountry}
             searchEnabled={true}
-            name='u_fedcountry'
-            label={`Bridge Federation Country (${u_fedcountry})`}
+            name='us_fedcountry'
+            label={`Bridge Federation Country (${us_fedcountry})`}
             tableData={COUNTRIES}
             optionLabel='label'
             optionValue='code'
@@ -225,23 +225,23 @@ export default function Form({ admin_uid }: Props) {
         {/*  FEDID  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='u_fedid'>
+          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_fedid'>
             Bridge Federation ID
           </label>
           <div className='relative'>
             <MyInput
               className='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='u_fedid'
+              id='us_fedid'
               type='text'
-              name='u_fedid'
-              value={u_fedid}
-              onChange={e => setu_fedid(e.target.value)}
+              name='us_fedid'
+              value={us_fedid}
+              onChange={e => setus_fedid(e.target.value)}
             />
           </div>
         </div>
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.u_fedid &&
-            formState.errors.u_fedid.map((error: string) => (
+          {formState.errors?.us_fedid &&
+            formState.errors.us_fedid.map((error: string) => (
               <p className='mt-2 text-sm text-red-500' key={error}>
                 {error}
               </p>
@@ -253,24 +253,24 @@ export default function Form({ admin_uid }: Props) {
         <div className='mt-4'>
           <label
             className='mb-3 mt-5 block text-xs font-medium text-gray-900'
-            htmlFor='u_maxquestions'
+            htmlFor='us_maxquestions'
           >
             Maximum Number of Questions
           </label>
           <div className='relative'>
             <MyInput
               overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='u_maxquestions'
+              id='us_maxquestions'
               type='number'
-              name='u_maxquestions'
-              value={u_maxquestions || ''}
-              onChange={e => setu_maxquestions(Number(e.target.value) || 0)}
+              name='us_maxquestions'
+              value={us_maxquestions || ''}
+              onChange={e => setus_maxquestions(Number(e.target.value) || 0)}
             />
           </div>
         </div>
-        <div id='u_maxquestions-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.u_maxquestions &&
-            formState.errors.u_maxquestions.map((error: string) => (
+        <div id='us_maxquestions-error' aria-live='polite' aria-atomic='true'>
+          {formState.errors?.us_maxquestions &&
+            formState.errors.us_maxquestions.map((error: string) => (
               <p className='mt-2 text-sm text-red-500' key={error}>
                 {error}
               </p>
@@ -281,20 +281,20 @@ export default function Form({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         <MyCheckbox
           overrideClass=''
-          inputName='u_skipcorrect'
-          inputValue={u_skipcorrect}
+          inputName='us_skipcorrect'
+          inputValue={us_skipcorrect}
           description='Skip Correct on Review'
-          onChange={() => setu_skipcorrect(prev => !prev)}
+          onChange={() => setus_skipcorrect(prev => !prev)}
         />
         {/*  ...................................................................................*/}
         {/*   Toggle - Random Sort questions */}
         {/*  ...................................................................................*/}
         <MyCheckbox
           overrideClass=''
-          inputName='u_sortquestions'
-          inputValue={u_sortquestions}
+          inputName='us_sortquestions'
+          inputValue={us_sortquestions}
           description='Random Sort Questions'
-          onChange={() => setu_sortquestions(prev => !prev)}
+          onChange={() => setus_sortquestions(prev => !prev)}
         />
         {/*  ...................................................................................*/}
         {/*   Toggle - Admin */}
@@ -302,14 +302,14 @@ export default function Form({ admin_uid }: Props) {
         {admin_uid ? (
           <MyCheckbox
             overrideClass=''
-            inputName='u_admin'
-            inputValue={u_admin}
+            inputName='us_admin'
+            inputValue={us_admin}
             description='Admin'
-            onChange={() => setu_admin(prev => !prev)}
+            onChange={() => setus_admin(prev => !prev)}
           />
         ) : (
           <div className='relative'>
-            <MyInput id='u_admin' type='hidden' name='u_admin' value={u_admin.toString()} />
+            <MyInput id='us_admin' type='hidden' name='us_admin' value={us_admin.toString()} />
           </div>
         )}
         {/*  ...................................................................................*/}

@@ -38,10 +38,10 @@ export default function NavSide(props: Props) {
     //
     const rows = await table_fetch({
       table: 'tdb_database',
-      whereColumnValuePairs: [{ column: 'd_did', value: 1 }]
+      whereColumnValuePairs: [{ column: 'db_did', value: 1 }]
     })
     const row = rows[0]
-    const tdb_database = row?.d_name ?? 'unknown'
+    const tdb_database = row?.db_name ?? 'unknown'
     setdbName(tdb_database)
     //
     //  Auth Session
@@ -55,9 +55,9 @@ export default function NavSide(props: Props) {
     if (sessionId) {
       const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
-        cxuid: sessionData.bsuid,
-        cxid: sessionData.bsid,
-        cxdbName: dbName
+        cx_uid: sessionData.bsuid,
+        cx_id: sessionData.bsid,
+        cx_dbName: dbName
       }
       setSessionContext(structure_ContextInfo)
       setSessionInfo(sessionData)

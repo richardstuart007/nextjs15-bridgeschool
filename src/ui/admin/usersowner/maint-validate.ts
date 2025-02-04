@@ -12,7 +12,7 @@ type StateSetup = {
 }
 
 export default async function validateUsersowner(record: table_Usersowner): Promise<StateSetup> {
-  const { uouid, uoowner } = record
+  const { uo_uid, uo_owner } = record
   let errors: StateSetup['errors'] = {}
   //
   //  Check for Add duplicate
@@ -21,8 +21,8 @@ export default async function validateUsersowner(record: table_Usersowner): Prom
     {
       table: 'tuo_usersowner',
       whereColumnValuePairs: [
-        { column: 'uouid', value: uouid },
-        { column: 'uoowner', value: uoowner }
+        { column: 'uo_uid', value: uo_uid },
+        { column: 'uo_owner', value: uo_owner }
       ]
     }
   ]

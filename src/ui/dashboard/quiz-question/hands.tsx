@@ -11,7 +11,8 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
   //
   //  No Hands
   //
-  if (!question.qnorth && !question.qeast && !question.qsouth && !question.qwest) return null
+  if (!question.qq_north && !question.qq_east && !question.qq_south && !question.qq_west)
+    return null
   //
   // Helper function to check if all values in the hand are 'n' or 'N'
   //
@@ -21,10 +22,10 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
   //  Build Hand Data for Positions
   //
   const handData = [
-    { position: 'North', hand: question.qnorth },
-    { position: 'East', hand: question.qeast },
-    { position: 'South', hand: question.qsouth },
-    { position: 'West', hand: question.qwest }
+    { position: 'North', hand: question.qq_north },
+    { position: 'East', hand: question.qq_east },
+    { position: 'South', hand: question.qq_south },
+    { position: 'West', hand: question.qq_west }
   ]
     .filter(handObj => handObj.hand && !isEmptyHand(handObj.hand as Hand))
     .map(handObj => ({

@@ -42,9 +42,9 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     //
     const message = `Sequence ${sequenceName} for ${tableName}.${columnName} updated with maxValue ${maxValue} `
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: message,
-      lgseverity: 'I'
+      lg_functionname: functionName,
+      lg_msg: message,
+      lg_severity: 'I'
     })
     return true
     //
@@ -54,9 +54,9 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return false
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react'
 import Image from 'next/image'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -11,11 +11,11 @@ export default function QuizBidding({ question }: QuizBiddingProps): JSX.Element
   const [suitData, setSuitData] = useState<(string | null)[][]>([])
 
   useEffect(() => {
-    if (question?.qrounds) {
+    if (question?.qq_rounds) {
       const bids: (string | null)[][] = []
       const suits: (string | null)[][] = []
 
-      question.qrounds.forEach(round => {
+      question.qq_rounds.forEach(round => {
         const roundBids: (string | null)[] = []
         const roundSuits: (string | null)[] = []
 
@@ -64,7 +64,7 @@ export default function QuizBidding({ question }: QuizBiddingProps): JSX.Element
     }
   }, [question])
 
-  if (!question?.qrounds) return null
+  if (!question?.qq_rounds) return null
 
   return (
     <div className='my-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>

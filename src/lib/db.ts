@@ -50,9 +50,9 @@ async function createDbQueryHandler(): Promise<void> {
         const errorMessage = (error as Error).message
         if (functionName !== 'errorLogging') {
           errorLogging({
-            lgfunctionname: functionName,
-            lgmsg: errorMessage,
-            lgseverity: 'E'
+            lg_functionname: functionName,
+            lg_msg: errorMessage,
+            lg_severity: 'E'
           })
         }
         console.error('Error executing Vercel query:', error)
@@ -92,9 +92,9 @@ async function createDbQueryHandler(): Promise<void> {
         const errorMessage = (error as Error).message
         if (functionName !== 'errorLogging') {
           errorLogging({
-            lgfunctionname: functionName,
-            lgmsg: errorMessage,
-            lgseverity: 'E'
+            lg_functionname: functionName,
+            lg_msg: errorMessage,
+            lg_severity: 'E'
           })
         }
         console.error('Error:', errorMessage)
@@ -121,8 +121,8 @@ async function log_query(functionName: string, query: string, params: any[]): Pr
   //  Logging
   //
   errorLogging({
-    lgfunctionname: functionName,
-    lgmsg: `${query}${valuesJson}`,
-    lgseverity: 'I'
+    lg_functionname: functionName,
+    lg_msg: `${query}${valuesJson}`,
+    lg_severity: 'I'
   })
 }

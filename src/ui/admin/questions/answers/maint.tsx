@@ -19,10 +19,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const qqid = record?.qqid || 0
-  const [qans, setqans] = useState<string[]>(record?.qans || ['', '', '', ''])
-  const [qpoints, setqpoints] = useState<string[]>(
-    (record?.qpoints || ['', '', '', '']).map(point => point.toString())
+  const qq_qid = record?.qq_qid || 0
+  const [qq_ans, setqq_ans] = useState<string[]>(record?.qq_ans || ['', '', '', ''])
+  const [qq_points, setqq_points] = useState<string[]>(
+    (record?.qq_points || ['', '', '', '']).map(point => point.toString())
   )
   //-------------------------------------------------------------------------
   //  Update MyButton
@@ -35,7 +35,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {qqid === 0 ? 'Create' : 'Update'}
+        {qq_qid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -50,18 +50,18 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   // Handle answer change for a specific index
   //-------------------------------------------------------------------------
   const handleAnswerChange = (index: number, value: string) => {
-    const updated = [...qans]
+    const updated = [...qq_ans]
     updated[index] = value
-    setqans(updated)
+    setqq_ans(updated)
   }
   //-------------------------------------------------------------------------
   // Handle points change for a specific index
   //-------------------------------------------------------------------------
   const handlePointsChange = (index: number, value: string) => {
     const newValue = value === '' ? '0' : value
-    const updated = [...qpoints]
+    const updated = [...qq_points]
     updated[index] = newValue
-    setqpoints(updated)
+    setqq_points(updated)
   }
   //-------------------------------------------------------------------------
   return (
@@ -71,12 +71,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {qqid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
-              ID: {qqid}
+          {qq_qid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qq_qid'>
+              ID: {qq_qid}
             </label>
           )}
-          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}
@@ -91,19 +91,19 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
               {/* Answer Input */}
               <textarea
                 className='w-full px-4 rounded-md border border-blue-500 py-[9px] text-xs '
-                id={`qans${index}`}
-                name={`qans${index}`}
-                value={qans[index] || ''}
+                id={`qq_ans${index}`}
+                name={`qq_ans${index}`}
+                value={qq_ans[index] || ''}
                 onChange={e => handleAnswerChange(index, e.target.value)}
                 rows={3}
               />
               {/* Points Input */}
               <MyInput
                 overrideClass='w-20 px-4 rounded-md border border-blue-500 py-[9px] text-xs '
-                id={`qpoints${index}`}
+                id={`qq_points${index}`}
                 type='text'
-                name={`qpoints${index}`}
-                value={qpoints[index] || ''}
+                name={`qq_points${index}`}
+                value={qq_points[index] || ''}
                 onChange={e => handlePointsChange(index, e.target.value.replace(/\s+/g, ''))}
               />
             </div>
@@ -112,8 +112,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
 
         {/* Errors for answers */}
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.qans &&
-            formState.errors.qans.map((error: string) => (
+          {formState.errors?.qq_ans &&
+            formState.errors.qq_ans.map((error: string) => (
               <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
@@ -122,8 +122,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
 
         {/* Errors for points */}
         <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.qpoints &&
-            formState.errors.qpoints.map((error: string) => (
+          {formState.errors?.qq_points &&
+            formState.errors.qq_points.map((error: string) => (
               <p className='mt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>

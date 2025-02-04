@@ -11,7 +11,7 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  upuid: z.string().min(1),
+  up_uid: z.string().min(1),
   uppwd: z.string().min(1, { message: 'String must be at least 2 characters long' })
 })
 //
@@ -19,7 +19,7 @@ const FormSchemaSetup = z.object({
 //
 export type StateSetup = {
   errors?: {
-    upuid?: string[]
+    up_uid?: string[]
     uppwd?: string[]
   }
   message?: string | null
@@ -34,7 +34,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    upuid: formData.get('upuid'),
+    up_uid: formData.get('up_uid'),
     uppwd: formData.get('uppwd')
   })
   //
@@ -49,8 +49,8 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   //
   // Unpack form data
   //
-  const { upuid, uppwd } = validatedFields.data
-  const userid = Number(upuid)
+  const { up_uid, uppwd } = validatedFields.data
+  const userid = Number(up_uid)
   //
   // Update data into the database
   //
@@ -58,12 +58,12 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
     //
     //  Update the userspwd data
     //
-    const upuid = userid
-    const uphash = await bcrypt.hash(uppwd, 10)
+    const up_uid = userid
+    const up_hash = await bcrypt.hash(uppwd, 10)
     const updateParams = {
       table: 'tup_userspwd',
-      columnValuePairs: [{ column: 'uphash', value: uphash }],
-      whereColumnValuePairs: [{ column: 'upuid', value: upuid }]
+      columnValuePairs: [{ column: 'up_hash', value: up_hash }],
+      whereColumnValuePairs: [{ column: 'up_uid', value: up_uid }]
     }
     await table_update(updateParams)
     return {
@@ -76,9 +76,9 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update userspwd.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

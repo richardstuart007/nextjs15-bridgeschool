@@ -12,16 +12,16 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  rttype: z.string(),
-  rttitle: z.string()
+  rt_type: z.string(),
+  rt_title: z.string()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    rttype?: string[]
-    rttitle?: string[]
+    rt_type?: string[]
+    rt_title?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -35,8 +35,8 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    rttype: formData.get('rttype'),
-    rttitle: formData.get('rttitle')
+    rt_type: formData.get('rt_type'),
+    rt_title: formData.get('rt_title')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -50,18 +50,18 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   // Unpack form data
   //
-  const { rttype, rttitle } = validatedFields.data
+  const { rt_type, rt_title } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
-  const rtrid = Number(formData.get('rtrid'))
+  const rt_rid = Number(formData.get('rt_rid'))
   //
   // Validate fields
   //
   const Table = {
-    rtrid: rtrid,
-    rttype: rttype,
-    rttitle: rttitle
+    rt_rid: rt_rid,
+    rt_type: rt_type,
+    rt_title: rt_title
   }
   const errorMessages = await validate(Table)
   if (errorMessages.message) {
@@ -79,18 +79,18 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Write/Update
     //
     const updateParams = {
-      table: 'trf_reftype',
-      columnValuePairs: [{ column: 'rttitle', value: rttitle }],
-      whereColumnValuePairs: [{ column: 'rttype', value: rttype }]
+      table: 'trt_reftype',
+      columnValuePairs: [{ column: 'rt_title', value: rt_title }],
+      whereColumnValuePairs: [{ column: 'rt_type', value: rt_type }]
     }
     const writeParams = {
-      table: 'trf_reftype',
+      table: 'trt_reftype',
       columnValuePairs: [
-        { column: 'rttype', value: rttype },
-        { column: 'rttitle', value: rttitle }
+        { column: 'rt_type', value: rt_type },
+        { column: 'rt_title', value: rt_title }
       ]
     }
-    await (rtrid === 0 ? table_write(writeParams) : table_update(updateParams))
+    await (rt_rid === 0 ? table_write(writeParams) : table_update(updateParams))
 
     return {
       message: `Database updated successfully.`,
@@ -103,9 +103,9 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update reftype.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

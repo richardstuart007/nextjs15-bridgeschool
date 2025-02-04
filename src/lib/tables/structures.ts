@@ -10,9 +10,9 @@ export type structure_SessionsInfo = {
 }
 
 export type structure_ContextInfo = {
-  cxuid: number
-  cxid: number
-  cxdbName: string
+  cx_uid: number
+  cx_id: number
+  cx_dbName: string
 }
 
 export type structure_UserAuth = {
@@ -23,8 +23,8 @@ export type structure_UserAuth = {
 }
 
 export interface structure_UsershistoryTopResults {
-  r_uid: number
-  u_name: string
+  hs_uid: number
+  us_name: string
   record_count: number
   total_points: number
   total_maxpoints: number
@@ -32,12 +32,12 @@ export interface structure_UsershistoryTopResults {
 }
 
 export interface structure_UsershistoryRecentResults {
-  r_hid: number
-  r_uid: number
-  u_name: string
-  r_totalpoints: number
-  r_maxpoints: number
-  r_correctpercent: number
+  hs_hid: number
+  hs_uid: number
+  us_name: string
+  hs_totalpoints: number
+  hs_maxpoints: number
+  hs_correctpercent: number
 }
 
 export interface structure_ProviderSignInParams {

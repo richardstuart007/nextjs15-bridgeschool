@@ -70,11 +70,11 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'u_name', value: name, operator: 'LIKE' },
-      { column: 'u_email', value: email, operator: 'LIKE' },
-      { column: 'u_provider', value: provider, operator: 'LIKE' },
-      { column: 's_id', value: id, operator: '>=' },
-      { column: 's_uid', value: uid, operator: '=' }
+      { column: 'us_name', value: name, operator: 'LIKE' },
+      { column: 'us_email', value: email, operator: 'LIKE' },
+      { column: 'us_provider', value: provider, operator: 'LIKE' },
+      { column: 'ss_id', value: id, operator: '>=' },
+      { column: 'ss_uid', value: uid, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -89,7 +89,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [{ table: 'tus_users', on: 's_uid = u_uid' }]
+      const joins = [{ table: 'tus_users', on: 'ss_uid = us_uid' }]
       //
       // Calculate the offset for pagination
       //
@@ -101,7 +101,7 @@ export default function Table() {
         table,
         joins,
         filters,
-        orderBy: 's_id DESC',
+        orderBy: 'ss_id DESC',
         limit: rowsPerPage,
         offset
       })
@@ -264,15 +264,15 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.s_id} className='w-full border-b'>
-                  <td className='px-2 text-center'>{tabledata.s_id}</td>
+                <tr key={tabledata.ss_id} className='w-full border-b'>
+                  <td className='px-2 text-center'>{tabledata.ss_id}</td>
                   <td className='px-2 text-center'>
-                    {format(new Date(tabledata.s_datetime), 'yyyy MMM dd HH:mm')}
+                    {format(new Date(tabledata.ss_datetime), 'yyyy MMM dd HH:mm')}
                   </td>
-                  <td className='px-2 text-center'>{tabledata.s_uid}</td>
-                  <td className='px-2 '>{tabledata.u_name}</td>
-                  <td className='px-2 '>{tabledata.u_email}</td>
-                  <td className='px-2 text-center   '>{tabledata.u_provider}</td>
+                  <td className='px-2 text-center'>{tabledata.ss_uid}</td>
+                  <td className='px-2 '>{tabledata.us_name}</td>
+                  <td className='px-2 '>{tabledata.us_email}</td>
+                  <td className='px-2 text-center   '>{tabledata.us_provider}</td>
 
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>

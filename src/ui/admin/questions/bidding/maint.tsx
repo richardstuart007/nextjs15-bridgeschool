@@ -56,7 +56,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const qqid = record.qqid
+  const qq_qid = record.qq_qid
   //
   // Build the HandObj array for N/E/S/W positions
   //
@@ -79,7 +79,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     //
     //  Build Bidding Arrays
     //
-    let Rounds = record.qrounds
+    let Rounds = record.qq_rounds
     //
     //  Unpack arrays into form fields
     //
@@ -149,10 +149,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
-            ID: {qqid}
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qq_qid'>
+            ID: {qq_qid}
           </label>
-          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}

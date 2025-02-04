@@ -16,10 +16,10 @@ export function TableSkeleton() {
                   Owner
                 </th>
                 <th scope='col' className='px-2 py-2 font-medium text-left'>
-                  Group
+                  Subject
                 </th>
                 <th scope='col' className='px-2 py-2 font-medium text-left'>
-                  Group-Id
+                  Subject-Id
                 </th>
                 <th scope='col' className='px-2 py-2 font-medium text-left '>
                   Hist-Id

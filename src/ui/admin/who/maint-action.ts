@@ -12,16 +12,16 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  wwho: z.string(),
-  wtitle: z.string()
+  wh_who: z.string(),
+  wh_title: z.string()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    wwho?: string[]
-    wtitle?: string[]
+    wh_who?: string[]
+    wh_title?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -35,8 +35,8 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    wwho: formData.get('wwho'),
-    wtitle: formData.get('wtitle')
+    wh_who: formData.get('wh_who'),
+    wh_title: formData.get('wh_title')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -50,18 +50,18 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   // Unpack form data
   //
-  const { wwho, wtitle } = validatedFields.data
+  const { wh_who, wh_title } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
-  const wwid = Number(formData.get('wwid'))
+  const wh_wid = Number(formData.get('wh_wid'))
   //
   // Validate fields
   //
   const Table = {
-    wwid: wwid,
-    wwho: wwho,
-    wtitle: wtitle
+    wh_wid: wh_wid,
+    wh_who: wh_who,
+    wh_title: wh_title
   }
   const errorMessages = await validate(Table)
   if (errorMessages.message) {
@@ -80,17 +80,17 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
     const updateParams = {
       table: 'twh_who',
-      columnValuePairs: [{ column: 'wtitle', value: wtitle }],
-      whereColumnValuePairs: [{ column: 'wwho', value: wwho }]
+      columnValuePairs: [{ column: 'wh_title', value: wh_title }],
+      whereColumnValuePairs: [{ column: 'wh_who', value: wh_who }]
     }
     const writeParams = {
       table: 'twh_who',
       columnValuePairs: [
-        { column: 'wwho', value: wwho },
-        { column: 'wtitle', value: wtitle }
+        { column: 'wh_who', value: wh_who },
+        { column: 'wh_title', value: wh_title }
       ]
     }
-    await (wwid === 0 ? table_write(writeParams) : table_update(updateParams))
+    await (wh_wid === 0 ? table_write(writeParams) : table_update(updateParams))
 
     return {
       message: `Database updated successfully.`,
@@ -101,11 +101,11 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //  Errors
     //
   } catch (error) {
-    const errorMessage = 'Database Error: Failed to Update Library.'
+    const errorMessage = 'Database Error: Failed to Update.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

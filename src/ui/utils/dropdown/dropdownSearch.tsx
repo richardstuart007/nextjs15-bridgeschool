@@ -13,6 +13,7 @@ type DropdownProps = {
   overrideClass_Label?: string
   overrideClass_Search?: string
   overrideClass_Dropdown?: string
+  includeBlank?: boolean
 }
 
 export default function DropdownSearch({
@@ -24,23 +25,28 @@ export default function DropdownSearch({
   searchEnabled = true,
   overrideClass_Label = 'w-72',
   overrideClass_Search = 'w-72',
-  overrideClass_Dropdown = 'w-72'
+  overrideClass_Dropdown = 'w-72',
+  includeBlank = false
 }: DropdownProps) {
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  //
+  //  Add the optional blank option
+  //
+  const updatedOptions = includeBlank ? [{ value: '', label: '' }, ...options] : options
   //
   // Filter options based on search term
   //
-  const filteredOptions = options.filter(option =>
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const filteredOptions = updatedOptions.filter(option =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
   )
   //
-  // Set default value to the first filtered option when options are available or change
+  // If there's only one option, set it as the selected option
   //
   useEffect(() => {
-    if (!selectedOption && filteredOptions.length > 0) {
+    if (filteredOptions.length === 1 && selectedOption !== filteredOptions[0].value) {
       const value = filteredOptions[0].value
-      const numericValue = isNaN(Number(value)) ? value : Number(value)
-      setSelectedOption(numericValue)
+      const valueUpdate = isNaN(Number(value)) ? value : Number(value)
+      setSelectedOption(valueUpdate)
     }
   }, [filteredOptions, selectedOption, setSelectedOption])
   //
@@ -90,9 +96,6 @@ export default function DropdownSearch({
       {/* Dropdown */}
       {/*  ...................................................................................*/}
       <div className='relative'>
-        <label htmlFor={name} className='sr-only'>
-          {name}
-        </label>
         <select
           className={className_Dropdown}
           id={name}
@@ -100,8 +103,8 @@ export default function DropdownSearch({
           value={selectedOption}
           onChange={e => {
             const value = e.target.value
-            const numericValue = isNaN(Number(value)) ? value : Number(value)
-            setSelectedOption(numericValue)
+            const valueUpdate = isNaN(Number(value)) ? value : Number(value)
+            setSelectedOption(valueUpdate)
           }}
         >
           {filteredOptions.length > 0 ? (
@@ -111,7 +114,9 @@ export default function DropdownSearch({
               </option>
             ))
           ) : (
-            <option value=''>No options found</option>
+            <option className={className_Dropdown} value=''>
+              No options found
+            </option>
           )}
         </select>
       </div>

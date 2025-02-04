@@ -1,4 +1,3 @@
-// Libraries
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import Popup from '@/src/ui/utils/popup'
 import { MyButton } from '@/src/ui/utils/myButton'

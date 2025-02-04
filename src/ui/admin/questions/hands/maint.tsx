@@ -8,7 +8,7 @@ import { Maint } from '@/src/ui/admin/questions/hands/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import { MyInput } from '@/src/ui/utils/myInput'
 
-const hand_name = [
+const handb_name = [
   'NS',
   'NH',
   'ND',
@@ -30,7 +30,7 @@ const hand_name = [
 const values_valid = 'AKQJT987654321' // Define valid values
 
 type FormStateErrors = {
-  [key in (typeof hand_name)[number]]?: string[]
+  [key in (typeof handb_name)[number]]?: string[]
 }
 
 interface FormProps {
@@ -46,7 +46,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const qqid = record.qqid
+  const qq_qid = record.qq_qid
   //
   // Build the HandObj array for N/E/S/W positions
   //
@@ -85,10 +85,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     // Combine all arrays
     //
     const combinedArray = [
-      ...normalizeArray(record.qnorth),
-      ...normalizeArray(record.qeast),
-      ...normalizeArray(record.qsouth),
-      ...normalizeArray(record.qwest)
+      ...normalizeArray(record.qq_north),
+      ...normalizeArray(record.qq_east),
+      ...normalizeArray(record.qq_south),
+      ...normalizeArray(record.qq_west)
     ]
     //
     //  Update state
@@ -130,7 +130,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     // Get the current value for the selected suit (hand)
     //
     const updatedValues = [...hand_value]
-    const index = hand_name.indexOf(name)
+    const index = handb_name.indexOf(name)
     if (index !== -1) {
       // Replace the value at the current index with the sanitized value
       updatedValues[index] = validValue
@@ -149,10 +149,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qqid'>
-            ID: {qqid}
+          <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qq_qid'>
+            ID: {qq_qid}
           </label>
-          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}
@@ -186,7 +186,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
               {/* Row of Inputs */}
               {/*  ...................................................................................*/}
               {Array.from({ length: 4 }).map((_, colIndex) => {
-                const inputName = hand_name[
+                const inputName = handb_name[
                   rowIndex * 4 + colIndex
                 ] as keyof typeof formState.errors
                 const inputValue = (hand_value[rowIndex * 4 + colIndex] || '') as string

@@ -5,13 +5,13 @@ import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 //
 export type StateSetup = {
   errors?: {
-    wtitle?: string[]
-    wwho?: string[]
+    wh_title?: string[]
+    wh_who?: string[]
   }
   message?: string | null
 }
 export default async function validate(record: table_Who): Promise<StateSetup> {
-  const { wwid, wwho } = record
+  const { wh_wid, wh_who } = record
   //
   // Initialise errors return
   //
@@ -19,15 +19,15 @@ export default async function validate(record: table_Who): Promise<StateSetup> {
   //
   //  Check for Add duplicate
   //
-  if (wwid === 0) {
+  if (wh_wid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'twh_who',
-        whereColumnValuePairs: [{ column: 'wwho', value: wwho }]
+        whereColumnValuePairs: [{ column: 'wh_who', value: wh_who }]
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.wwho = ['Who must be unique']
+    if (exists.found) errors.wh_who = ['Who must be unique']
   }
   //
   // Return error messages

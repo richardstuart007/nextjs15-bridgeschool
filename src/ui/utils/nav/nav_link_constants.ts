@@ -1,7 +1,6 @@
 export const links_dashboard = [
   { name: 'Home', href: '/dashboard' },
-  { name: 'Groups', href: '/dashboard/ownergroup' },
-  // { name: 'Library', href: '/dashboard/library' },
+  { name: 'Subjects', href: '/dashboard/subject' },
   { name: 'History', href: '/dashboard/history' },
   { name: 'User', href: '/dashboard/user' }
 ]

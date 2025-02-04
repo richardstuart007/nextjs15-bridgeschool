@@ -62,8 +62,8 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'wwho', value: who, operator: 'LIKE' },
-      { column: 'wtitle', value: title, operator: 'LIKE' }
+      { column: 'wh_who', value: who, operator: 'LIKE' },
+      { column: 'wh_title', value: title, operator: 'LIKE' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -87,7 +87,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'wwho',
+        orderBy: 'wh_who',
         limit: rowsPerPage,
         offset
       })
@@ -141,15 +141,15 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${who.wwid}) : ${who.wtitle}?`,
+      subTitle: `Are you sure you want to delete (${who.wh_wid}) : ${who.wh_title}?`,
       onConfirm: async () => {
         //
         // Check a list of tables if who changes
         //
         const tableColumnValuePairs = [
           {
-            table: 'tlr_library',
-            whereColumnValuePairs: [{ column: 'lrwho', value: who.wwho }]
+            table: 'trf_reference',
+            whereColumnValuePairs: [{ column: 'rf_who', value: who.wh_who }]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -168,7 +168,7 @@ export default function Table() {
         //
         const Params = {
           table: 'twh_who',
-          whereColumnValuePairs: [{ column: 'wwid', value: who.wwid }]
+          whereColumnValuePairs: [{ column: 'wh_wid', value: who.wh_wid }]
         }
         await table_delete(Params)
         //
@@ -278,10 +278,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(who => (
-              <tr key={who.wwid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1  '>{who.wwho}</td>
-                <td className='text-xs px-2 py-1  '>{who.wtitle}</td>
-                <td className='text-xs px-2 py-1  '>{who.wwid}</td>
+              <tr key={who.wh_wid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1  '>{who.wh_who}</td>
+                <td className='text-xs px-2 py-1  '>{who.wh_title}</td>
+                <td className='text-xs px-2 py-1  '>{who.wh_wid}</td>
                 <td className='text-xs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleClickEdit(who)}

@@ -53,7 +53,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   const tableColumnValuePairs = [
     {
       table: 'tus_users',
-      whereColumnValuePairs: [{ column: 'u_email', value: email }]
+      whereColumnValuePairs: [{ column: 'us_email', value: email }]
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
@@ -69,23 +69,23 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   //  Write User
   //
-  const u_email = email
-  const u_name = name
-  const u_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
-  const u_fedid = ''
-  const u_admin = false
-  const u_fedcountry = 'ZZ'
-  const u_provider = provider
+  const us_email = email
+  const us_name = name
+  const us_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const us_fedid = ''
+  const us_admin = false
+  const us_fedcountry = 'ZZ'
+  const us_provider = provider
   const userRecords = await table_write({
     table: 'tus_users',
     columnValuePairs: [
-      { column: 'u_email', value: u_email },
-      { column: 'u_name', value: u_name },
-      { column: 'u_joined', value: u_joined },
-      { column: 'u_fedid', value: u_fedid },
-      { column: 'u_admin', value: u_admin },
-      { column: 'u_fedcountry', value: u_fedcountry },
-      { column: 'u_provider', value: u_provider }
+      { column: 'us_email', value: us_email },
+      { column: 'us_name', value: us_name },
+      { column: 'us_joined', value: us_joined },
+      { column: 'us_fedid', value: us_fedid },
+      { column: 'us_admin', value: us_admin },
+      { column: 'us_fedcountry', value: us_fedcountry },
+      { column: 'us_provider', value: us_provider }
     ]
   })
   const userRecord = userRecords[0]
@@ -95,28 +95,28 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   //  Write the userspwd data
   //
-  const upuid = userRecord.u_uid
-  const uphash = await bcrypt.hash(password, 10)
-  const upemail = email
+  const up_uid = userRecord.us_uid
+  const up_hash = await bcrypt.hash(password, 10)
+  const up_email = email
 
   await table_write({
     table: 'tup_userspwd',
     columnValuePairs: [
-      { column: 'upuid', value: upuid },
-      { column: 'uphash', value: uphash },
-      { column: 'upemail', value: upemail }
+      { column: 'up_uid', value: up_uid },
+      { column: 'up_hash', value: up_hash },
+      { column: 'up_email', value: up_email }
     ]
   })
   //
   //  Write the usersowner data
   //
-  const uouid = userRecord.u_uid
-  const uoowner = 'Richard'
+  const uo_uid = userRecord.us_uid
+  const uo_owner = 'Richard'
   await table_write({
     table: 'tuo_usersowner',
     columnValuePairs: [
-      { column: 'uouid', value: uouid },
-      { column: 'uoowner', value: uoowner }
+      { column: 'uo_uid', value: uo_uid },
+      { column: 'uo_owner', value: uo_owner }
     ]
   })
   //

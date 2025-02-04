@@ -11,8 +11,8 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
   const [formState, formAction] = useActionState(PwdEdit, initialState)
   const [uppwd, setUppwd] = useState('')
-  const upuid = UserRecord.u_uid
-  const upemail = UserRecord.u_email
+  const up_uid = UserRecord.us_uid
+  const up_email = UserRecord.us_email
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -33,11 +33,11 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
           {/*  User ID  */}
           {/*  ...................................................................................*/}
           <div>
-            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='upuid'>
-              ID:{upuid} Email:{upemail}
+            <label className='text-xs mb-3 mt-5 block   text-gray-900' htmlFor='up_uid'>
+              ID:{up_uid} Email:{up_email}
             </label>
             <div className='relative'>
-              <MyInput id='upuid' type='hidden' name='upuid' value={upuid} />
+              <MyInput id='up_uid' type='hidden' name='up_uid' value={up_uid} />
             </div>
           </div>
           {/*  ...................................................................................*/}

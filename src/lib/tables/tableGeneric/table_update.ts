@@ -67,9 +67,9 @@ export async function table_update({
     const errorMessage = `Table(${table}) WHERE(${whereClause}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     throw new Error(`functionName, ${errorMessage}`)
   }

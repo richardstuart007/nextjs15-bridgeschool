@@ -51,7 +51,7 @@ export default async function SummaryGraphs() {
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
-  const userIds: number[] = dataRecent.map(item => item.r_uid)
+  const userIds: number[] = dataRecent.map(item => item.hs_uid)
   const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
     userIds,
     RecentResults_usersAverage
@@ -67,11 +67,11 @@ export default async function SummaryGraphs() {
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
-  function topGraph(dataTop: { u_name: string; percentage: number }[]): GraphStructure {
+  function topGraph(dataTop: { us_name: string; percentage: number }[]): GraphStructure {
     //
     //  Derive the names and percentages from the data
     //
-    const names: string[] = dataTop.map(item => item.u_name)
+    const names: string[] = dataTop.map(item => item.us_name)
     const percentages: number[] = dataTop.map(item => item.percentage)
     //
     //  Datasets
@@ -98,8 +98,8 @@ export default async function SummaryGraphs() {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent.map(item => item.u_name)
-    const individualPercentages: number[] = dataRecent.map(item => item.r_correctpercent)
+    const names: string[] = dataRecent.map(item => item.us_name)
+    const individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
     //
     //  Derive percentages from the data
     //
@@ -140,12 +140,12 @@ export default async function SummaryGraphs() {
     let sumTotalPoints = 0
     let sumMaxPoints = 0
     for (const record of dataForAverages) {
-      const { r_uid, r_totalpoints, r_maxpoints } = record
+      const { hs_uid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== r_uid || dataForAverages.indexOf(record) === dataForAverages.length - 1) {
+      if (currentUid !== hs_uid || dataForAverages.indexOf(record) === dataForAverages.length - 1) {
         //
         //  If not first record
         //
@@ -165,13 +165,13 @@ export default async function SummaryGraphs() {
         //
         //  Current user
         //
-        currentUid = r_uid
+        currentUid = hs_uid
       }
       //
       //  Increment the sum and count
       //
-      sumTotalPoints += r_totalpoints
-      sumMaxPoints += r_maxpoints
+      sumTotalPoints += hs_totalpoints
+      sumMaxPoints += hs_maxpoints
     }
     //
     //  End of data

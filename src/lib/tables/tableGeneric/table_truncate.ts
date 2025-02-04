@@ -22,9 +22,9 @@ export async function table_truncate(table: string): Promise<boolean> {
     const errorMessage = `Table(${table}) TRUNCATE FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     throw new Error(`${functionName}, ${errorMessage}`)
   }

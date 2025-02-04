@@ -25,8 +25,8 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //  User context
   //
   const { sessionContext } = useUserContext()
-  const cxid = sessionContext.cxid
-  const cxuid = sessionContext.cxuid
+  const cx_id = sessionContext.cx_id
+  const cx_uid = sessionContext.cx_uid
   //
   //  Questions state updated in initial load
   //
@@ -117,11 +117,11 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //
     //  Initialise the results
     //
-    let r_qid: number[] = []
-    let r_points: number[] = []
-    let r_totalpoints = 0
-    let r_maxpoints = 0
-    let r_correctpercent = 0
+    let hs_qid: number[] = []
+    let hs_points: number[] = []
+    let hs_totalpoints = 0
+    let hs_maxpoints = 0
+    let hs_correctpercent = 0
     //
     // Get the answered questions
     //
@@ -130,47 +130,47 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //  Loop through the answered questions to populate the points
     //
     answeredQuestions.forEach((question, i) => {
-      r_qid.push(question.qqid)
+      hs_qid.push(question.qq_qid)
 
       const p = answer[i]
-      const points = question.qpoints[p]
+      const points = question.qq_points[p]
       if (points !== undefined) {
-        r_points.push(points)
-        r_totalpoints += points
+        hs_points.push(points)
+        hs_totalpoints += points
       }
       //
       //  Max points
       //
-      r_maxpoints += Math.max(...question.qpoints)
+      hs_maxpoints += Math.max(...question.qq_points)
     })
     //
     //  Calculate the correct percentage
     //
-    if (r_maxpoints !== 0) {
-      r_correctpercent = Math.ceil((r_totalpoints * 100) / r_maxpoints)
+    if (hs_maxpoints !== 0) {
+      hs_correctpercent = Math.ceil((hs_totalpoints * 100) / hs_maxpoints)
     }
     //
     // Create a NewUsersHistoryTable object
     //
-    const r_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
+    const hs_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
     //
     //  Create parameters
     //
     const writeParams = {
-      table: 'ths_usershistory',
+      table: 'ths_history',
       columnValuePairs: [
-        { column: 'r_datetime', value: r_datetime },
-        { column: 'r_owner', value: question.qowner },
-        { column: 'r_group', value: question.qgroup },
-        { column: 'r_questions', value: answer.length },
-        { column: 'r_qid', value: r_qid },
-        { column: 'r_ans', value: answer },
-        { column: 'r_uid', value: cxuid },
-        { column: 'r_points', value: r_points },
-        { column: 'r_maxpoints', value: r_maxpoints },
-        { column: 'r_correctpercent', value: r_correctpercent },
-        { column: 'r_gid', value: question.qgid },
-        { column: 'r_sid', value: cxid }
+        { column: 'hs_datetime', value: hs_datetime },
+        { column: 'hs_owner', value: question.qq_owner },
+        { column: 'hs_subject', value: question.qq_subject },
+        { column: 'hs_questions', value: answer.length },
+        { column: 'hs_qid', value: hs_qid },
+        { column: 'hs_ans', value: answer },
+        { column: 'hs_uid', value: cx_uid },
+        { column: 'hs_points', value: hs_points },
+        { column: 'hs_maxpoints', value: hs_maxpoints },
+        { column: 'hs_correctpercent', value: hs_correctpercent },
+        { column: 'hs_gid', value: question.qq_gid },
+        { column: 'hs_sid', value: cx_id }
       ]
     }
     //
@@ -181,8 +181,8 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //
     //  Go to the quiz review page
     //
-    const { r_hid } = historyRecord
-    router.push(`/dashboard/quiz-review/${r_hid}`)
+    const { hs_hid } = historyRecord
+    router.push(`/dashboard/quiz-review/${hs_hid}`)
   }
   //...................................................................................
   //.  Render the form
@@ -193,8 +193,8 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   return (
     <>
       <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-        <p className='text-xs  font-medium'>{`${question.qgroup}`}</p>
-        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qqid}) ${index + 1}/${questions.length}`}</p>
+        <p className='text-xs  font-medium'>{`${question.qq_subject}`}</p>
+        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qid}) ${index + 1}/${questions.length}`}</p>
       </div>
       <QuizBidding question={question} />
       <QuizHands question={question} />

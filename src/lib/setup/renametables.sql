@@ -1,0 +1,13 @@
+ALTER TABLE  database       RENAME TO old_database;
+ALTER TABLE  logging        RENAME TO old_logging;
+ALTER TABLE  library        RENAME TO old_library;
+ALTER TABLE  owner          RENAME TO old_owner;
+ALTER TABLE  subject     RENAME TO old_ownergroup;
+ALTER TABLE  questions      RENAME TO old_questions;
+ALTER TABLE  reftype        RENAME TO old_reftype;
+ALTER TABLE  sessions       RENAME TO old_sessions;
+ALTER TABLE  users          RENAME TO old_users;
+ALTER TABLE  usershistory   RENAME TO old_usershistory;
+ALTER TABLE  usersowner     RENAME TO old_usersowner;
+ALTER TABLE  userspwd       RENAME TO old_userspwd;
+ALTER TABLE  who            RENAME TO old_who;

@@ -1,6 +1,6 @@
 import { FaceFrownIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 interface RadioOption {
   id: string
@@ -8,13 +8,13 @@ interface RadioOption {
   value: number
 }
 
-interface RadioGroupProps {
+interface RadioSubjectProps {
   options: RadioOption[]
   selectedOption: number
   correctOption: number
 }
 
-export default function RadioGroup(props: RadioGroupProps): JSX.Element {
+export default function RadioSubject(props: RadioSubjectProps): JSX.Element {
   const { options, selectedOption, correctOption } = props
   return (
     <>

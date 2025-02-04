@@ -22,7 +22,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
     const fetchParams = {
       table: 'tus_users',
-      whereColumnValuePairs: [{ column: 'u_email', value: email }]
+      whereColumnValuePairs: [{ column: 'us_email', value: email }]
     }
     const rows = await table_fetch(fetchParams)
     userRecord = rows[0]
@@ -34,8 +34,8 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
     // Write session information
     //
-    const s_uid = userRecord.u_uid
-    const sessionId = await newSession(s_uid)
+    const ss_uid = userRecord.us_uid
+    const sessionId = await newSession(ss_uid)
     //
     //  Return Session ID
     //
@@ -46,9 +46,9 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
 
     console.error('Error:', errorMessage)
@@ -60,23 +60,23 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
 // ----------------------------------------------------------------------
 async function newUser(provider: string, email: string, name: string) {
   let userRecord = []
-  const u_email = email
-  const u_name = name
-  const u_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
-  const u_fedid = ''
-  const u_admin = false
-  const u_fedcountry = 'ZZ'
-  const u_provider = provider
+  const us_email = email
+  const us_name = name
+  const us_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const us_fedid = ''
+  const us_admin = false
+  const us_fedcountry = 'ZZ'
+  const us_provider = provider
   const userRecords = await table_write({
     table: 'tus_users',
     columnValuePairs: [
-      { column: 'u_email', value: u_email },
-      { column: 'u_name', value: u_name },
-      { column: 'u_joined', value: u_joined },
-      { column: 'u_fedid', value: u_fedid },
-      { column: 'u_admin', value: u_admin },
-      { column: 'u_fedcountry', value: u_fedcountry },
-      { column: 'u_provider', value: u_provider }
+      { column: 'us_email', value: us_email },
+      { column: 'us_name', value: us_name },
+      { column: 'us_joined', value: us_joined },
+      { column: 'us_fedid', value: us_fedid },
+      { column: 'us_admin', value: us_admin },
+      { column: 'us_fedcountry', value: us_fedcountry },
+      { column: 'us_provider', value: us_provider }
     ]
   })
   userRecord = userRecords[0]
@@ -86,13 +86,13 @@ async function newUser(provider: string, email: string, name: string) {
   //
   //  Write the usersowner data
   //
-  const uouid = userRecord.u_uid
-  const uoowner = 'Richard'
+  const uo_uid = userRecord.us_uid
+  const uo_owner = 'Richard'
   await table_write({
     table: 'tuo_usersowner',
     columnValuePairs: [
-      { column: 'uouid', value: uouid },
-      { column: 'uoowner', value: uoowner }
+      { column: 'uo_uid', value: uo_uid },
+      { column: 'uo_owner', value: uo_owner }
     ]
   })
 
@@ -101,16 +101,16 @@ async function newUser(provider: string, email: string, name: string) {
 // ----------------------------------------------------------------------
 //  Write session
 // ----------------------------------------------------------------------
-async function newSession(s_uid: number) {
+async function newSession(ss_uid: number) {
   //
   //  Write Session
   //
-  const s_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
+  const ss_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
   const sessionsRecords = await table_write({
     table: 'tss_sessions',
     columnValuePairs: [
-      { column: 's_datetime', value: s_datetime },
-      { column: 's_uid', value: s_uid }
+      { column: 'ss_datetime', value: ss_datetime },
+      { column: 'ss_uid', value: ss_uid }
     ]
   })
   //
@@ -118,7 +118,7 @@ async function newSession(s_uid: number) {
   //
   const sessionsRecord = sessionsRecords[0]
   if (!sessionsRecord) throw new Error('providerSignIn: Write Session Error')
-  const sessionId = sessionsRecord.s_id
+  const sessionId = sessionsRecord.ss_id
   //
   // Write cookie sessionId
   //
@@ -142,9 +142,9 @@ export async function getAuthSession() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

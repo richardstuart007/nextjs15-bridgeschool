@@ -11,14 +11,14 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  oowner: z.string()
+  ow_owner: z.string()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    oowner?: string[]
+    ow_owner?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -32,7 +32,7 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    oowner: formData.get('oowner')
+    ow_owner: formData.get('ow_owner')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -46,8 +46,8 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   //
   // Unpack form data
   //
-  const { oowner } = validatedFields.data
-  const errorMessages = await validateOwner(oowner)
+  const { ow_owner } = validatedFields.data
+  const errorMessages = await validateOwner(ow_owner)
   if (errorMessages.message) {
     return {
       errors: errorMessages.errors,
@@ -61,7 +61,7 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   try {
     const writeParams = {
       table: 'tow_owner',
-      columnValuePairs: [{ column: 'oowner', value: oowner }]
+      columnValuePairs: [{ column: 'ow_owner', value: ow_owner }]
     }
     await table_write(writeParams)
 
@@ -76,9 +76,9 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Owner.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

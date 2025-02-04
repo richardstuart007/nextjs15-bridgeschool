@@ -5,13 +5,13 @@ import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 //
 export type StateSetup = {
   errors?: {
-    rttitle?: string[]
-    rttype?: string[]
+    rt_title?: string[]
+    rt_type?: string[]
   }
   message?: string | null
 }
 export default async function validate(record: table_Reftype): Promise<StateSetup> {
-  const { rtrid, rttype } = record
+  const { rt_rid, rt_type } = record
   //
   // Initialise errors return
   //
@@ -19,15 +19,15 @@ export default async function validate(record: table_Reftype): Promise<StateSetu
   //
   //  Check for Add duplicate
   //
-  if (rtrid === 0) {
+  if (rt_rid === 0) {
     const tableColumnValuePairs = [
       {
-        table: 'trf_reftype',
-        whereColumnValuePairs: [{ column: 'rttype', value: rttype }]
+        table: 'trt_reftype',
+        whereColumnValuePairs: [{ column: 'rt_type', value: rt_type }]
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.rttype = ['reftype must be unique']
+    if (exists.found) errors.rt_type = ['reftype must be unique']
   }
   //
   // Return error messages

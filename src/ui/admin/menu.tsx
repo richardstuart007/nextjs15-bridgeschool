@@ -36,8 +36,8 @@ export default function Page() {
             Owner
           </MyLink>
 
-          <MyLink key='ownergroup' href='/admin/ownergroup' overrideClass='w-36 justify-center'>
-            Owner Group
+          <MyLink key='subject' href='/admin/subject' overrideClass='w-36 justify-center'>
+            Owner Subject
           </MyLink>
 
           <div className='w-36 '></div>
@@ -45,8 +45,8 @@ export default function Page() {
           {/* -------------------------------------------------------------------------------------------------------------------- */}
           <div className='w-36 '></div>
 
-          <MyLink key='library' href='/admin/library' overrideClass='w-36 justify-center'>
-            Library
+          <MyLink key='reference' href='/admin/reference' overrideClass='w-36 justify-center'>
+            Reference
           </MyLink>
 
           <MyLink key='who' href='/admin/who' overrideClass='w-36 justify-center'>

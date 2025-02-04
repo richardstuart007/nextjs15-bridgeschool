@@ -22,9 +22,9 @@ export async function table_drop(table: string): Promise<boolean> {
     const errorMessage = `Table(${table}) DROP FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     throw new Error(`${functionName}, ${errorMessage}`)
   }

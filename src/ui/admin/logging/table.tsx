@@ -104,10 +104,10 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'lgmsg', value: msg, operator: 'LIKE' },
-      { column: 'lgfunctionname', value: functionname, operator: 'LIKE' },
-      { column: 'lgseverity', value: severity, operator: '=' },
-      { column: 'lgsession', value: session, operator: '=' }
+      { column: 'lg_msg', value: msg, operator: 'LIKE' },
+      { column: 'lg_functionname', value: functionname, operator: 'LIKE' },
+      { column: 'lg_severity', value: severity, operator: '=' },
+      { column: 'lg_session', value: session, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -129,7 +129,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'lgid DESC',
+        orderBy: 'lg_id DESC',
         limit: rowsPerPage,
         offset
       })
@@ -271,12 +271,12 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.lgid} className='w-full border-b'>
-                  <td className='px-2 '>{tabledata.lgid}</td>
-                  <td className='px-2 text-center   '>{tabledata.lgsession}</td>
-                  <td className='px-2 '>{tabledata.lgfunctionname}</td>
-                  <td className='px-2 text-center   '>{tabledata.lgseverity}</td>
-                  <td className='px-2 '>{tabledata.lgmsg}</td>
+                <tr key={tabledata.lg_id} className='w-full border-b'>
+                  <td className='px-2 '>{tabledata.lg_id}</td>
+                  <td className='px-2 text-center   '>{tabledata.lg_session}</td>
+                  <td className='px-2 '>{tabledata.lg_functionname}</td>
+                  <td className='px-2 text-center   '>{tabledata.lg_severity}</td>
+                  <td className='px-2 '>{tabledata.lg_msg}</td>
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>
               ))

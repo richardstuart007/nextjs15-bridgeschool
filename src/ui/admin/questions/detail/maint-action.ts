@@ -6,7 +6,7 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
-import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
+import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Setup
@@ -15,19 +15,19 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  qowner: z.string(),
-  qgroup: z.string(),
-  qdetail: z.string()
+  qq_owner: z.string(),
+  qq_subject: z.string(),
+  qq_detail: z.string()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    qowner?: string[]
-    qgroup?: string[]
-    qdetail?: string[]
-    qlid?: string[]
+    qq_owner?: string[]
+    qq_subject?: string[]
+    qq_detail?: string[]
+    qq_lid?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -44,9 +44,9 @@ export async function Maint_detail(
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    qowner: formData.get('qowner'),
-    qgroup: formData.get('qgroup'),
-    qdetail: formData.get('qdetail')
+    qq_owner: formData.get('qq_owner'),
+    qq_subject: formData.get('qq_subject'),
+    qq_detail: formData.get('qq_detail')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -60,27 +60,27 @@ export async function Maint_detail(
   //
   // Unpack form data
   //
-  const { qowner, qgroup, qdetail } = validatedFields.data
+  const { qq_owner, qq_subject, qq_detail } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
-  const qqidString = formData.get('qqid') as string | 0
-  const qqid = Number(qqidString)
+  const qq_qidString = formData.get('qq_qid') as string | 0
+  const qq_qid = Number(qq_qidString)
 
-  const qseqString = formData.get('qseq') as string | 0
-  let qseq = Number(qseqString)
+  const qq_seqString = formData.get('qq_seq') as string | 0
+  let qq_seq = Number(qq_seqString)
 
-  const qlidString = formData.get('qlid') as string | 0
-  const qlid = Number(qlidString)
+  const qq_lidString = formData.get('qq_lid') as string | 0
+  const qq_lid = Number(qq_lidString)
   //
   // Validate fields
   //
   const Table = {
-    qqid: qqid,
-    qowner: qowner,
-    qgroup: qgroup,
-    qseq: qseq,
-    qlid: qlid
+    qq_qid: qq_qid,
+    qq_owner: qq_owner,
+    qq_subject: qq_subject,
+    qq_seq: qq_seq,
+    qq_lid: qq_lid
   }
   const errorMessages = await validate(Table)
   if (errorMessages.message) {
@@ -97,17 +97,17 @@ export async function Maint_detail(
     //
     //  Update
     //
-    if (qqid !== 0) {
+    if (qq_qid !== 0) {
       //
       //  update parameters
       //
       const updateParams = {
         table: 'tqq_questions',
         columnValuePairs: [
-          { column: 'qdetail', value: qdetail },
-          { column: 'qlid', value: qlid }
+          { column: 'qq_detail', value: qq_detail },
+          { column: 'qq_lid', value: qq_lid }
         ],
-        whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
+        whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
       }
       await table_update(updateParams)
     }
@@ -118,37 +118,37 @@ export async function Maint_detail(
       //
       //  Get next sequence if Add
       //
-      qseq = await getNextSeq(qowner, qgroup)
+      qq_seq = await getNextSeq(qq_owner, qq_subject)
       //
-      //  Get group id - qgid
+      //  Get subject id - qq_gid
       //
       const rows = await table_fetch({
-        table: 'tog_ownergroup',
+        table: 'tsb_subject',
         whereColumnValuePairs: [
-          { column: 'ogowner', value: qowner },
-          { column: 'oggroup', value: qgroup }
+          { column: 'sb_owner', value: qq_owner },
+          { column: 'sb_subject', value: qq_subject }
         ]
       })
-      const oggid = rows[0].oggid
+      const sb_sid = rows[0].sb_sid
       //
       //  Write Parameters
       //
       const writeParams = {
         table: 'tqq_questions',
         columnValuePairs: [
-          { column: 'qowner', value: qowner },
-          { column: 'qgroup', value: qgroup },
-          { column: 'qseq', value: qseq },
-          { column: 'qdetail', value: qdetail },
-          { column: 'qgid', value: oggid },
-          { column: 'qlid', value: qlid }
+          { column: 'qq_owner', value: qq_owner },
+          { column: 'qq_subject', value: qq_subject },
+          { column: 'qq_seq', value: qq_seq },
+          { column: 'qq_detail', value: qq_detail },
+          { column: 'qq_gid', value: sb_sid },
+          { column: 'qq_lid', value: qq_lid }
         ]
       }
       await table_write(writeParams)
       //
-      //  update Questions counts in Ownergroup
+      //  update Questions counts in Subject
       //
-      await update_ogcntquestions(oggid)
+      await update_sbcntquestions(sb_sid)
     }
     return {
       message: `Database updated successfully.`,
@@ -156,11 +156,11 @@ export async function Maint_detail(
       databaseUpdated: true
     }
   } catch (error) {
-    const errorMessage = 'Database Error: Failed to Update Library.'
+    const errorMessage = 'Database Error: Failed to Update.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

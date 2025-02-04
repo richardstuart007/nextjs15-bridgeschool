@@ -1,5 +1,5 @@
 import { useEffect, useState, type JSX } from 'react'
-import RadioGroup from '@/src/ui/dashboard/quiz/radiobuttons'
+import RadioSubject from '@/src/ui/dashboard/quiz/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
 // Define the RadioOption type
@@ -35,16 +35,16 @@ export default function QuizChoice(props: QuizChoiceProps): JSX.Element {
     //
     //  Determine questionText
     //
-    const qdetail = question.qdetail
-    setQuestionText(qdetail)
+    const qq_detail = question.qq_detail
+    setQuestionText(qq_detail)
     //
     //  Answers array
     //
-    const shuffledOptions = shuffleArray(question.qans)
+    const shuffledOptions = shuffleArray(question.qq_ans)
     const newOptions = shuffledOptions.map((option, index) => ({
       id: index.toString(),
       label: option.toString(),
-      value: question.qans.indexOf(option)
+      value: question.qq_ans.indexOf(option)
     }))
     setAnswers(newOptions)
     //
@@ -77,7 +77,7 @@ export default function QuizChoice(props: QuizChoiceProps): JSX.Element {
   return (
     <div className='my-1 p-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
       <p className='text-xs italic font-bold text-yellow-500 break-words w-full'>{questionText}</p>
-      <RadioGroup options={answers} selectedOption={selectedOption} onChange={handleSelect} />
+      <RadioSubject options={answers} selectedOption={selectedOption} onChange={handleSelect} />
     </div>
   )
 }

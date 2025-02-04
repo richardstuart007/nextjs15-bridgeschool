@@ -1,14 +1,14 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
-interface RadioGroupProps {
+interface RadioSubjectProps {
   question: table_Questions
   QuizInfo: number
   quizTotal: number
 }
 
-export default function QuizInfo(props: RadioGroupProps): JSX.Element {
+export default function QuizInfo(props: RadioSubjectProps): JSX.Element {
   //...................................................................................
   //.  Main Line
   //...................................................................................
@@ -19,11 +19,11 @@ export default function QuizInfo(props: RadioGroupProps): JSX.Element {
   //
   //  Deconstruct row
   //
-  const { qowner, qgroup, qqid } = question
+  const { qq_owner, qq_subject, qq_qid } = question
   //
   //  Question Info
   //
-  let QuestionInfo = `${qowner}/${qgroup}(${qqid}) ${QuizInfo}/${quizTotal}`
+  let QuestionInfo = `${qq_owner}/${qq_subject}(${qq_qid}) ${QuizInfo}/${quizTotal}`
   //...................................................................................
   //.  Render the form
   //...................................................................................

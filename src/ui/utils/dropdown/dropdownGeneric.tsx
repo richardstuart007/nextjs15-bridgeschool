@@ -41,11 +41,13 @@ export default function DropdownGeneric({
   overrideClass_Dropdown = '',
   includeBlank = false
 }: DropdownProps) {
+  //
+  //  State
+  //
   const [dropdownOptions, setDropdownOptions] = useState<
     { value: string | number; label: string }[]
   >([])
   const [loading, setLoading] = useState(true)
-
   //---------------------------------------------------------------------
   //  Fetch dropdown options
   //---------------------------------------------------------------------
@@ -72,9 +74,9 @@ export default function DropdownGeneric({
           if (tableColumn && tableColumnValue) {
             fetchParams.whereColumnValuePairs = [{ column: tableColumn, value: tableColumnValue }]
           }
-          return table_fetch(fetchParams)
+          const data = await table_fetch(fetchParams)
+          return data
         }
-
         throw new Error('Either tableData or table must be provided')
       }
 
@@ -95,17 +97,12 @@ export default function DropdownGeneric({
           label: row[optionLabel]?.toString() || ''
         }))
         //
-        //  Deal with just 1 option, no need to dropdown
+        //  Set options
         //
-        if (options.length === 1) {
-          setSelectedOption(options[0].value)
-          setDropdownOptions(options)
-        } else {
-          //
-          //  Add the optional black option
-          //
-          setDropdownOptions(includeBlank ? [{ value: '', label: '' }, ...options] : options)
-        }
+        setDropdownOptions(options)
+        //
+        //  Errors
+        //
       } catch (error) {
         console.error('Error fetching dropdown options:', error)
       } finally {
@@ -145,20 +142,19 @@ export default function DropdownGeneric({
   //---------------------------------------------------------------------
   function renderDropdown() {
     return (
-      <div>
-        <DropdownSearch
-          label={label}
-          name={name}
-          options={dropdownOptions}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          searchEnabled={searchEnabled}
-          dropdownWidth={dropdownWidth}
-          overrideClass_Label={overrideClass_Label}
-          overrideClass_Search={overrideClass_Search}
-          overrideClass_Dropdown={overrideClass_Dropdown}
-        />
-      </div>
+      <DropdownSearch
+        label={label}
+        name={name}
+        options={dropdownOptions}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
+        searchEnabled={searchEnabled}
+        dropdownWidth={dropdownWidth}
+        overrideClass_Label={overrideClass_Label}
+        overrideClass_Search={overrideClass_Search}
+        overrideClass_Dropdown={overrideClass_Dropdown}
+        includeBlank={includeBlank}
+      />
     )
   }
   //---------------------------------------------------------------------

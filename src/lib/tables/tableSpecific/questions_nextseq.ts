@@ -3,21 +3,21 @@
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
 //---------------------------------------------------------------------
-//  Get next qseq
+//  Get next qq_seq
 //---------------------------------------------------------------------
-export async function getNextSeq(qowner: string, qgroup: string) {
+export async function getNextSeq(qq_owner: string, qq_subject: string) {
   const functionName = 'getNextSeq'
   try {
     const sqlQuery = `
-      SELECT COALESCE(MAX(qseq) + 1, 1) AS next_qseq
+      SELECT COALESCE(MAX(qq_seq) + 1, 1) AS next_qq_seq
       FROM tqq_questions
-      WHERE qowner = $1
-        AND qgroup = $2
+      WHERE qq_owner = $1
+        AND qq_subject = $2
     `
     //
     //  Logging
     //
-    const values = [qowner, qgroup]
+    const values = [qq_owner, qq_subject]
     //
     //  Run sql Query
     //
@@ -26,17 +26,17 @@ export async function getNextSeq(qowner: string, qgroup: string) {
     //
     //  Return results
     //
-    const next_qseq = data.rows[0]?.next_qseq ?? null
-    return next_qseq
+    const next_qq_seq = data.rows[0]?.next_qq_seq ?? null
+    return next_qq_seq
     //
     //  Errors
     //
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

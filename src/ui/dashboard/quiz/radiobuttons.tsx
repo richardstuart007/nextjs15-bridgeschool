@@ -7,13 +7,13 @@ interface RadioOption {
   value: number
 }
 
-interface RadioGroupProps {
+interface RadioSubjectProps {
   options: RadioOption[]
   selectedOption: number
   onChange: (value: number) => void
 }
 
-export default function RadioGroup(props: RadioGroupProps): JSX.Element {
+export default function RadioSubject(props: RadioSubjectProps): JSX.Element {
   const { options, selectedOption, onChange } = props
   const [selectedValue, setSelectedValue] = useState<number>(selectedOption)
   //

@@ -10,28 +10,28 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  u_uid: z.string(),
-  u_name: z.string().min(1),
-  u_fedid: z.string(),
-  u_fedcountry: z.string(),
-  u_maxquestions: z.number().min(3).max(30),
-  u_skipcorrect: z.boolean(),
-  u_sortquestions: z.boolean(),
-  u_admin: z.boolean()
+  us_uid: z.string(),
+  us_name: z.string().min(1),
+  us_fedid: z.string(),
+  us_fedcountry: z.string(),
+  us_maxquestions: z.number().min(3).max(30),
+  us_skipcorrect: z.boolean(),
+  us_sortquestions: z.boolean(),
+  us_admin: z.boolean()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    u_uid?: string[]
-    u_name?: string[]
-    u_fedid?: string[]
-    u_fedcountry?: string[]
-    u_maxquestions?: string[]
-    u_skipcorrect?: string[]
-    u_sortquestions?: string[]
-    u_admin?: string[]
+    us_uid?: string[]
+    us_name?: string[]
+    us_fedid?: string[]
+    us_fedcountry?: string[]
+    us_maxquestions?: string[]
+    us_skipcorrect?: string[]
+    us_sortquestions?: string[]
+    us_admin?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -45,14 +45,14 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    u_uid: formData.get('u_uid'),
-    u_name: formData.get('u_name'),
-    u_fedid: formData.get('u_fedid'),
-    u_fedcountry: formData.get('u_fedcountry'),
-    u_maxquestions: Number(formData.get('u_maxquestions')),
-    u_sortquestions: formData.get('u_sortquestions') === 'true',
-    u_skipcorrect: formData.get('u_skipcorrect') === 'true',
-    u_admin: formData.get('u_admin') === 'true'
+    us_uid: formData.get('us_uid'),
+    us_name: formData.get('us_name'),
+    us_fedid: formData.get('us_fedid'),
+    us_fedcountry: formData.get('us_fedcountry'),
+    us_maxquestions: Number(formData.get('us_maxquestions')),
+    us_sortquestions: formData.get('us_sortquestions') === 'true',
+    us_skipcorrect: formData.get('us_skipcorrect') === 'true',
+    us_admin: formData.get('us_admin') === 'true'
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -68,14 +68,14 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   // Unpack form data
   //
   const {
-    u_uid,
-    u_name,
-    u_fedid,
-    u_fedcountry,
-    u_maxquestions,
-    u_sortquestions,
-    u_skipcorrect,
-    u_admin
+    us_uid,
+    us_name,
+    us_fedid,
+    us_fedcountry,
+    us_maxquestions,
+    us_sortquestions,
+    us_skipcorrect,
+    us_admin
   } = validatedFields.data
   //
   // Update data into the database
@@ -85,18 +85,18 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     // Common column-value pairs
     //
     const columnValuePairs = [
-      { column: 'u_name', value: u_name },
-      { column: 'u_fedid', value: u_fedid },
-      { column: 'u_fedcountry', value: u_fedcountry },
-      { column: 'u_maxquestions', value: u_maxquestions },
-      { column: 'u_sortquestions', value: u_sortquestions },
-      { column: 'u_skipcorrect', value: u_skipcorrect },
-      { column: 'u_admin', value: u_admin }
+      { column: 'us_name', value: us_name },
+      { column: 'us_fedid', value: us_fedid },
+      { column: 'us_fedcountry', value: us_fedcountry },
+      { column: 'us_maxquestions', value: us_maxquestions },
+      { column: 'us_sortquestions', value: us_sortquestions },
+      { column: 'us_skipcorrect', value: us_skipcorrect },
+      { column: 'us_admin', value: us_admin }
     ]
     const updateParams = {
       table: 'tus_users',
       columnValuePairs,
-      whereColumnValuePairs: [{ column: 'u_uid', value: u_uid }]
+      whereColumnValuePairs: [{ column: 'us_uid', value: us_uid }]
     }
     //
     //  Update the database
@@ -114,11 +114,11 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     //  Errors
     //
   } catch (error) {
-    const errorMessage = 'Database Error: Failed to Update Library.'
+    const errorMessage = 'Database Error: Failed to Update.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

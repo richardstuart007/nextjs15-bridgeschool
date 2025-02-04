@@ -22,34 +22,34 @@ export async function fetch_TopResults({
   try {
     const sqlQuery = `
     SELECT
-        r_uid,
-        u_name,
+        hs_uid,
+        us_name,
         COUNT(*) AS record_count,
-        SUM(r_totalpoints) AS total_points,
-        SUM(r_maxpoints) AS total_maxpoints,
+        SUM(hs_totalpoints) AS total_points,
+        SUM(hs_maxpoints) AS total_maxpoints,
         CASE
-          WHEN SUM(r_maxpoints) > 0
-          THEN ROUND((SUM(r_totalpoints) / CAST(SUM(r_maxpoints) AS NUMERIC)) * 100)::INTEGER
+          WHEN SUM(hs_maxpoints) > 0
+          THEN ROUND((SUM(hs_totalpoints) / CAST(SUM(hs_maxpoints) AS NUMERIC)) * 100)::INTEGER
           ELSE 0
         END AS percentage
         FROM (
             SELECT
-                r_uid,
-                r_totalpoints,
-                r_maxpoints,
-                ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
+                hs_uid,
+                hs_totalpoints,
+                hs_maxpoints,
+                ROW_NUMBER() OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
             FROM
-                ths_usershistory
+                ths_history
             WHERE
-                r_datetime >= NOW() - ($4 || ' months')::interval
+                hs_datetime >= NOW() - ($4 || ' months')::interval
         ) AS ranked
       JOIN
-        tus_users ON r_uid = u_uid
+        tus_users ON hs_uid = us_uid
       WHERE
         rn <= $2
-        AND u_admin = false
+        AND us_admin = false
       GROUP BY
-        r_uid, u_name
+        hs_uid, us_name
       HAVING
         COUNT(*) >= $1
       ORDER BY
@@ -78,9 +78,9 @@ export async function fetch_TopResults({
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
   }
@@ -98,27 +98,27 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
   try {
     const sqlQuery = `
     SELECT
-      r_hid, r_uid, u_name, r_totalpoints, r_maxpoints, r_correctpercent
+      hs_hid, hs_uid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
       FROM (
           SELECT
-            r_hid,
-            r_uid,
-            u_name,
-            r_totalpoints,
-            r_maxpoints,
-            r_correctpercent,
+            hs_hid,
+            hs_uid,
+            us_name,
+            hs_totalpoints,
+            hs_maxpoints,
+            hs_correctpercent,
             ROW_NUMBER()
-            OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
-          FROM ths_usershistory
+            OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
+          FROM ths_history
           JOIN tus_users
-            ON r_uid = u_uid
+            ON hs_uid = us_uid
           WHERE
-            u_admin = false
+            us_admin = false
             )
       AS ranked
       WHERE rn = 1
       ORDER BY
-        r_hid DESC
+        hs_hid DESC
       LIMIT $1
       `
     //
@@ -138,9 +138,9 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
   }
@@ -168,22 +168,22 @@ export async function fetch_RecentResultsAverages({
 
     const sqlQuery = `
     SELECT
-      r_hid,
-      r_uid,
-      u_name,
-      r_totalpoints,
-      r_maxpoints,
-      r_correctpercent
+      hs_hid,
+      hs_uid,
+      us_name,
+      hs_totalpoints,
+      hs_maxpoints,
+      hs_correctpercent
       FROM (
         SELECT
-          r_hid, r_uid, u_name, r_totalpoints, r_maxpoints, r_correctpercent,
-          ROW_NUMBER() OVER (PARTITION BY r_uid ORDER BY r_hid DESC) AS rn
-        FROM ths_usershistory
-        JOIN tus_users ON r_uid = u_uid
-          WHERE r_uid IN (${placeholders})
+          hs_hid, hs_uid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent,
+          ROW_NUMBER() OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
+        FROM ths_history
+        JOIN tus_users ON hs_uid = us_uid
+          WHERE hs_uid IN (${placeholders})
       ) AS ranked
       WHERE rn <= $${averagePlaceholderIndex}
-      ORDER BY r_uid;
+      ORDER BY hs_uid;
         `
     //
     // Append RecentResults_usersAverage to the values array
@@ -205,9 +205,9 @@ export async function fetch_RecentResultsAverages({
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
   }

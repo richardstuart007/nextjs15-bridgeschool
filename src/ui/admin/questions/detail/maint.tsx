@@ -11,7 +11,7 @@ import { MyInput } from '@/src/ui/utils/myInput'
 interface FormProps {
   questionRecord: table_Questions | undefined
   selected_owner?: string | undefined
-  selected_group?: string | undefined
+  selected_subject?: string | undefined
   onSuccess: () => void
   shouldCloseOnUpdate?: boolean
 }
@@ -19,7 +19,7 @@ interface FormProps {
 export default function Form({
   questionRecord,
   selected_owner,
-  selected_group,
+  selected_subject,
   onSuccess,
   shouldCloseOnUpdate = true
 }: FormProps) {
@@ -28,17 +28,17 @@ export default function Form({
   //
   //  State and Initial values
   //
-  const qgid = questionRecord?.qgid || 0
-  const qqid = questionRecord?.qqid || 0
-  const qseq = questionRecord?.qseq || 0
-  const [qowner, setqowner] = useState<string | number>(
-    questionRecord?.qowner || selected_owner || ''
+  const qq_gid = questionRecord?.qq_gid || 0
+  const qq_qid = questionRecord?.qq_qid || 0
+  const qq_seq = questionRecord?.qq_seq || 0
+  const [qq_owner, setqq_owner] = useState<string | number>(
+    questionRecord?.qq_owner || selected_owner || ''
   )
-  const [qgroup, setqgroup] = useState<string | number>(
-    questionRecord?.qgroup || selected_group || ''
+  const [qq_subject, setqq_subject] = useState<string | number>(
+    questionRecord?.qq_subject || selected_subject || ''
   )
-  const [qdetail, setqdetail] = useState(questionRecord?.qdetail || '')
-  const [qlid, setqlid] = useState<string | number>(questionRecord?.qlid || 0)
+  const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
+  const [qq_lid, setqq_lid] = useState<string | number>(questionRecord?.qq_lid || 0)
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -50,7 +50,7 @@ export default function Form({
     return (
       <div className='pt-2'>
         <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
-          {qqid === 0 ? 'Create' : 'Update'}
+          {qq_qid === 0 ? 'Create' : 'Update'}
         </MyButton>
       </div>
     )
@@ -75,26 +75,26 @@ export default function Form({
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qqid !== 0 && (
-            <label className='text-xs block   text-gray-900' htmlFor='qqid'>
-              ID: {qqid}
+          {qq_qid !== 0 && (
+            <label className='text-xs block   text-gray-900' htmlFor='qq_qid'>
+              ID: {qq_qid}
             </label>
           )}
-          <MyInput id='qqid' type='hidden' name='qqid' value={qqid} />
+          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qqid === 0 && !selected_owner ? (
+          {qq_qid === 0 && !selected_owner ? (
             <DropdownGeneric
-              selectedOption={qowner}
-              setSelectedOption={setqowner}
-              name='qowner'
+              selectedOption={qq_owner}
+              setSelectedOption={setqq_owner}
+              name='qq_owner'
               label='Owner'
               table='tow_owner'
-              optionLabel='oowner'
-              optionValue='oowner'
+              optionLabel='ow_owner'
+              optionValue='ow_owner'
               overrideClass_Dropdown='w-72'
               includeBlank={false}
             />
@@ -102,34 +102,37 @@ export default function Form({
             /* -----------------Edit ------------------*/
             <>
               <div className='mt-2'>
-                <label className='text-xs font-semibold mb-1block   text-gray-900' htmlFor='qowner'>
+                <label
+                  className='text-xs font-semibold mb-1block   text-gray-900'
+                  htmlFor='qq_owner'
+                >
                   Owner
                 </label>
                 <>
                   <span className='block w-72  px-4 py-2 rounded-md bg-gray-200 border-none  text-xs '>
-                    {qowner}
+                    {qq_owner}
                   </span>
-                  <MyInput id='qowner' type='hidden' name='qowner' value={qowner} />
+                  <MyInput id='qq_owner' type='hidden' name='qq_owner' value={qq_owner} />
                 </>
               </div>
             </>
           )}
         </div>
         {/*  ...................................................................................*/}
-        {/*   Owner Group */}
+        {/*   Owner Subject */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qqid === 0 && !selected_group && qowner ? (
+          {qq_qid === 0 && !selected_subject && qq_owner ? (
             <DropdownGeneric
-              selectedOption={qgroup}
-              setSelectedOption={setqgroup}
-              name='qgroup'
-              label='Group'
-              table='tog_ownergroup'
-              tableColumn='ogowner'
-              tableColumnValue={qowner}
-              optionLabel='oggroup'
-              optionValue='oggroup'
+              selectedOption={qq_subject}
+              setSelectedOption={setqq_subject}
+              name='qq_subject'
+              label='Subject'
+              table='tsb_subject'
+              tableColumn='sb_owner'
+              tableColumnValue={qq_owner}
+              optionLabel='sb_subject'
+              optionValue='sb_subject'
               overrideClass_Dropdown='w-72'
               includeBlank={false}
             />
@@ -139,15 +142,15 @@ export default function Form({
               <div className='mt-2'>
                 <label
                   className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
-                  htmlFor='qgroup'
+                  htmlFor='qq_subject'
                 >
-                  Owner Group
+                  Owner Subject
                 </label>
                 <>
                   <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
-                    {qgroup}
+                    {qq_subject}
                   </span>
-                  <MyInput id='qgroup' type='hidden' name='qgroup' value={qgroup} />
+                  <MyInput id='qq_subject' type='hidden' name='qq_subject' value={qq_subject} />
                 </>
               </div>
             </>
@@ -157,16 +160,19 @@ export default function Form({
         {/*  Seq  */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qseq !== 0 && (
-            <label className='text-xs font-semibold mb-1 pt-2 block   text-gray-900' htmlFor='qqid'>
+          {qq_seq !== 0 && (
+            <label
+              className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
+              htmlFor='qq_qid'
+            >
               Seq
             </label>
           )}
           <>
             <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
-              {qseq}
+              {qq_seq}
             </span>
-            <MyInput id='qseq' type='hidden' name='qseq' value={qseq} />
+            <MyInput id='qq_seq' type='hidden' name='qq_seq' value={qq_seq} />
           </>
         </div>
         {/*  ...................................................................................*/}
@@ -175,51 +181,51 @@ export default function Form({
         <div className='pt-2'>
           <label
             className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
-            htmlFor='qdetail'
+            htmlFor='qq_detail'
           >
             Question
           </label>
           <div className='relative'>
             <MyInput
               overrideClass='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
-              id='qdetail'
+              id='qq_detail'
               type='text'
-              name='qdetail'
-              value={qdetail}
-              onChange={e => setqdetail(e.target.value)}
+              name='qq_detail'
+              value={qq_detail}
+              onChange={e => setqq_detail(e.target.value)}
             />
           </div>
         </div>
-        <div id='error-qdetail' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.qdetail &&
-            formState.errors.qdetail.map((error: string) => (
+        <div id='error-qq_detail' aria-live='polite' aria-atomic='true'>
+          {formState.errors?.qq_detail &&
+            formState.errors.qq_detail.map((error: string) => (
               <p className='pt-2 text-xs  text-red-500' key={error}>
                 {error}
               </p>
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*  Library id */}
+        {/*  id */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           <DropdownGeneric
             overrideClass_Label='font-semibold pt-2'
-            selectedOption={qlid}
-            setSelectedOption={setqlid}
+            selectedOption={qq_lid}
+            setSelectedOption={setqq_lid}
             searchEnabled={true}
-            name='qlid'
-            label='Library Reference'
-            table='tlr_library'
-            tableColumn='lrgid'
-            tableColumnValue={qgid}
-            optionLabel='lrdesc'
-            optionValue='lrlid'
+            name='qq_lid'
+            label='Reference'
+            table='trf_reference'
+            tableColumn='rf_gid'
+            tableColumnValue={qq_gid}
+            optionLabel='rf_desc'
+            optionValue='rf_rid'
             overrideClass_Dropdown='w-96'
             includeBlank={true}
           />
-          <div id='error-qlid' aria-live='polite' aria-atomic='true'>
-            {formState.errors?.qlid &&
-              formState.errors.qlid.map((error: string) => (
+          <div id='error-qq_lid' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.qq_lid &&
+              formState.errors.qq_lid.map((error: string) => (
                 <p className='pt-2 text-xs  text-red-500' key={error}>
                   {error}
                 </p>

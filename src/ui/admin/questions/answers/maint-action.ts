@@ -10,16 +10,16 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  qans: z.array(z.string()),
-  qpoints: z.array(z.string())
+  qq_ans: z.array(z.string()),
+  qq_points: z.array(z.string())
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    qans?: string[]
-    qpoints?: string[]
+    qq_ans?: string[]
+    qq_points?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -30,15 +30,15 @@ const Setup = FormSchemaSetup
 export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
   const functionName = 'MaintAnswers'
   //
-  // Populate qans and qpoints arrays
+  // Populate qq_ans and qq_points arrays
   //
-  const qans: string[] = []
-  const qpoints: string[] = []
-  for (let i = 0; formData.has(`qans${i}`) || formData.has(`qpoints${i}`); i++) {
-    qans.push((formData.get(`qans${i}`) as string) || '')
-    qpoints.push((formData.get(`qpoints${i}`) as string) || '0')
+  const qq_ans: string[] = []
+  const qq_points: string[] = []
+  for (let i = 0; formData.has(`qq_ans${i}`) || formData.has(`qq_points${i}`); i++) {
+    qq_ans.push((formData.get(`qq_ans${i}`) as string) || '')
+    qq_points.push((formData.get(`qq_points${i}`) as string) || '0')
   }
-  const validatedFields = Setup.safeParse({ qans, qpoints })
+  const validatedFields = Setup.safeParse({ qq_ans, qq_points })
   //
   // If form validation fails, return errors early. Otherwise, continue.
   //
@@ -53,21 +53,21 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   let errors: StateSetup['errors'] = {}
   //
-  // Ensure no `qans` entry exists if the previous entry is empty
+  // Ensure no `qq_ans` entry exists if the previous entry is empty
   //
-  for (let i = 1; i < qans.length; i++) {
-    if (qans[i] && !qans[i - 1]) {
-      errors.qans = errors.qans || []
-      errors.qans.push(`Answer at index ${i} requires the previous answer to be filled.`)
+  for (let i = 1; i < qq_ans.length; i++) {
+    if (qq_ans[i] && !qq_ans[i - 1]) {
+      errors.qq_ans = errors.qq_ans || []
+      errors.qq_ans.push(`Answer at index ${i} requires the previous answer to be filled.`)
     }
   }
   //
-  // Ensure there are at least two valid `qans` entries
+  // Ensure there are at least two valid `qq_ans` entries
   //
-  const validAnswersCount = qans.filter(answer => answer.trim()).length
+  const validAnswersCount = qq_ans.filter(answer => answer.trim()).length
   if (validAnswersCount < 2) {
-    errors.qans = errors.qans || []
-    errors.qans.push('At least two answers are required.')
+    errors.qq_ans = errors.qq_ans || []
+    errors.qq_ans.push('At least two answers are required.')
   }
   //
   // Return validation errors if any exist
@@ -81,41 +81,41 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   //  Convert hidden fields value to numeric
   //
-  const qqidString = formData.get('qqid') as string | 0
-  const qqid = Number(qqidString)
+  const qq_qidString = formData.get('qq_qid') as string | 0
+  const qq_qid = Number(qq_qidString)
   //
   // Update data into the database
   //
   try {
     //
-    // Create pairs of qans and qpoints where qans is non-empty
+    // Create pairs of qq_ans and qq_points where qq_ans is non-empty
     //
-    const validPairs = qans
-      .map((qansValue, index) => ({ qansValue, qpointsValue: qpoints[index] }))
-      .filter(pair => pair.qansValue !== '')
+    const validPairs = qq_ans
+      .map((qq_ansValue, index) => ({ qq_ansValue, qq_pointsValue: qq_points[index] }))
+      .filter(pair => pair.qq_ansValue !== '')
     //
-    // Extract the valid qans and qpoints values
+    // Extract the valid qq_ans and qq_points values
     //
-    const validQans = validPairs.map(pair => pair.qansValue)
-    const validQpoints = validPairs.map(pair => {
-      const strippedValue = pair.qpointsValue.replace(/^0+/, '')
+    const validqq_ans = validPairs.map(pair => pair.qq_ansValue)
+    const validqq_points = validPairs.map(pair => {
+      const strippedValue = pair.qq_pointsValue.replace(/^0+/, '')
       return strippedValue === '' ? '0' : strippedValue
     })
     //
     // Create the value pairs
     //
-    const qansValue = `{${validQans.join(',')}}`
-    const qpointsValue = `{${validQpoints.join(',')}}`
+    const qq_ansValue = `{${validqq_ans.join(',')}}`
+    const qq_pointsValue = `{${validqq_points.join(',')}}`
     //
     //  Update database
     //
     const updateParams = {
       table: 'tqq_questions',
       columnValuePairs: [
-        { column: 'qans', value: qansValue },
-        { column: 'qpoints', value: qpointsValue }
+        { column: 'qq_ans', value: qq_ansValue },
+        { column: 'qq_points', value: qq_pointsValue }
       ],
-      whereColumnValuePairs: [{ column: 'qqid', value: qqid }]
+      whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
     }
     await table_update(updateParams)
 
@@ -130,9 +130,9 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Questions.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,

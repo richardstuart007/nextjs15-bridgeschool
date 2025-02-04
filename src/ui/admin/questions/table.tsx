@@ -10,7 +10,7 @@ import { table_Questions } from '@/src/lib/tables/definitions'
 import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { update_ogcntquestions } from '@/src/lib/tables/tableSpecific/ownergroup_counts'
+import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { MyButton } from '@/src/ui/utils/myButton'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -18,15 +18,15 @@ import { MyInput } from '@/src/ui/utils/myInput'
 interface FormProps {
   selected_gid?: number | undefined
   selected_owner?: string | undefined
-  selected_group?: string | undefined
+  selected_subject?: string | undefined
 }
-export default function Table({ selected_gid, selected_owner, selected_group }: FormProps) {
+export default function Table({ selected_gid, selected_owner, selected_subject }: FormProps) {
   const rowsPerPage = 17
   //
   //  Selection
   //
   const [owner, setowner] = useState<string | number>('')
-  const [group, setgroup] = useState<string | number>('')
+  const [subject, setsubject] = useState<string | number>('')
   const [detail, setdetail] = useState('')
   //
   //  Data
@@ -68,7 +68,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, selected_gid, owner, group, detail])
+  }, [currentPage, shouldFetchData, selected_gid, owner, subject, detail])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -85,14 +85,14 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'qowner', value: owner, operator: '=' },
-      { column: 'qgroup', value: group, operator: '=' },
-      { column: 'qdetail', value: detail, operator: 'LIKE' }
+      { column: 'qq_owner', value: owner, operator: '=' },
+      { column: 'qq_subject', value: subject, operator: '=' },
+      { column: 'qq_detail', value: detail, operator: 'LIKE' }
     ]
     //
     //  Selected gid ?
     //
-    if (selected_gid) filtersToUpdate.push({ column: 'qgid', value: selected_gid, operator: '=' })
+    if (selected_gid) filtersToUpdate.push({ column: 'qq_gid', value: selected_gid, operator: '=' })
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -115,7 +115,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'qowner, qgroup, qseq',
+        orderBy: 'qq_owner, qq_subject, qq_seq',
         limit: rowsPerPage,
         offset
       })
@@ -137,7 +137,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       //  Errors
       //
     } catch (error) {
-      console.error('Error fetching tlr_library:', error)
+      console.error('Error fetching trf_reference:', error)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -200,20 +200,20 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${questions.qqid}) : ${questions.qgroup}?`,
+      subTitle: `Are you sure you want to delete (${questions.qq_qid}) : ${questions.qq_subject}?`,
       onConfirm: async () => {
         //
         // Call the server function to delete
         //
         const Params = {
           table: 'tqq_questions',
-          whereColumnValuePairs: [{ column: 'qqid', value: questions.qqid }]
+          whereColumnValuePairs: [{ column: 'qq_qid', value: questions.qq_qid }]
         }
         await table_delete(Params)
         //
-        //  update Questions counts in Ownergroup
+        //  update Questions counts in Subject
         //
-        await update_ogcntquestions(questions.qgid)
+        await update_sbcntquestions(questions.qq_gid)
         //
         //  Reload the page
         //
@@ -260,10 +260,10 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 Owner
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
-                Group
+                Subject
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
-                GroupID
+                SubjectID
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Seq
@@ -275,7 +275,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                 Detail
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
-                Library ID
+                Ref ID
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Answers
@@ -308,8 +308,8 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     searchEnabled={false}
                     name='owner'
                     table='tow_owner'
-                    optionLabel='oowner'
-                    optionValue='oowner'
+                    optionLabel='ow_owner'
+                    optionValue='ow_owner'
                     overrideClass_Dropdown='w-28'
                     includeBlank={true}
                   />
@@ -319,18 +319,18 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
               {/* GROUP                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                {selected_group ? (
-                  <h1>{selected_group}</h1>
+                {selected_subject ? (
+                  <h1>{selected_subject}</h1>
                 ) : owner === '' ? null : (
                   <DropdownGeneric
-                    selectedOption={group}
-                    setSelectedOption={setgroup}
-                    name='group'
-                    table='tog_ownergroup'
-                    tableColumn='ogowner'
+                    selectedOption={subject}
+                    setSelectedOption={setsubject}
+                    name='subject'
+                    table='tsb_subject'
+                    tableColumn='sb_owner'
                     tableColumnValue={owner}
-                    optionLabel='ogtitle'
-                    optionValue='oggroup'
+                    optionLabel='sb_title'
+                    optionValue='sb_subject'
                     overrideClass_Dropdown='w-72'
                     includeBlank={true}
                   />
@@ -370,12 +370,12 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.qqid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1  '>{record.qowner}</td>
-                <td className='text-xs px-2 py-1  '>{record.qgroup}</td>
-                <td className='text-xs px-2 py-1  '>{record.qgid}</td>
-                <td className='text-xs px-2 py-1  '>{record.qseq}</td>
-                <td className='text-xs px-2 py-1  '>{record.qqid}</td>
+              <tr key={record.qq_qid} className='w-full border-b py-2                    '>
+                <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_gid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_seq}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_qid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -384,12 +384,12 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     onClick={() => handleClickEdit_detail(record)}
                     overrideClass='h-6 w-[40rem]  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
-                    {record.qdetail.length > 100
-                      ? `${record.qdetail.slice(0, 100)}...`
-                      : record.qdetail}
+                    {record.qq_detail.length > 100
+                      ? `${record.qq_detail.slice(0, 100)}...`
+                      : record.qq_detail}
                   </MyButton>
                 </td>
-                <td className='text-xs px-2 py-1  '>{record.qlid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_lid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -398,7 +398,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     onClick={() => handleClickEdit_answers(record)}
                     overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
-                    {record.qans && record.qans.length > 0 ? 'Y' : 'N'}
+                    {record.qq_ans && record.qq_ans.length > 0 ? 'Y' : 'N'}
                   </MyButton>
                 </td>
                 {/* --------------------------------------------------------------------- */}
@@ -409,10 +409,10 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     onClick={() => handleClickEdit_hands(record)}
                     overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
-                    {(record.qnorth?.length ?? 0) > 0 ||
-                    (record.qeast?.length ?? 0) > 0 ||
-                    (record.qsouth?.length ?? 0) > 0 ||
-                    (record.qwest?.length ?? 0) > 0
+                    {(record.qq_north?.length ?? 0) > 0 ||
+                    (record.qq_east?.length ?? 0) > 0 ||
+                    (record.qq_south?.length ?? 0) > 0 ||
+                    (record.qq_west?.length ?? 0) > 0
                       ? 'Y'
                       : 'N'}
                   </MyButton>
@@ -425,7 +425,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
                     onClick={() => handleClickEdit_bidding(record)}
                     overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
                   >
-                    {record.qrounds && record.qrounds.length > 0 ? 'Y' : 'N'}
+                    {record.qq_rounds && record.qq_rounds.length > 0 ? 'Y' : 'N'}
                   </MyButton>
                 </td>
 
@@ -494,7 +494,7 @@ export default function Table({ selected_gid, selected_owner, selected_group }: 
       {isModelOpenAdd_detail && (
         <MaintPopup_detail
           selected_owner={selected_owner}
-          selected_group={selected_group}
+          selected_subject={selected_subject}
           isOpen={isModelOpenAdd_detail}
           onClose={handleModalCloseAdd_detail}
         />

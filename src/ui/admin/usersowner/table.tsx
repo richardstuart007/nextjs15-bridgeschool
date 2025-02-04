@@ -39,6 +39,17 @@ export default function Table({ selected_uid }: FormProps) {
     subTitle: '',
     onConfirm: () => {}
   })
+  //......................................................................................
+  // Fetch on mount and when shouldFetchData changes
+  //......................................................................................
+  //
+  // Adjust currentPage if it exceeds totalPages
+  //
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setcurrentPage(totalPages)
+    }
+  }, [currentPage, totalPages])
   //
   // Change of current page or should fetch data
   //
@@ -46,7 +57,7 @@ export default function Table({ selected_uid }: FormProps) {
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, owner])
+  }, [currentPage, shouldFetchData, uid, owner])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -62,7 +73,10 @@ export default function Table({ selected_uid }: FormProps) {
     //
     // Construct filters dynamically from input fields
     //
-    const filtersToUpdate: Filter[] = [{ column: 'oowner', value: owner, operator: 'LIKE' }]
+    const filtersToUpdate: Filter[] = [
+      { column: 'uo_uid', value: uid, operator: '=' },
+      { column: 'uo_owner', value: owner, operator: 'LIKE' }
+    ]
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -85,7 +99,7 @@ export default function Table({ selected_uid }: FormProps) {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'uouid, uoowner',
+        orderBy: 'uo_uid, uo_owner',
         limit: rowsPerPage,
         offset
       })
@@ -110,31 +124,7 @@ export default function Table({ selected_uid }: FormProps) {
       console.error('Error fetching tuo_usersowner:', error)
     }
   }
-  //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
-  //......................................................................................
-  //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
-  //
-  // Adjust currentPage if it exceeds totalPages
-  //
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-  //
-  // Change of current page or should fetch data
-  //
-  useEffect(() => {
-    fetchdata()
-    setShouldFetchData(false)
-    // eslint-disable-next-line
-  }, [currentPage, shouldFetchData])
+
   //----------------------------------------------------------------------------------------------
   //  Close Modal Add
   //----------------------------------------------------------------------------------------------
@@ -164,8 +154,8 @@ export default function Table({ selected_uid }: FormProps) {
       const Params = {
         table: 'tuo_usersowner',
         whereColumnValuePairs: [
-          { column: 'uouid', value: tabledata.uouid },
-          { column: 'uoowner', value: tabledata.uoowner }
+          { column: 'uo_uid', value: tabledata.uo_uid },
+          { column: 'uo_owner', value: tabledata.uo_owner }
         ]
       }
       await table_delete(Params)
@@ -237,11 +227,11 @@ export default function Table({ selected_uid }: FormProps) {
                   <DropdownGeneric
                     selectedOption={uid}
                     setSelectedOption={setuid}
-                    searchEnabled={false}
+                    searchEnabled={true}
                     name='uid'
                     table='tus_users'
-                    optionLabel='u_name'
-                    optionValue='u_uid'
+                    optionLabel='us_name'
+                    optionValue='us_uid'
                     overrideClass_Dropdown='w-48'
                     includeBlank={true}
                   />
@@ -257,8 +247,8 @@ export default function Table({ selected_uid }: FormProps) {
                   searchEnabled={false}
                   name='owner'
                   table='tow_owner'
-                  optionLabel='oowner'
-                  optionValue='oowner'
+                  optionLabel='ow_owner'
+                  optionValue='ow_owner'
                   overrideClass_Dropdown='w-48'
                   includeBlank={true}
                 />
@@ -275,12 +265,12 @@ export default function Table({ selected_uid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={`${tabledata.uouid}${tabledata.uoowner}`} className='w-full border-b'>
+              <tr key={`${tabledata.uo_uid}${tabledata.uo_owner}`} className='w-full border-b'>
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uouid}</td>
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uoowner}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_uid}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
                 {/* ................................................... */}
                 {/* MyButton                                                  */}
                 {/* ................................................... */}

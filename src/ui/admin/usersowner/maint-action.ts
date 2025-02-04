@@ -61,8 +61,8 @@ export async function ActionUsersowner(
   // Validate fields
   //
   const table_usersowner = {
-    uouid: uid,
-    uoowner: owner
+    uo_uid: uid,
+    uo_owner: owner
   }
   const errorMessages = await validateUsersowner(table_usersowner)
   if (errorMessages.message) {
@@ -82,8 +82,8 @@ export async function ActionUsersowner(
     const writeParams = {
       table: 'tuo_usersowner',
       columnValuePairs: [
-        { column: 'uouid', value: uid },
-        { column: 'uoowner', value: owner }
+        { column: 'uo_uid', value: uid },
+        { column: 'uo_owner', value: owner }
       ]
     }
     await table_write(writeParams)
@@ -98,9 +98,9 @@ export async function ActionUsersowner(
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Usersowner.'
     errorLogging({
-      lgfunctionname: functionName,
-      lgmsg: errorMessage,
-      lgseverity: 'E'
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
     })
     return {
       message: errorMessage,
