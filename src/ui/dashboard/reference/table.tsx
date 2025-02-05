@@ -12,10 +12,10 @@ import { MyLink } from '@/src/ui/utils/myLink'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
-  selected_sbgid?: string | undefined
+  selected_sbsbid?: string | undefined
 }
 
-export default function Table({ selected_sbgid }: FormProps) {
+export default function Table({ selected_sbsbid }: FormProps) {
   //
   //  User context
   //
@@ -80,7 +80,7 @@ export default function Table({ selected_sbgid }: FormProps) {
       //
       //  Set the selected values
       //
-      if (selected_sbgid) await selectedOwnerSubject()
+      if (selected_sbsbid) await selectedOwnerSubject()
       ref_initialisedSelection.current = true
     }
     //
@@ -177,8 +177,8 @@ export default function Table({ selected_sbgid }: FormProps) {
   // Reset the subject when the owner changes
   //......................................................................................
   useEffect(() => {
-    if (!selected_sbgid) setsubject('')
-  }, [owner, selected_sbgid])
+    if (!selected_sbsbid) setsubject('')
+  }, [owner, selected_sbsbid])
   //
   // Adjust currentPage if it exceeds totalPages
   //
@@ -221,11 +221,11 @@ export default function Table({ selected_sbgid }: FormProps) {
     //
     //  smaller screens
     //
-    ref_show_quiz.current = !selected_sbgid ? true : false
+    ref_show_quiz.current = !selected_sbsbid ? true : false
     if (widthNumber >= 2) {
-      if (!selected_sbgid) ref_show_owner.current = true
-      if (!selected_sbgid) ref_show_subject.current = true
-      if (!selected_sbgid) ref_show_questions.current = true
+      if (!selected_sbsbid) ref_show_owner.current = true
+      if (!selected_sbsbid) ref_show_subject.current = true
+      if (!selected_sbsbid) ref_show_questions.current = true
       ref_show_type.current = true
     }
     if (widthNumber >= 3) {
@@ -268,10 +268,10 @@ export default function Table({ selected_sbgid }: FormProps) {
       //
       //  Get the subject id
       //
-      const sb_sid = Number(selected_sbgid)
+      const sb_sbid = Number(selected_sbsbid)
       const rows = await table_fetch({
         table: 'tsb_subject',
-        whereColumnValuePairs: [{ column: 'sb_sid', value: sb_sid }]
+        whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
       })
       const row = rows[0]
       setowner(row.sb_owner)
@@ -305,7 +305,7 @@ export default function Table({ selected_sbgid }: FormProps) {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'uo_uid', value: uid, operator: '=' },
+      { column: 'uo_usid', value: uid, operator: '=' },
       { column: 'rf_owner', value: owner, operator: '=' },
       { column: 'rf_subject', value: subject, operator: '=' },
       { column: 'rf_who', value: who, operator: '=' },
@@ -335,7 +335,7 @@ export default function Table({ selected_sbgid }: FormProps) {
       //
       const joins = [
         { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
-        { table: 'tsb_subject', on: 'rf_gid = sb_sid' }
+        { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
       ]
 
       //
@@ -394,7 +394,7 @@ export default function Table({ selected_sbgid }: FormProps) {
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {selected_sbgid && (
+        {selected_sbsbid && (
           <div className='pl-2 py-2 text-xs'>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
@@ -409,7 +409,7 @@ export default function Table({ selected_sbgid }: FormProps) {
                 <div className='pl-2 inline-flex justify-center items-center'>
                   <MyLink
                     href={{
-                      pathname: `/dashboard/quiz/${selected_sbgid}`,
+                      pathname: `/dashboard/quiz/${selected_sbsbid}`,
                       query: { from: 'reference' }
                     }}
                     overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
@@ -482,7 +482,7 @@ export default function Table({ selected_sbgid }: FormProps) {
                     searchEnabled={false}
                     name='owner'
                     table='tuo_usersowner'
-                    tableColumn='uo_uid'
+                    tableColumn='uo_usid'
                     tableColumnValue={uid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
@@ -619,7 +619,7 @@ export default function Table({ selected_sbgid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
-              <tr key={tabledata.rf_rid} className='w-full border-b'>
+              <tr key={tabledata.rf_rfid} className='w-full border-b'>
                 {ref_show_owner.current && <td className=' px-2 '>{tabledata.rf_owner}</td>}
                 {ref_show_subject.current && <td className=' px-2 '>{tabledata.rf_subject}</td>}
                 {/* ................................................... */}
@@ -663,7 +663,7 @@ export default function Table({ selected_sbgid }: FormProps) {
                       {'sb_cntquestions' in tabledata && tabledata.sb_cntquestions > 0 ? (
                         <MyLink
                           href={{
-                            pathname: `/dashboard/quiz/${tabledata.rf_gid}`,
+                            pathname: `/dashboard/quiz/${tabledata.rf_sbid}`,
                             query: { from: 'reference' }
                           }}
                           overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'

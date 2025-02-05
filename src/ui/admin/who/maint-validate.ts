@@ -11,7 +11,7 @@ export type StateSetup = {
   message?: string | null
 }
 export default async function validate(record: table_Who): Promise<StateSetup> {
-  const { wh_wid, wh_who } = record
+  const { wh_whid, wh_who } = record
   //
   // Initialise errors return
   //
@@ -19,7 +19,7 @@ export default async function validate(record: table_Who): Promise<StateSetup> {
   //
   //  Check for Add duplicate
   //
-  if (wh_wid === 0) {
+  if (wh_whid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'twh_who',

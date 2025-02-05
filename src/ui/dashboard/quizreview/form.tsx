@@ -19,7 +19,7 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
   const hs_ans = history.hs_ans
   const hs_qid = history.hs_qid
   const hs_correctpercent = history.hs_correctpercent
-  const questionIndex = questions.findIndex(q => q.qq_qid === hs_qid[0])
+  const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qid[0])
   //
   // Define the State variables
   //
@@ -30,7 +30,7 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= hs_qid.length) {
       setCurrentPage(newPage)
-      const questionIndex = questions.findIndex(q => q.qq_qid === hs_qid[newPage - 1]) // Adjust for 1-based index
+      const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qid[newPage - 1]) // Adjust for 1-based index
       setQuestion(questions[questionIndex])
       setAns(hs_ans[newPage - 1]) // Adjust for 1-based index
     }
@@ -43,7 +43,7 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
       <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
         <p className='text-xs font-bold'>{hs_correctpercent}%</p>
         <p className='ml-2 text-xs  font-medium'>{`${question.qq_subject}`}</p>
-        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qid})`}</p>
+        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qqid})`}</p>
       </div>
       <QuizBidding question={question} />
       <QuizHands question={question} />

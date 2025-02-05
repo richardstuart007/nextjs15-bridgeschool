@@ -6,13 +6,13 @@ import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 //---------------------------------------------------------------------
 //  subject - Questions Count
 //---------------------------------------------------------------------
-export async function update_sbcntquestions(gid: number) {
+export async function update_sbcntquestions(sbid: number) {
   const functionName = 'update_sbcntquestions'
 
   try {
     const rowCount = await table_count({
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: 'qq_gid', value: gid }]
+      whereColumnValuePairs: [{ column: 'qq_sbid', value: sbid }]
     })
     //
     //  update Subject
@@ -20,7 +20,7 @@ export async function update_sbcntquestions(gid: number) {
     const updateParams = {
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_cntquestions', value: rowCount }],
-      whereColumnValuePairs: [{ column: 'sb_sid', value: gid }]
+      whereColumnValuePairs: [{ column: 'sb_sbid', value: sbid }]
     }
     await table_update(updateParams)
     //
@@ -44,13 +44,13 @@ export async function update_sbcntquestions(gid: number) {
 //---------------------------------------------------------------------
 //  subject -  Count
 //---------------------------------------------------------------------
-export async function update_sbcntreference(gid: number) {
+export async function update_sbcntreference(sbid: number) {
   const functionName = 'update_sbcntreference'
 
   try {
     const rowCount = await table_count({
       table: 'trf_reference',
-      whereColumnValuePairs: [{ column: 'rf_gid', value: gid }]
+      whereColumnValuePairs: [{ column: 'rf_sbid', value: sbid }]
     })
     //
     //  update Subject
@@ -58,7 +58,7 @@ export async function update_sbcntreference(gid: number) {
     const updateParams = {
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_cntreference', value: rowCount }],
-      whereColumnValuePairs: [{ column: 'sb_sid', value: gid }]
+      whereColumnValuePairs: [{ column: 'sb_sbid', value: sbid }]
     }
     await table_update(updateParams)
     //

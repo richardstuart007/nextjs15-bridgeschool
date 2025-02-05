@@ -19,7 +19,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const wh_wid = record?.wh_wid || 0
+  const wh_whid = record?.wh_whid || 0
   const [wh_who, setwh_who] = useState(record?.wh_who || '')
   const [wh_title, setwh_title] = useState(record?.wh_title || '')
   //-------------------------------------------------------------------------
@@ -33,7 +33,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {wh_wid === 0 ? 'Create' : 'Update'}
+        {wh_whid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -53,12 +53,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {wh_wid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='wh_wid'>
-              ID: {wh_wid}
+          {wh_whid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='wh_whid'>
+              ID: {wh_whid}
             </label>
           )}
-          <MyInput id='wh_wid' type='hidden' name='wh_wid' value={wh_wid} />
+          <MyInput id='wh_whid' type='hidden' name='wh_whid' value={wh_whid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Who */}
@@ -68,7 +68,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             Who
           </label>
           <div className='relative'>
-            {wh_wid === 0 ? (
+            {wh_whid === 0 ? (
               <MyInput
                 overrideClass='w-72  px-4  py-[9px]  '
                 id='wh_who'

@@ -34,8 +34,8 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
     // Write session information
     //
-    const ss_uid = userRecord.us_uid
-    const sessionId = await newSession(ss_uid)
+    const ss_usid = userRecord.us_usid
+    const sessionId = await newSession(ss_usid)
     //
     //  Return Session ID
     //
@@ -86,12 +86,12 @@ async function newUser(provider: string, email: string, name: string) {
   //
   //  Write the usersowner data
   //
-  const uo_uid = userRecord.us_uid
+  const uo_usid = userRecord.us_usid
   const uo_owner = 'Richard'
   await table_write({
     table: 'tuo_usersowner',
     columnValuePairs: [
-      { column: 'uo_uid', value: uo_uid },
+      { column: 'uo_usid', value: uo_usid },
       { column: 'uo_owner', value: uo_owner }
     ]
   })
@@ -101,7 +101,7 @@ async function newUser(provider: string, email: string, name: string) {
 // ----------------------------------------------------------------------
 //  Write session
 // ----------------------------------------------------------------------
-async function newSession(ss_uid: number) {
+async function newSession(ss_usid: number) {
   //
   //  Write Session
   //
@@ -110,7 +110,7 @@ async function newSession(ss_uid: number) {
     table: 'tss_sessions',
     columnValuePairs: [
       { column: 'ss_datetime', value: ss_datetime },
-      { column: 'ss_uid', value: ss_uid }
+      { column: 'ss_usid', value: ss_usid }
     ]
   })
   //
@@ -118,7 +118,7 @@ async function newSession(ss_uid: number) {
   //
   const sessionsRecord = sessionsRecords[0]
   if (!sessionsRecord) throw new Error('providerSignIn: Write Session Error')
-  const sessionId = sessionsRecord.ss_id
+  const sessionId = sessionsRecord.ss_ssid
   //
   // Write cookie sessionId
   //

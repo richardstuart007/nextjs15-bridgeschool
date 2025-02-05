@@ -8,7 +8,7 @@ import {
 export function fetch_TopResults() {
   const structure_UsershistoryTopResults: structure_UsershistoryTopResults[] = [
     {
-      hs_uid: 1,
+      hs_usid: 1,
       us_name: 'Alice Johnson',
       record_count: 120,
       total_points: 950,
@@ -16,7 +16,7 @@ export function fetch_TopResults() {
       percentage: 95.0
     },
     {
-      hs_uid: 2,
+      hs_usid: 2,
       us_name: 'Bob Smith',
       record_count: 110,
       total_points: 880,
@@ -24,7 +24,7 @@ export function fetch_TopResults() {
       percentage: 88.0
     },
     {
-      hs_uid: 3,
+      hs_usid: 3,
       us_name: 'Charlie Brown',
       record_count: 105,
       total_points: 840,
@@ -32,7 +32,7 @@ export function fetch_TopResults() {
       percentage: 84.0
     },
     {
-      hs_uid: 4,
+      hs_usid: 4,
       us_name: 'Diana Prince',
       record_count: 115,
       total_points: 920,
@@ -40,7 +40,7 @@ export function fetch_TopResults() {
       percentage: 92.0
     },
     {
-      hs_uid: 5,
+      hs_usid: 5,
       us_name: 'Ethan Hunt',
       record_count: 100,
       total_points: 800,
@@ -59,40 +59,40 @@ export function fetch_TopResults() {
 export function fetch_RecentResults1() {
   const structure_UsershistoryRecentResults: structure_UsershistoryRecentResults[] = [
     {
-      hs_hid: 101,
-      hs_uid: 1,
+      hs_hsid: 101,
+      hs_usid: 1,
       us_name: 'Alice Johnson',
       hs_totalpoints: 190,
       hs_maxpoints: 200,
       hs_correctpercent: 95.0
     },
     {
-      hs_hid: 102,
-      hs_uid: 2,
+      hs_hsid: 102,
+      hs_usid: 2,
       us_name: 'Bob Smith',
       hs_totalpoints: 176,
       hs_maxpoints: 200,
       hs_correctpercent: 88.0
     },
     {
-      hs_hid: 103,
-      hs_uid: 3,
+      hs_hsid: 103,
+      hs_usid: 3,
       us_name: 'Charlie Brown',
       hs_totalpoints: 168,
       hs_maxpoints: 200,
       hs_correctpercent: 84.0
     },
     {
-      hs_hid: 104,
-      hs_uid: 4,
+      hs_hsid: 104,
+      hs_usid: 4,
       us_name: 'Diana Prince',
       hs_totalpoints: 184,
       hs_maxpoints: 200,
       hs_correctpercent: 92.0
     },
     {
-      hs_hid: 105,
-      hs_uid: 5,
+      hs_hsid: 105,
+      hs_usid: 5,
       us_name: 'Ethan Hunt',
       hs_totalpoints: 160,
       hs_maxpoints: 200,
@@ -110,40 +110,40 @@ export function fetch_RecentResults1() {
 export function fetch_RecentResultsAverages() {
   const UsershistoryRecentResults5: structure_UsershistoryRecentResults[] = [
     {
-      hs_hid: 201,
-      hs_uid: 1,
+      hs_hsid: 201,
+      hs_usid: 1,
       us_name: 'Alice Johnson',
       hs_totalpoints: 185,
       hs_maxpoints: 200,
       hs_correctpercent: 92.5
     },
     {
-      hs_hid: 202,
-      hs_uid: 2,
+      hs_hsid: 202,
+      hs_usid: 2,
       us_name: 'Bob Smith',
       hs_totalpoints: 170,
       hs_maxpoints: 200,
       hs_correctpercent: 85.0
     },
     {
-      hs_hid: 203,
-      hs_uid: 3,
+      hs_hsid: 203,
+      hs_usid: 3,
       us_name: 'Charlie Brown',
       hs_totalpoints: 160,
       hs_maxpoints: 200,
       hs_correctpercent: 80.0
     },
     {
-      hs_hid: 204,
-      hs_uid: 4,
+      hs_hsid: 204,
+      hs_usid: 4,
       us_name: 'Diana Prince',
       hs_totalpoints: 190,
       hs_maxpoints: 200,
       hs_correctpercent: 95.0
     },
     {
-      hs_hid: 205,
-      hs_uid: 5,
+      hs_hsid: 205,
+      hs_usid: 5,
       us_name: 'Ethan Hunt',
       hs_totalpoints: 150,
       hs_maxpoints: 200,

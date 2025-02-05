@@ -167,7 +167,7 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${row.sb_sid}) : ${row.sb_title}?`,
+      subTitle: `Are you sure you want to delete (${row.sb_sbid}) : ${row.sb_title}?`,
       onConfirm: async () => {
         //
         // Check a list of tables if owner changes
@@ -175,11 +175,11 @@ export default function Table() {
         const tableColumnValuePairs = [
           {
             table: 'trf_reference',
-            whereColumnValuePairs: [{ column: 'rf_gid', value: row.sb_sid }]
+            whereColumnValuePairs: [{ column: 'rf_sbid', value: row.sb_sbid }]
           },
           {
             table: 'tqq_questions',
-            whereColumnValuePairs: [{ column: 'qq_gid', value: row.sb_sid }]
+            whereColumnValuePairs: [{ column: 'qq_sbid', value: row.sb_sbid }]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -198,7 +198,7 @@ export default function Table() {
         //
         const Params = {
           table: 'tsb_subject',
-          whereColumnValuePairs: [{ column: 'sb_sid', value: row.sb_sid }]
+          whereColumnValuePairs: [{ column: 'sb_sbid', value: row.sb_sbid }]
         }
         await table_delete(Params)
         //
@@ -333,7 +333,7 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(row => (
-              <tr key={row.sb_sid} className='w-full border-b py-2                    '>
+              <tr key={row.sb_sbid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{row.sb_owner}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_subject}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_title}</td>
@@ -358,7 +358,7 @@ export default function Table() {
                   </div>
                 </td>
                 <td className='text-xs px-2 py-1  '>
-                  <div className='flex justify-center'>{row.sb_sid}</div>
+                  <div className='flex justify-center'>{row.sb_sbid}</div>
                 </td>
                 <td className='text-xs px-2 py-1 '>
                   <div className='flex justify-center'>
@@ -408,7 +408,7 @@ export default function Table() {
       )}
       {selectedRow && (
         <MaintPopup_Reference
-          gid={selectedRow.sb_sid}
+          sbid={selectedRow.sb_sbid}
           owner={selectedRow.sb_owner}
           subject={selectedRow.sb_subject}
           isOpen={isModelOpenEdit_reference}
@@ -417,7 +417,7 @@ export default function Table() {
       )}
       {selectedRow && (
         <MaintPopup_Questions
-          gid={selectedRow.sb_sid}
+          sbid={selectedRow.sb_sbid}
           owner={selectedRow.sb_owner}
           subject={selectedRow.sb_subject}
           isOpen={isModelOpenEdit_questions}

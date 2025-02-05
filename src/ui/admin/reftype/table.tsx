@@ -140,7 +140,7 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${reftype.rt_rid}) : ${reftype.rt_title}?`,
+      subTitle: `Are you sure you want to delete (${reftype.rt_rtid}) : ${reftype.rt_title}?`,
       onConfirm: async () => {
         //
         // Check a list of tables if reftype changes
@@ -167,7 +167,7 @@ export default function Table() {
         //
         const Params = {
           table: 'trt_reftype',
-          whereColumnValuePairs: [{ column: 'rt_rid', value: reftype.rt_rid }]
+          whereColumnValuePairs: [{ column: 'rt_rtid', value: reftype.rt_rtid }]
         }
         await table_delete(Params)
         //
@@ -277,10 +277,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.rt_rid} className='w-full border-b py-2                    '>
+              <tr key={record.rt_rtid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{record.rt_type}</td>
                 <td className='text-xs px-2 py-1  '>{record.rt_title}</td>
-                <td className='text-xs px-2 py-1  '>{record.rt_rid}</td>
+                <td className='text-xs px-2 py-1  '>{record.rt_rtid}</td>
                 <td className='text-xs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleClickEdit(record)}

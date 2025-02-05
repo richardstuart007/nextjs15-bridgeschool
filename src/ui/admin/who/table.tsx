@@ -141,7 +141,7 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${who.wh_wid}) : ${who.wh_title}?`,
+      subTitle: `Are you sure you want to delete (${who.wh_whid}) : ${who.wh_title}?`,
       onConfirm: async () => {
         //
         // Check a list of tables if who changes
@@ -168,7 +168,7 @@ export default function Table() {
         //
         const Params = {
           table: 'twh_who',
-          whereColumnValuePairs: [{ column: 'wh_wid', value: who.wh_wid }]
+          whereColumnValuePairs: [{ column: 'wh_whid', value: who.wh_whid }]
         }
         await table_delete(Params)
         //
@@ -278,10 +278,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(who => (
-              <tr key={who.wh_wid} className='w-full border-b py-2                    '>
+              <tr key={who.wh_whid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{who.wh_who}</td>
                 <td className='text-xs px-2 py-1  '>{who.wh_title}</td>
-                <td className='text-xs px-2 py-1  '>{who.wh_wid}</td>
+                <td className='text-xs px-2 py-1  '>{who.wh_whid}</td>
                 <td className='text-xs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleClickEdit(who)}

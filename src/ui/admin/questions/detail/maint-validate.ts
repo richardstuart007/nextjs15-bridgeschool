@@ -7,7 +7,7 @@ export type StateSetup = {
     qq_subject?: string[]
     qq_owner?: string[]
     qq_detail?: string[]
-    qq_lid?: string[]
+    qq_rfid?: string[]
   }
   message?: string | null
 }
@@ -15,14 +15,14 @@ export type StateSetup = {
 //  Validation Parameters
 //
 type Table = {
-  qq_qid: number
+  qq_qqid: number
   qq_owner: string
   qq_subject: string
   qq_seq: number
-  qq_lid: number
+  qq_rfid: number
 }
 export default async function validate(record: Table): Promise<StateSetup> {
-  const { qq_qid, qq_owner, qq_subject, qq_seq, qq_lid } = record
+  const { qq_qqid, qq_owner, qq_subject, qq_seq, qq_rfid } = record
   //
   // Initialise errors return
   //
@@ -30,7 +30,7 @@ export default async function validate(record: Table): Promise<StateSetup> {
   //
   //  Check for Add duplicate
   //
-  if (qq_qid === 0) {
+  if (qq_qqid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'tqq_questions',
@@ -47,15 +47,15 @@ export default async function validate(record: Table): Promise<StateSetup> {
   //
   //  Check for Add duplicate
   //
-  if (qq_lid > 0) {
+  if (qq_rfid > 0) {
     const tableColumnValuePairs = [
       {
         table: 'trf_reference',
-        whereColumnValuePairs: [{ column: 'rf_rid', value: qq_lid }]
+        whereColumnValuePairs: [{ column: 'rf_rfid', value: qq_rfid }]
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (!exists.found) errors.qq_lid = ['id must exist']
+    if (!exists.found) errors.qq_rfid = ['id must exist']
   }
   //
   // Return error messages

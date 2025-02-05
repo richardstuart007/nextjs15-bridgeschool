@@ -51,7 +51,7 @@ export default async function SummaryGraphs() {
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
-  const userIds: number[] = dataRecent.map(item => item.hs_uid)
+  const userIds: number[] = dataRecent.map(item => item.hs_usid)
   const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
     userIds,
     RecentResults_usersAverage
@@ -140,12 +140,15 @@ export default async function SummaryGraphs() {
     let sumTotalPoints = 0
     let sumMaxPoints = 0
     for (const record of dataForAverages) {
-      const { hs_uid, hs_totalpoints, hs_maxpoints } = record
+      const { hs_usid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== hs_uid || dataForAverages.indexOf(record) === dataForAverages.length - 1) {
+      if (
+        currentUid !== hs_usid ||
+        dataForAverages.indexOf(record) === dataForAverages.length - 1
+      ) {
         //
         //  If not first record
         //
@@ -165,7 +168,7 @@ export default async function SummaryGraphs() {
         //
         //  Current user
         //
-        currentUid = hs_uid
+        currentUid = hs_usid
       }
       //
       //  Increment the sum and count

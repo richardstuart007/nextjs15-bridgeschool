@@ -13,7 +13,7 @@ export type StateSetup = {
 }
 
 export default async function validateSubject(record: table_Subject): Promise<StateSetup> {
-  const { sb_sid, sb_owner, sb_subject } = record
+  const { sb_sbid, sb_owner, sb_subject } = record
   //
   // Initialise errors return
   //
@@ -21,7 +21,7 @@ export default async function validateSubject(record: table_Subject): Promise<St
   //
   //  Check for Add duplicate
   //
-  if (sb_sid === 0) {
+  if (sb_sbid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'tsb_subject',

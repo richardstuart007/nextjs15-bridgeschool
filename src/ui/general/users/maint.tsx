@@ -26,7 +26,7 @@ export default function Form({ admin_uid }: Props) {
   //
   type actionState = {
     errors?: {
-      us_uid?: string[]
+      us_usid?: string[]
       us_name?: string[]
       us_fedid?: string[]
       us_fedcountry?: string[]
@@ -53,7 +53,7 @@ export default function Form({ admin_uid }: Props) {
   const [us_name, setus_name] = useState('')
   const [us_fedid, setus_fedid] = useState('')
   const [us_fedcountry, setus_fedcountry] = useState<string | number>('')
-  const [us_uid, setus_uid] = useState(0)
+  const [us_usid, setus_usid] = useState(0)
   const [us_email, setus_email] = useState('')
   const [us_maxquestions, setus_maxquestions] = useState<number>(0)
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
@@ -80,7 +80,7 @@ export default function Form({ admin_uid }: Props) {
     //  Admin is passed from the table maintenance
     //
     if (admin_uid) {
-      setus_uid(admin_uid)
+      setus_usid(admin_uid)
       setShouldFetchData(true)
     } else {
       //
@@ -88,22 +88,22 @@ export default function Form({ admin_uid }: Props) {
       //
       if (sessionContext?.cx_uid) {
         const cx_uid = sessionContext.cx_uid
-        setus_uid(cx_uid)
+        setus_usid(cx_uid)
         setShouldFetchData(true)
       }
     }
     // eslint-disable-next-line
-  }, [sessionContext, us_uid])
+  }, [sessionContext, us_usid])
   //......................................................................................
   //  Get user info
   //......................................................................................
   useEffect(() => {
-    if (shouldFetchData && us_uid !== 0) {
+    if (shouldFetchData && us_usid !== 0) {
       fetchdata()
       setShouldFetchData(false)
     }
     // eslint-disable-next-line
-  }, [shouldFetchData, us_uid])
+  }, [shouldFetchData, us_usid])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -111,14 +111,14 @@ export default function Form({ admin_uid }: Props) {
     //
     //  No uid yet?
     //
-    if (us_uid === 0) return
+    if (us_usid === 0) return
     //
     //  Get User Info
     //
     try {
       const fetchParams = {
         table: 'tus_users',
-        whereColumnValuePairs: [{ column: 'us_uid', value: us_uid }]
+        whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
       }
       const rows = await table_fetch(fetchParams)
       const data = rows[0]
@@ -170,11 +170,11 @@ export default function Form({ admin_uid }: Props) {
         {/*  User ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_uid'>
-            ID:{us_uid} Email:{us_email}
+          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_usid'>
+            ID:{us_usid} Email:{us_email}
           </label>
           <div className='relative'>
-            <MyInput id='us_uid' type='hidden' name='us_uid' value={us_uid} />
+            <MyInput id='us_usid' type='hidden' name='us_usid' value={us_usid} />
           </div>
         </div>
         {/*  ...................................................................................*/}

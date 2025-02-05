@@ -536,6 +536,37 @@ export default function Table() {
     }
   }
   //----------------------------------------------------------------------------------------------
+  //  Perform the ToBase
+  //----------------------------------------------------------------------------------------------
+  async function performSeqReset(tablebase: string, many: boolean = false) {
+    const functionName = 'performSeqReset'
+    try {
+      //
+      //  Reset dialog
+      //
+      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      //
+      //  Status Message
+      //
+      setmessage(`Sequence Reset Data from (${tablebase})`)
+      //
+      // Reset the sequence
+      //
+      await table_seqReset({ tableName: tablebase })
+      //
+      //  Status Message
+      //
+      if (!many) setmessage(`Task ${functionName} completed`)
+      //
+      //  Errors
+      //
+    } catch (error) {
+      const errorMessage = `Error in ${functionName}`
+      console.error(errorMessage, error)
+      setmessage(errorMessage)
+    }
+  }
+  //----------------------------------------------------------------------------------------------
   //  Update count_Z
   //----------------------------------------------------------------------------------------------
   async function updcount_Z(index: number, value: number) {
@@ -618,6 +649,9 @@ export default function Table() {
     //  Reset dialog
     //
     setConfirmDialog({ ...confirmDialog, isOpen: false })
+    //
+    //  Run function over array
+    //
     try {
       //
       //  Run concurrently
@@ -668,7 +702,7 @@ export default function Table() {
     index: number
   }
 
-  function handleRunClick({ routine, tablebase, index }: Props_Click1) {
+  function handleRunClick1({ routine, tablebase, index }: Props_Click1) {
     //
     //  Form the title & subtitle
     //
@@ -702,7 +736,10 @@ export default function Table() {
       case 'TOBASE':
         title = 'Confirm Copy to ToBase'
         subTitle = `Are you sure you want to Copy Data FROM (${tablebackup}) TO (${tablebase}) ?`
-
+        break
+      case 'SEQRESET':
+        title = 'Confirm SEQRESET of Base'
+        subTitle = `Are you sure you want to Reset Sequences on (${tablebase}) ?`
         break
       case 'DOWN':
         const tabledown = `${tablebase}.json`
@@ -756,44 +793,50 @@ export default function Table() {
     tablebackup_count
   }: Props_run) {
     const functionName = 'perform_Run1'
+    //
+    //  Just one
+    //
+    const many = false
     try {
       switch (routine) {
         case 'DUP':
           if (!tablebackup_exists) {
-            return performDup(tablebase, tablebackup, true)
+            return performDup(tablebase, tablebackup, many)
           }
           break
         case 'CLEAR':
           if (tablebackup_exists && tablebackup_count > 0) {
-            return performClear(tablebackup, true)
+            return performClear(tablebackup, many)
           }
           break
         case 'COPY':
           if (tablebackup_exists && tablebase_count > 0 && tablebackup_count === 0) {
-            performCopy(tablebase, tablebackup, true)
+            performCopy(tablebase, tablebackup, many)
           }
           break
         case 'DROP':
           if (tablebackup_exists) {
-            return performDrop(tablebackup, true)
+            return performDrop(tablebackup, many)
           }
           break
         case 'TOBASE':
-          if (tablebackup_exists && tablebase_count > 0) {
-            return performToBase(tablebackup, tablebase, true)
+          if (tablebackup_exists && tablebackup_count > 0) {
+            return performToBase(tablebackup, tablebase, many)
           }
           break
+        case 'SEQRESET':
+          return performSeqReset(tablebase, many)
         case 'DOWN':
           if (tablebase_count > 0) {
             const tabledown = `${tablebase}.json`
-            return performDown(tablebase, tabledown, true)
+            return performDown(tablebase, tabledown, many)
           }
           break
         case 'UPLOAD':
           if (tablebackup_count === 0) {
             const tableUpload = `${tablebase}.json`
             const filePath = `${dirPathPrefix}${dataDirectory}/${tableUpload}`
-            return performUpload(filePath, tablebackup, true)
+            return performUpload(filePath, tablebackup, many)
           }
           break
         default:
@@ -814,7 +857,7 @@ export default function Table() {
   function render_tr1() {
     return (
       <tr>
-        <th className='pb-2 px-2' colSpan={2}>
+        <th className='pb-2 px-2' colSpan={3}>
           <div className='font-bold rounded-md border border-blue-500 py-1 text-center'>
             Postgres Base Tables
           </div>
@@ -844,6 +887,9 @@ export default function Table() {
         </th>
         <th scope='col' className='text-xs   px-2 text-right'>
           Records
+        </th>
+        <th scope='col' className='text-xs   px-2 text-center'>
+          Reset
         </th>
         <th scope='col' className='text-xs   px-2'>
           Table
@@ -898,6 +944,7 @@ export default function Table() {
     return (
       <tr className=' align-bottom'>
         <th scope='col' className='text-xs  px-2'></th>
+
         {/* ................................................... */}
         {/* Refresh                                       */}
         {/* ................................................... */}
@@ -908,6 +955,19 @@ export default function Table() {
               overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
             >
               Refresh
+            </MyButton>
+          </div>
+        </th>
+        {/* ................................................... */}
+        {/* SEQ RESET                                    */}
+        {/* ................................................... */}
+        <th scope='col' className='text-xs   px-2 text-center'>
+          <div className='inline-flex justify-center items-center'>
+            <MyButton
+              onClick={() => handleRunClick_ALL({ routine: 'SEQRESET' })}
+              overrideClass='h-6 px-2 py-2  bg-red-500 hover:bg-red-600'
+            >
+              SeqReset
             </MyButton>
           </div>
         </th>
@@ -1091,6 +1151,25 @@ export default function Table() {
               {/* Table Name */}
               <td className='text-xs px-2 pt-2'>{row_tabledata}</td>
               <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count}</td>
+
+              {/* ToBase MyButton -  */}
+              <td className='text-xs px-2 py-1 text-center'>
+                <div className='inline-flex justify-center items-center'>
+                  <MyButton
+                    onClick={() =>
+                      handleRunClick1({
+                        routine: 'SEQRESET',
+                        tablebase: row_tabledata,
+                        index: index
+                      })
+                    }
+                    overrideClass='h-6 px-2 py-2 '
+                  >
+                    SeqReset
+                  </MyButton>
+                </div>
+              </td>
+
               <td className='text-xs px-2 pt-2'>{row_tabledata_Z}</td>
               <td className='text-xs px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
               <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
@@ -1101,7 +1180,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({ routine: 'DROP', tablebase: row_tabledata, index: index })
+                        handleRunClick1({ routine: 'DROP', tablebase: row_tabledata, index: index })
                       }
                       overrideClass='h-6 px-2 py-2 '
                     >
@@ -1117,7 +1196,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({ routine: 'DUP', tablebase: row_tabledata, index: index })
+                        handleRunClick1({ routine: 'DUP', tablebase: row_tabledata, index: index })
                       }
                       overrideClass='h-6 px-2 py-2 '
                     >
@@ -1133,7 +1212,11 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({ routine: 'CLEAR', tablebase: row_tabledata, index: index })
+                        handleRunClick1({
+                          routine: 'CLEAR',
+                          tablebase: row_tabledata,
+                          index: index
+                        })
                       }
                       overrideClass='h-6 px-2 py-2 '
                     >
@@ -1149,7 +1232,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({ routine: 'COPY', tablebase: row_tabledata, index: index })
+                        handleRunClick1({ routine: 'COPY', tablebase: row_tabledata, index: index })
                       }
                       overrideClass='h-6 px-2 py-2 '
                     >
@@ -1165,7 +1248,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({
+                        handleRunClick1({
                           routine: 'TOBASE',
                           tablebase: row_tabledata,
                           index: index
@@ -1185,7 +1268,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({ routine: 'DOWN', tablebase: row_tabledata, index: index })
+                        handleRunClick1({ routine: 'DOWN', tablebase: row_tabledata, index: index })
                       }
                       overrideClass='h-6 px-2 py-2 '
                     >
@@ -1204,7 +1287,7 @@ export default function Table() {
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
-                        handleRunClick({
+                        handleRunClick1({
                           routine: 'UPLOAD',
                           tablebase: row_tabledata,
                           index: index

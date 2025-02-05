@@ -13,7 +13,7 @@ export default async function Page({
   params,
   searchParams
 }: {
-  params: Promise<{ gid: number }>
+  params: Promise<{ sbid: number }>
   searchParams: Promise<{ from?: string }>
 }) {
   //
@@ -22,9 +22,9 @@ export default async function Page({
   const resolvedParams = await params
   const resolvedSearchParams = await searchParams
   //
-  //  gid
+  //  sbid
   //
-  const gid = resolvedParams.gid
+  const sbid = resolvedParams.sbid
 
   //
   //  Variables used in the return statement
@@ -41,7 +41,7 @@ export default async function Page({
     //
     const fetchParams = {
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: 'qq_gid', value: gid }]
+      whereColumnValuePairs: [{ column: 'qq_sbid', value: sbid }]
     }
     const questionsData = await table_fetch(fetchParams)
     if (!questionsData) notFound()
@@ -60,7 +60,7 @@ export default async function Page({
           { label: From, href: `/dashboard/${from}` },
           {
             label: 'Quiz',
-            href: `/dashboard/quiz/${gid}`,
+            href: `/dashboard/quiz/${sbid}`,
             active: true
           }
         ]}

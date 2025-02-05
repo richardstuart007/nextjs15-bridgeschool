@@ -19,11 +19,11 @@ export default function QuizInfo(props: RadioSubjectProps): JSX.Element {
   //
   //  Deconstruct row
   //
-  const { qq_owner, qq_subject, qq_qid } = question
+  const { qq_owner, qq_subject, qq_qqid } = question
   //
   //  Question Info
   //
-  let QuestionInfo = `${qq_owner}/${qq_subject}(${qq_qid}) ${QuizInfo}/${quizTotal}`
+  let QuestionInfo = `${qq_owner}/${qq_subject}(${qq_qqid}) ${QuizInfo}/${quizTotal}`
   //...................................................................................
   //.  Render the form
   //...................................................................................

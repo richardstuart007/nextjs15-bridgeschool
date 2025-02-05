@@ -11,7 +11,7 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  up_uid: z.string().min(1),
+  up_usid: z.string().min(1),
   uppwd: z.string().min(1, { message: 'String must be at least 2 characters long' })
 })
 //
@@ -19,7 +19,7 @@ const FormSchemaSetup = z.object({
 //
 export type StateSetup = {
   errors?: {
-    up_uid?: string[]
+    up_usid?: string[]
     uppwd?: string[]
   }
   message?: string | null
@@ -34,7 +34,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    up_uid: formData.get('up_uid'),
+    up_usid: formData.get('up_usid'),
     uppwd: formData.get('uppwd')
   })
   //
@@ -49,8 +49,8 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
   //
   // Unpack form data
   //
-  const { up_uid, uppwd } = validatedFields.data
-  const userid = Number(up_uid)
+  const { up_usid, uppwd } = validatedFields.data
+  const userid = Number(up_usid)
   //
   // Update data into the database
   //
@@ -58,12 +58,12 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
     //
     //  Update the userspwd data
     //
-    const up_uid = userid
+    const up_usid = userid
     const up_hash = await bcrypt.hash(uppwd, 10)
     const updateParams = {
       table: 'tup_userspwd',
       columnValuePairs: [{ column: 'up_hash', value: up_hash }],
-      whereColumnValuePairs: [{ column: 'up_uid', value: up_uid }]
+      whereColumnValuePairs: [{ column: 'up_usid', value: up_usid }]
     }
     await table_update(updateParams)
     return {

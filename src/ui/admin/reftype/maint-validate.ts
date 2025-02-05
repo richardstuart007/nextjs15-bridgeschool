@@ -11,7 +11,7 @@ export type StateSetup = {
   message?: string | null
 }
 export default async function validate(record: table_Reftype): Promise<StateSetup> {
-  const { rt_rid, rt_type } = record
+  const { rt_rtid, rt_type } = record
   //
   // Initialise errors return
   //
@@ -19,7 +19,7 @@ export default async function validate(record: table_Reftype): Promise<StateSetu
   //
   //  Check for Add duplicate
   //
-  if (rt_rid === 0) {
+  if (rt_rtid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'trt_reftype',

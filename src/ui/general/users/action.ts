@@ -10,7 +10,7 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //  Form Schema for validation
 //
 const FormSchemaSetup = z.object({
-  us_uid: z.string(),
+  us_usid: z.string(),
   us_name: z.string().min(1),
   us_fedid: z.string(),
   us_fedcountry: z.string(),
@@ -24,7 +24,7 @@ const FormSchemaSetup = z.object({
 //
 export type StateSetup = {
   errors?: {
-    us_uid?: string[]
+    us_usid?: string[]
     us_name?: string[]
     us_fedid?: string[]
     us_fedcountry?: string[]
@@ -45,7 +45,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   //  Validate form data
   //
   const validatedFields = Setup.safeParse({
-    us_uid: formData.get('us_uid'),
+    us_usid: formData.get('us_usid'),
     us_name: formData.get('us_name'),
     us_fedid: formData.get('us_fedid'),
     us_fedcountry: formData.get('us_fedcountry'),
@@ -68,7 +68,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   // Unpack form data
   //
   const {
-    us_uid,
+    us_usid,
     us_name,
     us_fedid,
     us_fedcountry,
@@ -96,7 +96,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     const updateParams = {
       table: 'tus_users',
       columnValuePairs,
-      whereColumnValuePairs: [{ column: 'us_uid', value: us_uid }]
+      whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
     }
     //
     //  Update the database

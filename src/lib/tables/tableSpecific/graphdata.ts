@@ -22,7 +22,7 @@ export async function fetch_TopResults({
   try {
     const sqlQuery = `
     SELECT
-        hs_uid,
+        hs_usid,
         us_name,
         COUNT(*) AS record_count,
         SUM(hs_totalpoints) AS total_points,
@@ -34,22 +34,22 @@ export async function fetch_TopResults({
         END AS percentage
         FROM (
             SELECT
-                hs_uid,
+                hs_usid,
                 hs_totalpoints,
                 hs_maxpoints,
-                ROW_NUMBER() OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
+                ROW_NUMBER() OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
             FROM
                 ths_history
             WHERE
                 hs_datetime >= NOW() - ($4 || ' months')::interval
         ) AS ranked
       JOIN
-        tus_users ON hs_uid = us_uid
+        tus_users ON hs_usid = us_usid
       WHERE
         rn <= $2
         AND us_admin = false
       GROUP BY
-        hs_uid, us_name
+        hs_usid, us_name
       HAVING
         COUNT(*) >= $1
       ORDER BY
@@ -98,27 +98,27 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
   try {
     const sqlQuery = `
     SELECT
-      hs_hid, hs_uid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
+      hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
       FROM (
           SELECT
-            hs_hid,
-            hs_uid,
+            hs_hsid,
+            hs_usid,
             us_name,
             hs_totalpoints,
             hs_maxpoints,
             hs_correctpercent,
             ROW_NUMBER()
-            OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
+            OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
           FROM ths_history
           JOIN tus_users
-            ON hs_uid = us_uid
+            ON hs_usid = us_usid
           WHERE
             us_admin = false
             )
       AS ranked
       WHERE rn = 1
       ORDER BY
-        hs_hid DESC
+        hs_hsid DESC
       LIMIT $1
       `
     //
@@ -168,22 +168,22 @@ export async function fetch_RecentResultsAverages({
 
     const sqlQuery = `
     SELECT
-      hs_hid,
-      hs_uid,
+      hs_hsid,
+      hs_usid,
       us_name,
       hs_totalpoints,
       hs_maxpoints,
       hs_correctpercent
       FROM (
         SELECT
-          hs_hid, hs_uid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent,
-          ROW_NUMBER() OVER (PARTITION BY hs_uid ORDER BY hs_hid DESC) AS rn
+          hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent,
+          ROW_NUMBER() OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
         FROM ths_history
-        JOIN tus_users ON hs_uid = us_uid
-          WHERE hs_uid IN (${placeholders})
+        JOIN tus_users ON hs_usid = us_usid
+          WHERE hs_usid IN (${placeholders})
       ) AS ranked
       WHERE rn <= $${averagePlaceholderIndex}
-      ORDER BY hs_uid;
+      ORDER BY hs_usid;
         `
     //
     // Append RecentResults_usersAverage to the values array

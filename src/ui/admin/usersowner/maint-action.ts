@@ -61,7 +61,7 @@ export async function ActionUsersowner(
   // Validate fields
   //
   const table_usersowner = {
-    uo_uid: uid,
+    uo_usid: uid,
     uo_owner: owner
   }
   const errorMessages = await validateUsersowner(table_usersowner)
@@ -82,7 +82,7 @@ export async function ActionUsersowner(
     const writeParams = {
       table: 'tuo_usersowner',
       columnValuePairs: [
-        { column: 'uo_uid', value: uid },
+        { column: 'uo_usid', value: uid },
         { column: 'uo_owner', value: owner }
       ]
     }

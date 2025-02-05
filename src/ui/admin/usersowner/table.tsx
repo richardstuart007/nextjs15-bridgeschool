@@ -74,7 +74,7 @@ export default function Table({ selected_uid }: FormProps) {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'uo_uid', value: uid, operator: '=' },
+      { column: 'uo_usid', value: uid, operator: '=' },
       { column: 'uo_owner', value: owner, operator: 'LIKE' }
     ]
     //
@@ -99,7 +99,7 @@ export default function Table({ selected_uid }: FormProps) {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'uo_uid, uo_owner',
+        orderBy: 'uo_usid, uo_owner',
         limit: rowsPerPage,
         offset
       })
@@ -154,7 +154,7 @@ export default function Table({ selected_uid }: FormProps) {
       const Params = {
         table: 'tuo_usersowner',
         whereColumnValuePairs: [
-          { column: 'uo_uid', value: tabledata.uo_uid },
+          { column: 'uo_usid', value: tabledata.uo_usid },
           { column: 'uo_owner', value: tabledata.uo_owner }
         ]
       }
@@ -231,7 +231,7 @@ export default function Table({ selected_uid }: FormProps) {
                     name='uid'
                     table='tus_users'
                     optionLabel='us_name'
-                    optionValue='us_uid'
+                    optionValue='us_usid'
                     overrideClass_Dropdown='w-48'
                     includeBlank={true}
                   />
@@ -265,11 +265,11 @@ export default function Table({ selected_uid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={`${tabledata.uo_uid}${tabledata.uo_owner}`} className='w-full border-b'>
+              <tr key={`${tabledata.uo_usid}${tabledata.uo_owner}`} className='w-full border-b'>
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_uid}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_usid}</td>
                 <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
                 {/* ................................................... */}
                 {/* MyButton                                                  */}

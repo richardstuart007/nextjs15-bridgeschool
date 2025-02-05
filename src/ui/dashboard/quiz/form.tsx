@@ -130,7 +130,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //  Loop through the answered questions to populate the points
     //
     answeredQuestions.forEach((question, i) => {
-      hs_qid.push(question.qq_qid)
+      hs_qid.push(question.qq_qqid)
 
       const p = answer[i]
       const points = question.qq_points[p]
@@ -165,12 +165,12 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
         { column: 'hs_questions', value: answer.length },
         { column: 'hs_qid', value: hs_qid },
         { column: 'hs_ans', value: answer },
-        { column: 'hs_uid', value: cx_uid },
+        { column: 'hs_usid', value: cx_uid },
         { column: 'hs_points', value: hs_points },
         { column: 'hs_maxpoints', value: hs_maxpoints },
         { column: 'hs_correctpercent', value: hs_correctpercent },
-        { column: 'hs_gid', value: question.qq_gid },
-        { column: 'hs_sid', value: cx_id }
+        { column: 'hs_sbid', value: question.qq_sbid },
+        { column: 'hs_rfid', value: cx_id }
       ]
     }
     //
@@ -181,8 +181,8 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //
     //  Go to the quiz review page
     //
-    const { hs_hid } = historyRecord
-    router.push(`/dashboard/quiz-review/${hs_hid}`)
+    const { hs_hsid } = historyRecord
+    router.push(`/dashboard/quiz-review/${hs_hsid}`)
   }
   //...................................................................................
   //.  Render the form
@@ -194,7 +194,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     <>
       <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
         <p className='text-xs  font-medium'>{`${question.qq_subject}`}</p>
-        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qid}) ${index + 1}/${questions.length}`}</p>
+        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qqid}) ${index + 1}/${questions.length}`}</p>
       </div>
       <QuizBidding question={question} />
       <QuizHands question={question} />

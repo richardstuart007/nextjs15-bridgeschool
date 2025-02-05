@@ -23,7 +23,7 @@ export type structure_UserAuth = {
 }
 
 export interface structure_UsershistoryTopResults {
-  hs_uid: number
+  hs_usid: number
   us_name: string
   record_count: number
   total_points: number
@@ -32,8 +32,8 @@ export interface structure_UsershistoryTopResults {
 }
 
 export interface structure_UsershistoryRecentResults {
-  hs_hid: number
-  hs_uid: number
+  hs_hsid: number
+  hs_usid: number
   us_name: string
   hs_totalpoints: number
   hs_maxpoints: number

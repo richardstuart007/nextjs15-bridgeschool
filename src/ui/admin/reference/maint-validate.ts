@@ -16,12 +16,12 @@ export type StateSetup = {
 }
 
 export default async function validateReference(record: table_Reference): Promise<StateSetup> {
-  const { rf_rid, rf_ref, rf_owner, rf_subject } = record
+  const { rf_rfid, rf_ref, rf_owner, rf_subject } = record
   let errors: StateSetup['errors'] = {}
   //
   //  Check for Add duplicate
   //
-  if (rf_rid === 0) {
+  if (rf_rfid === 0) {
     const tableColumnValuePairs = [
       {
         table: 'trf_reference',

@@ -54,12 +54,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   //  Convert hidden fields value to numeric
   //
-  const wh_wid = Number(formData.get('wh_wid'))
+  const wh_whid = Number(formData.get('wh_whid'))
   //
   // Validate fields
   //
   const Table = {
-    wh_wid: wh_wid,
+    wh_whid: wh_whid,
     wh_who: wh_who,
     wh_title: wh_title
   }
@@ -90,7 +90,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
         { column: 'wh_title', value: wh_title }
       ]
     }
-    await (wh_wid === 0 ? table_write(writeParams) : table_update(updateParams))
+    await (wh_whid === 0 ? table_write(writeParams) : table_update(updateParams))
 
     return {
       message: `Database updated successfully.`,

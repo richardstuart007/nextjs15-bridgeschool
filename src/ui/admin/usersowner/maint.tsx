@@ -57,7 +57,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
             label='User'
             table='tus_users'
             optionLabel='us_name'
-            optionValue='us_uid'
+            optionValue='us_usid'
             overrideClass_Dropdown='w-48'
             includeBlank={true}
           />

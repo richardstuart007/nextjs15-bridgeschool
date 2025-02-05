@@ -75,7 +75,7 @@ export function SummarySkeleton() {
     //
     //  Derive percentages from the data
     //
-    const userIds: number[] = dataRecent1.map(item => item.hs_uid)
+    const userIds: number[] = dataRecent1.map(item => item.hs_usid)
     const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
     //
     //  Datasets
@@ -115,12 +115,12 @@ export function SummarySkeleton() {
     let sumTotalPoints = 0
     let sumMaxPoints = 0
     for (const record of dataRecent5) {
-      const { hs_uid, hs_totalpoints, hs_maxpoints } = record
+      const { hs_usid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== hs_uid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
+      if (currentUid !== hs_usid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
         //
         //  If not first record
         //
@@ -140,7 +140,7 @@ export function SummarySkeleton() {
         //
         //  Current user
         //
-        currentUid = hs_uid
+        currentUid = hs_usid
       }
       //
       //  Increment the sum and count

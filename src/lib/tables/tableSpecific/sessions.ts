@@ -18,8 +18,8 @@ export async function fetchSessionInfo() {
   try {
     const sqlQuery = `
     SELECT
-        ss_id,
-        us_uid,
+        ss_ssid,
+        us_usid,
         us_name,
         us_email,
         us_admin,
@@ -28,8 +28,8 @@ export async function fetchSessionInfo() {
         us_maxquestions
       FROM tss_sessions
       JOIN tus_users
-      ON   ss_uid = us_uid
-      WHERE ss_id = $1
+      ON   ss_usid = us_usid
+      WHERE ss_ssid = $1
     `
     const queryValues = [sessionId]
     //
@@ -46,8 +46,8 @@ export async function fetchSessionInfo() {
     //  Return the session info
     //
     const structure_SessionsInfo: structure_SessionsInfo = {
-      bsid: row.ss_id,
-      bsuid: row.us_uid,
+      bsid: row.ss_ssid,
+      bsuid: row.us_usid,
       bsname: row.us_name,
       bsemail: row.us_email,
       bsadmin: row.us_admin,

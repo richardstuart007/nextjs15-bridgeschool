@@ -16,11 +16,11 @@ import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  selected_gid?: number | undefined
+  selected_sbid?: number | undefined
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({ selected_gid, selected_owner, selected_subject }: FormProps) {
+export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
   const rowsPerPage = 17
   //
   //  Selection
@@ -68,7 +68,7 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, selected_gid, owner, subject, detail])
+  }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -90,9 +90,10 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
       { column: 'qq_detail', value: detail, operator: 'LIKE' }
     ]
     //
-    //  Selected gid ?
+    //  Selected sbid ?
     //
-    if (selected_gid) filtersToUpdate.push({ column: 'qq_gid', value: selected_gid, operator: '=' })
+    if (selected_sbid)
+      filtersToUpdate.push({ column: 'qq_sbid', value: selected_sbid, operator: '=' })
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -200,20 +201,20 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${questions.qq_qid}) : ${questions.qq_subject}?`,
+      subTitle: `Are you sure you want to delete (${questions.qq_qqid}) : ${questions.qq_subject}?`,
       onConfirm: async () => {
         //
         // Call the server function to delete
         //
         const Params = {
           table: 'tqq_questions',
-          whereColumnValuePairs: [{ column: 'qq_qid', value: questions.qq_qid }]
+          whereColumnValuePairs: [{ column: 'qq_qqid', value: questions.qq_qqid }]
         }
         await table_delete(Params)
         //
         //  update Questions counts in Subject
         //
-        await update_sbcntquestions(questions.qq_gid)
+        await update_sbcntquestions(questions.qq_sbid)
         //
         //  Reload the page
         //
@@ -337,10 +338,10 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
                 )}
               </th>
               {/* ................................................... */}
-              {/* GID                                                 */}
+              {/* sbid                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                {selected_gid ? <h1>{selected_gid}</h1> : null}
+                {selected_sbid ? <h1>{selected_sbid}</h1> : null}
               </th>
               <th scope='col' className='text-xs  px-2'></th>
               <th scope='col' className='text-xs  px-2'></th>
@@ -370,12 +371,12 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.qq_qid} className='w-full border-b py-2                    '>
+              <tr key={record.qq_qqid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
                 <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_gid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_sbid}</td>
                 <td className='text-xs px-2 py-1  '>{record.qq_seq}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_qid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -389,7 +390,7 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
                       : record.qq_detail}
                   </MyButton>
                 </td>
-                <td className='text-xs px-2 py-1  '>{record.qq_lid}</td>
+                <td className='text-xs px-2 py-1  '>{record.qq_rfid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}

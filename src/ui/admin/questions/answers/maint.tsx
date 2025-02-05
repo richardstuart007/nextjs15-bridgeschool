@@ -19,7 +19,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const qq_qid = record?.qq_qid || 0
+  const qq_qqid = record?.qq_qqid || 0
   const [qq_ans, setqq_ans] = useState<string[]>(record?.qq_ans || ['', '', '', ''])
   const [qq_points, setqq_points] = useState<string[]>(
     (record?.qq_points || ['', '', '', '']).map(point => point.toString())
@@ -35,7 +35,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {qq_qid === 0 ? 'Create' : 'Update'}
+        {qq_qqid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -71,12 +71,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {qq_qid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qq_qid'>
-              ID: {qq_qid}
+          {qq_qqid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='qq_qqid'>
+              ID: {qq_qqid}
             </label>
           )}
-          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
+          <MyInput id='qq_qqid' type='hidden' name='qq_qqid' value={qq_qqid} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Title */}

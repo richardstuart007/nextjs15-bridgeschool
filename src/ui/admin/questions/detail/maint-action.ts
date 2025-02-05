@@ -27,7 +27,7 @@ export type StateSetup = {
     qq_owner?: string[]
     qq_subject?: string[]
     qq_detail?: string[]
-    qq_lid?: string[]
+    qq_rfid?: string[]
   }
   message?: string | null
   databaseUpdated?: boolean
@@ -64,23 +64,23 @@ export async function Maint_detail(
   //
   //  Convert hidden fields value to numeric
   //
-  const qq_qidString = formData.get('qq_qid') as string | 0
-  const qq_qid = Number(qq_qidString)
+  const qq_qqidString = formData.get('qq_qqid') as string | 0
+  const qq_qqid = Number(qq_qqidString)
 
   const qq_seqString = formData.get('qq_seq') as string | 0
   let qq_seq = Number(qq_seqString)
 
-  const qq_lidString = formData.get('qq_lid') as string | 0
-  const qq_lid = Number(qq_lidString)
+  const qq_rfidString = formData.get('qq_rfid') as string | 0
+  const qq_rfid = Number(qq_rfidString)
   //
   // Validate fields
   //
   const Table = {
-    qq_qid: qq_qid,
+    qq_qqid: qq_qqid,
     qq_owner: qq_owner,
     qq_subject: qq_subject,
     qq_seq: qq_seq,
-    qq_lid: qq_lid
+    qq_rfid: qq_rfid
   }
   const errorMessages = await validate(Table)
   if (errorMessages.message) {
@@ -97,7 +97,7 @@ export async function Maint_detail(
     //
     //  Update
     //
-    if (qq_qid !== 0) {
+    if (qq_qqid !== 0) {
       //
       //  update parameters
       //
@@ -105,9 +105,9 @@ export async function Maint_detail(
         table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qq_detail', value: qq_detail },
-          { column: 'qq_lid', value: qq_lid }
+          { column: 'qq_rfid', value: qq_rfid }
         ],
-        whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
+        whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]
       }
       await table_update(updateParams)
     }
@@ -120,7 +120,7 @@ export async function Maint_detail(
       //
       qq_seq = await getNextSeq(qq_owner, qq_subject)
       //
-      //  Get subject id - qq_gid
+      //  Get subject id - qq_sbid
       //
       const rows = await table_fetch({
         table: 'tsb_subject',
@@ -129,7 +129,7 @@ export async function Maint_detail(
           { column: 'sb_subject', value: qq_subject }
         ]
       })
-      const sb_sid = rows[0].sb_sid
+      const sb_sbid = rows[0].sb_sbid
       //
       //  Write Parameters
       //
@@ -140,15 +140,15 @@ export async function Maint_detail(
           { column: 'qq_subject', value: qq_subject },
           { column: 'qq_seq', value: qq_seq },
           { column: 'qq_detail', value: qq_detail },
-          { column: 'qq_gid', value: sb_sid },
-          { column: 'qq_lid', value: qq_lid }
+          { column: 'qq_sbid', value: sb_sbid },
+          { column: 'qq_rfid', value: qq_rfid }
         ]
       }
       await table_write(writeParams)
       //
       //  update Questions counts in Subject
       //
-      await update_sbcntquestions(sb_sid)
+      await update_sbcntquestions(sb_sbid)
     }
     return {
       message: `Database updated successfully.`,

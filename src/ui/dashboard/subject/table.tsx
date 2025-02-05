@@ -221,7 +221,7 @@ export default function Table() {
     // Construct filters dynamically from input fields ?????????
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'uo_uid', value: uid, operator: '=' },
+      { column: 'uo_usid', value: uid, operator: '=' },
       { column: 'sb_owner', value: owner, operator: '=' },
       { column: 'sb_subject', value: subject, operator: '=' },
       { column: 'sb_cntquestions', value: questions, operator: '>=' }
@@ -347,7 +347,7 @@ export default function Table() {
                     searchEnabled={false}
                     name='owner'
                     table='tuo_usersowner'
-                    tableColumn='uo_uid'
+                    tableColumn='uo_usid'
                     tableColumnValue={uid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
@@ -411,7 +411,7 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
-              <tr key={tabledata.sb_sid} className='w-full border-b'>
+              <tr key={tabledata.sb_sbid} className='w-full border-b'>
                 {ref_show_owner.current && <td className=' px-2 '>{tabledata.sb_owner}</td>}
                 {ref_show_subject.current && <td className=' px-2 '>{tabledata.sb_title}</td>}
                 {/* ................................................... */}
@@ -430,7 +430,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.sb_sid}`,
+                          pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
                           query: { from: 'subject' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
@@ -459,7 +459,7 @@ export default function Table() {
                           pathname: `/dashboard/reference_select`,
                           query: {
                             from: 'subject',
-                            selected_sbgid: JSON.stringify(tabledata.sb_sid)
+                            selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
                           }
                         }}
                         overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'

@@ -95,14 +95,14 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   //  Write the userspwd data
   //
-  const up_uid = userRecord.us_uid
+  const up_usid = userRecord.us_usid
   const up_hash = await bcrypt.hash(password, 10)
   const up_email = email
 
   await table_write({
     table: 'tup_userspwd',
     columnValuePairs: [
-      { column: 'up_uid', value: up_uid },
+      { column: 'up_usid', value: up_usid },
       { column: 'up_hash', value: up_hash },
       { column: 'up_email', value: up_email }
     ]
@@ -110,12 +110,12 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   //  Write the usersowner data
   //
-  const uo_uid = userRecord.us_uid
+  const uo_usid = userRecord.us_usid
   const uo_owner = 'Richard'
   await table_write({
     table: 'tuo_usersowner',
     columnValuePairs: [
-      { column: 'uo_uid', value: uo_uid },
+      { column: 'uo_usid', value: uo_usid },
       { column: 'uo_owner', value: uo_owner }
     ]
   })

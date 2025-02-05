@@ -81,8 +81,8 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   //  Convert hidden fields value to numeric
   //
-  const qq_qidString = formData.get('qq_qid') as string | 0
-  const qq_qid = Number(qq_qidString)
+  const qq_qqidString = formData.get('qq_qqid') as string | 0
+  const qq_qqid = Number(qq_qqidString)
   //
   // Update data into the database
   //
@@ -115,7 +115,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
         { column: 'qq_ans', value: qq_ansValue },
         { column: 'qq_points', value: qq_pointsValue }
       ],
-      whereColumnValuePairs: [{ column: 'qq_qid', value: qq_qid }]
+      whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]
     }
     await table_update(updateParams)
 

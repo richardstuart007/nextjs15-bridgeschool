@@ -38,7 +38,7 @@ export default function NavSide(props: Props) {
     //
     const rows = await table_fetch({
       table: 'tdb_database',
-      whereColumnValuePairs: [{ column: 'db_did', value: 1 }]
+      whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
     })
     const row = rows[0]
     const tdb_database = row?.db_name ?? 'unknown'

@@ -20,7 +20,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const sb_sid = record?.sb_sid || 0
+  const sb_sbid = record?.sb_sbid || 0
   const [sb_owner, setogowner] = useState<string | number>(record?.sb_owner || '')
   const [sb_subject, setsb_subject] = useState(record?.sb_subject || '')
   const [sb_title, setogtitle] = useState(record?.sb_title || '')
@@ -35,7 +35,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {sb_sid === 0 ? 'Create' : 'Update'}
+        {sb_sbid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -55,17 +55,17 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {sb_sid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='sb_sid'>
-              ID: {sb_sid}
+          {sb_sbid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='sb_sbid'>
+              ID: {sb_sbid}
             </label>
           )}
-          <MyInput id='sb_sid' type='hidden' name='sb_sid' value={sb_sid} />
+          <MyInput id='sb_sbid' type='hidden' name='sb_sbid' value={sb_sbid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
-        {sb_sid === 0 ? (
+        {sb_sbid === 0 ? (
           <DropdownGeneric
             selectedOption={sb_owner}
             setSelectedOption={setogowner}
@@ -101,7 +101,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             Subject
           </label>
           <div className='relative'>
-            {sb_sid === 0 ? (
+            {sb_sbid === 0 ? (
               <MyInput
                 overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px]'
                 id='sb_subject'

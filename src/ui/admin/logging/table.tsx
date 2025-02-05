@@ -129,7 +129,7 @@ export default function Table() {
       const data = await fetchFiltered({
         table,
         filters,
-        orderBy: 'lg_id DESC',
+        orderBy: 'lg_lgid DESC',
         limit: rowsPerPage,
         offset
       })
@@ -271,8 +271,8 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.lg_id} className='w-full border-b'>
-                  <td className='px-2 '>{tabledata.lg_id}</td>
+                <tr key={tabledata.lg_lgid} className='w-full border-b'>
+                  <td className='px-2 '>{tabledata.lg_lgid}</td>
                   <td className='px-2 text-center   '>{tabledata.lg_session}</td>
                   <td className='px-2 '>{tabledata.lg_functionname}</td>
                   <td className='px-2 text-center   '>{tabledata.lg_severity}</td>

@@ -51,7 +51,7 @@ export default function Form({
   //
   //  State and Initial values
   //
-  const rf_rid = referenceRecord?.rf_rid || 0
+  const rf_rfid = referenceRecord?.rf_rfid || 0
   const [rf_owner, setLrowner] = useState<string | number>(
     referenceRecord?.rf_owner || selected_owner || ''
   )
@@ -74,7 +74,7 @@ export default function Form({
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {rf_rid === 0 ? 'Create' : 'Update'}
+        {rf_rfid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -93,18 +93,18 @@ export default function Form({
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          {rf_rid !== 0 && (
-            <label className='text-xs   block   text-gray-900' htmlFor='rf_rid'>
-              ID: {rf_rid}
+          {rf_rfid !== 0 && (
+            <label className='text-xs   block   text-gray-900' htmlFor='rf_rfid'>
+              ID: {rf_rfid}
             </label>
           )}
-          <MyInput id='rf_rid' type='hidden' name='rf_rid' value={rf_rid} />
+          <MyInput id='rf_rfid' type='hidden' name='rf_rfid' value={rf_rfid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          {rf_rid === 0 && !selected_owner ? (
+          {rf_rfid === 0 && !selected_owner ? (
             <DropdownGeneric
               selectedOption={rf_owner}
               setSelectedOption={setLrowner}
@@ -133,7 +133,7 @@ export default function Form({
         {/*   Owner Subject */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          {rf_rid === 0 && !selected_subject && rf_owner ? (
+          {rf_rfid === 0 && !selected_subject && rf_owner ? (
             <DropdownGeneric
               selectedOption={rf_subject}
               setSelectedOption={setrf_subject}
@@ -168,7 +168,7 @@ export default function Form({
             Reference
           </label>
           <div className='relative'>
-            {rf_rid === 0 ? (
+            {rf_rfid === 0 ? (
               <MyInput
                 overrideClass='w-72   rounded-md border border-blue-500 px-4 py-1 text-xs  '
                 id='rf_ref'

@@ -19,7 +19,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
-  const rt_rid = record?.rt_rid || 0
+  const rt_rtid = record?.rt_rtid || 0
   const [rt_type, setrt_type] = useState(record?.rt_type || '')
   const [rt_title, setrt_title] = useState(record?.rt_title || '')
   //-------------------------------------------------------------------------
@@ -33,7 +33,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
         {' '}
-        {rt_rid === 0 ? 'Create' : 'Update'}
+        {rt_rtid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
   }
@@ -53,12 +53,12 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div>
-          {rt_rid !== 0 && (
-            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rt_rid'>
-              ID: {rt_rid}
+          {rt_rtid !== 0 && (
+            <label className='text-xs mb-1 mt-5 block   text-gray-900' htmlFor='rt_rtid'>
+              ID: {rt_rtid}
             </label>
           )}
-          <MyInput id='rt_rid' type='hidden' name='rt_rid' value={rt_rid} />
+          <MyInput id='rt_rtid' type='hidden' name='rt_rtid' value={rt_rtid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Reftype */}
@@ -68,7 +68,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
             Reftype
           </label>
           <div className='relative'>
-            {rt_rid === 0 ? (
+            {rt_rtid === 0 ? (
               <MyInput
                 overrideClass='w-72  px-4  py-[9px]'
                 id='rt_type'

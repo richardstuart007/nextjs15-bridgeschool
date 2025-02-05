@@ -28,8 +28,8 @@ export default function Form({
   //
   //  State and Initial values
   //
-  const qq_gid = questionRecord?.qq_gid || 0
-  const qq_qid = questionRecord?.qq_qid || 0
+  const qq_sbid = questionRecord?.qq_sbid || 0
+  const qq_qqid = questionRecord?.qq_qqid || 0
   const qq_seq = questionRecord?.qq_seq || 0
   const [qq_owner, setqq_owner] = useState<string | number>(
     questionRecord?.qq_owner || selected_owner || ''
@@ -38,7 +38,7 @@ export default function Form({
     questionRecord?.qq_subject || selected_subject || ''
   )
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
-  const [qq_lid, setqq_lid] = useState<string | number>(questionRecord?.qq_lid || 0)
+  const [qq_rfid, setqq_rfid] = useState<string | number>(questionRecord?.qq_rfid || 0)
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -50,7 +50,7 @@ export default function Form({
     return (
       <div className='pt-2'>
         <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
-          {qq_qid === 0 ? 'Create' : 'Update'}
+          {qq_qqid === 0 ? 'Create' : 'Update'}
         </MyButton>
       </div>
     )
@@ -75,18 +75,18 @@ export default function Form({
         {/*  ID  */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qq_qid !== 0 && (
-            <label className='text-xs block   text-gray-900' htmlFor='qq_qid'>
-              ID: {qq_qid}
+          {qq_qqid !== 0 && (
+            <label className='text-xs block   text-gray-900' htmlFor='qq_qqid'>
+              ID: {qq_qqid}
             </label>
           )}
-          <MyInput id='qq_qid' type='hidden' name='qq_qid' value={qq_qid} />
+          <MyInput id='qq_qqid' type='hidden' name='qq_qqid' value={qq_qqid} />
         </div>
         {/*  ...................................................................................*/}
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qq_qid === 0 && !selected_owner ? (
+          {qq_qqid === 0 && !selected_owner ? (
             <DropdownGeneric
               selectedOption={qq_owner}
               setSelectedOption={setqq_owner}
@@ -122,7 +122,7 @@ export default function Form({
         {/*   Owner Subject */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          {qq_qid === 0 && !selected_subject && qq_owner ? (
+          {qq_qqid === 0 && !selected_subject && qq_owner ? (
             <DropdownGeneric
               selectedOption={qq_subject}
               setSelectedOption={setqq_subject}
@@ -163,7 +163,7 @@ export default function Form({
           {qq_seq !== 0 && (
             <label
               className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
-              htmlFor='qq_qid'
+              htmlFor='qq_qqid'
             >
               Seq
             </label>
@@ -210,22 +210,22 @@ export default function Form({
         <div className='pt-2'>
           <DropdownGeneric
             overrideClass_Label='font-semibold pt-2'
-            selectedOption={qq_lid}
-            setSelectedOption={setqq_lid}
+            selectedOption={qq_rfid}
+            setSelectedOption={setqq_rfid}
             searchEnabled={true}
-            name='qq_lid'
+            name='qq_rfid'
             label='Reference'
             table='trf_reference'
-            tableColumn='rf_gid'
-            tableColumnValue={qq_gid}
+            tableColumn='rf_sbid'
+            tableColumnValue={qq_sbid}
             optionLabel='rf_desc'
-            optionValue='rf_rid'
+            optionValue='rf_rfid'
             overrideClass_Dropdown='w-96'
             includeBlank={true}
           />
-          <div id='error-qq_lid' aria-live='polite' aria-atomic='true'>
-            {formState.errors?.qq_lid &&
-              formState.errors.qq_lid.map((error: string) => (
+          <div id='error-qq_rfid' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.qq_rfid &&
+              formState.errors.qq_rfid.map((error: string) => (
                 <p className='pt-2 text-xs  text-red-500' key={error}>
                   {error}
                 </p>

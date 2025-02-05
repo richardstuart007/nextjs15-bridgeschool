@@ -54,12 +54,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   //  Convert hidden fields value to numeric
   //
-  const rt_rid = Number(formData.get('rt_rid'))
+  const rt_rtid = Number(formData.get('rt_rtid'))
   //
   // Validate fields
   //
   const Table = {
-    rt_rid: rt_rid,
+    rt_rtid: rt_rtid,
     rt_type: rt_type,
     rt_title: rt_title
   }
@@ -90,7 +90,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
         { column: 'rt_title', value: rt_title }
       ]
     }
-    await (rt_rid === 0 ? table_write(writeParams) : table_update(updateParams))
+    await (rt_rtid === 0 ? table_write(writeParams) : table_update(updateParams))
 
     return {
       message: `Database updated successfully.`,

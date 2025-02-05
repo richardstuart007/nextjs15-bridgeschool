@@ -133,7 +133,7 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${owner.ow_oid}) ?`,
+      subTitle: `Are you sure you want to delete (${owner.ow_owid}) ?`,
       onConfirm: async () => {
         //
         // Check a list of tables if owner changes
@@ -164,7 +164,7 @@ export default function Table() {
         //
         const Params = {
           table: 'tow_owner',
-          whereColumnValuePairs: [{ column: 'ow_oid', value: owner.ow_oid }]
+          whereColumnValuePairs: [{ column: 'ow_owid', value: owner.ow_owid }]
         }
         await table_delete(Params)
         //
@@ -249,9 +249,9 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {data?.map(row => (
-              <tr key={row.ow_oid} className='w-full border-b py-2                    '>
+              <tr key={row.ow_owid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1 text-xs '>{row.ow_owner}</td>
-                <td className='text-xs px-2 py-1 text-xs '>{row.ow_oid}</td>
+                <td className='text-xs px-2 py-1 text-xs '>{row.ow_owid}</td>
                 <td className='text-xs px-2 py-1 text-xs'>
                   <MyButton
                     onClick={() => handleDeleteClick(row)}

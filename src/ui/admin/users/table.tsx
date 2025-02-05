@@ -171,34 +171,34 @@ export default function Table() {
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${user.us_uid}) : ${user.us_name}?`,
+      subTitle: `Are you sure you want to delete (${user.us_usid}) : ${user.us_name}?`,
       onConfirm: async () => {
         //
         //  User ID
         //
-        const uid = user.us_uid
+        const uid = user.us_usid
         //
         // Call the server function to delete
         //
         await table_delete({
           table: 'ths_history',
-          whereColumnValuePairs: [{ column: 'hs_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'hs_usid', value: uid }]
         })
         await table_delete({
           table: 'tss_sessions',
-          whereColumnValuePairs: [{ column: 'ss_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'ss_usid', value: uid }]
         })
         await table_delete({
           table: 'tuo_usersowner',
-          whereColumnValuePairs: [{ column: 'uo_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'uo_usid', value: uid }]
         })
         await table_delete({
           table: 'tup_userspwd',
-          whereColumnValuePairs: [{ column: 'up_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'up_usid', value: uid }]
         })
         await table_delete({
           table: 'tus_users',
-          whereColumnValuePairs: [{ column: 'us_uid', value: uid }]
+          whereColumnValuePairs: [{ column: 'us_usid', value: uid }]
         })
         //
         //  Reload the page
@@ -269,7 +269,7 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             <tr className=' align-bottom'>
               {/* ................................................... */}
-              {/* GID                                                 */}
+              {/* sbid                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
@@ -386,8 +386,8 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {users?.map(user => (
-              <tr key={user.us_uid} className='w-full border-b py-2 '>
-                <td className='text-xs px-2 py-1 '>{user.us_uid}</td>
+              <tr key={user.us_usid} className='w-full border-b py-2 '>
+                <td className='text-xs px-2 py-1 '>{user.us_usid}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_name}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_email}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_fedid}</td>
@@ -458,13 +458,13 @@ export default function Table() {
 
       {/* User Edit Modal */}
       {selectedUser && (
-        <UserEditPopup uid={selectedUser.us_uid} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <UserEditPopup uid={selectedUser.us_usid} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
 
       {/* User Usersowner Modal */}
       {selectedUsersowner && (
         <UserownertablePopup
-          uid={selectedUsersowner.us_uid}
+          uid={selectedUsersowner.us_usid}
           isOpen={isModalOpen}
           onClose={handleCloseModal}
         />

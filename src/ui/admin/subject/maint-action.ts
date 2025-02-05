@@ -57,12 +57,12 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   //  Convert hidden fields value to numeric
   //
-  const sb_sid = Number(formData.get('sb_sid'))
+  const sb_sbid = Number(formData.get('sb_sbid'))
   //
   // Validate fields
   //
   const table_Subject = {
-    sb_sid: sb_sid,
+    sb_sbid: sb_sbid,
     sb_owner: sb_owner,
     sb_subject: sb_subject,
     sb_cntquestions: 0,
@@ -84,7 +84,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     const updateParams = {
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_title', value: sb_title }],
-      whereColumnValuePairs: [{ column: 'sb_sid', value: sb_sid }]
+      whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
     }
     const writeParams = {
       table: 'tsb_subject',
@@ -94,7 +94,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
         { column: 'sb_title', value: sb_title }
       ]
     }
-    await (sb_sid === 0 ? table_write(writeParams) : table_update(updateParams))
+    await (sb_sbid === 0 ? table_write(writeParams) : table_update(updateParams))
 
     return {
       message: `Database updated successfully.`,

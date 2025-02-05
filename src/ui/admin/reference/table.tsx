@@ -13,11 +13,11 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
-  selected_gid?: number | undefined
+  selected_sbid?: number | undefined
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({ selected_gid, selected_owner, selected_subject }: FormProps) {
+export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
   const rowsPerPage = 17
   const [loading, setLoading] = useState(true)
   //
@@ -123,7 +123,7 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
       //
       const joins = [
         { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
-        { table: 'tsb_subject', on: 'rf_gid = sb_sid' }
+        { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
       ]
       //
       // Calculate the offset for pagination
@@ -193,7 +193,7 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
     setConfirmDialog({
       isOpen: true,
       title: 'Confirm Deletion',
-      subTitle: `Are you sure you want to delete (${tabledata.rf_rid}) : ${tabledata.rf_desc}?`,
+      subTitle: `Are you sure you want to delete (${tabledata.rf_rfid}) : ${tabledata.rf_desc}?`,
       onConfirm: () => performDelete(tabledata)
     })
   }
@@ -207,13 +207,13 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
       //
       const Params = {
         table: 'trf_reference',
-        whereColumnValuePairs: [{ column: 'rf_rid', value: tabledata.rf_rid }]
+        whereColumnValuePairs: [{ column: 'rf_rfid', value: tabledata.rf_rfid }]
       }
       await table_delete(Params)
       //
       //  update counts in Subject
       //
-      await update_sbcntreference(tabledata.rf_gid)
+      await update_sbcntreference(tabledata.rf_sbid)
       //
       //  Reload the page
       //
@@ -259,7 +259,7 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
             {/** -------------------------------------------------------------------- */}
             <tr className=''>
               <th scope='col' className='text-xs   px-2'>
-                Gid
+                sbid
               </th>
               <th scope='col' className='text-xs   px-2'>
                 Owner
@@ -297,10 +297,10 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
             {/* ---------------------------------------------------------------------------------- */}
             <tr className=' align-bottom'>
               {/* ................................................... */}
-              {/* GID                                                 */}
+              {/* sbid                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                {selected_gid ? <h1>{selected_gid}</h1> : null}
+                {selected_sbid ? <h1>{selected_sbid}</h1> : null}
               </th>
               {/* ................................................... */}
               {/* OWNER                                                 */}
@@ -446,11 +446,11 @@ export default function Table({ selected_gid, selected_owner, selected_subject }
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={tabledata.rf_rid} className='w-full border-b'>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_gid}</td>
+              <tr key={tabledata.rf_rfid} className='w-full border-b'>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_sbid}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_owner}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_subject}</td>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_rid}</td>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_rfid}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_ref}</td>
                 <td className='text-xs px-2 pt-2'>
                   {tabledata.rf_desc.length > 40

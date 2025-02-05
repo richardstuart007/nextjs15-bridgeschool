@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //
     const rows = await table_fetch({
       table: 'ths_history',
-      whereColumnValuePairs: [{ column: 'hs_hid', value: hid }]
+      whereColumnValuePairs: [{ column: 'hs_hsid', value: hid }]
     })
     const history = rows[0]
     if (!history) {
@@ -53,12 +53,12 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //
     //  Get Questions
     //
-    const qq_gid = history.hs_gid
-    const questions_gid = await table_fetch({
+    const qq_sbid = history.hs_sbid
+    const questions_sbid = await table_fetch({
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: 'qq_gid', value: qq_gid }]
+      whereColumnValuePairs: [{ column: 'qq_sbid', value: qq_sbid }]
     })
-    if (!questions_gid || questions_gid.length === 0) {
+    if (!questions_sbid || questions_sbid.length === 0) {
       notFound()
     }
     //
@@ -67,8 +67,8 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     let questions: table_Questions[] = []
     const qidArray: number[] = history.hs_qid
     qidArray.forEach((qid: number) => {
-      const questionIndex = questions_gid.findIndex(q => q.qq_qid === qid)
-      questions.push(questions_gid[questionIndex])
+      const questionIndex = questions_sbid.findIndex(q => q.qq_qqid === qid)
+      questions.push(questions_sbid[questionIndex])
     })
     //
     //  Continue

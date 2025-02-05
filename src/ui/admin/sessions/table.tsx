@@ -73,8 +73,8 @@ export default function Table() {
       { column: 'us_name', value: name, operator: 'LIKE' },
       { column: 'us_email', value: email, operator: 'LIKE' },
       { column: 'us_provider', value: provider, operator: 'LIKE' },
-      { column: 'ss_id', value: id, operator: '>=' },
-      { column: 'ss_uid', value: uid, operator: '=' }
+      { column: 'ss_ssid', value: id, operator: '>=' },
+      { column: 'ss_usid', value: uid, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -89,7 +89,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [{ table: 'tus_users', on: 'ss_uid = us_uid' }]
+      const joins = [{ table: 'tus_users', on: 'ss_usid = us_usid' }]
       //
       // Calculate the offset for pagination
       //
@@ -101,7 +101,7 @@ export default function Table() {
         table,
         joins,
         filters,
-        orderBy: 'ss_id DESC',
+        orderBy: 'ss_ssid DESC',
         limit: rowsPerPage,
         offset
       })
@@ -264,12 +264,12 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.ss_id} className='w-full border-b'>
-                  <td className='px-2 text-center'>{tabledata.ss_id}</td>
+                <tr key={tabledata.ss_ssid} className='w-full border-b'>
+                  <td className='px-2 text-center'>{tabledata.ss_ssid}</td>
                   <td className='px-2 text-center'>
                     {format(new Date(tabledata.ss_datetime), 'yyyy MMM dd HH:mm')}
                   </td>
-                  <td className='px-2 text-center'>{tabledata.ss_uid}</td>
+                  <td className='px-2 text-center'>{tabledata.ss_usid}</td>
                   <td className='px-2 '>{tabledata.us_name}</td>
                   <td className='px-2 '>{tabledata.us_email}</td>
                   <td className='px-2 text-center   '>{tabledata.us_provider}</td>

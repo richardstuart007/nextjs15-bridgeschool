@@ -28,7 +28,7 @@ export default function Table() {
   //  Show flags
   //
   const ref_rowsPerPage = useRef(0)
-  const ref_show_gid = useRef(false)
+  const ref_show_sbid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_subject = useRef(false)
   const ref_show_hid = useRef(false)
@@ -198,7 +198,7 @@ export default function Table() {
       ref_show_questions.current = true
 
       ref_show_hid.current = true
-      ref_show_gid.current = true
+      ref_show_sbid.current = true
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -236,7 +236,7 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'hs_uid', value: uid, operator: '=' },
+      { column: 'hs_usid', value: uid, operator: '=' },
       { column: 'hs_owner', value: owner, operator: '=' },
       { column: 'hs_subject', value: subject, operator: '=' },
       { column: 'sb_title', value: title, operator: 'LIKE' },
@@ -258,8 +258,8 @@ export default function Table() {
       //  Joins
       //
       const joins = [
-        { table: 'tsb_subject', on: 'hs_gid = sb_sid' },
-        { table: 'tus_users', on: 'hs_uid = us_uid' }
+        { table: 'tsb_subject', on: 'hs_sbid = sb_sbid' },
+        { table: 'tus_users', on: 'hs_usid = us_usid' }
       ]
       //
       // Calculate the offset for pagination
@@ -273,7 +273,7 @@ export default function Table() {
         table,
         joins,
         filters,
-        orderBy: 'hs_hid DESC',
+        orderBy: 'hs_hsid DESC',
         limit: rowsPerPage,
         offset
       })
@@ -318,9 +318,9 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className='text-xs'>
-              {ref_show_gid.current && (
+              {ref_show_sbid.current && (
                 <th scope='col' className=' font-medium px-2'>
-                  Gid
+                  sbid
                 </th>
               )}
               {ref_show_owner.current && (
@@ -377,9 +377,9 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
               {/* ................................................... */}
-              {/* GID                                                 */}
+              {/* sbid                                                 */}
               {/* ................................................... */}
-              {ref_show_gid.current && <th scope='col' className=' px-2'></th>}
+              {ref_show_sbid.current && <th scope='col' className=' px-2'></th>}
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
@@ -391,7 +391,7 @@ export default function Table() {
                     searchEnabled={false}
                     name='owner'
                     table='tuo_usersowner'
-                    tableColumn='uo_uid'
+                    tableColumn='uo_usid'
                     tableColumnValue={sessionContext.cx_uid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
@@ -536,11 +536,15 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
-                <tr key={`${tabledata.hs_hid}-${index}`} className='w-full border-b'>
-                  {ref_show_gid.current && <td className=' px-2  text-left'>{tabledata.hs_gid}</td>}
+                <tr key={`${tabledata.hs_hsid}-${index}`} className='w-full border-b'>
+                  {ref_show_sbid.current && (
+                    <td className=' px-2  text-left'>{tabledata.hs_sbid}</td>
+                  )}
                   {ref_show_owner.current && <td className=' px-2 '>{tabledata.hs_owner}</td>}
                   {ref_show_subject.current && <td className=' px-2 '>{tabledata.hs_subject}</td>}
-                  {ref_show_hid.current && <td className=' px-2  text-left'>{tabledata.hs_hid}</td>}
+                  {ref_show_hid.current && (
+                    <td className=' px-2  text-left'>{tabledata.hs_hsid}</td>
+                  )}
                   {ref_show_title.current && (
                     <td className='px-2 '>
                       {tabledata.sb_title
@@ -551,7 +555,7 @@ export default function Table() {
                     </td>
                   )}
                   {ref_show_uid.current && (
-                    <td className='px-2  text-center'>{tabledata.hs_uid}</td>
+                    <td className='px-2  text-center'>{tabledata.hs_usid}</td>
                   )}
                   {ref_show_name.current && <td className='px-2 '>{tabledata.us_name}</td>}
                   {ref_show_questions.current && (
@@ -567,7 +571,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz-review/${tabledata.hs_hid}`,
+                          pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                           query: { from: 'history' }
                         }}
                         overrideClass='h-6 bg-green-500 text-white justify-center hover:bg-green-600 md:w-15'
@@ -583,7 +587,7 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.hs_gid}`,
+                          pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
                           query: { from: 'history' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white justify-center hover:bg-blue-600 md:w-15'

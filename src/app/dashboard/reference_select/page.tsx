@@ -13,7 +13,7 @@ export default async function Page({
 }: {
   searchParams: Promise<{
     from?: string
-    selected_sbgid?: string
+    selected_sbsbid?: string
   }>
 }) {
   //
@@ -29,7 +29,7 @@ export default async function Page({
   //
   //  Subject
   //
-  const selected_sbgid = resolvedSearchParams?.selected_sbgid
+  const selected_sbsbid = resolvedSearchParams?.selected_sbsbid
   //
   //  user interface
   //
@@ -46,7 +46,7 @@ export default async function Page({
         ]}
       />
       <Suspense fallback={<TableSkeleton />}>
-        <Table selected_sbgid={selected_sbgid} />
+        <Table selected_sbsbid={selected_sbsbid} />
       </Suspense>
     </div>
   )

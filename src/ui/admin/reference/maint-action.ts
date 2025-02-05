@@ -71,12 +71,12 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
   //
   //  Convert hidden fields value to numeric
   //
-  const rf_rid = Number(formData.get('rf_rid'))
+  const rf_rfid = Number(formData.get('rf_rfid'))
   //
   // Validate fields
   //
   const table_Reference = {
-    rf_rid: rf_rid,
+    rf_rfid: rf_rfid,
     rf_ref: rf_ref,
     rf_desc: rf_desc,
     rf_link: rf_link,
@@ -84,7 +84,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     rf_type: rf_type,
     rf_owner: rf_owner,
     rf_subject: rf_subject,
-    rf_gid: 0
+    rf_sbid: 0
   }
   const errorMessages = await validateReference(table_Reference)
   if (errorMessages.message) {
@@ -109,7 +109,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
       ]
     }
     const rows = await table_fetch(fetchParams)
-    const rf_gid = rows[0].sb_sid
+    const rf_sbid = rows[0].sb_sbid
     //
     // Common column-value pairs
     //
@@ -121,12 +121,12 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
       { column: 'rf_owner', value: rf_owner },
       { column: 'rf_ref', value: rf_ref },
       { column: 'rf_subject', value: rf_subject },
-      { column: 'rf_gid', value: rf_gid }
+      { column: 'rf_sbid', value: rf_sbid }
     ]
     //
     //  Write
     //
-    if (rf_rid === 0) {
+    if (rf_rfid === 0) {
       const params = {
         table: 'trf_reference',
         columnValuePairs
@@ -135,7 +135,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
       //
       //  update counts in Subject
       //
-      await update_sbcntreference(rf_gid)
+      await update_sbcntreference(rf_sbid)
     }
     //
     //  Update
@@ -144,7 +144,7 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
       const updateParams = {
         table: 'trf_reference',
         columnValuePairs,
-        whereColumnValuePairs: [{ column: 'rf_rid', value: rf_rid }]
+        whereColumnValuePairs: [{ column: 'rf_rfid', value: rf_rfid }]
       }
       await table_update(updateParams)
     }
