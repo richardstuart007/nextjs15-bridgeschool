@@ -14,7 +14,7 @@ const FormSchemaSetup = z.object({
   us_name: z.string().min(1),
   us_fedid: z.string(),
   us_fedcountry: z.string(),
-  us_maxquestions: z.number().min(3).max(30),
+  us_maxquestions: z.number().min(3).max(50),
   us_skipcorrect: z.boolean(),
   us_sortquestions: z.boolean(),
   us_admin: z.boolean()

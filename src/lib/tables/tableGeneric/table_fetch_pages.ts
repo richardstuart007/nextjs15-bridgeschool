@@ -2,6 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
+import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
 
 // Define types for joins and filters
 type JoinParams = {
@@ -11,7 +12,7 @@ type JoinParams = {
 
 type FilterParams = {
   column: string
-  operator: '=' | 'LIKE' | 'NOT LIKE' | '>' | '>=' | '<' | '<=' | 'IN' | 'NOT IN'
+  operator: Comparison_operator
   value: string | number | (string | number)[]
 }
 //

@@ -1,14 +1,18 @@
 import { useEffect, useState, useCallback } from 'react'
 import DropdownSearch from '@/src/ui/utils/dropdown/dropdownSearch'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+//
+//  Define the options
+//
+type RowData<T extends string, U extends string> = Record<T | U, string | number>
 
-type DropdownProps = {
+type DropdownProps<T extends string, U extends string> = {
   selectedOption: string | number
   setSelectedOption: (value: string | number) => void
   searchEnabled?: boolean
   name: string
   label?: string
-  tableData?: Array<{ [key: string]: any }>
+  tableData?: Array<RowData<T, U>>
   table?: string
   tableColumn?: string
   tableColumnValue?: string | number
@@ -22,7 +26,7 @@ type DropdownProps = {
   includeBlank?: boolean
 }
 
-export default function DropdownGeneric({
+export default function DropdownGeneric<T extends string, U extends string>({
   selectedOption,
   setSelectedOption,
   searchEnabled = false,
@@ -40,7 +44,7 @@ export default function DropdownGeneric({
   overrideClass_Search = '',
   overrideClass_Dropdown = '',
   includeBlank = false
-}: DropdownProps) {
+}: DropdownProps<T, U>) {
   //
   //  State
   //
@@ -53,7 +57,7 @@ export default function DropdownGeneric({
   //---------------------------------------------------------------------
   const fetchOptions = useCallback(
     async function () {
-      async function determineRows(): Promise<Array<{ [key: string]: any }>> {
+      async function determineRows(): Promise<Array<RowData<T, U>>> {
         //
         //  Passed data
         //
@@ -93,9 +97,10 @@ export default function DropdownGeneric({
         //  Load the options
         //
         const options = rows.map(row => ({
-          value: row[optionValue],
-          label: row[optionLabel]?.toString() || ''
+          value: row[optionValue as keyof RowData<T, U>],
+          label: row[optionLabel as keyof RowData<T, U>]?.toString() || ''
         }))
+
         //
         //  Set options
         //

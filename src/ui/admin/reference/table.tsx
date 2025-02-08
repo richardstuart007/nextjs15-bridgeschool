@@ -323,7 +323,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 )}
               </th>
               {/* ................................................... */}
-              {/* GROUP                                                 */}
+              {/* SUBJECT                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
                 {selected_subject ? (

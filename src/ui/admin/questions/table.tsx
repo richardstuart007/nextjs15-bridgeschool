@@ -14,6 +14,10 @@ import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_co
 import { MyButton } from '@/src/ui/utils/myButton'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
+import {
+  Comparison_operator,
+  Comparison_values
+} from '@/src/lib/tables/tableGeneric/table_comparison_values'
 
 interface FormProps {
   selected_sbid?: number | undefined
@@ -28,6 +32,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [detail, setdetail] = useState('')
+  const [rfid, setrfid] = useState<number | string>('')
+
+  // Update rfid_cmp state to the correct operator type
+  const [rfid_cmp, setrfid_cmp] = useState<Comparison_operator>('=')
   //
   //  Data
   //
@@ -68,7 +76,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail])
+  }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail, rfid, rfid_cmp])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -79,7 +87,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     type Filter = {
       column: string
       value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
+      operator: Comparison_operator
     }
     //
     // Construct filters dynamically from input fields
@@ -87,7 +95,8 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     const filtersToUpdate: Filter[] = [
       { column: 'qq_owner', value: owner, operator: '=' },
       { column: 'qq_subject', value: subject, operator: '=' },
-      { column: 'qq_detail', value: detail, operator: 'LIKE' }
+      { column: 'qq_detail', value: detail, operator: 'LIKE' },
+      { column: 'qq_rfid', value: rfid, operator: rfid_cmp }
     ]
     //
     //  Selected sbid ?
@@ -97,7 +106,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     //
     // Filter out any entries where `value` is not defined or empty
     //
-    const filters = filtersToUpdate.filter(filter => filter.value)
+    const filters = filtersToUpdate.filter(
+      filter => filter.value !== '' && filter.value !== undefined
+    )
+    console.log('filters', filters)
     //
     //  Continue to get data
     //
@@ -227,6 +239,21 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     })
   }
   //----------------------------------------------------------------------------------------------
+  // Change of operator
+  //----------------------------------------------------------------------------------------------
+  const handleOperatorChange = (value: string | number) => {
+    //
+    // If the value is a valid operator, update the state; otherwise, set it to blank
+    //
+    const validOperator = Comparison_values.some(option => option.optionValue === value)
+      ? (value as Comparison_operator)
+      : '='
+    //
+    //  update State
+    //
+    setrfid_cmp(validOperator)
+  }
+  //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
   if (loading) return <p className='text-xs'>Loading....</p>
@@ -275,8 +302,8 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Detail
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
-                Ref ID
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
+                Ref
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Answers
@@ -317,7 +344,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 )}
               </th>
               {/* ................................................... */}
-              {/* GROUP                                                 */}
+              {/* SUBJECT                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
                 {selected_subject ? (
@@ -349,13 +376,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               {/* detail                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2'>
-                <label htmlFor='detail' className='sr-only'>
-                  Detail
-                </label>
                 <MyInput
                   id='detail'
                   name='detail'
-                  overrideClass={`w-60  py-2`}
+                  overrideClass={`w-96  py-2`}
                   type='text'
                   value={detail}
                   onChange={e => {
@@ -363,6 +387,38 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                     setdetail(value)
                   }}
                 />
+              </th>
+              {/* ................................................... */}
+              {/* Ref                                                 */}
+              {/* ................................................... */}
+              <th scope='col' className='text-xs px-2 text-center'>
+                <div className='flex items-center justify-center space-x-2'>
+                  {/* ................................................... */}
+                  {/* Comparison                                                */}
+                  {/* ................................................... */}
+                  <DropdownGeneric
+                    selectedOption={rfid_cmp}
+                    setSelectedOption={handleOperatorChange}
+                    name='rfid_cmp'
+                    tableData={Comparison_values}
+                    optionLabel='optionValue'
+                    optionValue='optionValue'
+                    overrideClass_Dropdown='w-12'
+                    includeBlank={true}
+                  />
+                  <MyInput
+                    id='rfid'
+                    name='rfid'
+                    overrideClass={`w-8  py-2 text-center`}
+                    type='text'
+                    value={rfid}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numberValue = value === '' ? '' : Number(value)
+                      setrfid(numberValue === '' || isNaN(numberValue) ? '' : numberValue)
+                    }}
+                  />
+                </div>
               </th>
             </tr>
           </thead>
@@ -390,7 +446,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                       : record.qq_detail}
                   </MyButton>
                 </td>
-                <td className='text-xs px-2 py-1  '>{record.qq_rfid}</td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_rfid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}

@@ -492,7 +492,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 </th>
               )}
               {/* ................................................... */}
-              {/* GROUP                                                 */}
+              {/* SUBJECT                                                 */}
               {/* ................................................... */}
               {ref_show_subject.current && (
                 <th scope='col' className=' px-2'>

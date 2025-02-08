@@ -22,7 +22,7 @@ insert into  tsb_subject
     sb_cntquestions,
     sb_cntreference
 )
-select * from ownergroup;
+select * from ownerSUBJECT;
 
 
 insert into  tqq_questions
