@@ -109,7 +109,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     const filters = filtersToUpdate.filter(
       filter => filter.value !== '' && filter.value !== undefined
     )
-    console.log('filters', filters)
     //
     //  Continue to get data
     //

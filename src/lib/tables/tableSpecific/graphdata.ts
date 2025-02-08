@@ -48,7 +48,7 @@ export async function fetch_TopResults({
       WHERE
         rn <= $2
         AND us_admin = false
-      SUBJECT BY
+      GROUP BY
         hs_usid, us_name
       HAVING
         COUNT(*) >= $1
