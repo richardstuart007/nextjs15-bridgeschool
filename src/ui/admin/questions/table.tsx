@@ -549,8 +549,8 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       {/* Add Modal */}
       {isModelOpenAdd_detail && (
         <MaintPopup_detail
-          selected_owner={selected_owner}
-          selected_subject={selected_subject}
+          selected_owner={String(owner)}
+          selected_subject={String(subject)}
           isOpen={isModelOpenAdd_detail}
           onClose={handleModalCloseAdd_detail}
         />

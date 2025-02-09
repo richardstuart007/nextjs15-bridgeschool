@@ -225,6 +225,7 @@ export const COUNTRIES = [
   { code: 'TZ', label: 'Tanzania', phone: '255' },
   { code: 'UA', label: 'Ukraine', phone: '380' },
   { code: 'UG', label: 'Uganda', phone: '256' },
+  { code: 'UK', label: 'United Kingdom', phone: '44' },
   { code: 'UM', label: 'United States Minor Outlying Islands', phone: '1' },
   { code: 'US', label: 'United States', phone: '1' },
   { code: 'UY', label: 'Uruguay', phone: '598' },

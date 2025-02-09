@@ -1,5 +1,5 @@
 'use client'
-import { useState, useActionState } from 'react'
+import { useState, useActionState, useEffect } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
@@ -7,6 +7,7 @@ import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
   questionRecord: table_Questions | undefined
@@ -28,7 +29,6 @@ export default function Form({
   //
   //  State and Initial values
   //
-  const qq_sbid = questionRecord?.qq_sbid || 0
   const qq_qqid = questionRecord?.qq_qqid || 0
   const qq_seq = questionRecord?.qq_seq || 0
   const [qq_owner, setqq_owner] = useState<string | number>(
@@ -37,8 +37,37 @@ export default function Form({
   const [qq_subject, setqq_subject] = useState<string | number>(
     questionRecord?.qq_subject || selected_subject || ''
   )
+  const [qq_sbid, setqq_sbid] = useState(questionRecord?.qq_sbid || 0)
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
   const [qq_rfid, setqq_rfid] = useState<string | number>(questionRecord?.qq_rfid || 0)
+  //
+  //  Get the subject
+  //
+  useEffect(() => {
+    getSubject()
+    // eslint-disable-next-line
+  }, [qq_owner, qq_subject])
+  //-------------------------------------------------------------------------
+  //  Get the subject id
+  //-------------------------------------------------------------------------
+  async function getSubject() {
+    //
+    //  Do not fetch if Owner/Subject are empty
+    //
+    if (qq_owner === '' || qq_subject === '') return
+    //
+    //  Get subject id - qq_sbid
+    //
+    const rows = await table_fetch({
+      table: 'tsb_subject',
+      whereColumnValuePairs: [
+        { column: 'sb_owner', value: qq_owner },
+        { column: 'sb_subject', value: qq_subject }
+      ]
+    })
+    const sb_sbid = rows[0].sb_sbid
+    setqq_sbid(sb_sbid)
+  }
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------

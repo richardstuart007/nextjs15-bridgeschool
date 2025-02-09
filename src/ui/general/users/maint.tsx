@@ -59,7 +59,9 @@ export default function Form({ admin_uid }: Props) {
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
   const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
   const [us_admin, setus_admin] = useState<boolean>(false)
-
+  const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
+    []
+  )
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //-------------------------------------------------------------------------
@@ -134,6 +136,14 @@ export default function Form({ admin_uid }: Props) {
       setus_skipcorrect(data.us_skipcorrect)
       setus_sortquestions(data.us_sortquestions)
       setus_admin(data.us_admin)
+      //
+      //  Format countries
+      //
+      const Countries = COUNTRIES.map(({ code, label }) => ({
+        value: code,
+        label: label
+      }))
+      setformattedCountries(Countries)
       //
       //  Data can be displayed
       //
@@ -214,9 +224,9 @@ export default function Form({ admin_uid }: Props) {
             searchEnabled={true}
             name='us_fedcountry'
             label={`Bridge Federation Country (${us_fedcountry})`}
-            tableData={COUNTRIES}
+            tableData={formattedCountries}
             optionLabel='label'
-            optionValue='code'
+            optionValue='value'
             overrideClass_Dropdown='w-72'
             includeBlank={false}
           />

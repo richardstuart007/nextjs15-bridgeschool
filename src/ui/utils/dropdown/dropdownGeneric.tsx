@@ -114,17 +114,7 @@ export default function DropdownGeneric<T extends string, U extends string>({
         setLoading(false)
       }
     },
-    [
-      optionValue,
-      optionLabel,
-      includeBlank,
-      tableData,
-      table,
-      tableColumn,
-      tableColumnValue,
-      orderBy,
-      setSelectedOption
-    ]
+    [optionValue, optionLabel, tableData, table, tableColumn, tableColumnValue, orderBy]
   )
   //---------------------------------------------------------------------
   //  Fetch options on component mount and whenever dependencies change
