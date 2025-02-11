@@ -84,7 +84,8 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
     rf_type: rf_type,
     rf_owner: rf_owner,
     rf_subject: rf_subject,
-    rf_sbid: 0
+    rf_sbid: 0,
+    rf_cntquestions: 0
   }
   const errorMessages = await validateReference(table_Reference)
   if (errorMessages.message) {

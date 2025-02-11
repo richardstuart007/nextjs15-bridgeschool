@@ -7,6 +7,7 @@ import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
+import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
 // ----------------------------------------------------------------------
 //  Update Setup
@@ -129,7 +130,7 @@ export async function Maint_detail(
           { column: 'sb_subject', value: qq_subject }
         ]
       })
-      const sb_sbid = rows[0].sb_sbid
+      const qq_sbid = rows[0].sb_sbid
       //
       //  Write Parameters
       //
@@ -140,7 +141,7 @@ export async function Maint_detail(
           { column: 'qq_subject', value: qq_subject },
           { column: 'qq_seq', value: qq_seq },
           { column: 'qq_detail', value: qq_detail },
-          { column: 'qq_sbid', value: sb_sbid },
+          { column: 'qq_sbid', value: qq_sbid },
           { column: 'qq_rfid', value: qq_rfid }
         ]
       }
@@ -148,7 +149,11 @@ export async function Maint_detail(
       //
       //  update Questions counts in Subject
       //
-      await update_sbcntquestions(sb_sbid)
+      await update_sbcntquestions(qq_sbid)
+      //
+      //  update Questions counts in Reference
+      //
+      await update_rfcntquestions(qq_rfid)
     }
     return {
       message: `Database updated successfully.`,

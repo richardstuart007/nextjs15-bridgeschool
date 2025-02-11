@@ -431,7 +431,7 @@ export default function Table() {
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
-                          query: { from: 'subject' }
+                          query: { from: 'subject', idColumn: 'qq_sbid' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                       >

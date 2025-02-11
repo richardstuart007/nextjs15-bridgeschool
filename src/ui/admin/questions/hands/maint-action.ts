@@ -85,10 +85,10 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   // Check for duplicate cards across hands
   //
-  let availableSpades = 'AKQJT987654321'
-  let availableHearts = 'AKQJT987654321'
-  let availableDiamonds = 'AKQJT987654321'
-  let availableClubs = 'AKQJT987654321'
+  let availableSpades = 'AKQJT98765432'
+  let availableHearts = 'AKQJT98765432'
+  let availableDiamonds = 'AKQJT98765432'
+  let availableClubs = 'AKQJT98765432'
   checkDuplicates()
   //
   // Check not too many cards

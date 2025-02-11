@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.trf_reference
     rf_link character varying ,
     rf_who character varying ,
     rf_type character varying ,
+    rf_cntquestions SMALLINT DEFAULT 0,
     CONSTRAINT trf_reference_pkey PRIMARY KEY (rf_owner, rf_subject, rf_ref),
     CONSTRAINT trf_reference_rf_rfid_key UNIQUE (rf_rfid)
 );

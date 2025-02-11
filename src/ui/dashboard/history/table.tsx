@@ -588,7 +588,7 @@ export default function Table() {
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
-                          query: { from: 'history' }
+                          query: { from: 'history', idColumn: 'qq_sbid' }
                         }}
                         overrideClass='h-6 bg-blue-500 text-white justify-center hover:bg-blue-600 md:w-15'
                       >

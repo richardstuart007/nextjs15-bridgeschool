@@ -27,7 +27,7 @@ const handb_name = [
   'WC'
 ]
 
-const values_valid = 'AKQJT987654321' // Define valid values
+const values_valid = 'AKQJT98765432'
 
 type FormStateErrors = {
   [key in (typeof handb_name)[number]]?: string[]
@@ -125,6 +125,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     const validValue = uppercasedValue
       .split('')
       .filter((char, index, self) => values_valid.includes(char) && self.indexOf(char) === index)
+      .sort((a, b) => values_valid.indexOf(a) - values_valid.indexOf(b))
       .join('')
     //
     // Get the current value for the selected suit (hand)
@@ -140,7 +141,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     //
     sethand_value(updatedValues)
   }
-
   //-------------------------------------------------------------------------
   return (
     <form action={formAction} className='space-y-3 '>

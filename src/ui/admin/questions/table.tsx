@@ -11,6 +11,7 @@ import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/ta
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
+import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
 import { MyButton } from '@/src/ui/utils/myButton'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -227,6 +228,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         //
         await update_sbcntquestions(questions.qq_sbid)
         //
+        //  update Questions counts in Reference
+        //
+        await update_rfcntquestions(questions.qq_rfid)
+        //
         //  Reload the page
         //
         setTimeout(() => setShouldFetchData(true), 0)
@@ -289,13 +294,13 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Subject
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 SubjectID
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Seq
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 ID
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-left'>
@@ -304,17 +309,17 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Ref
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Answers
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Hands
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Bidding
               </th>
 
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Delete
               </th>
             </tr>
@@ -388,7 +393,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 />
               </th>
               {/* ................................................... */}
-              {/* Ref                                                 */}
+              {/* Ref  id                                               */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2 text-center'>
                 <div className='flex items-center justify-center space-x-2'>
@@ -408,7 +413,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <MyInput
                     id='rfid'
                     name='rfid'
-                    overrideClass={`w-8  py-2 text-center`}
+                    overrideClass={`w-16  py-2 text-center`}
                     type='text'
                     value={rfid}
                     onChange={e => {
@@ -429,9 +434,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               <tr key={record.qq_qqid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
                 <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_sbid}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_seq}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_qqid}</td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_sbid}</td>
+                <td className='text-xs px-2 py-1 text-center  '>{record.qq_seq}</td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -445,56 +450,66 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                       : record.qq_detail}
                   </MyButton>
                 </td>
+                {/* --------------------------------------------------------------------- */}
+                {/* Reference ID                                                              */}
+                {/* --------------------------------------------------------------------- */}
                 <td className='text-xs px-2 py-1 text-center '>{record.qq_rfid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1  '>
-                  <MyButton
-                    onClick={() => handleClickEdit_answers(record)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    {record.qq_ans && record.qq_ans.length > 0 ? 'Y' : 'N'}
-                  </MyButton>
+                <td className='text-xs px-2 py-1 text-center'>
+                  <div className='inline-flex'>
+                    <MyButton
+                      onClick={() => handleClickEdit_answers(record)}
+                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1 text-center'
+                    >
+                      {record.qq_ans && record.qq_ans.length > 0 ? 'Y' : 'N'}
+                    </MyButton>
+                  </div>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Hands                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 '>
-                  <MyButton
-                    onClick={() => handleClickEdit_hands(record)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    {(record.qq_north?.length ?? 0) > 0 ||
-                    (record.qq_east?.length ?? 0) > 0 ||
-                    (record.qq_south?.length ?? 0) > 0 ||
-                    (record.qq_west?.length ?? 0) > 0
-                      ? 'Y'
-                      : 'N'}
-                  </MyButton>
+                <td className='text-xs px-2 py-1 text-center'>
+                  <div className='inline-flex'>
+                    <MyButton
+                      onClick={() => handleClickEdit_hands(record)}
+                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                    >
+                      {(record.qq_north?.length ?? 0) > 0 ||
+                      (record.qq_east?.length ?? 0) > 0 ||
+                      (record.qq_south?.length ?? 0) > 0 ||
+                      (record.qq_west?.length ?? 0) > 0
+                        ? 'Y'
+                        : 'N'}
+                    </MyButton>
+                  </div>
                 </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Bidding                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 '>
-                  <MyButton
-                    onClick={() => handleClickEdit_bidding(record)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
-                  >
-                    {record.qq_rounds && record.qq_rounds.length > 0 ? 'Y' : 'N'}
-                  </MyButton>
+                <td className='text-xs px-2 py-1 text-center'>
+                  <div className='inline-flex'>
+                    <MyButton
+                      onClick={() => handleClickEdit_bidding(record)}
+                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                    >
+                      {record.qq_rounds && record.qq_rounds.length > 0 ? 'Y' : 'N'}
+                    </MyButton>
+                  </div>
                 </td>
-
                 {/* --------------------------------------------------------------------- */}
                 {/* Delete                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 '>
-                  <MyButton
-                    onClick={() => handleDeleteClick(record)}
-                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
-                  >
-                    Delete
-                  </MyButton>
+                <td className='text-xs px-2 py-1 text-center'>
+                  <div className='inline-flex'>
+                    <MyButton
+                      onClick={() => handleDeleteClick(record)}
+                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                    >
+                      Delete
+                    </MyButton>
+                  </div>
                 </td>
                 {/* --------------------------------------------------------------------- */}
               </tr>

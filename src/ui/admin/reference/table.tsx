@@ -99,7 +99,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       { column: 'rf_type', value: type, operator: '=' },
       { column: 'rf_ref', value: ref, operator: 'LIKE' },
       { column: 'rf_desc', value: desc, operator: 'LIKE' },
-      { column: 'sb_cntquestions', value: questions, operator: '>=' }
+      { column: 'rf_cntquestions', value: questions, operator: '>=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -462,9 +462,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {'sb_cntquestions' in tabledata && (
+                {'rf_cntquestions' in tabledata && (
                   <td className='text-xs px-2 pt-2 text-center'>
-                    {tabledata.sb_cntquestions > 0 ? tabledata.sb_cntquestions : ' '}
+                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}

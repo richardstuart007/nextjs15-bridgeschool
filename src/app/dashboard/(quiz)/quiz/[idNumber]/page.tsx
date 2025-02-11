@@ -13,8 +13,8 @@ export default async function Page({
   params,
   searchParams
 }: {
-  params: Promise<{ sbid: number }>
-  searchParams: Promise<{ from?: string }>
+  params: Promise<{ idNumber: number }>
+  searchParams: Promise<{ from?: string; idColumn?: string }>
 }) {
   //
   // Await the params promise
@@ -22,15 +22,15 @@ export default async function Page({
   const resolvedParams = await params
   const resolvedSearchParams = await searchParams
   //
-  //  sbid
-  //
-  const sbid = resolvedParams.sbid
-
-  //
   //  Variables used in the return statement
   //
   const from = resolvedSearchParams?.from || 'unknown'
   const From = from.charAt(0).toUpperCase() + from.slice(1)
+  //
+  //  Quiz column and Value
+  //
+  const idColumn = resolvedSearchParams?.idColumn || 'unknown'
+  const idNumber = resolvedParams.idNumber
   //
   //  Get the data
   //
@@ -41,11 +41,14 @@ export default async function Page({
     //
     const fetchParams = {
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: 'qq_sbid', value: sbid }]
+      whereColumnValuePairs: [{ column: idColumn, value: idNumber }]
     }
     const questionsData = await table_fetch(fetchParams)
     if (!questionsData) notFound()
-    questions = questionsData
+    //
+    //  Filter out questions with no answers
+    //
+    questions = questionsData.filter(q => Array.isArray(q.qq_ans) && q.qq_ans.length > 0)
     //
     //  Errors
     //
@@ -60,7 +63,7 @@ export default async function Page({
           { label: From, href: `/dashboard/${from}` },
           {
             label: 'Quiz',
-            href: `/dashboard/quiz/${sbid}`,
+            href: `/dashboard/quiz/${idNumber}`,
             active: true
           }
         ]}

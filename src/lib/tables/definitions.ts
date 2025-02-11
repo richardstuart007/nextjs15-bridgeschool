@@ -10,6 +10,7 @@ export type table_Reference = {
   rf_owner: string
   rf_subject: string
   rf_sbid: number
+  rf_cntquestions: number
 }
 
 export type table_ReferenceSubject = {
@@ -22,6 +23,7 @@ export type table_ReferenceSubject = {
   rf_owner: string
   rf_subject: string
   rf_sbid: number
+  rf_cntquestions: number
   sb_owner: string
   sb_subject: string
   sb_title: string

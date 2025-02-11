@@ -26,12 +26,14 @@ export default function Table({ selected_sbsbid }: FormProps) {
   const [uid, setuid] = useState(0)
   const [owner, setowner] = useState<number | string>('')
   const [subject, setsubject] = useState<number | string>('')
+
   const [desc, setdesc] = useState('')
   const [who, setwho] = useState<number | string>('')
   const [ref, setref] = useState('')
   const [type, settype] = useState<number | string>('')
-  const [questions, setquestions] = useState<number | string>(1)
-  const [references, setreferences] = useState<number | string>(0)
+  const [questions, setquestions] = useState<number | string>(0)
+  const [sb_references, setsb_references] = useState<number | string>(0)
+  const [sb_cntquestions, setsb_cntquestions] = useState<number | string>(0)
   //
   //  Show columns
   //
@@ -57,7 +59,6 @@ export default function Table({ selected_sbsbid }: FormProps) {
   const [loading, setLoading] = useState(true)
   const ref_initialised = useRef(false)
   const ref_initialisedSelection = useRef(false)
-
   //......................................................................................
   //  Screen change
   //......................................................................................
@@ -221,7 +222,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //
     //  smaller screens
     //
-    ref_show_quiz.current = !selected_sbsbid ? true : false
+    ref_show_quiz.current = true
     if (widthNumber >= 2) {
       if (!selected_sbsbid) ref_show_owner.current = true
       if (!selected_sbsbid) ref_show_subject.current = true
@@ -233,6 +234,9 @@ export default function Table({ selected_sbsbid }: FormProps) {
     }
     if (widthNumber >= 4) {
       ref_show_ref.current = true
+      ref_show_owner.current = true
+      ref_show_subject.current = true
+      ref_show_questions.current = true
     }
     // Description width
     ref_widthDesc.current =
@@ -276,8 +280,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
       const row = rows[0]
       setowner(row.sb_owner)
       setsubject(row.sb_subject)
-      setquestions(row.sb_cntquestions)
-      setreferences(row.sb_cntreference)
+      setsb_references(row.sb_cntreference)
+      setsb_cntquestions(row.sb_cntquestions)
       //
       //  Errors
       //
@@ -312,7 +316,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
       { column: 'rf_type', value: type, operator: '=' },
       { column: 'rf_ref', value: ref, operator: 'LIKE' },
       { column: 'rf_desc', value: desc, operator: 'LIKE' },
-      { column: 'sb_cntquestions', value: questions, operator: '>=' }
+      { column: 'rf_cntquestions', value: questions, operator: '>=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -401,16 +405,16 @@ export default function Table({ selected_sbsbid }: FormProps) {
             <span className='pl-2 font-bold'> Subject: </span>
             <span className='text-green-500'>{subject}</span>
             <span className='pl-2 font-bold'> References: </span>
-            <span className='text-green-500'>{references}</span>
+            <span className='text-green-500'>{sb_references}</span>
             <span className='pl-2 font-bold'> Questions: </span>
-            <span className='text-green-500'>{questions}</span>
-            {Number(questions) > 0 && (
+            <span className='text-green-500'>{sb_cntquestions}</span>
+            {Number(sb_cntquestions) > 0 && (
               <span>
                 <div className='pl-2 inline-flex justify-center items-center'>
                   <MyLink
                     href={{
                       pathname: `/dashboard/quiz/${selected_sbsbid}`,
-                      query: { from: 'reference' }
+                      query: { from: 'reference', idColumn: 'qq_sbid' }
                     }}
                     overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                   >
@@ -625,9 +629,9 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_questions.current && 'sb_cntquestions' in tabledata && (
+                {ref_show_questions.current && 'rf_cntquestions' in tabledata && (
                   <td className='px-2  text-center'>
-                    {tabledata.sb_cntquestions > 0 ? tabledata.sb_cntquestions : ' '}
+                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
                   </td>
                 )}
                 {ref_show_ref.current && <td className=' px-2 '>{tabledata.rf_ref}</td>}
@@ -660,11 +664,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {ref_show_quiz.current && (
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
-                      {'sb_cntquestions' in tabledata && tabledata.sb_cntquestions > 0 ? (
+                      {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
                         <MyLink
                           href={{
-                            pathname: `/dashboard/quiz/${tabledata.rf_sbid}`,
-                            query: { from: 'reference' }
+                            pathname: `/dashboard/quiz/${tabledata.rf_rfid}`,
+                            query: { from: 'reference', idColumn: 'qq_rfid' }
                           }}
                           overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
                         >
