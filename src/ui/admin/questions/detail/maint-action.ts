@@ -18,7 +18,8 @@ import { errorLogging } from '@/src/lib/errorLogging'
 const FormSchemaSetup = z.object({
   qq_owner: z.string(),
   qq_subject: z.string(),
-  qq_detail: z.string()
+  qq_detail: z.string(),
+  qq_help: z.string()
 })
 //
 //  Errors and Messages
@@ -47,7 +48,8 @@ export async function Maint_detail(
   const validatedFields = Setup.safeParse({
     qq_owner: formData.get('qq_owner'),
     qq_subject: formData.get('qq_subject'),
-    qq_detail: formData.get('qq_detail')
+    qq_detail: formData.get('qq_detail'),
+    qq_help: formData.get('qq_help')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -61,7 +63,7 @@ export async function Maint_detail(
   //
   // Unpack form data
   //
-  const { qq_owner, qq_subject, qq_detail } = validatedFields.data
+  const { qq_owner, qq_subject, qq_detail, qq_help } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
@@ -106,6 +108,7 @@ export async function Maint_detail(
         table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qq_detail', value: qq_detail },
+          { column: 'qq_help', value: qq_help },
           { column: 'qq_rfid', value: qq_rfid }
         ],
         whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]
@@ -141,6 +144,7 @@ export async function Maint_detail(
           { column: 'qq_subject', value: qq_subject },
           { column: 'qq_seq', value: qq_seq },
           { column: 'qq_detail', value: qq_detail },
+          { column: 'qq_help', value: qq_help },
           { column: 'qq_sbid', value: qq_sbid },
           { column: 'qq_rfid', value: qq_rfid }
         ]

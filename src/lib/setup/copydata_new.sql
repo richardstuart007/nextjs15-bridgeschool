@@ -84,7 +84,7 @@ insert into  ths_history
     hs_sbid ,
     hs_owner ,
     hs_subject  ,
-    hs_qid ,
+    hs_qqid ,
     hs_questions ,
     hs_ans ,
     hs_points ,

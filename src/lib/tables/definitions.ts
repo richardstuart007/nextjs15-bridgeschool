@@ -70,6 +70,7 @@ export type table_Questions = {
   qq_west: string[] | null
   qq_sbid: number
   qq_rfid: number
+  qq_help: string
 }
 
 export type table_Reftype = {
@@ -120,7 +121,7 @@ export type table_Usershistory = {
   hs_owner: string
   hs_subject: string
   hs_questions: number
-  hs_qid: number[]
+  hs_qqid: number[]
   hs_ans: number[]
   hs_usid: number
   hs_points: number[]
@@ -137,7 +138,7 @@ export type table_UsershistorySubjectUser = {
   hs_owner: string
   hs_subject: string
   hs_questions: number
-  hs_qid: number[]
+  hs_qqid: number[]
   hs_ans: number[]
   hs_usid: number
   hs_points: number[]

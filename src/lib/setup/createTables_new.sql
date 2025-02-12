@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS public.tqq_questions
     qq_south text[] ,
     qq_west text[] ,
     qq_rfid integer DEFAULT 0,
+    qq_help text ,
     CONSTRAINT tqq_questions_pkey PRIMARY KEY (qq_owner, qq_subject, qq_seq),
     CONSTRAINT tqq_questions_qq_qqid_key UNIQUE (qq_qqid)
 );
@@ -92,7 +93,7 @@ CREATE TABLE IF NOT EXISTS public.ths_history
     hs_sbid integer,
     hs_owner character varying(16)  NOT NULL,
     hs_subject character varying(32) ,
-    hs_qid integer[],
+    hs_qqid integer[],
     hs_questions integer,
     hs_ans integer[],
     hs_points integer[],

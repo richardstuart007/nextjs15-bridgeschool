@@ -109,15 +109,17 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //.  Quiz Completed
   //...................................................................................
   async function handleQuizCompleted() {
+    //
+    // If the question is null, skip the writing process
+    //
     if (!question) {
-      // If the question is null, skip the writing process
       console.error('Question is null, skipping write operation.')
       return
     }
     //
     //  Initialise the results
     //
-    let hs_qid: number[] = []
+    let hs_qqid: number[] = []
     let hs_points: number[] = []
     let hs_totalpoints = 0
     let hs_maxpoints = 0
@@ -130,7 +132,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //  Loop through the answered questions to populate the points
     //
     answeredQuestions.forEach((question, i) => {
-      hs_qid.push(question.qq_qqid)
+      hs_qqid.push(question.qq_qqid)
 
       const p = answer[i]
       const points = question.qq_points[p]
@@ -163,11 +165,12 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
         { column: 'hs_owner', value: question.qq_owner },
         { column: 'hs_subject', value: question.qq_subject },
         { column: 'hs_questions', value: answer.length },
-        { column: 'hs_qid', value: hs_qid },
+        { column: 'hs_qqid', value: hs_qqid },
         { column: 'hs_ans', value: answer },
         { column: 'hs_usid', value: cx_uid },
         { column: 'hs_points', value: hs_points },
         { column: 'hs_maxpoints', value: hs_maxpoints },
+        { column: 'hs_totalpoints', value: hs_totalpoints },
         { column: 'hs_correctpercent', value: hs_correctpercent },
         { column: 'hs_sbid', value: question.qq_sbid },
         { column: 'hs_rfid', value: cx_id }

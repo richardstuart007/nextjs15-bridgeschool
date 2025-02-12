@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS public.ths_history
     hs_sbid integer,
     hs_owner character varying(16)  NOT NULL,
     hs_subject character varying(32) ,
-    hs_qid integer[],
+    hs_qqid integer[],
     hs_questions integer,
     hs_ans integer[],
     hs_points integer[],

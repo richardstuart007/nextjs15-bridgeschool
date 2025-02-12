@@ -306,11 +306,14 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Detail
               </th>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
+                Help
+              </th>
               <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Ref
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-center'>
-                Answers
+                Answer
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Hands
@@ -363,7 +366,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                     tableColumnValue={owner}
                     optionLabel='sb_title'
                     optionValue='sb_subject'
-                    overrideClass_Dropdown='w-72'
+                    overrideClass_Dropdown='w-48'
                     includeBlank={true}
                   />
                 )}
@@ -392,6 +395,8 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   }}
                 />
               </th>
+              {/* ................................................... */}
+              <th scope='col' className='text-xs  px-2'></th>
               {/* ................................................... */}
               {/* Ref  id                                               */}
               {/* ................................................... */}
@@ -443,13 +448,17 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 <td className='text-xs px-2 py-1  '>
                   <MyButton
                     onClick={() => handleClickEdit_detail(record)}
-                    overrideClass='h-6 w-[40rem]  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                    overrideClass='h-6 w-96  bg-blue-400  hover:bg-blue-500 px-2 py-1'
                   >
                     {record.qq_detail.length > 100
                       ? `${record.qq_detail.slice(0, 100)}...`
                       : record.qq_detail}
                   </MyButton>
                 </td>
+                {/* --------------------------------------------------------------------- */}
+                {/* Help                                                               */}
+                {/* --------------------------------------------------------------------- */}
+                <td className='text-xs px-2 py-1  '>{record.qq_help ? 'Y' : 'N'}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Reference ID                                                              */}
                 {/* --------------------------------------------------------------------- */}
@@ -461,9 +470,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_answers(record)}
-                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1 text-center'
+                      overrideClass='flex text-xs h-6 w-20 bg-blue-400  hover:bg-blue-500 px-2 py-1 text-center justify-center'
                     >
-                      {record.qq_ans && record.qq_ans.length > 0 ? 'Y' : 'N'}
+                      {record.qq_ans && record.qq_ans.length > 0
+                        ? record.qq_ans[0].slice(0, 8)
+                        : ' '}
                     </MyButton>
                   </div>
                 </td>
@@ -474,7 +485,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_hands(record)}
-                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1'
                     >
                       {(record.qq_north?.length ?? 0) > 0 ||
                       (record.qq_east?.length ?? 0) > 0 ||
@@ -492,7 +503,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_bidding(record)}
-                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1'
                     >
                       {record.qq_rounds && record.qq_rounds.length > 0 ? 'Y' : 'N'}
                     </MyButton>

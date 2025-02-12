@@ -37,18 +37,17 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Process History: Remove correct answers if bsskipcorrect is true
     //
     if (bsskipcorrect) {
-      const filteredData = history.hs_ans.reduce(
-        (acc: { hs_qid: number[]; hs_ans: number[] }, ans: number, index: number) => {
-          if (ans !== 0) {
-            acc.hs_qid.push(history.hs_qid[index])
-            acc.hs_ans.push(ans)
-          }
-          return acc
-        },
-        { hs_qid: [], hs_ans: [] }
-      )
-      history.hs_qid = filteredData.hs_qid
-      history.hs_ans = filteredData.hs_ans
+      const newHs_qqid = []
+      const newHs_ans = []
+
+      for (let i = 0; i < history.hs_ans.length; i++) {
+        if (history.hs_ans[i] !== 0 && history.hs_qqid[i] !== undefined) {
+          newHs_qqid.push(history.hs_qqid[i])
+          newHs_ans.push(history.hs_ans[i])
+        }
+      }
+      history.hs_qqid = newHs_qqid
+      history.hs_ans = newHs_ans
     }
     //
     //  Get Questions
@@ -65,7 +64,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     //  Strip out questions not answered
     //
     let questions: table_Questions[] = []
-    const qidArray: number[] = history.hs_qid
+    const qidArray: number[] = history.hs_qqid
     qidArray.forEach((qid: number) => {
       const questionIndex = questions_sbid.findIndex(q => q.qq_qqid === qid)
       questions.push(questions_sbid[questionIndex])

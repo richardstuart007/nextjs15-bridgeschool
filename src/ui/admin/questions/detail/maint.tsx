@@ -39,6 +39,7 @@ export default function Form({
   )
   const [qq_sbid, setqq_sbid] = useState(questionRecord?.qq_sbid || 0)
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
+  const [qq_help, setqq_help] = useState(questionRecord?.qq_help || '')
   const [qq_rfid, setqq_rfid] = useState<string | number>(questionRecord?.qq_rfid || 0)
   //
   //  Get the subject
@@ -259,6 +260,27 @@ export default function Form({
                   {error}
                 </p>
               ))}
+          </div>
+        </div>
+        {/*  ...................................................................................*/}
+        {/*  Help  */}
+        {/*  ...................................................................................*/}
+        <div className='pt-2'>
+          <label
+            className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
+            htmlFor='qq_help'
+          >
+            Help
+          </label>
+          <div className='relative'>
+            <textarea
+              className='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
+              id='qq_help'
+              name='qq_help'
+              rows={4}
+              value={qq_help}
+              onChange={e => setqq_help(e.target.value)}
+            />
           </div>
         </div>
         {/*  ...................................................................................*/}
