@@ -2,21 +2,18 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
-//---------------------------------------------------------------------
-//  Top results data
-//---------------------------------------------------------------------
-interface TopResultsProps {
-  TopResults_count_min: number
-  TopResults_count_max: number
-  TopResults_usersReturned: number
-  TopResults_limitMonths: number
-}
-export async function fetch_TopResults({
+import {
   TopResults_count_min,
   TopResults_count_max,
   TopResults_usersReturned,
-  TopResults_limitMonths
-}: TopResultsProps) {
+  TopResults_limitMonths,
+  RecentResults_usersReturned,
+  RecentResults_usersAverage
+} from '@/src/ui/dashboard/graph/graph_constants'
+//---------------------------------------------------------------------
+//  Top results data
+//---------------------------------------------------------------------
+export async function fetch_TopResults() {
   const functionName = 'fetch_TopResults'
 
   try {
@@ -88,11 +85,7 @@ export async function fetch_TopResults({
 //---------------------------------------------------------------------
 //  Recent result data last
 //---------------------------------------------------------------------
-interface RecentResultsProps {
-  RecentResults_usersReturned: number
-}
-
-export async function fetch_RecentResults1({ RecentResults_usersReturned }: RecentResultsProps) {
+export async function fetch_RecentResults1() {
   const functionName = 'fetch_RecentResults1'
 
   try {
@@ -112,8 +105,6 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
           FROM ths_history
           JOIN tus_users
             ON hs_usid = us_usid
-          WHERE
-            us_admin = false
             )
       AS ranked
       WHERE rn = 1
@@ -150,13 +141,9 @@ export async function fetch_RecentResults1({ RecentResults_usersReturned }: Rece
 //---------------------------------------------------------------------
 interface AveragesProps {
   userIds: number[]
-  RecentResults_usersAverage: number
 }
 
-export async function fetch_RecentResultsAverages({
-  userIds,
-  RecentResults_usersAverage
-}: AveragesProps) {
+export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
   const functionName = 'fetch_RecentResultsAverages'
 
   try {

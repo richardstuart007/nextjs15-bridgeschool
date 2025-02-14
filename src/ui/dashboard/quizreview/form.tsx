@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type JSX } from 'react'
+import { useState } from 'react'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
@@ -15,7 +15,7 @@ interface QuestionsFormProps {
 //...................................................................................
 //.  Main Line
 //...................................................................................
-export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
+export default function ReviewForm(props: QuestionsFormProps) {
   const { questions, history } = props
   const hs_hsid = history.hs_hsid
   const hs_ans = history.hs_ans
@@ -32,7 +32,7 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
   //...................................................................................
   //.  Help Text
   //...................................................................................
-  const renderHelpText = () => {
+  function renderHelpText() {
     //
     //  Help text
     //
@@ -48,9 +48,9 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
     //
     // Map over the lines, ensuring blank lines are represented
     //
-    const formattedText = lines.map((line, index) => (
-      <div key={index}>{line || '\u00A0'}</div> // Use a non-breaking space for blank lines
-    ))
+    const formattedText = lines
+      .map(line => (line ? line : '\u00A0')) // Replace empty lines with a non-breaking space
+      .join('<br />')
     //
     // Wrapper for the formatted lines with a border
     //
@@ -61,13 +61,15 @@ export default function ReviewForm(props: QuestionsFormProps): JSX.Element {
         </MyButton>
         {isHelpVisible && (
           <div className='flex flex-col text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
-            {formattedText}
+            <div dangerouslySetInnerHTML={{ __html: formattedText }} />
           </div>
         )}
       </div>
     )
   }
-
+  //...................................................................................
+  //.  Pagination
+  //...................................................................................
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= hs_qqid.length) {
       setCurrentPage(newPage)

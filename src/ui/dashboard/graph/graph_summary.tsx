@@ -2,12 +2,13 @@ import {
   fetch_TopResults,
   fetch_RecentResults1,
   fetch_RecentResultsAverages
-} from '@/src/ui/dashboard/dashboard/skeletondata'
-import { StackedBarChart } from '@/src/ui/dashboard/dashboard/stackedbarchart'
-import { structure_UsershistoryRecentResults } from '@/src/lib/tables/structures'
-//-----------------------------------------------------------------------------
-//  Graph skeleton
-//--------------------------------------------------------------------------------
+} from '@/src/ui/dashboard/graph/graph_data'
+import { StackedBarChart } from '@/src/ui/dashboard/graph/stackedbarchart'
+import {
+  structure_UsershistoryTopResults,
+  structure_UsershistoryRecentResults
+} from '@/src/lib/tables/structures'
+import { RecentResults_usersAverage } from '@/src/ui/dashboard/graph/graph_constants'
 //
 //  Graph Interfaces
 //
@@ -21,13 +22,21 @@ interface GraphStructure {
   datasets: Datasets[]
 }
 //--------------------------------------------------------------------------------
-export function SummarySkeleton() {
+export default async function SummaryGraphs() {
   //
   //  Fetch the data
   //
-  const dataTop = fetch_TopResults()
-  const dataRecent1 = fetch_RecentResults1()
-  const dataRecent5 = fetch_RecentResultsAverages()
+  const [dataTop, dataRecent]: [
+    structure_UsershistoryTopResults[],
+    structure_UsershistoryRecentResults[]
+  ] = await Promise.all([fetch_TopResults(), fetch_RecentResults1()])
+  //
+  //  Extract the user IDs and get the data for the last 5 results for each user
+  //
+  const userIds: number[] = dataRecent.map(item => item.hs_usid)
+  const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
+    userIds
+  })
   //
   // TOP graph
   //
@@ -35,7 +44,7 @@ export function SummarySkeleton() {
   //
   // Recent graph
   //
-  const RecentGraphData: GraphStructure = recentGraph(dataRecent1, dataRecent5)
+  const RecentGraphData: GraphStructure = recentGraph(dataRecent, dataForAverages)
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
@@ -52,9 +61,9 @@ export function SummarySkeleton() {
       labels: names,
       datasets: [
         {
-          label: 'Percentage',
+          label: 'Top %',
           data: percentages,
-          backgroundColor: 'rgba(200, 200, 200, 0.6)'
+          backgroundColor: 'rgba(255, 165, 0, 0.6)'
         }
       ]
     }
@@ -64,19 +73,18 @@ export function SummarySkeleton() {
   //  Generate the data for the RECENT results graph
   //--------------------------------------------------------------------------------
   function recentGraph(
-    dataRecent1: structure_UsershistoryRecentResults[],
-    dataRecent5: structure_UsershistoryRecentResults[]
+    dataRecent: structure_UsershistoryRecentResults[],
+    dataForAverages: structure_UsershistoryRecentResults[]
   ): GraphStructure {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent1.map(item => item.us_name)
-    const individualPercentages: number[] = dataRecent1.map(item => item.hs_correctpercent)
+    const names: string[] = dataRecent.map(item => item.us_name)
+    const individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
     //
     //  Derive percentages from the data
     //
-    const userIds: number[] = dataRecent1.map(item => item.hs_usid)
-    const averagePercentages: number[] = calculatePercentages(dataRecent5, userIds)
+    const averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
     //
     //  Datasets
     //
@@ -85,13 +93,11 @@ export function SummarySkeleton() {
       datasets: [
         {
           label: 'Latest %',
-          data: individualPercentages,
-          backgroundColor: 'rgba(220, 220, 220, 0.6)'
+          data: individualPercentages
         },
         {
-          label: '5-Average %',
-          data: averagePercentages,
-          backgroundColor: 'rgba(210, 210, 220, 0.6)'
+          label: `${RecentResults_usersAverage}-Average %`,
+          data: averagePercentages
         }
       ]
     }
@@ -101,26 +107,29 @@ export function SummarySkeleton() {
   //  Calculate the average and individual percentages for each user
   //--------------------------------------------------------------------------------
   function calculatePercentages(
-    dataRecent5: structure_UsershistoryRecentResults[],
+    dataForAverages: structure_UsershistoryRecentResults[],
     userIds: number[]
   ): number[] {
     //
     //  Calculate average percentages for each user
     //
-    const averagePercentages: number[] = [0, 0, 0, 0, 0]
+    const averagePercentages: number[] = []
     //
     //  Process each record
     //
     let currentUid = 0
     let sumTotalPoints = 0
     let sumMaxPoints = 0
-    for (const record of dataRecent5) {
+    for (const record of dataForAverages) {
       const { hs_usid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (currentUid !== hs_usid || dataRecent5.indexOf(record) === dataRecent5.length - 1) {
+      if (
+        currentUid !== hs_usid ||
+        dataForAverages.indexOf(record) === dataForAverages.length - 1
+      ) {
         //
         //  If not first record
         //
@@ -153,6 +162,9 @@ export function SummarySkeleton() {
     //
     const averagePercentage = Math.round((100 * sumTotalPoints) / sumMaxPoints)
     const index = userIds.indexOf(currentUid)
+    //
+    //  Place in the array
+    //
     averagePercentages[index] = averagePercentage
     //
     //  Return the average percentages
@@ -161,25 +173,30 @@ export function SummarySkeleton() {
   }
   //--------------------------------------------------------------------------------
   return (
-    <div className='h-screen flex flex-col gap-5 md:p-3'>
+    <div className='h-screen flex flex-col gap-4'>
       {/* --------------------------------------------------------------- */}
-      {/* Top Results Section */}
+      {/* Top Results Section - TopGraphData  */}
       {/* --------------------------------------------------------------- */}
-      <div className='box-border' style={{ height: '40%' }}>
-        <div className='w-full max-w-2xl bg-gray-100 h-full'>
+      <div className='flex-none h-[40vh]'>
+        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
           <h2 className='text-lg'>Top Results</h2>
-          <StackedBarChart StackedGraphData={TopGraphData} />
+          <div className='flex-grow overflow-hidden'>
+            <StackedBarChart StackedGraphData={TopGraphData} />
+          </div>
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
-      {/* Recent Results Section */}
+      {/* Recent Results Section - RecentGraphData   */}
       {/* --------------------------------------------------------------- */}
-      <div className='box-border' style={{ height: '40%' }}>
-        <div className='w-full max-w-2xl bg-gray-100 h-full'>
+      <div className='flex-none h-[40vh]'>
+        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
           <h2 className='text-lg'>Recent Results</h2>
-          <StackedBarChart StackedGraphData={RecentGraphData} />
+          <div className='flex-grow overflow-hidden'>
+            <StackedBarChart StackedGraphData={RecentGraphData} />
+          </div>
         </div>
       </div>
+      {/* --------------------------------------------------------------- */}
     </div>
   )
 }

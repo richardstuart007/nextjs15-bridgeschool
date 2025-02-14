@@ -2,12 +2,12 @@ import {
   fetch_TopResults,
   fetch_RecentResults1,
   fetch_RecentResultsAverages
-} from '@/src/lib/tables/tableSpecific/graphdata'
-import { StackedBarChart } from '@/src/ui/dashboard/dashboard/stackedbarchart'
-import {
-  structure_UsershistoryTopResults,
-  structure_UsershistoryRecentResults
-} from '@/src/lib/tables/structures'
+} from '@/src/ui/dashboard/graph/skeleton_data'
+import { StackedBarChart } from '@/src/ui/dashboard/graph/stackedbarchart'
+import { structure_UsershistoryRecentResults } from '@/src/lib/tables/structures'
+//-----------------------------------------------------------------------------
+//  Graph skeleton
+//--------------------------------------------------------------------------------
 //
 //  Graph Interfaces
 //
@@ -20,42 +20,14 @@ interface GraphStructure {
   labels: string[]
   datasets: Datasets[]
 }
-//
-//  Graph variables
-//
-const TopResults_count_min = 2
-const TopResults_count_max = 10
-const TopResults_usersReturned = 6
-const TopResults_limitMonths = 18
-const RecentResults_usersReturned = 7
-const RecentResults_usersAverage = 10
 //--------------------------------------------------------------------------------
-export default async function SummaryGraphs() {
+export function SummarySkeleton() {
   //
   //  Fetch the data
   //
-  const [dataTop, dataRecent]: [
-    structure_UsershistoryTopResults[],
-    structure_UsershistoryRecentResults[]
-  ] = await Promise.all([
-    fetch_TopResults({
-      TopResults_count_min: TopResults_count_min,
-      TopResults_count_max: TopResults_count_max,
-      TopResults_usersReturned: TopResults_usersReturned,
-      TopResults_limitMonths: TopResults_limitMonths
-    }),
-    fetch_RecentResults1({
-      RecentResults_usersReturned: RecentResults_usersReturned
-    })
-  ])
-  //
-  //  Extract the user IDs and get the data for the last 5 results for each user
-  //
-  const userIds: number[] = dataRecent.map(item => item.hs_usid)
-  const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
-    userIds,
-    RecentResults_usersAverage
-  })
+  const dataTop = fetch_TopResults()
+  const dataRecent1 = fetch_RecentResults1()
+  const dataRecent = fetch_RecentResultsAverages()
   //
   // TOP graph
   //
@@ -63,7 +35,7 @@ export default async function SummaryGraphs() {
   //
   // Recent graph
   //
-  const RecentGraphData: GraphStructure = recentGraph(dataRecent, dataForAverages)
+  const RecentGraphData: GraphStructure = recentGraph(dataRecent1, dataRecent)
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
@@ -82,7 +54,7 @@ export default async function SummaryGraphs() {
         {
           label: 'Percentage',
           data: percentages,
-          backgroundColor: 'rgba(255, 165, 0, 0.6)'
+          backgroundColor: 'rgba(200, 200, 200, 0.6)'
         }
       ]
     }
@@ -92,18 +64,19 @@ export default async function SummaryGraphs() {
   //  Generate the data for the RECENT results graph
   //--------------------------------------------------------------------------------
   function recentGraph(
-    dataRecent: structure_UsershistoryRecentResults[],
-    dataForAverages: structure_UsershistoryRecentResults[]
+    dataRecent1: structure_UsershistoryRecentResults[],
+    dataRecent: structure_UsershistoryRecentResults[]
   ): GraphStructure {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent.map(item => item.us_name)
-    const individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
+    const names: string[] = dataRecent1.map(item => item.us_name)
+    const individualPercentages: number[] = dataRecent1.map(item => item.hs_correctpercent)
     //
     //  Derive percentages from the data
     //
-    const averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
+    const userIds: number[] = dataRecent1.map(item => item.hs_usid)
+    const averagePercentages: number[] = calculatePercentages(dataRecent, userIds)
     //
     //  Datasets
     //
@@ -112,11 +85,13 @@ export default async function SummaryGraphs() {
       datasets: [
         {
           label: 'Latest %',
-          data: individualPercentages
+          data: individualPercentages,
+          backgroundColor: 'rgba(220, 220, 220, 0.6)'
         },
         {
-          label: `${RecentResults_usersAverage}-Average %`,
-          data: averagePercentages
+          label: '5-Average %',
+          data: averagePercentages,
+          backgroundColor: 'rgba(210, 210, 220, 0.6)'
         }
       ]
     }
@@ -126,29 +101,26 @@ export default async function SummaryGraphs() {
   //  Calculate the average and individual percentages for each user
   //--------------------------------------------------------------------------------
   function calculatePercentages(
-    dataForAverages: structure_UsershistoryRecentResults[],
+    dataRecent: structure_UsershistoryRecentResults[],
     userIds: number[]
   ): number[] {
     //
     //  Calculate average percentages for each user
     //
-    const averagePercentages: number[] = [0, 0, 0, 0, 0]
+    const averagePercentages: number[] = []
     //
     //  Process each record
     //
     let currentUid = 0
     let sumTotalPoints = 0
     let sumMaxPoints = 0
-    for (const record of dataForAverages) {
+    for (const record of dataRecent) {
       const { hs_usid, hs_totalpoints, hs_maxpoints } = record
       //
       //  CHANGE of user ID          OR
       //  LAST record in the data
       //
-      if (
-        currentUid !== hs_usid ||
-        dataForAverages.indexOf(record) === dataForAverages.length - 1
-      ) {
+      if (currentUid !== hs_usid || dataRecent.indexOf(record) === dataRecent.length - 1) {
         //
         //  If not first record
         //
@@ -181,6 +153,9 @@ export default async function SummaryGraphs() {
     //
     const averagePercentage = Math.round((100 * sumTotalPoints) / sumMaxPoints)
     const index = userIds.indexOf(currentUid)
+    //
+    //  Place in the array
+    //
     averagePercentages[index] = averagePercentage
     //
     //  Return the average percentages
@@ -189,30 +164,25 @@ export default async function SummaryGraphs() {
   }
   //--------------------------------------------------------------------------------
   return (
-    <div className='h-screen flex flex-col gap-4'>
+    <div className='h-screen flex flex-col gap-5 md:p-3'>
       {/* --------------------------------------------------------------- */}
-      {/* Top Results Section - TopGraphData  */}
+      {/* Top Results Section */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='box-border' style={{ height: '40%' }}>
+        <div className='w-full max-w-2xl bg-gray-100 h-full'>
           <h2 className='text-lg'>Top Results</h2>
-          <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={TopGraphData} />
-          </div>
+          <StackedBarChart StackedGraphData={TopGraphData} />
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
-      {/* Recent Results Section - RecentGraphData   */}
+      {/* Recent Results Section */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='box-border' style={{ height: '40%' }}>
+        <div className='w-full max-w-2xl bg-gray-100 h-full'>
           <h2 className='text-lg'>Recent Results</h2>
-          <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={RecentGraphData} />
-          </div>
+          <StackedBarChart StackedGraphData={RecentGraphData} />
         </div>
       </div>
-      {/* --------------------------------------------------------------- */}
     </div>
   )
 }

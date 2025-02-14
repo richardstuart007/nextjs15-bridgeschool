@@ -470,7 +470,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_answers(record)}
-                      overrideClass='flex text-xs h-6 w-20 bg-blue-400  hover:bg-blue-500 px-2 py-1 text-center justify-center'
+                      overrideClass='flex text-xxs h-6 w-20 bg-blue-400  hover:bg-blue-500 px-2 py-1 text-center justify-center'
                     >
                       {record.qq_ans && record.qq_ans.length > 0
                         ? record.qq_ans[0].slice(0, 8)
@@ -485,14 +485,17 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_hands(record)}
-                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1'
+                      overrideClass='h-6 bg-blue-400 hover:bg-blue-500 px-2 py-1 text-xxs'
                     >
-                      {(record.qq_north?.length ?? 0) > 0 ||
-                      (record.qq_east?.length ?? 0) > 0 ||
-                      (record.qq_south?.length ?? 0) > 0 ||
-                      (record.qq_west?.length ?? 0) > 0
-                        ? 'Y'
-                        : 'N'}
+                      {record.qq_north && !record.qq_north.every(card => card === 'n')
+                        ? 'N: ' + record.qq_north.join(', ')
+                        : record.qq_east && !record.qq_east.every(card => card === 'n')
+                          ? 'E: ' + record.qq_east.join(', ')
+                          : record.qq_south && !record.qq_south.every(card => card === 'n')
+                            ? 'S: ' + record.qq_south.join(', ')
+                            : record.qq_west && !record.qq_west.every(card => card === 'n')
+                              ? 'W: ' + record.qq_west.join(', ')
+                              : 'N'}
                     </MyButton>
                   </div>
                 </td>
@@ -503,9 +506,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_bidding(record)}
-                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1'
+                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1 text-xxs'
                     >
-                      {record.qq_rounds && record.qq_rounds.length > 0 ? 'Y' : 'N'}
+                      {record.qq_rounds?.[0]
+                        ?.filter(card => card !== 'N' && card !== 'n')
+                        .join(', ') || ' '}
                     </MyButton>
                   </div>
                 </td>
