@@ -1,5 +1,3 @@
-import { DateTime } from 'next-auth/providers/kakao'
-
 export type table_Reference = {
   rf_rfid: number
   rf_ref: string
@@ -34,7 +32,7 @@ export type table_ReferenceSubject = {
 
 export type table_Logging = {
   lg_lgid: number
-  lg_datetime: DateTime
+  lg_datetime: Date
   lg_msg: string
   lg_functionname: string
   lg_session: number
@@ -81,17 +79,17 @@ export type table_Reftype = {
 
 export type table_Sessions = {
   ss_ssid: number
-  ss_datetime: DateTime
+  ss_datetime: Date
   ss_usid: number
 }
 
 export type table_SessionsUser = {
   ss_ssid: number
-  ss_datetime: DateTime
+  ss_datetime: Date
   ss_usid: number
   us_name: string
   us_email: string
-  us_joined: DateTime
+  us_joined: Date
   us_fedid: string
   us_admin: boolean
   us_fedcountry: string
@@ -105,7 +103,7 @@ export type table_Users = {
   us_usid: number
   us_name: string
   us_email: string
-  us_joined: DateTime
+  us_joined: Date
   us_fedid: string
   us_admin: boolean
   us_fedcountry: string
@@ -117,7 +115,7 @@ export type table_Users = {
 
 export type table_Usershistory = {
   hs_hsid: number
-  hs_datetime: DateTime
+  hs_datetime: Date
   hs_owner: string
   hs_subject: string
   hs_questions: number
@@ -134,7 +132,7 @@ export type table_Usershistory = {
 
 export type table_UsershistorySubjectUser = {
   hs_hsid: number
-  hs_datetime: DateTime
+  hs_datetime: Date
   hs_owner: string
   hs_subject: string
   hs_questions: number
@@ -156,7 +154,7 @@ export type table_UsershistorySubjectUser = {
   us_usid: number
   us_name: string
   us_email: string
-  us_joined: DateTime
+  us_joined: Date
   us_fedid: string
   us_admin: boolean
   us_fedcountry: string

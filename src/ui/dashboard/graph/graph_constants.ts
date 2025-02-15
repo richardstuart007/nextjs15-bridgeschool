@@ -1,4 +1,4 @@
-export const TopResults_count_min = 2
+export const TopResults_count_min = 1
 export const TopResults_count_max = 10
 export const TopResults_usersReturned = 10
 export const TopResults_limitMonths = 18

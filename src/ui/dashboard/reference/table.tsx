@@ -1,11 +1,17 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  table_Reference,
+  table_ReferenceSubject
+} from '@/src/lib/tables/definitions'
+import {
+  fetchFiltered,
+  fetchTotalPages
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { useUserContext } from '@/UserContext'
+import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
@@ -50,7 +56,9 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
+  const [tabledata, setTabledata] = useState<
+    (table_Reference | table_ReferenceSubject)[]
+  >([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   //
@@ -75,8 +83,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
       //
       //  Ensure the userid is set
       //
-      if (sessionContext?.cx_uid) {
-        setuid(sessionContext.cx_uid)
+      if (sessionContext?.cx_usid) {
+        setuid(sessionContext.cx_usid)
       }
       //
       //  Set the selected values
@@ -129,7 +137,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //
     //  Data initialised
     //
-    if (uid > 0 && ref_initialisedSelection.current) ref_initialised.current = true
+    if (uid > 0 && ref_initialisedSelection.current)
+      ref_initialised.current = true
     //
     //  Only debounce if the data is initialised
     //
@@ -240,7 +249,13 @@ export default function Table({ selected_sbsbid }: FormProps) {
     }
     // Description width
     ref_widthDesc.current =
-      widthNumber >= 4 ? 100 : widthNumber >= 3 ? 75 : widthNumber >= 2 ? 40 : 30
+      widthNumber >= 4
+        ? 100
+        : widthNumber >= 3
+          ? 75
+          : widthNumber >= 2
+            ? 40
+            : 30
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -624,30 +639,43 @@ export default function Table({ selected_sbsbid }: FormProps) {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                {ref_show_owner.current && <td className=' px-2 '>{tabledata.rf_owner}</td>}
-                {ref_show_subject.current && <td className=' px-2 '>{tabledata.rf_subject}</td>}
+                {ref_show_owner.current && (
+                  <td className=' px-2 '>{tabledata.rf_owner}</td>
+                )}
+                {ref_show_subject.current && (
+                  <td className=' px-2 '>{tabledata.rf_subject}</td>
+                )}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_questions.current && 'rf_cntquestions' in tabledata && (
-                  <td className='px-2  text-center'>
-                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
-                  </td>
+                {ref_show_questions.current &&
+                  'rf_cntquestions' in tabledata && (
+                    <td className='px-2  text-center'>
+                      {tabledata.rf_cntquestions > 0
+                        ? tabledata.rf_cntquestions
+                        : ' '}
+                    </td>
+                  )}
+                {ref_show_ref.current && (
+                  <td className=' px-2 '>{tabledata.rf_ref}</td>
                 )}
-                {ref_show_ref.current && <td className=' px-2 '>{tabledata.rf_ref}</td>}
                 <td className='px-2 '>
                   {tabledata.rf_desc.length > ref_widthDesc.current
                     ? `${tabledata.rf_desc.slice(0, ref_widthDesc.current - 3)}...`
                     : tabledata.rf_desc}
                 </td>
-                {ref_show_who.current && <td className=' px-2 '>{tabledata.rf_who}</td>}
+                {ref_show_who.current && (
+                  <td className=' px-2 '>{tabledata.rf_who}</td>
+                )}
                 {/* ................................................... */}
                 {/* MyButton  1                                                 */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
-                      onClick={() => window.open(`${tabledata.rf_link}`, '_blank')}
+                      onClick={() =>
+                        window.open(`${tabledata.rf_link}`, '_blank')
+                      }
                       overrideClass={`h-6 ${
                         tabledata.rf_type === 'youtube'
                           ? 'bg-orange-500 hover:bg-orange-600'
@@ -664,7 +692,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {ref_show_quiz.current && (
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
-                      {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
+                      {'rf_cntquestions' in tabledata &&
+                      tabledata.rf_cntquestions > 0 ? (
                         <MyLink
                           href={{
                             pathname: `/dashboard/quiz/${tabledata.rf_rfid}`,

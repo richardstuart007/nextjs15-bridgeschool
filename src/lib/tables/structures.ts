@@ -10,7 +10,7 @@ export type structure_SessionsInfo = {
 }
 
 export type structure_ContextInfo = {
-  cx_uid: number
+  cx_usid: number
   cx_id: number
   cx_dbName: string
 }
@@ -44,4 +44,11 @@ export interface structure_ProviderSignInParams {
   provider: string
   email: string
   name: string
+}
+
+export interface structure_Country {
+  code: string
+  label: string
+  phone: string
+  timezone: string
 }

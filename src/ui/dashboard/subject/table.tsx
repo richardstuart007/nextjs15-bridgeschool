@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { table_Subject } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { useUserContext } from '@/UserContext'
+import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
 
@@ -116,8 +119,8 @@ export default function Table() {
   //  UID - Mandatory to continue
   //......................................................................................
   useEffect(() => {
-    if (sessionContext?.cx_uid) {
-      setuid(sessionContext.cx_uid)
+    if (sessionContext?.cx_usid) {
+      setuid(sessionContext.cx_usid)
       setShouldFetchData(true)
     }
   }, [sessionContext])
@@ -180,7 +183,13 @@ export default function Table() {
     }
     // Description width
     ref_widthDesc.current =
-      widthNumber >= 4 ? 100 : widthNumber >= 3 ? 75 : widthNumber >= 2 ? 40 : 30
+      widthNumber >= 4
+        ? 100
+        : widthNumber >= 3
+          ? 75
+          : widthNumber >= 2
+            ? 40
+            : 30
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -412,62 +421,74 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.sb_sbid} className='w-full border-b'>
-                {ref_show_owner.current && <td className=' px-2 '>{tabledata.sb_owner}</td>}
-                {ref_show_subject.current && <td className=' px-2 '>{tabledata.sb_title}</td>}
+                {ref_show_owner.current && (
+                  <td className=' px-2 '>{tabledata.sb_owner}</td>
+                )}
+                {ref_show_subject.current && (
+                  <td className=' px-2 '>{tabledata.sb_title}</td>
+                )}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_questions.current && 'sb_cntquestions' in tabledata && (
-                  <td className='px-2  text-center'>
-                    {tabledata.sb_cntquestions > 0 ? tabledata.sb_cntquestions : ' '}
-                  </td>
-                )}
+                {ref_show_questions.current &&
+                  'sb_cntquestions' in tabledata && (
+                    <td className='px-2  text-center'>
+                      {tabledata.sb_cntquestions > 0
+                        ? tabledata.sb_cntquestions
+                        : ' '}
+                    </td>
+                  )}
                 {/* ................................................... */}
                 {/* MyButton  1                                                */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
-                  {'sb_cntquestions' in tabledata && tabledata.sb_cntquestions > 0 && (
-                    <div className='inline-flex justify-center items-center'>
-                      <MyLink
-                        href={{
-                          pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
-                          query: { from: 'subject', idColumn: 'qq_sbid' }
-                        }}
-                        overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
-                      >
-                        Quiz
-                      </MyLink>
-                    </div>
-                  )}
+                  {'sb_cntquestions' in tabledata &&
+                    tabledata.sb_cntquestions > 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <MyLink
+                          href={{
+                            pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
+                            query: { from: 'subject', idColumn: 'qq_sbid' }
+                          }}
+                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                        >
+                          Quiz
+                        </MyLink>
+                      </div>
+                    )}
                 </td>
                 {/* ................................................... */}
                 {/* References                                            */}
                 {/* ................................................... */}
-                {ref_show_references.current && 'sb_cntquestions' in tabledata && (
-                  <td className='px-2  text-center'>
-                    {tabledata.sb_cntreference > 0 ? tabledata.sb_cntreference : ' '}
-                  </td>
-                )}
+                {ref_show_references.current &&
+                  'sb_cntquestions' in tabledata && (
+                    <td className='px-2  text-center'>
+                      {tabledata.sb_cntreference > 0
+                        ? tabledata.sb_cntreference
+                        : ' '}
+                    </td>
+                  )}
                 {/* ................................................... */}
                 {/* MyButton  2                                               */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
-                  {'sb_cntreference' in tabledata && tabledata.sb_cntreference > 0 && (
-                    <div className='inline-flex justify-center items-center'>
-                      <MyLink
-                        href={{
-                          pathname: `/dashboard/reference_select`,
-                          query: {
-                            from: 'subject',
-                            selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
-                          }
-                        }}
-                        overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
-                      >
-                        Reference
-                      </MyLink>
-                    </div>
-                  )}
+                  {'sb_cntreference' in tabledata &&
+                    tabledata.sb_cntreference > 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <MyLink
+                          href={{
+                            pathname: `/dashboard/reference_select`,
+                            query: {
+                              from: 'subject',
+                              selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
+                            }
+                          }}
+                          overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
+                        >
+                          Reference
+                        </MyLink>
+                      </div>
+                    )}
                 </td>
                 {/* ---------------------------------------------------------------------------------- */}
               </tr>

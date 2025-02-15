@@ -8,7 +8,10 @@ import {
   structure_UsershistoryTopResults,
   structure_UsershistoryRecentResults
 } from '@/src/lib/tables/structures'
-import { RecentResults_usersAverage } from '@/src/ui/dashboard/graph/graph_constants'
+import {
+  RecentResults_usersAverage,
+  TopResults_limitMonths
+} from '@/src/ui/dashboard/graph/graph_constants'
 //
 //  Graph Interfaces
 //
@@ -61,7 +64,7 @@ export default async function SummaryGraphs() {
       labels: names,
       datasets: [
         {
-          label: 'Top %',
+          label: `Top % over ${TopResults_limitMonths} months`,
           data: percentages,
           backgroundColor: 'rgba(255, 165, 0, 0.6)'
         }

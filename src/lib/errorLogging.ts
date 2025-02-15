@@ -35,7 +35,11 @@ export async function errorLogging({
     //
     //  Get datetime
     //
-    const lg_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
+    //
+    //  Get date in UTC
+    //
+    const currentDate = new Date()
+    const lg_datetime = currentDate.toISOString()
     //
     //  Trim message
     //
@@ -53,7 +57,13 @@ export async function errorLogging({
       )
     VALUES ($1,$2,$3,$4,$5)
   `
-    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_session, lg_severity]
+    const queryValues = [
+      lg_datetime,
+      lg_msgTrim,
+      lg_functionname,
+      lg_session,
+      lg_severity
+    ]
     //
     // Remove redundant spaces
     //
@@ -62,7 +72,11 @@ export async function errorLogging({
     //  Execute the sql
     //
     const db = await sql()
-    await db.query({ query: sqlQuery, params: queryValues, functionName: functionName })
+    await db.query({
+      query: sqlQuery,
+      params: queryValues,
+      functionName: functionName
+    })
     //
     //  Return inserted log
     //

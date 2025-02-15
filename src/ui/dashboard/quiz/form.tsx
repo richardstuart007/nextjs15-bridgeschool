@@ -7,7 +7,7 @@ import QuizChoice from '@/src/ui/dashboard/quiz/choices'
 import { useRouter } from 'next/navigation'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
-import { useUserContext } from '@/UserContext'
+import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 
 interface QuestionsFormProps {
@@ -26,11 +26,13 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //
   const { sessionContext } = useUserContext()
   const cx_id = sessionContext.cx_id
-  const cx_uid = sessionContext.cx_uid
+  const cx_usid = sessionContext.cx_usid
   //
   //  Questions state updated in initial load
   //
-  const [questions, setQuestions] = useState<table_Questions[]>(props.questions || [])
+  const [questions, setQuestions] = useState<table_Questions[]>(
+    props.questions || []
+  )
   //
   //  Fetch session data when the component mounts
   //
@@ -42,7 +44,9 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //  State variables
   //
   const [index, setIndex] = useState(0)
-  const [question, setQuestion] = useState(questions.length > 0 ? questions[0] : null)
+  const [question, setQuestion] = useState(
+    questions.length > 0 ? questions[0] : null
+  )
   const [answer, setAnswer] = useState<number[]>([])
   const [showSubmit, setShowSubmit] = useState(false)
   //-------------------------------------------------------------------------
@@ -152,22 +156,23 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       hs_correctpercent = Math.ceil((hs_totalpoints * 100) / hs_maxpoints)
     }
     //
-    // Create a NewUsersHistoryTable object
+    //  Get date in UTC
     //
-    const hs_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
+    const currentDate = new Date()
+    const UTC_datetime = currentDate.toISOString()
     //
     //  Create parameters
     //
     const writeParams = {
       table: 'ths_history',
       columnValuePairs: [
-        { column: 'hs_datetime', value: hs_datetime },
+        { column: 'hs_datetime', value: UTC_datetime },
         { column: 'hs_owner', value: question.qq_owner },
         { column: 'hs_subject', value: question.qq_subject },
         { column: 'hs_questions', value: answer.length },
         { column: 'hs_qqid', value: hs_qqid },
         { column: 'hs_ans', value: answer },
-        { column: 'hs_usid', value: cx_uid },
+        { column: 'hs_usid', value: cx_usid },
         { column: 'hs_points', value: hs_points },
         { column: 'hs_maxpoints', value: hs_maxpoints },
         { column: 'hs_totalpoints', value: hs_totalpoints },
@@ -201,7 +206,11 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       </div>
       <QuizBidding question={question} />
       <QuizHands question={question} />
-      <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
+      <QuizChoice
+        question={question}
+        setAnswer={setAnswer}
+        setShowSubmit={setShowSubmit}
+      />
       {showSubmit ? (
         <div className='whitespace-nowrap px-3 h-5'>
           <MyButton

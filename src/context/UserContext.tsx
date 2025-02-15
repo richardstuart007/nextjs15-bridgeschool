@@ -11,7 +11,7 @@ type UserContextType = {
 }
 const defaultContext: structure_ContextInfo = {
   cx_id: 0,
-  cx_uid: 0,
+  cx_usid: 0,
   cx_dbName: ''
 }
 //
@@ -24,11 +24,14 @@ const UserContext = createContext<UserContextType>({
 //------------------------------------------------------------------------------
 // Create the provider
 //------------------------------------------------------------------------------
-export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+  children
+}) => {
   //
   //  Provided the user state and setter
   //
-  const [sessionContext, setSessionContext] = useState<structure_ContextInfo>(defaultContext)
+  const [sessionContext, setSessionContext] =
+    useState<structure_ContextInfo>(defaultContext)
   //
   //  Pass state to the context
   //
@@ -49,7 +52,8 @@ export const useUserContext = (): UserContextType => {
   //
   //  If no context then error
   //
-  if (!context) throw new Error('useUserContext must be used within a UserProvider')
+  if (!context)
+    throw new Error('useUserContext must be used within a UserProvider')
   //
   //  Return context
   //

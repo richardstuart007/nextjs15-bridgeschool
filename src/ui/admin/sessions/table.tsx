@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { table_SessionsUser } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
-import { format } from 'date-fns'
+import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 export default function Table() {
   //
@@ -267,12 +270,17 @@ export default function Table() {
                 <tr key={tabledata.ss_ssid} className='w-full border-b'>
                   <td className='px-2 text-center'>{tabledata.ss_ssid}</td>
                   <td className='px-2 text-center'>
-                    {format(new Date(tabledata.ss_datetime), 'yyyy MMM dd HH:mm')}
+                    {convertUTCtoLocal({
+                      datetimeUTC: tabledata.ss_datetime,
+                      to_localcountryCode: 'NZ'
+                    })}
                   </td>
                   <td className='px-2 text-center'>{tabledata.ss_usid}</td>
                   <td className='px-2 '>{tabledata.us_name}</td>
                   <td className='px-2 '>{tabledata.us_email}</td>
-                  <td className='px-2 text-center   '>{tabledata.us_provider}</td>
+                  <td className='px-2 text-center   '>
+                    {tabledata.us_provider}
+                  </td>
 
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>

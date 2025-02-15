@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import NavLinks from '@/src/ui/utils/nav/nav-links'
 import NavSession from '@/src/ui/utils/nav/nav-session'
 import SchoolLogo from '@/src/ui/utils/school-logo'
-import { useUserContext } from '@/UserContext'
+import { useUserContext } from '@/src/context/UserContext'
 import { getAuthSession } from '@/src/lib/data-auth'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { logout } from '@/src/ui/utils/user-logout'
+import { logout } from '@/src/lib/user-logout'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 
@@ -23,7 +23,9 @@ export default function NavSide(props: Props) {
   //
   //  session info
   //
-  const [sessionInfo, setSessionInfo] = useState<structure_SessionsInfo | undefined>(undefined)
+  const [sessionInfo, setSessionInfo] = useState<
+    structure_SessionsInfo | undefined
+  >(undefined)
   const [dbName, setdbName] = useState<string>('')
   useEffect(() => {
     getSessionInfo()
@@ -55,7 +57,7 @@ export default function NavSide(props: Props) {
     if (sessionId) {
       const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
-        cx_uid: sessionData.bsuid,
+        cx_usid: sessionData.bsuid,
         cx_id: sessionData.bsid,
         cx_dbName: dbName
       }

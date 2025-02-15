@@ -6,8 +6,8 @@ import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/general/users/action'
 import { notFound } from 'next/navigation'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { COUNTRIES } from '@/src/ui/utils/countries'
-import { useUserContext } from '@/UserContext'
+import { COUNTRIES } from '@/src/lib/countries'
+import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyCheckbox } from '@/src/ui/utils/myCheckbox'
@@ -59,9 +59,9 @@ export default function Form({ admin_uid }: Props) {
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
   const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
   const [us_admin, setus_admin] = useState<boolean>(false)
-  const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
-    []
-  )
+  const [formattedCountries, setformattedCountries] = useState<
+    { value: string; label: string }[]
+  >([])
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
   //-------------------------------------------------------------------------
@@ -88,9 +88,9 @@ export default function Form({ admin_uid }: Props) {
       //
       //  Not admin then for the logged on user
       //
-      if (sessionContext?.cx_uid) {
-        const cx_uid = sessionContext.cx_uid
-        setus_usid(cx_uid)
+      if (sessionContext?.cx_usid) {
+        const cx_usid = sessionContext.cx_usid
+        setus_usid(cx_usid)
         setShouldFetchData(true)
       }
     }
@@ -161,7 +161,10 @@ export default function Form({ admin_uid }: Props) {
   function UpdateMyButton() {
     const { pending } = useFormStatus()
     return (
-      <MyButton overrideClass='mt-4 w-72  px-4 flex justify-center' aria-disabled={pending}>
+      <MyButton
+        overrideClass='mt-4 w-72  px-4 flex justify-center'
+        aria-disabled={pending}
+      >
         Update
       </MyButton>
     )
@@ -180,18 +183,29 @@ export default function Form({ admin_uid }: Props) {
         {/*  User ID  */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_usid'>
+          <label
+            className='mb-3 mt-5 block text-xs font-medium text-gray-900'
+            htmlFor='us_usid'
+          >
             ID:{us_usid} Email:{us_email}
           </label>
           <div className='relative'>
-            <MyInput id='us_usid' type='hidden' name='us_usid' value={us_usid} />
+            <MyInput
+              id='us_usid'
+              type='hidden'
+              name='us_usid'
+              value={us_usid}
+            />
           </div>
         </div>
         {/*  ...................................................................................*/}
         {/*  Name */}
         {/*  ...................................................................................*/}
         <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_name'>
+          <label
+            className='mb-3 mt-5 block text-xs font-medium text-gray-900'
+            htmlFor='us_name'
+          >
             Name
           </label>
           <div className='relative'>
@@ -235,7 +249,10 @@ export default function Form({ admin_uid }: Props) {
         {/*  FEDID  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_fedid'>
+          <label
+            className='mb-3 mt-5 block text-xs font-medium text-gray-900'
+            htmlFor='us_fedid'
+          >
             Bridge Federation ID
           </label>
           <div className='relative'>
@@ -319,7 +336,12 @@ export default function Form({ admin_uid }: Props) {
           />
         ) : (
           <div className='relative'>
-            <MyInput id='us_admin' type='hidden' name='us_admin' value={us_admin.toString()} />
+            <MyInput
+              id='us_admin'
+              type='hidden'
+              name='us_admin'
+              value={us_admin.toString()}
+            />
           </div>
         )}
         {/*  ...................................................................................*/}
@@ -329,7 +351,11 @@ export default function Form({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
-        <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
+        <div
+          className='flex h-8 items-end space-x-1'
+          aria-live='polite'
+          aria-atomic='true'
+        >
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />

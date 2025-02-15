@@ -10,7 +10,11 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 // ----------------------------------------------------------------------
 //  Google Provider
 // ----------------------------------------------------------------------
-export async function providerSignIn({ provider, email, name }: structure_ProviderSignInParams) {
+export async function providerSignIn({
+  provider,
+  email,
+  name
+}: structure_ProviderSignInParams) {
   const functionName = 'providerSignIn'
   try {
     //
@@ -59,10 +63,16 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
 //  Write new user
 // ----------------------------------------------------------------------
 async function newUser(provider: string, email: string, name: string) {
+  //
+  //  Get date in UTC
+  //
+  const currentDate = new Date()
+  const UTC_datetime = currentDate.toISOString()
+
   let userRecord = []
   const us_email = email
   const us_name = name
-  const us_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const us_joined = UTC_datetime
   const us_fedid = ''
   const us_admin = false
   const us_fedcountry = 'ZZ'
@@ -103,13 +113,17 @@ async function newUser(provider: string, email: string, name: string) {
 // ----------------------------------------------------------------------
 async function newSession(ss_usid: number) {
   //
+  //  Get date in UTC
+  //
+  const currentDate = new Date()
+  const UTC_datetime = currentDate.toISOString()
+  //
   //  Write Session
   //
-  const ss_datetime = new Date().toISOString().replace('T', ' ').replace('Z', '').substring(0, 23)
   const sessionsRecords = await table_write({
     table: 'tss_sessions',
     columnValuePairs: [
-      { column: 'ss_datetime', value: ss_datetime },
+      { column: 'ss_datetime', value: UTC_datetime },
       { column: 'ss_usid', value: ss_usid }
     ]
   })

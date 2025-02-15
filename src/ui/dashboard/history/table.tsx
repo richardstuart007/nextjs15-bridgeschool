@@ -2,12 +2,16 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
-import { useUserContext } from '@/UserContext'
+import { useUserContext } from '@/src/context/UserContext'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 export default function Table() {
   //
@@ -17,10 +21,11 @@ export default function Table() {
   //
   //  Input selection
   //
-  const [uid, setuid] = useState<number | string>(0)
+  const [usid, setusid] = useState<number | string>(0)
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
+  const [hsid, sethsid] = useState<number | string>(0)
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
   const [correct, setcorrect] = useState<number | string>('')
@@ -31,17 +36,20 @@ export default function Table() {
   const ref_show_sbid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_subject = useRef(false)
-  const ref_show_hid = useRef(false)
-  const ref_show_uid = useRef(false)
+  const ref_show_hsid = useRef(false)
+  const ref_show_usid = useRef(false)
   const ref_show_title = useRef(false)
   const ref_show_name = useRef(false)
   const ref_show_questions = useRef(false)
   const ref_show_correct = useRef(false)
+  const ref_show_datetime = useRef(false)
   //
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>([])
+  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>(
+    []
+  )
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -49,19 +57,21 @@ export default function Table() {
   // Debounce selection
   //......................................................................................
   type DebouncedState = {
-    uid: string | number
+    usid: string | number
     owner: string | number
     subject: string | number
     questions: string | number
     title: string | number
+    hsid: string | number
     correct: string | number
   }
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    uid: 0,
+    usid: 0,
     owner: '',
     subject: '',
     questions: 0,
     title: '',
+    hsid: '',
     correct: 0
   })
   //
@@ -86,11 +96,12 @@ export default function Table() {
     //
     const handler = setTimeout(() => {
       setDebouncedState({
-        uid: Number(uid as string),
+        usid: Number(usid as string),
         owner,
         subject,
         questions: Number(questions as string),
         title,
+        hsid: Number(hsid as string),
         correct: Number(correct as string)
       })
       //
@@ -111,7 +122,7 @@ export default function Table() {
     //
     //  Values to debounce
     //
-  }, [uid, owner, subject, questions, title, correct])
+  }, [usid, owner, subject, questions, title, hsid, correct])
   //......................................................................................
   //  Screen change
   //......................................................................................
@@ -121,11 +132,11 @@ export default function Table() {
     // eslint-disable-next-line
   }, [])
   //......................................................................................
-  //  UID
+  //  usid
   //......................................................................................
   useEffect(() => {
-    if (sessionContext?.cx_uid) {
-      setuid(sessionContext.cx_uid)
+    if (sessionContext?.cx_usid) {
+      setusid(sessionContext.cx_usid)
       setShouldFetchData(true)
     }
   }, [sessionContext])
@@ -184,7 +195,7 @@ export default function Table() {
       ref_show_title.current = true
     }
     if (widthNumber >= 2) {
-      ref_show_uid.current = true
+      ref_show_usid.current = true
     }
     if (widthNumber >= 3) {
       ref_show_correct.current = true
@@ -196,9 +207,9 @@ export default function Table() {
     }
     if (widthNumber >= 5) {
       ref_show_questions.current = true
-
-      ref_show_hid.current = true
+      ref_show_hsid.current = true
       ref_show_sbid.current = true
+      ref_show_datetime.current = true
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -236,10 +247,11 @@ export default function Table() {
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'hs_usid', value: uid, operator: '=' },
+      { column: 'hs_usid', value: usid, operator: '=' },
       { column: 'hs_owner', value: owner, operator: '=' },
       { column: 'hs_subject', value: subject, operator: '=' },
       { column: 'sb_title', value: title, operator: 'LIKE' },
+      { column: 'hs_hsid', value: hsid, operator: '=' },
       { column: 'hs_questions', value: questions, operator: '>=' },
       { column: 'hs_correctpercent', value: correct, operator: '>=' },
       { column: 'us_name', value: name, operator: 'LIKE' }
@@ -333,9 +345,14 @@ export default function Table() {
                   Subject
                 </th>
               )}
-              {ref_show_hid.current && (
+              {ref_show_hsid.current && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  hsid
+                </th>
+              )}
+              {ref_show_datetime.current && (
                 <th scope='col' className=' font-medium px-2'>
-                  Hid
+                  Date
                 </th>
               )}
               {ref_show_title.current && (
@@ -343,9 +360,9 @@ export default function Table() {
                   Title
                 </th>
               )}
-              {ref_show_uid.current && (
+              {ref_show_usid.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
-                  Uid
+                  usid
                 </th>
               )}
               {ref_show_name.current && (
@@ -363,11 +380,9 @@ export default function Table() {
                   %
                 </th>
               )}
-
               <th scope='col' className=' font-medium px-2 text-center'>
                 Review
               </th>
-
               <th scope='col' className=' font-medium px-2 text-center'>
                 Quiz
               </th>
@@ -392,7 +407,7 @@ export default function Table() {
                     name='owner'
                     table='tuo_usersowner'
                     tableColumn='uo_usid'
-                    tableColumnValue={sessionContext.cx_uid}
+                    tableColumnValue={sessionContext.cx_usid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
                     overrideClass_Dropdown='h-6 w-28 text-xxs'
@@ -422,9 +437,31 @@ export default function Table() {
                 </th>
               )}
               {/* ................................................... */}
-              {/* HISTORY ID                                          */}
+              {/* hsid                                                 */}
               {/* ................................................... */}
-              {ref_show_hid.current && <th scope='col' className=' px-2'></th>}
+              {ref_show_hsid.current && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='hsid'
+                    name='hsid'
+                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
+                    type='text'
+                    value={hsid}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      sethsid(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* DateTime                                          */}
+              {/* ................................................... */}
+              {ref_show_datetime.current && (
+                <th scope='col' className=' px-2'></th>
+              )}
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
@@ -444,21 +481,21 @@ export default function Table() {
                 </th>
               )}
               {/* ................................................... */}
-              {/* uid                                                 */}
+              {/* usid                                                 */}
               {/* ................................................... */}
-              {ref_show_uid.current && (
+              {ref_show_usid.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
-                    id='uid'
-                    name='uid'
+                    id='usid'
+                    name='usid'
                     overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
                     type='text'
-                    value={uid}
+                    value={usid}
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
                       const parsedValue = isNaN(numValue) ? '' : numValue
-                      setuid(parsedValue)
+                      setusid(parsedValue)
                       setname('')
                     }}
                   />
@@ -478,7 +515,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       setname(value)
-                      setuid('')
+                      setusid('')
                     }}
                   />
                 </th>
@@ -536,14 +573,29 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
-                <tr key={`${tabledata.hs_hsid}-${index}`} className='w-full border-b'>
+                <tr
+                  key={`${tabledata.hs_hsid}-${index}`}
+                  className='w-full border-b'
+                >
                   {ref_show_sbid.current && (
                     <td className=' px-2  text-left'>{tabledata.hs_sbid}</td>
                   )}
-                  {ref_show_owner.current && <td className=' px-2 '>{tabledata.hs_owner}</td>}
-                  {ref_show_subject.current && <td className=' px-2 '>{tabledata.hs_subject}</td>}
-                  {ref_show_hid.current && (
-                    <td className=' px-2  text-left'>{tabledata.hs_hsid}</td>
+                  {ref_show_owner.current && (
+                    <td className=' px-2 '>{tabledata.hs_owner}</td>
+                  )}
+                  {ref_show_subject.current && (
+                    <td className=' px-2 '>{tabledata.hs_subject}</td>
+                  )}
+                  {ref_show_hsid.current && (
+                    <td className=' px-2  text-center'>{tabledata.hs_hsid}</td>
+                  )}
+                  {ref_show_datetime.current && (
+                    <td className=' px-2  text-left'>
+                      {convertUTCtoLocal({
+                        datetimeUTC: tabledata.hs_datetime,
+                        to_localcountryCode: 'NZ'
+                      })}
+                    </td>
                   )}
                   {ref_show_title.current && (
                     <td className='px-2 '>
@@ -554,15 +606,21 @@ export default function Table() {
                         : ' '}
                     </td>
                   )}
-                  {ref_show_uid.current && (
+                  {ref_show_usid.current && (
                     <td className='px-2  text-center'>{tabledata.hs_usid}</td>
                   )}
-                  {ref_show_name.current && <td className='px-2 '>{tabledata.us_name}</td>}
+                  {ref_show_name.current && (
+                    <td className='px-2 '>{tabledata.us_name}</td>
+                  )}
                   {ref_show_questions.current && (
-                    <td className='px-2  text-center'>{tabledata.hs_questions}</td>
+                    <td className='px-2  text-center'>
+                      {tabledata.hs_questions}
+                    </td>
                   )}
                   {ref_show_correct.current && (
-                    <td className='px-2   text-center '>{tabledata.hs_correctpercent}</td>
+                    <td className='px-2   text-center '>
+                      {tabledata.hs_correctpercent}
+                    </td>
                   )}
                   {/* ................................................... */}
                   {/* MyButton  1                                                */}

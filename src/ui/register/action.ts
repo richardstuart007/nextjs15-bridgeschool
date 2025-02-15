@@ -25,7 +25,10 @@ export type StateRegister = {
 
 const Register = FormSchemaRegister
 
-export async function action(_prevState: StateRegister | undefined, formData: FormData) {
+export async function action(
+  _prevState: StateRegister | undefined,
+  formData: FormData
+) {
   //
   //  Validate the fields using Zod
   //
@@ -67,11 +70,16 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //
   const provider = 'email'
   //
+  //  Get date in UTC
+  //
+  const currentDate = new Date()
+  const UTC_datetime = currentDate.toISOString()
+  //
   //  Write User
   //
   const us_email = email
   const us_name = name
-  const us_joined = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const us_joined = UTC_datetime
   const us_fedid = ''
   const us_admin = false
   const us_fedcountry = 'ZZ'

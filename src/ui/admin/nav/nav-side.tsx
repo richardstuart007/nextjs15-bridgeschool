@@ -1,7 +1,7 @@
 'use client'
 import NavLinks from '@/src/ui/admin/nav/nav-links'
 import SchoolLogo from '@/src/ui/utils/school-logo'
-import { logout } from '@/src/ui/utils/user-logout'
+import { logout } from '@/src/lib/user-logout'
 import { MyButton } from '@/src/ui/utils/myButton'
 
 export default function NavSide() {
@@ -14,7 +14,9 @@ export default function NavSide() {
           <NavLinks />
           <div className='grow invisible'></div>
           <form action={logout}>
-            <MyButton overrideClass='h-8 px-1 p-1 w-full grow bg-gray-700'>Logoff</MyButton>
+            <MyButton overrideClass='h-8 px-1 p-1 w-full grow bg-gray-700'>
+              Logoff
+            </MyButton>
           </form>
         </div>
       </>
