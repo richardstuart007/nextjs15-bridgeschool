@@ -24,3 +24,6 @@ ALTER DATABASE verceldb SET TIMEZONE = 'UTC';
 ALTER ROLE postgres SET TIMEZONE = 'UTC';
 ALTER ROLE "default" SET timezone = 'UTC';
 
+ALTER TABLE tlg_logging RENAME COLUMN lg_session TO lg_ssid;
+
+

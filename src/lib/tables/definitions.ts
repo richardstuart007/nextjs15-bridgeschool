@@ -35,7 +35,7 @@ export type table_Logging = {
   lg_datetime: Date
   lg_msg: string
   lg_functionname: string
-  lg_session: number
+  lg_ssid: number
   lg_severity: string
 }
 

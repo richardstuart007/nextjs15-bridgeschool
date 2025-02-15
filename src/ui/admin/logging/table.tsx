@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { table_Logging } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
 
@@ -17,7 +20,7 @@ export default function Table() {
   //
   //  Show flags
   //
-  const rowsPerPage = 15
+  const rowsPerPage = 25
   //
   //  Other state
   //
@@ -107,7 +110,7 @@ export default function Table() {
       { column: 'lg_msg', value: msg, operator: 'LIKE' },
       { column: 'lg_functionname', value: functionname, operator: 'LIKE' },
       { column: 'lg_severity', value: severity, operator: '=' },
-      { column: 'lg_session', value: session, operator: '=' }
+      { column: 'lg_ssid', value: session, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -272,11 +275,17 @@ export default function Table() {
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
                 <tr key={tabledata.lg_lgid} className='w-full border-b'>
-                  <td className='px-2 '>{tabledata.lg_lgid}</td>
-                  <td className='px-2 text-center   '>{tabledata.lg_session}</td>
-                  <td className='px-2 '>{tabledata.lg_functionname}</td>
-                  <td className='px-2 text-center   '>{tabledata.lg_severity}</td>
-                  <td className='px-2 '>{tabledata.lg_msg}</td>
+                  <td className='px-2 text-xxs '>{tabledata.lg_lgid}</td>
+                  <td className='px-2 text-center text-xxs  '>
+                    {tabledata.lg_ssid}
+                  </td>
+                  <td className='px-2 text-xxs '>
+                    {tabledata.lg_functionname}
+                  </td>
+                  <td className='px-2 text-center text-xxs  '>
+                    {tabledata.lg_severity}
+                  </td>
+                  <td className='px-2 text-xxs '>{tabledata.lg_msg}</td>
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>
               ))

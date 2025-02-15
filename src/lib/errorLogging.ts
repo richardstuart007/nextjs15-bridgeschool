@@ -27,10 +27,10 @@ export async function errorLogging({
     //
     // Only call getCookieSessionId() server-side
     //
-    let lg_session = 0
+    let lg_ssid = 0
     if (typeof window === 'undefined') {
       const sessionId = await getCookieSessionId()
-      lg_session = sessionId ? sessionId : 0
+      lg_ssid = sessionId ? sessionId : 0
     }
     //
     //  Get datetime
@@ -52,7 +52,7 @@ export async function errorLogging({
       lg_datetime,
       lg_msg,
       lg_functionname,
-      lg_session,
+      lg_ssid,
       lg_severity
       )
     VALUES ($1,$2,$3,$4,$5)
@@ -61,7 +61,7 @@ export async function errorLogging({
       lg_datetime,
       lg_msgTrim,
       lg_functionname,
-      lg_session,
+      lg_ssid,
       lg_severity
     ]
     //

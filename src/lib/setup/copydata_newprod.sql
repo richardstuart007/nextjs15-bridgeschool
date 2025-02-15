@@ -101,7 +101,7 @@ insert into  tlg_logging
 (
     lg_lgid ,
     lg_functionname ,
-    lg_session ,
+    lg_ssid ,
     lg_severity  ,
     lg_msg ,
     lg_datetime
