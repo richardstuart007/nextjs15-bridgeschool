@@ -54,7 +54,8 @@ export const {
     //
     async session({ token, session }) {
       if (token.sub && session.user) session.user.id = token.sub
-      if (token.sessionId && session.user) session.user.sessionId = token.sessionId as string
+      if (token.sessionId && session.user)
+        session.user.sessionId = token.sessionId as string
       return session
     },
     //
@@ -102,7 +103,7 @@ export const {
           //
           const pwdParams = {
             table: 'tup_userspwd',
-            whereColumnValuePairs: [{ column: 'upemail', value: email }]
+            whereColumnValuePairs: [{ column: 'up_email', value: email }]
           }
           const pwdRows = await table_fetch(pwdParams)
           const userPwd = pwdRows[0]
@@ -112,7 +113,7 @@ export const {
           //
           //  Check password if exists
           //
-          const passwordsMatch = await bcrypt.compare(password, userPwd.uphash)
+          const passwordsMatch = await bcrypt.compare(password, userPwd.up_hash)
           if (!passwordsMatch) {
             return null
           }
@@ -121,7 +122,7 @@ export const {
           //
           const fetchParams = {
             table: 'tus_users',
-            whereColumnValuePairs: [{ column: 'u_email', value: email }]
+            whereColumnValuePairs: [{ column: 'us_email', value: email }]
           }
           const rows = await table_fetch(fetchParams)
           const userRecord = rows[0]
@@ -132,10 +133,10 @@ export const {
           //  Return in correct format
           //
           const rtnData = {
-            id: userRecord.u_uid.toString(),
-            name: userRecord.u_name,
-            email: userRecord.u_email,
-            password: userPwd.uphash
+            id: userRecord.us_usid.toString(),
+            name: userRecord.us_name,
+            email: userRecord.us_email,
+            password: userPwd.up_hash
           }
           return rtnData as structure_UserAuth
           //
