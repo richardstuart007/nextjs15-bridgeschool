@@ -7,7 +7,11 @@ import MaintPopup_hands from '@/src/ui/admin/questions/hands/maintPopup'
 import MaintPopup_bidding from '@/src/ui/admin/questions/bidding/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
@@ -25,7 +29,11 @@ interface FormProps {
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
+export default function Table({
+  selected_sbid,
+  selected_owner,
+  selected_subject
+}: FormProps) {
   const rowsPerPage = 17
   //
   //  Selection
@@ -77,19 +85,20 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail, rfid, rfid_cmp])
+  }, [
+    currentPage,
+    shouldFetchData,
+    selected_sbid,
+    owner,
+    subject,
+    detail,
+    rfid,
+    rfid_cmp
+  ])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: Comparison_operator
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -103,7 +112,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     //  Selected sbid ?
     //
     if (selected_sbid)
-      filtersToUpdate.push({ column: 'qq_sbid', value: selected_sbid, operator: '=' })
+      filtersToUpdate.push({
+        column: 'qq_sbid',
+        value: selected_sbid,
+        operator: '='
+      })
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -220,7 +233,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         //
         const Params = {
           table: 'tqq_questions',
-          whereColumnValuePairs: [{ column: 'qq_qqid', value: questions.qq_qqid }]
+          whereColumnValuePairs: [
+            { column: 'qq_qqid', value: questions.qq_qqid }
+          ]
         }
         await table_delete(Params)
         //
@@ -249,7 +264,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     //
     // If the value is a valid operator, update the state; otherwise, set it to blank
     //
-    const validOperator = Comparison_values.some(option => option.optionValue === value)
+    const validOperator = Comparison_values.some(
+      option => option.optionValue === value
+    )
       ? (value as Comparison_operator)
       : '='
     //
@@ -424,7 +441,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                     onChange={e => {
                       const value = e.target.value
                       const numberValue = value === '' ? '' : Number(value)
-                      setrfid(numberValue === '' || isNaN(numberValue) ? '' : numberValue)
+                      setrfid(
+                        numberValue === '' || isNaN(numberValue)
+                          ? ''
+                          : numberValue
+                      )
                     }}
                   />
                 </div>
@@ -436,12 +457,21 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.qq_qqid} className='w-full border-b py-2                    '>
+              <tr
+                key={record.qq_qqid}
+                className='w-full border-b py-2                    '
+              >
                 <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
                 <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_sbid}</td>
-                <td className='text-xs px-2 py-1 text-center  '>{record.qq_seq}</td>
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_qqid}</td>
+                <td className='text-xs px-2 py-1 text-center '>
+                  {record.qq_sbid}
+                </td>
+                <td className='text-xs px-2 py-1 text-center  '>
+                  {record.qq_seq}
+                </td>
+                <td className='text-xs px-2 py-1 text-center '>
+                  {record.qq_qqid}
+                </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -458,11 +488,15 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 {/* --------------------------------------------------------------------- */}
                 {/* Help                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1  '>{record.qq_help ? 'Y' : 'N'}</td>
+                <td className='text-xs px-2 py-1  '>
+                  {record.qq_help ? 'Y' : 'N'}
+                </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Reference ID                                                              */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_rfid}</td>
+                <td className='text-xs px-2 py-1 text-center '>
+                  {record.qq_rfid}
+                </td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -487,13 +521,17 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                       onClick={() => handleClickEdit_hands(record)}
                       overrideClass='h-6 bg-blue-400 hover:bg-blue-500 px-2 py-1 text-xxs'
                     >
-                      {record.qq_north && !record.qq_north.every(card => card === 'n')
+                      {record.qq_north &&
+                      !record.qq_north.every(card => card === 'n')
                         ? 'N: ' + record.qq_north.join(', ')
-                        : record.qq_east && !record.qq_east.every(card => card === 'n')
+                        : record.qq_east &&
+                            !record.qq_east.every(card => card === 'n')
                           ? 'E: ' + record.qq_east.join(', ')
-                          : record.qq_south && !record.qq_south.every(card => card === 'n')
+                          : record.qq_south &&
+                              !record.qq_south.every(card => card === 'n')
                             ? 'S: ' + record.qq_south.join(', ')
-                            : record.qq_west && !record.qq_west.every(card => card === 'n')
+                            : record.qq_west &&
+                                !record.qq_west.every(card => card === 'n')
                               ? 'W: ' + record.qq_west.join(', ')
                               : 'N'}
                     </MyButton>
@@ -588,7 +626,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   )
 }
