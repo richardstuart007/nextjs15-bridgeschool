@@ -1,7 +1,6 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-
 import { errorLogging } from '@/src/lib/errorLogging'
 //
 // Define the column-value pair interface
@@ -18,7 +17,10 @@ interface Props {
   columnValuePairs: ColumnValuePair[]
 }
 
-export async function table_write({ table, columnValuePairs }: Props): Promise<any[]> {
+export async function table_write({
+  table,
+  columnValuePairs
+}: Props): Promise<any[]> {
   const functionName = 'table_write'
 
   //
@@ -26,7 +28,9 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
   //
   const columns = columnValuePairs.map(({ column }) => column).join(', ')
   const values = columnValuePairs.map(({ value }) => value)
-  const placeholders = columnValuePairs.map((_, index) => `$${index + 1}`).join(', ')
+  const placeholders = columnValuePairs
+    .map((_, index) => `$${index + 1}`)
+    .join(', ')
   //
   // Build the SQL query
   //
@@ -39,7 +43,11 @@ export async function table_write({ table, columnValuePairs }: Props): Promise<a
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
     //
     // Return the inserted rows
     //

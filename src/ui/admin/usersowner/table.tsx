@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Usersowner } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -19,7 +23,9 @@ export default function Table({ selected_uid }: FormProps) {
   //
   //  Selection
   //
-  const [uid, setuid] = useState<string | number>(selected_uid ? selected_uid : 0)
+  const [uid, setuid] = useState<string | number>(
+    selected_uid ? selected_uid : 0
+  )
   const [owner, setowner] = useState<string | number>('')
   //
   //  Data
@@ -62,14 +68,6 @@ export default function Table({ selected_uid }: FormProps) {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -265,12 +263,19 @@ export default function Table({ selected_uid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={`${tabledata.uo_usid}${tabledata.uo_owner}`} className='w-full border-b'>
+              <tr
+                key={`${tabledata.uo_usid}${tabledata.uo_owner}`}
+                className='w-full border-b'
+              >
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_usid}</td>
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
+                <td className='text-xs px-2 py-1 text-center'>
+                  {tabledata.uo_usid}
+                </td>
+                <td className='text-xs px-2 py-1 text-center'>
+                  {tabledata.uo_owner}
+                </td>
                 {/* ................................................... */}
                 {/* MyButton                                                  */}
                 {/* ................................................... */}
@@ -305,10 +310,15 @@ export default function Table({ selected_uid }: FormProps) {
       {/* ---------------------------------------------------------------------------------- */}
       <>
         {/* Add Modal */}
-        {isModelOpenAdd && <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />}
+        {isModelOpenAdd && (
+          <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
+        )}
 
         {/* Confirmation Dialog */}
-        <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+        <ConfirmDialog
+          confirmDialog={confirmDialog}
+          setConfirmDialog={setConfirmDialog}
+        />
       </>
       {/* ---------------------------------------------------------------------------------- */}
     </>

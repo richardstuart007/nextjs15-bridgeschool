@@ -2,21 +2,14 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
-
-//
-// Column-value pairs
-//
-interface ColumnValuePair {
-  column: string
-  value: string | number // Allow both string and numeric values
-}
+import { ColumnValuePair } from '@/src/lib/tables/structures'
 //
 // Props
 //
 interface Props {
   table: string
-  whereColumnValuePairs?: ColumnValuePair[] // Optional column-value pairs
-  returning?: boolean // Optional flag to determine if RETURNING * is needed
+  whereColumnValuePairs?: ColumnValuePair[]
+  returning?: boolean
 }
 
 export async function table_delete({

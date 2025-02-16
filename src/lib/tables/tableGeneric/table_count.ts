@@ -2,13 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
-//
-// Column-value pairs
-//
-interface ColumnValuePair {
-  column: string
-  value: string | number // Support both numeric and string values
-}
+import { ColumnValuePair } from '@/src/lib/tables/structures'
 //
 // Props
 //
@@ -17,7 +11,10 @@ interface Props {
   whereColumnValuePairs?: ColumnValuePair[]
 }
 
-export async function table_count({ table, whereColumnValuePairs }: Props): Promise<number> {
+export async function table_count({
+  table,
+  whereColumnValuePairs
+}: Props): Promise<number> {
   const functionName = 'table_count'
   //
   // Build the base SQL query
@@ -41,7 +38,11 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
     //
     // Return the count
     //

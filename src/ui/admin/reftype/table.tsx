@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reftype/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Reftype } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
@@ -49,14 +53,6 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -148,7 +144,9 @@ export default function Table() {
         const tableColumnValuePairs = [
           {
             table: 'trf_reference',
-            whereColumnValuePairs: [{ column: 'rf_type', value: reftype.rt_type }]
+            whereColumnValuePairs: [
+              { column: 'rf_type', value: reftype.rt_type }
+            ]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -277,7 +275,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.rt_rtid} className='w-full border-b py-2                    '>
+              <tr
+                key={record.rt_rtid}
+                className='w-full border-b py-2                    '
+              >
                 <td className='text-xs px-2 py-1  '>{record.rt_type}</td>
                 <td className='text-xs px-2 py-1  '>{record.rt_title}</td>
                 <td className='text-xs px-2 py-1  '>{record.rt_rtid}</td>
@@ -318,19 +319,32 @@ export default function Table() {
 
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup record={selectedRow} isOpen={isModelOpenEdit} onClose={handleModalCloseEdit} />
+        <MaintPopup
+          record={selectedRow}
+          isOpen={isModelOpenEdit}
+          onClose={handleModalCloseEdit}
+        />
       )}
 
       {/* Add Modal */}
       {isModelOpenAdd && (
-        <MaintPopup record={null} isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
+        <MaintPopup
+          record={null}
+          isOpen={isModelOpenAdd}
+          onClose={handleModalCloseAdd}
+        />
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
 
       {/* Error message */}
-      <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>
+      <div className='mt-2'>
+        {message && <div className='text-red-600 mb-4'>{message}</div>}
+      </div>
     </>
   )
 }

@@ -5,7 +5,10 @@ import { updateCookieSessionId } from '@/src/lib/cookie_server'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 // ----------------------------------------------------------------------
 //  Google Provider
@@ -24,11 +27,10 @@ export async function providerSignIn({
     //
     //  Get User record
     //
-    const fetchParams = {
+    const rows = await table_fetch({
       table: 'tus_users',
       whereColumnValuePairs: [{ column: 'us_email', value: email }]
-    }
-    const rows = await table_fetch(fetchParams)
+    } as table_fetch_Props)
     userRecord = rows[0]
     //
     //  Create user if does not exist

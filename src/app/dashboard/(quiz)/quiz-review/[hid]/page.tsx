@@ -3,14 +3,19 @@ import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 
 export const metadata: Metadata = {
   title: 'Quiz Review'
 }
 
-export default async function Page(props: { params: Promise<{ hid: number }> }) {
+export default async function Page(props: {
+  params: Promise<{ hid: number }>
+}) {
   const params = await props.params
   //
   //  Variables used in the return statement
@@ -28,7 +33,7 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
     const rows = await table_fetch({
       table: 'ths_history',
       whereColumnValuePairs: [{ column: 'hs_hsid', value: hid }]
-    })
+    } as table_fetch_Props)
     const history = rows[0]
     if (!history) {
       notFound()
@@ -87,7 +92,9 @@ export default async function Page(props: { params: Promise<{ hid: number }> }) 
         {questions.length > 0 ? (
           <ReviewForm history={history} questions={questions} />
         ) : (
-          <p className='text-xs text-red-600'>All correct. No bad answers to review</p>
+          <p className='text-xs text-red-600'>
+            All correct. No bad answers to review
+          </p>
         )}
       </div>
     )

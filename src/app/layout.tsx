@@ -2,7 +2,10 @@ import '@/src/global.css'
 import { inter } from '@/src/fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 import { URL_current } from '@/src/constants'
 import dotenv from 'dotenv'
 //
@@ -63,7 +66,7 @@ export default async function RootLayout({
     const rows = await table_fetch({
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
-    })
+    } as table_fetch_Props)
     const row = rows[0]
     const dbName = row?.db_name ?? 'unknown'
     //

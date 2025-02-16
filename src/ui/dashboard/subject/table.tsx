@@ -4,13 +4,19 @@ import { useState, useEffect, useRef } from 'react'
 import { table_Subject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
-  fetchTotalPages
+  fetchTotalPages,
+  Filter,
+  JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 export default function Table() {
   //
@@ -20,10 +26,12 @@ export default function Table() {
   //
   //  Selection
   //
-  const [uid, setuid] = useState<string | number>(0)
+  const [usid, setusid] = useState<string | number>(0)
+  const ref_selected_sbowner = useRef('')
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [questions, setquestions] = useState<number | string>(1)
+  const [initialisationCompleted, setinitialisationCompleted] = useState(false)
   //
   //  Show columns
   //
@@ -39,23 +47,39 @@ export default function Table() {
   const [currentPage, setcurrentPage] = useState(1)
   const [tabledata, setTabledata] = useState<table_Subject[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
-  const [shouldFetchData, setShouldFetchData] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setloading] = useState(true)
+  //......................................................................................
+  //  usid - Mandatory to continue
+  //......................................................................................
+  useEffect(() => {
+    //
+    //  Get user from context
+    //
+    if (sessionContext?.cx_usid && usid === 0) setusid(sessionContext.cx_usid)
+    //
+    //  Once user set, get owner for user
+    //
+    if (usid !== 0) fetchUserOwner()
+    // eslint-disable-next-line
+  }, [sessionContext, usid])
   //......................................................................................
   // Debounce selection
   //......................................................................................
   type DebouncedState = {
-    uid: string | number
+    usid: string | number
     owner: string | number
     subject: string | number
     questions: string | number
+    currentPage: number
+    initialisationCompleted: boolean
   }
-
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    uid: 0,
+    usid: 0,
     owner: '',
     subject: '',
-    questions: 0
+    questions: 0,
+    currentPage: 1,
+    initialisationCompleted: false
   })
   //
   //  Debounce message
@@ -70,60 +94,65 @@ export default function Table() {
   //
   useEffect(() => {
     //
-    //  Only debounce if the data is initialised
+    //  The user-id must be set
     //
-    if (Number(uid) > 0) {
-      setMessage('Applying filters...')
+    if (usid === 0) return
+    //
+    //  Owner not set
+    //
+    if (!initialisationCompleted) return
+    //
+    // Adjust currentPage if it exceeds totalPages
+    //
+    if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
+    //
+    //  Debounce
+    //
+    setMessage('Applying filters...')
+    //
+    // Input change
+    //
+    const inputChange = questions !== debouncedState.questions
+    //
+    // Input change
+    //
+    const dropdownChange =
+      owner !== debouncedState.owner || subject !== debouncedState.subject
+    //
+    // Determine debounce time
+    //
+    const timeout = firstRender.current
+      ? 1
+      : inputChange
+        ? 1000
+        : dropdownChange
+          ? 200
+          : 1
+    //
+    //  Debounce
+    //
+    const handler = setTimeout(() => {
+      setDebouncedState({
+        usid,
+        owner,
+        subject,
+        questions: Number(questions as string),
+        currentPage,
+        initialisationCompleted
+      })
       //
-      //  Do not timeout on first render
+      //  Default timeout after first render
       //
-      const timeout = firstRender.current ? 1 : 1000
-      //
-      //  Debounce
-      //
-      const handler = setTimeout(() => {
-        setDebouncedState({
-          uid,
-          owner,
-          subject,
-          questions: Number(questions as string)
-        })
-        //
-        //  Normal debounce if data initialised
-        //
-        setShouldFetchData(true)
-        //
-        //  Default timeout after first render
-        //
-        firstRender.current = false
-      }, timeout)
-      //
-      // Cleanup the timeout on change
-      //
-      return () => {
-        clearTimeout(handler)
-      }
+      firstRender.current = false
+    }, timeout)
+    //
+    // Cleanup the timeout on change
+    //
+    return () => {
+      clearTimeout(handler)
     }
-    //
-    //  Values to debounce
-    //
-  }, [uid, owner, subject, questions])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    updateColumns()
-    updateRows()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  //......................................................................................
-  //  UID - Mandatory to continue
-  //......................................................................................
-  useEffect(() => {
-    if (sessionContext?.cx_usid) {
-      setuid(sessionContext.cx_usid)
-      setShouldFetchData(true)
-    }
-  }, [sessionContext])
+    // eslint-disable-next-line
+  }, [usid, owner, subject, questions, currentPage, initialisationCompleted])
   //......................................................................................
   // Reset the subject when the owner changes
   //......................................................................................
@@ -131,33 +160,140 @@ export default function Table() {
     setsubject('')
   }, [owner])
   //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
+  // Fetch on mount and debounce
   //......................................................................................
   //
-  // Adjust currentPage if it exceeds totalPages
+  // Should fetch data
   //
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-  //
-  // Change of current page
-  //
-  useEffect(() => {
-    setShouldFetchData(true)
-  }, [currentPage])
-  //
-  // Change of current page or should fetch data
-  //
-  useEffect(() => {
-    if (shouldFetchData) {
-      fetchdata()
-      setShouldFetchData(false)
-      setMessage('')
-    }
+    fetchdata()
+    setMessage('')
     // eslint-disable-next-line
-  }, [shouldFetchData, debouncedState])
+  }, [debouncedState])
+  //----------------------------------------------------------------------------------------------
+  // fetch Owner for a user
+  //----------------------------------------------------------------------------------------------
+  async function fetchUserOwner() {
+    //
+    //  The user-id must be set & filters
+    //
+    if (usid === 0) return
+    //
+    //  Already set
+    //
+    if (initialisationCompleted) return
+    //
+    //  Continue
+    //
+    try {
+      //
+      //  Set the owner if only 1
+      //
+      const rows = await table_fetch({
+        table: 'tuo_usersowner',
+        whereColumnValuePairs: [{ column: 'uo_usid', value: usid }]
+      } as table_fetch_Props)
+      if (rows.length === 1) {
+        const uo_owner = rows[0].uo_owner
+        ref_selected_sbowner.current = uo_owner
+        setowner(uo_owner)
+      }
+      //
+      //  Update Columns and rows
+      //
+      updateColumns()
+      updateRows()
+      //
+      //  Allow fetch of data
+      //
+      setinitialisationCompleted(true)
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.error('Error fetching tuo_usersowner:', error)
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  // fetchdata
+  //----------------------------------------------------------------------------------------------
+  async function fetchdata() {
+    //
+    //  The user-id must be set & filters
+    //
+    if (usid === 0) return
+    if (!initialisationCompleted) return
+    //
+    // Construct filters dynamically from input fields
+    //
+    const filtersToUpdate: Filter[] = [
+      { column: 'uo_usid', value: usid, operator: '=' },
+      { column: 'sb_owner', value: owner, operator: '=' },
+      { column: 'sb_subject', value: subject, operator: '=' },
+      { column: 'sb_cntquestions', value: questions, operator: '>=' }
+    ]
+    //
+    // Filter out any entries where `value` is not defined or empty
+    //
+    const filters = filtersToUpdate.filter(filter => filter.value)
+    //
+    //  Continue to get data
+    //
+    try {
+      //
+      //  Table
+      //
+      const table = 'tsb_subject'
+      //
+      //  Distinct - no usid selected
+      //
+      let distinctColumns: string[] = []
+      //
+      //  Joins
+      //
+      const joins: JoinParams[] = [
+        { table: 'tuo_usersowner', on: 'sb_owner = uo_owner' }
+      ]
+      //
+      // Calculate the offset for pagination
+      //
+      const rowsPerPage = ref_rowsPerPage.current
+      const offset = (currentPage - 1) * rowsPerPage
+      //
+      //  Get data
+      //
+      const data = await fetchFiltered({
+        table,
+        joins,
+        filters,
+        orderBy: 'sb_owner, sb_subject',
+        limit: rowsPerPage,
+        offset,
+        distinctColumns
+      })
+      setTabledata(data)
+      //
+      //  Total number of pages
+      //
+      const fetchedTotalPages = await fetchTotalPages({
+        table,
+        joins,
+        filters,
+        items_per_page: rowsPerPage,
+        distinctColumns
+      })
+      setTotalPages(fetchedTotalPages)
+      //
+      //  Data can be displayed
+      //
+      setloading(false)
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.error('Error fetching trf_reference:', error)
+    }
+  }
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -176,7 +312,7 @@ export default function Table() {
     //  smaller screens
     //
     if (widthNumber >= 2) {
-      ref_show_owner.current = true
+      if (!ref_selected_sbowner.current) ref_show_owner.current = true
       ref_show_subject.current = true
       ref_show_questions.current = true
       ref_show_references.current = true
@@ -211,91 +347,6 @@ export default function Table() {
     ref_rowsPerPage.current = screenRows
   }
   //----------------------------------------------------------------------------------------------
-  // fetchdata
-  //----------------------------------------------------------------------------------------------
-  async function fetchdata() {
-    //
-    //  The user-id must be set & filters
-    //
-    if (uid === 0) return
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
-    //
-    // Construct filters dynamically from input fields ?????????
-    //
-    const filtersToUpdate: Filter[] = [
-      { column: 'uo_usid', value: uid, operator: '=' },
-      { column: 'sb_owner', value: owner, operator: '=' },
-      { column: 'sb_subject', value: subject, operator: '=' },
-      { column: 'sb_cntquestions', value: questions, operator: '>=' }
-    ]
-    //
-    // Filter out any entries where `value` is not defined or empty
-    //
-    const filters = filtersToUpdate.filter(filter => filter.value)
-    //
-    //  Continue to get data
-    //
-    try {
-      //
-      //  Table
-      //
-      const table = 'tsb_subject'
-      //
-      //  Distinct - no uid selected
-      //
-      let distinctColumns: string[] = []
-      //
-      //  Joins
-      //
-      const joins = [{ table: 'tuo_usersowner', on: 'sb_owner = uo_owner' }]
-      //
-      // Calculate the offset for pagination
-      //
-      const rowsPerPage = ref_rowsPerPage.current
-      const offset = (currentPage - 1) * rowsPerPage
-      //
-      //  Get data
-      //
-      const data = await fetchFiltered({
-        table,
-        joins,
-        filters,
-        orderBy: 'sb_owner, sb_subject',
-        limit: rowsPerPage,
-        offset,
-        distinctColumns
-      })
-      setTabledata(data)
-      //
-      //  Total number of pages
-      //
-      const fetchedTotalPages = await fetchTotalPages({
-        table,
-        joins,
-        filters,
-        items_per_page: rowsPerPage,
-        distinctColumns
-      })
-      setTotalPages(fetchedTotalPages)
-      //
-      //  Data can be displayed
-      //
-      setLoading(false)
-      //
-      //  Errors
-      //
-    } catch (error) {
-      console.error('Error fetching trf_reference:', error)
-    }
-  }
-  //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
   if (loading) return <p className='text-xs'>Loading....</p>
@@ -308,6 +359,18 @@ export default function Table() {
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        {/** -------------------------------------------------------------------- */}
+        {/** Selected Values                                                      */}
+        {/** -------------------------------------------------------------------- */}
+        {ref_selected_sbowner.current && (
+          <div className='pl-2 py-2 text-xs'>
+            <span className='font-bold'>Owner: </span>
+            <span className='text-green-500'>{owner}</span>
+          </div>
+        )}
+        {/** -------------------------------------------------------------------- */}
+        {/** TABLE                                                                */}
+        {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
           <thead className='rounded-lg text-left font-normal text-xs'>
             {/* --------------------------------------------------------------------- */}
@@ -357,7 +420,7 @@ export default function Table() {
                     name='owner'
                     table='tuo_usersowner'
                     tableColumn='uo_usid'
-                    tableColumnValue={uid}
+                    tableColumnValue={usid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
                     overrideClass_Dropdown='h-6 w-28 text-xxs'

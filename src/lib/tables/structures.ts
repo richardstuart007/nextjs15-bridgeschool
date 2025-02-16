@@ -52,3 +52,14 @@ export interface structure_Country {
   phone: string
   timezone: string
 }
+//
+// Column-value pairs
+//
+export type ColumnValuePair = {
+  column: string
+  value: string | number
+}
+export type TableColumnValuePairs = {
+  table: string
+  whereColumnValuePairs: ColumnValuePair[]
+}

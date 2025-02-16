@@ -9,7 +9,10 @@ import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/lib/user-logout'
 import { MyButton } from '@/src/ui/utils/myButton'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface Props {
   baseURL: string
@@ -41,7 +44,7 @@ export default function NavSide(props: Props) {
     const rows = await table_fetch({
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
-    })
+    } as table_fetch_Props)
     const row = rows[0]
     const tdb_database = row?.db_name ?? 'unknown'
     setdbName(tdb_database)

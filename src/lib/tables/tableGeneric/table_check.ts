@@ -2,16 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
-
-interface ColumnValuePair {
-  column: string
-  value: string | number | boolean
-}
-
-interface TableColumnValuePairs {
-  table: string
-  whereColumnValuePairs: ColumnValuePair[]
-}
+import { TableColumnValuePairs } from '@/src/lib/tables/structures'
 
 export async function table_check(
   tableColumnValuePairs: TableColumnValuePairs[]
@@ -45,7 +36,11 @@ export async function table_check(
       // Execute the query
       //
       const db = await sql()
-      const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+      const data = await db.query({
+        query: sqlQuery,
+        params: values,
+        functionName: functionName
+      })
       //
       // Check if rows exist
       //

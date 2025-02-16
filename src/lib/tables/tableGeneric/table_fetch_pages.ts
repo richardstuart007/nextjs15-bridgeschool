@@ -5,12 +5,12 @@ import { errorLogging } from '@/src/lib/errorLogging'
 import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
 
 // Define types for joins and filters
-type JoinParams = {
+export type JoinParams = {
   table: string
   on: string
 }
 
-type FilterParams = {
+export type Filter = {
   column: string
   operator: Comparison_operator
   value: string | number | (string | number)[]
@@ -33,7 +33,7 @@ export async function fetchFiltered({
 }: {
   table: string
   joins?: JoinParams[]
-  filters?: FilterParams[]
+  filters?: Filter[]
   orderBy?: string
   limit?: number
   offset?: number
@@ -93,7 +93,7 @@ export async function fetchTotalPages({
 }: {
   table: string
   joins?: JoinParams[]
-  filters?: FilterParams[]
+  filters?: Filter[]
   items_per_page?: number
   distinctColumns?: string[]
 }): Promise<number> {
@@ -147,7 +147,7 @@ function buildSqlQuery({
 }: {
   table: string
   joins?: JoinParams[]
-  filters?: FilterParams[]
+  filters?: Filter[]
 }) {
   //
   //  Default a select query
@@ -192,14 +192,22 @@ function buildSqlQuery({
       // Handle LIKE, NOT LIKE, and other standard operators
       //
       const adjustedColumn =
-        operator === 'LIKE' || operator === 'NOT LIKE' ? `LOWER(${column})` : column
+        operator === 'LIKE' || operator === 'NOT LIKE'
+          ? `LOWER(${column})`
+          : column
       const adjustedValue =
-        (operator === 'LIKE' || operator === 'NOT LIKE') && typeof value === 'string'
+        (operator === 'LIKE' || operator === 'NOT LIKE') &&
+        typeof value === 'string'
           ? `%${value.toLowerCase()}%`
           : value
 
-      if (typeof adjustedValue !== 'string' && typeof adjustedValue !== 'number') {
-        throw new Error(`Invalid value type for operator ${operator}: ${typeof adjustedValue}`)
+      if (
+        typeof adjustedValue !== 'string' &&
+        typeof adjustedValue !== 'number'
+      ) {
+        throw new Error(
+          `Invalid value type for operator ${operator}: ${typeof adjustedValue}`
+        )
       }
 
       queryValues.push(adjustedValue)

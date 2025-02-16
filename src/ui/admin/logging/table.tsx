@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { table_Logging } from '@/src/lib/tables/definitions'
 import {
+  Filter,
   fetchFiltered,
   fetchTotalPages
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
@@ -95,14 +96,6 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //

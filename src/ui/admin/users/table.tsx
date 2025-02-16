@@ -6,7 +6,11 @@ import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { MyButton } from '@/src/ui/utils/myButton'
 import Pagination from '@/src/ui/utils/paginationState'
@@ -32,7 +36,8 @@ export default function Table() {
   const [isModalOpen, setisModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<table_Users | null>(null)
   const [selectedPwd, setSelectedPwd] = useState<table_Users | null>(null)
-  const [selectedUsersowner, setSelectedUsersowner] = useState<table_Users | null>(null)
+  const [selectedUsersowner, setSelectedUsersowner] =
+    useState<table_Users | null>(null)
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: '',
@@ -68,14 +73,6 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -391,8 +388,12 @@ export default function Table() {
                 <td className='text-xs px-2 py-1 '>{user.us_name}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_email}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_fedid}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.us_admin ? 'Y' : ''}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.us_fedcountry}</td>
+                <td className='text-xs px-2 py-1  text-center'>
+                  {user.us_admin ? 'Y' : ''}
+                </td>
+                <td className='text-xs px-2 py-1  text-center'>
+                  {user.us_fedcountry}
+                </td>
                 <td className='text-xs px-2 py-1 '>{user.us_provider}</td>
                 <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
@@ -458,7 +459,11 @@ export default function Table() {
 
       {/* User Edit Modal */}
       {selectedUser && (
-        <UserEditPopup uid={selectedUser.us_usid} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <UserEditPopup
+          uid={selectedUser.us_usid}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
       )}
 
       {/* User Usersowner Modal */}
@@ -472,11 +477,18 @@ export default function Table() {
 
       {/* Password Edit Modal */}
       {selectedPwd && (
-        <PwdEditPopup userRecord={selectedPwd} isOpen={isModalOpen} onClose={handleCloseModal} />
+        <PwdEditPopup
+          userRecord={selectedPwd}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   )
 }

@@ -3,7 +3,10 @@ import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 export const metadata: Metadata = {
   title: 'Quiz'
@@ -39,16 +42,17 @@ export default async function Page({
     //
     //  Get Questions
     //
-    const fetchParams = {
+    const questionsData = await table_fetch({
       table: 'tqq_questions',
       whereColumnValuePairs: [{ column: idColumn, value: idNumber }]
-    }
-    const questionsData = await table_fetch(fetchParams)
+    } as table_fetch_Props)
     if (!questionsData) notFound()
     //
     //  Filter out questions with no answers
     //
-    questions = questionsData.filter(q => Array.isArray(q.qq_ans) && q.qq_ans.length > 0)
+    questions = questionsData.filter(
+      q => Array.isArray(q.qq_ans) && q.qq_ans.length > 0
+    )
     //
     //  Errors
     //

@@ -7,7 +7,9 @@ import {
 } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
-  fetchTotalPages
+  fetchTotalPages,
+  Filter,
+  JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -15,7 +17,10 @@ import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
   selected_sbsbid?: string | undefined
@@ -235,7 +240,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
     if (widthNumber >= 2) {
       if (!selected_sbsbid) ref_show_owner.current = true
       if (!selected_sbsbid) ref_show_subject.current = true
-      if (!selected_sbsbid) ref_show_questions.current = true
+      ref_show_questions.current = true
       ref_show_type.current = true
     }
     if (widthNumber >= 3) {
@@ -243,9 +248,6 @@ export default function Table({ selected_sbsbid }: FormProps) {
     }
     if (widthNumber >= 4) {
       ref_show_ref.current = true
-      ref_show_owner.current = true
-      ref_show_subject.current = true
-      ref_show_questions.current = true
     }
     // Description width
     ref_widthDesc.current =
@@ -291,7 +293,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
       const rows = await table_fetch({
         table: 'tsb_subject',
         whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
-      })
+      } as table_fetch_Props)
       const row = rows[0]
       setowner(row.sb_owner)
       setsubject(row.sb_subject)
@@ -312,14 +314,6 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //  The user-id must be set & filters
     //
     if (uid === 0) return
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -352,7 +346,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
       //
       //  Joins
       //
-      const joins = [
+      const joins: JoinParams[] = [
         { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
         { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
       ]
@@ -406,9 +400,6 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** TABLE                                                                */}
-      {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
@@ -459,11 +450,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   Subject-name
                 </th>
               )}
-              {ref_show_questions.current && (
-                <th scope='col' className=' font-medium px-2 text-center'>
-                  Questions
-                </th>
-              )}
+
               {ref_show_ref.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Ref
@@ -480,6 +467,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Type
               </th>
+              {ref_show_questions.current && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Questions
+                </th>
+              )}
               {ref_show_quiz.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Quiz
@@ -531,26 +523,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   )}
                 </th>
               )}
-              {/* ................................................... */}
-              {/* Questions                                           */}
-              {/* ................................................... */}
-              {ref_show_questions.current && (
-                <th scope='col' className='px-2 text-center'>
-                  <MyInput
-                    id='questions'
-                    name='questions'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xxs text-center`}
-                    type='text'
-                    value={questions}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
-                      setquestions(parsedValue)
-                    }}
-                  />
-                </th>
-              )}
+
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
@@ -627,6 +600,26 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 </th>
               )}
               {/* ................................................... */}
+              {/* Questions                                           */}
+              {/* ................................................... */}
+              {ref_show_questions.current && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='questions'
+                    name='questions'
+                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xxs text-center`}
+                    type='text'
+                    value={questions}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      setquestions(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
               {/* Quiz                                       */}
               {/* ................................................... */}
               <th scope='col' className=' px-2'></th>
@@ -645,30 +638,29 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {ref_show_subject.current && (
                   <td className=' px-2 '>{tabledata.rf_subject}</td>
                 )}
+
                 {/* ................................................... */}
-                {/* Questions                                            */}
+                {/* Ref                                          */}
                 {/* ................................................... */}
-                {ref_show_questions.current &&
-                  'rf_cntquestions' in tabledata && (
-                    <td className='px-2  text-center'>
-                      {tabledata.rf_cntquestions > 0
-                        ? tabledata.rf_cntquestions
-                        : ' '}
-                    </td>
-                  )}
                 {ref_show_ref.current && (
                   <td className=' px-2 '>{tabledata.rf_ref}</td>
                 )}
+                {/* ................................................... */}
+                {/* desc                                          */}
+                {/* ................................................... */}
                 <td className='px-2 '>
                   {tabledata.rf_desc.length > ref_widthDesc.current
                     ? `${tabledata.rf_desc.slice(0, ref_widthDesc.current - 3)}...`
                     : tabledata.rf_desc}
                 </td>
+                {/* ................................................... */}
+                {/* who                                          */}
+                {/* ................................................... */}
                 {ref_show_who.current && (
                   <td className=' px-2 '>{tabledata.rf_who}</td>
                 )}
                 {/* ................................................... */}
-                {/* MyButton  1                                                 */}
+                {/* Read/video                                                */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
                   <div className='inline-flex justify-center items-center'>
@@ -687,7 +679,18 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   </div>
                 </td>
                 {/* ................................................... */}
-                {/* MyButton  2                                                 */}
+                {/* Questions                                            */}
+                {/* ................................................... */}
+                {ref_show_questions.current &&
+                  'rf_cntquestions' in tabledata && (
+                    <td className='px-2  text-center'>
+                      {tabledata.rf_cntquestions > 0
+                        ? tabledata.rf_cntquestions
+                        : ' '}
+                    </td>
+                  )}
+                {/* ................................................... */}
+                {/* Quiz                                                */}
                 {/* ................................................... */}
                 {ref_show_quiz.current && (
                   <td className='px-2 text-center'>

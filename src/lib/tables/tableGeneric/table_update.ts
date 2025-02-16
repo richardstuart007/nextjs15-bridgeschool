@@ -34,7 +34,10 @@ export async function table_update({
   // Create the WHERE clause from the key-value pairs
   //
   const whereClause = whereColumnValuePairs
-    .map(({ column }, index) => `${column} = $${index + 1 + columnValuePairs.length}`)
+    .map(
+      ({ column }, index) =>
+        `${column} = $${index + 1 + columnValuePairs.length}`
+    )
     .join(' AND ')
   //
   // Combine values for SET and WHERE clauses
@@ -55,7 +58,11 @@ export async function table_update({
     //  Execute the sql
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
     //
     // Return rows updated
     //

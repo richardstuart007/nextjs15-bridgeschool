@@ -3,7 +3,10 @@
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
@@ -132,7 +135,7 @@ export async function Maint_detail(
           { column: 'sb_owner', value: qq_owner },
           { column: 'sb_subject', value: qq_subject }
         ]
-      })
+      } as table_fetch_Props)
       const qq_sbid = rows[0].sb_sbid
       //
       //  Write Parameters

@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/owner/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Owner } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
@@ -61,17 +65,11 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
-    //
     // Construct filters dynamically from input fields
     //
-    const filtersToUpdate: Filter[] = [{ column: 'ow_owner', value: owner, operator: 'LIKE' }]
+    const filtersToUpdate: Filter[] = [
+      { column: 'ow_owner', value: owner, operator: 'LIKE' }
+    ]
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -141,11 +139,15 @@ export default function Table() {
         const tableColumnValuePairs = [
           {
             table: 'tsb_subject',
-            whereColumnValuePairs: [{ column: 'sb_owner', value: owner.ow_owner }]
+            whereColumnValuePairs: [
+              { column: 'sb_owner', value: owner.ow_owner }
+            ]
           },
           {
             table: 'tuo_usersowner',
-            whereColumnValuePairs: [{ column: 'uo_owner', value: owner.ow_owner }]
+            whereColumnValuePairs: [
+              { column: 'uo_owner', value: owner.ow_owner }
+            ]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -209,13 +211,22 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr>
-              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
+              <th
+                scope='col'
+                className='text-xs px-2 py-2 font-normal text-left'
+              >
                 Owner
               </th>
-              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
+              <th
+                scope='col'
+                className='text-xs px-2 py-2 font-normal text-left'
+              >
                 ID
               </th>
-              <th scope='col' className='text-xs px-2 py-2 font-normal text-left'>
+              <th
+                scope='col'
+                className='text-xs px-2 py-2 font-normal text-left'
+              >
                 Delete
               </th>
             </tr>
@@ -249,7 +260,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {data?.map(row => (
-              <tr key={row.ow_owid} className='w-full border-b py-2                    '>
+              <tr
+                key={row.ow_owid}
+                className='w-full border-b py-2                    '
+              >
                 <td className='text-xs px-2 py-1 text-xs '>{row.ow_owner}</td>
                 <td className='text-xs px-2 py-1 text-xs '>{row.ow_owid}</td>
                 <td className='text-xs px-2 py-1 text-xs'>
@@ -280,13 +294,20 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
 
       {/* Add Modal */}
-      {isModelOpenAdd && <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />}
+      {isModelOpenAdd && (
+        <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
+      )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
 
       {/* Error message */}
-      <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>
+      <div className='mt-2'>
+        {message && <div className='text-red-600 mb-4'>{message}</div>}
+      </div>
     </>
   )
 }

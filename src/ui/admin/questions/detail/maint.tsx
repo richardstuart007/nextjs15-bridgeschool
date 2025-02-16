@@ -7,7 +7,10 @@ import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { MyInput } from '@/src/ui/utils/myInput'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
   questionRecord: table_Questions | undefined
@@ -40,7 +43,9 @@ export default function Form({
   const [qq_sbid, setqq_sbid] = useState(questionRecord?.qq_sbid || 0)
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
   const [qq_help, setqq_help] = useState(questionRecord?.qq_help || '')
-  const [qq_rfid, setqq_rfid] = useState<string | number>(questionRecord?.qq_rfid || 0)
+  const [qq_rfid, setqq_rfid] = useState<string | number>(
+    questionRecord?.qq_rfid || 0
+  )
   //
   //  Get the subject
   //
@@ -65,7 +70,7 @@ export default function Form({
         { column: 'sb_owner', value: qq_owner },
         { column: 'sb_subject', value: qq_subject }
       ]
-    })
+    } as table_fetch_Props)
     const sb_sbid = rows[0].sb_sbid
     setqq_sbid(sb_sbid)
   }
@@ -79,7 +84,10 @@ export default function Form({
     const { pending } = useFormStatus()
     return (
       <div className='pt-2'>
-        <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        <MyButton
+          overrideClass='mt-2 w-72  px-4 justify-center'
+          aria-disabled={pending}
+        >
           {qq_qqid === 0 ? 'Create' : 'Update'}
         </MyButton>
       </div>
@@ -100,7 +108,9 @@ export default function Form({
         {/*  ...................................................................................*/}
         {/*  Title */}
         {/*  ...................................................................................*/}
-        <div className='pt-2 block text-xl font-semibold text-green-500'>Details</div>
+        <div className='pt-2 block text-xl font-semibold text-green-500'>
+          Details
+        </div>
         {/*  ...................................................................................*/}
         {/*  ID  */}
         {/*  ...................................................................................*/}
@@ -142,7 +152,12 @@ export default function Form({
                   <span className='block w-72  px-4 py-2 rounded-md bg-gray-200 border-none  text-xs '>
                     {qq_owner}
                   </span>
-                  <MyInput id='qq_owner' type='hidden' name='qq_owner' value={qq_owner} />
+                  <MyInput
+                    id='qq_owner'
+                    type='hidden'
+                    name='qq_owner'
+                    value={qq_owner}
+                  />
                 </>
               </div>
             </>
@@ -180,7 +195,12 @@ export default function Form({
                   <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
                     {qq_subject}
                   </span>
-                  <MyInput id='qq_subject' type='hidden' name='qq_subject' value={qq_subject} />
+                  <MyInput
+                    id='qq_subject'
+                    type='hidden'
+                    name='qq_subject'
+                    value={qq_subject}
+                  />
                 </>
               </div>
             </>
@@ -290,7 +310,11 @@ export default function Form({
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
-        <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
+        <div
+          className='flex h-8 items-end space-x-1'
+          aria-live='polite'
+          aria-atomic='true'
+        >
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />

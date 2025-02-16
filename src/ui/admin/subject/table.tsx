@@ -6,7 +6,11 @@ import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
 import { table_Subject } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
@@ -32,8 +36,10 @@ export default function Table() {
   const [loading, setLoading] = useState(true)
 
   const [isModelOpenEdit_subject, setIsModelOpenEdit_subject] = useState(false)
-  const [isModelOpenEdit_reference, setIsModelOpenEdit_reference] = useState(false)
-  const [isModelOpenEdit_questions, setIsModelOpenEdit_questions] = useState(false)
+  const [isModelOpenEdit_reference, setIsModelOpenEdit_reference] =
+    useState(false)
+  const [isModelOpenEdit_questions, setIsModelOpenEdit_questions] =
+    useState(false)
   const [isModelOpenAdd_subject, setIsModelOpenAdd_subject] = useState(false)
   const [selectedRow, setSelectedRow] = useState<table_Subject | null>(null)
   const [message, setMessage] = useState<string | null>(null)
@@ -55,14 +61,6 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -333,7 +331,10 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(row => (
-              <tr key={row.sb_sbid} className='w-full border-b py-2                    '>
+              <tr
+                key={row.sb_sbid}
+                className='w-full border-b py-2                    '
+              >
                 <td className='text-xs px-2 py-1  '>{row.sb_owner}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_subject}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_title}</td>
@@ -435,10 +436,15 @@ export default function Table() {
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
 
       {/* Error message */}
-      <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>
+      <div className='mt-2'>
+        {message && <div className='text-red-600 mb-4'>{message}</div>}
+      </div>
     </>
   )
 }

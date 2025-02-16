@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react'
 import { table_SessionsUser } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
-  fetchTotalPages
+  fetchTotalPages,
+  Filter,
+  JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -62,14 +64,6 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
-    //
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
@@ -92,7 +86,9 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [{ table: 'tus_users', on: 'ss_usid = us_usid' }]
+      const joins: JoinParams[] = [
+        { table: 'tus_users', on: 'ss_usid = us_usid' }
+      ]
       //
       // Calculate the offset for pagination
       //

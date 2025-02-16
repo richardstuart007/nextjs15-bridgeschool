@@ -8,7 +8,10 @@ import { notFound } from 'next/navigation'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
 import { COUNTRIES } from '@/src/lib/countries'
 import { useUserContext } from '@/src/context/UserContext'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyCheckbox } from '@/src/ui/utils/myCheckbox'
 
@@ -118,11 +121,10 @@ export default function Form({ admin_uid }: Props) {
     //  Get User Info
     //
     try {
-      const fetchParams = {
+      const rows = await table_fetch({
         table: 'tus_users',
         whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
-      }
-      const rows = await table_fetch(fetchParams)
+      } as table_fetch_Props)
       const data = rows[0]
       if (!data) notFound()
       //

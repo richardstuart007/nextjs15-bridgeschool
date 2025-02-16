@@ -1,9 +1,9 @@
-UPDATE tsb_subject
-SET sb_cntquestions = subquery.count
+UPDATE trf_reference
+SET rf_cntquestions = subquery.count
 FROM (
-    SELECT sb_sbid, COALESCE(COUNT(qq_sbid), 0) AS count
-    FROM tsb_subject
-    LEFT JOIN tqq_questions ON sb_sbid = qq_sbid
-    GROUP BY sb_sbid
+    SELECT rf_rfid, COALESCE(COUNT(qq_rfid), 0) AS count
+    FROM trf_reference
+    LEFT JOIN tqq_questions ON rf_rfid = qq_rfid
+    GROUP BY rf_rfid
 ) subquery
-WHERE tsb_subject.sb_sbid = subquery.sb_sbid;
+WHERE trf_reference.rf_rfid = subquery.rf_rfid;

@@ -1,10 +1,16 @@
 import { useEffect, useState, useCallback } from 'react'
 import DropdownSearch from '@/src/ui/utils/dropdown/dropdownSearch'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 //
 //  Define the options
 //
-type RowData<T extends string, U extends string> = Record<T | U, string | number>
+type RowData<T extends string, U extends string> = Record<
+  T | U,
+  string | number
+>
 
 type DropdownProps<T extends string, U extends string> = {
   selectedOption: string | number
@@ -71,12 +77,17 @@ export default function DropdownGeneric<T extends string, U extends string>({
           const fetchParams: any = {
             table,
             orderBy: orderBy || optionLabel,
-            columns: optionLabel === optionValue ? [optionLabel] : [optionLabel, optionValue],
+            columns:
+              optionLabel === optionValue
+                ? [optionLabel]
+                : [optionLabel, optionValue],
             distinct: true
-          }
+          } as table_fetch_Props
 
           if (tableColumn && tableColumnValue) {
-            fetchParams.whereColumnValuePairs = [{ column: tableColumn, value: tableColumnValue }]
+            fetchParams.whereColumnValuePairs = [
+              { column: tableColumn, value: tableColumnValue }
+            ]
           }
           const data = await table_fetch(fetchParams)
           return data
@@ -114,7 +125,15 @@ export default function DropdownGeneric<T extends string, U extends string>({
         setLoading(false)
       }
     },
-    [optionValue, optionLabel, tableData, table, tableColumn, tableColumnValue, orderBy]
+    [
+      optionValue,
+      optionLabel,
+      tableData,
+      table,
+      tableColumn,
+      tableColumnValue,
+      orderBy
+    ]
   )
   //---------------------------------------------------------------------
   //  Fetch options on component mount and whenever dependencies change

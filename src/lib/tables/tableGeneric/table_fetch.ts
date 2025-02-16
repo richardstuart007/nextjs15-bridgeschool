@@ -2,22 +2,16 @@
 
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
-//
-// Column-value pairs
-//
-interface ColumnValuePair {
-  column: string
-  value: string | number // Allow both string and numeric values
-}
+import { ColumnValuePair } from '@/src/lib/tables/structures'
 //
 // Props
 //
-interface Props {
+export type table_fetch_Props = {
   table: string
   whereColumnValuePairs?: ColumnValuePair[]
   orderBy?: string
   distinct?: boolean
-  columns?: string[] // List of columns to include in the SELECT statement
+  columns?: string[]
 }
 export async function table_fetch({
   table,
@@ -25,7 +19,7 @@ export async function table_fetch({
   orderBy,
   distinct = false,
   columns
-}: Props): Promise<any[]> {
+}: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
   //
   // Start building the query
@@ -53,7 +47,11 @@ export async function table_fetch({
     // Execute the query
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
     //
     // Return rows
     //

@@ -3,8 +3,16 @@
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reference/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
-import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
-import { fetchFiltered, fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import {
+  table_Reference,
+  table_ReferenceSubject
+} from '@/src/lib/tables/definitions'
+import {
+  fetchFiltered,
+  fetchTotalPages,
+  Filter,
+  JoinParams
+} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
@@ -17,14 +25,22 @@ interface FormProps {
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
+export default function Table({
+  selected_sbid,
+  selected_owner,
+  selected_subject
+}: FormProps) {
   const rowsPerPage = 17
   const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
-  const [owner, setowner] = useState<string | number>(selected_owner ? selected_owner : '')
-  const [subject, setsubject] = useState<string | number>(selected_subject ? selected_subject : '')
+  const [owner, setowner] = useState<string | number>(
+    selected_owner ? selected_owner : ''
+  )
+  const [subject, setsubject] = useState<string | number>(
+    selected_subject ? selected_subject : ''
+  )
   const [desc, setdesc] = useState('')
   const [who, setwho] = useState<string | number>('')
   const [ref, setref] = useState('')
@@ -34,7 +50,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
+  const [tabledata, setTabledata] = useState<
+    (table_Reference | table_ReferenceSubject)[]
+  >([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   //
@@ -76,19 +94,21 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [currentPage, shouldFetchData, owner, subject, who, type, ref, desc, questions])
+  }, [
+    currentPage,
+    shouldFetchData,
+    owner,
+    subject,
+    who,
+    type,
+    ref,
+    desc,
+    questions
+  ])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
-    //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
     //
     // Construct filters dynamically from input fields
     //
@@ -121,7 +141,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       //
       //  Joins
       //
-      const joins = [
+      const joins: JoinParams[] = [
         { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
         { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
       ]
@@ -447,10 +467,14 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_sbid}</td>
+                <td className='text-xs  px-2 pt-2 text-left'>
+                  {tabledata.rf_sbid}
+                </td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_owner}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_subject}</td>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_rfid}</td>
+                <td className='text-xs  px-2 pt-2 text-left'>
+                  {tabledata.rf_rfid}
+                </td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_ref}</td>
                 <td className='text-xs px-2 pt-2'>
                   {tabledata.rf_desc.length > 40
@@ -464,7 +488,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 {/* ................................................... */}
                 {'rf_cntquestions' in tabledata && (
                   <td className='text-xs px-2 pt-2 text-center'>
-                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
+                    {tabledata.rf_cntquestions > 0
+                      ? tabledata.rf_cntquestions
+                      : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
@@ -534,7 +560,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
 
       {/* ---------------------------------------------------------------------------------- */}
     </>

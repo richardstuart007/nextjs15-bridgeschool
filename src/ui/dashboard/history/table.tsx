@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
-  fetchTotalPages
+  fetchTotalPages,
+  Filter,
+  JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
@@ -236,14 +238,6 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    // Define the structure for filters
-    //
-    type Filter = {
-      column: string
-      value: string | number
-      operator: '=' | 'LIKE' | '>' | '>=' | '<' | '<='
-    }
-    //
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
@@ -269,7 +263,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins = [
+      const joins: JoinParams[] = [
         { table: 'tsb_subject', on: 'hs_sbid = sb_sbid' },
         { table: 'tus_users', on: 'hs_usid = us_usid' }
       ]
