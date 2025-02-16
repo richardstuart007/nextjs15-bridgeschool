@@ -61,7 +61,7 @@ export default function NavSide(props: Props) {
       const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
         cx_usid: sessionData.bsuid,
-        cx_id: sessionData.bsid,
+        cx_bsid: sessionData.bsid,
         cx_dbName: dbName
       }
       setSessionContext(structure_ContextInfo)

@@ -14,6 +14,10 @@ import { useUserContext } from '@/src/context/UserContext'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
+import {
+  table_fetch,
+  table_fetch_Props
+} from '@/src/lib/tables/tableGeneric/table_fetch'
 
 export default function Table() {
   //
@@ -31,6 +35,7 @@ export default function Table() {
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
   const [correct, setcorrect] = useState<number | string>('')
+  const [countryCode, setcountryCode] = useState('')
   //
   //  Show flags
   //
@@ -137,10 +142,27 @@ export default function Table() {
   //  usid
   //......................................................................................
   useEffect(() => {
-    if (sessionContext?.cx_usid) {
-      setusid(sessionContext.cx_usid)
-      setShouldFetchData(true)
+    const fetchData = async () => {
+      if (sessionContext?.cx_usid) {
+        setusid(sessionContext.cx_usid)
+        //
+        //  Get users country code
+        //
+        const rows = await table_fetch({
+          table: 'tus_users',
+          whereColumnValuePairs: [
+            { column: 'us_usid', value: sessionContext.cx_usid }
+          ]
+        } as table_fetch_Props)
+        const userRecord = rows[0]
+        setcountryCode(userRecord.us_fedcountry)
+        //
+        //  Fetch the data
+        //
+        setShouldFetchData(true)
+      }
     }
+    fetchData() // Call the async function
   }, [sessionContext])
   //......................................................................................
   // Reset the subject when the owner changes
@@ -587,7 +609,7 @@ export default function Table() {
                     <td className=' px-2  text-left'>
                       {convertUTCtoLocal({
                         datetimeUTC: tabledata.hs_datetime,
-                        to_localcountryCode: 'NZ'
+                        to_localcountryCode: countryCode
                       })}
                     </td>
                   )}

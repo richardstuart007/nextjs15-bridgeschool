@@ -25,7 +25,6 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //  User context
   //
   const { sessionContext } = useUserContext()
-  const cx_id = sessionContext.cx_id
   const cx_usid = sessionContext.cx_usid
   //
   //  Questions state updated in initial load
@@ -178,7 +177,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
         { column: 'hs_totalpoints', value: hs_totalpoints },
         { column: 'hs_correctpercent', value: hs_correctpercent },
         { column: 'hs_sbid', value: question.qq_sbid },
-        { column: 'hs_rfid', value: cx_id }
+        { column: 'hs_rfid', value: question.qq_rfid }
       ]
     }
     //

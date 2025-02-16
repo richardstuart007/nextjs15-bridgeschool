@@ -267,8 +267,7 @@ export default function Table() {
                   <td className='px-2 text-center'>{tabledata.ss_ssid}</td>
                   <td className='px-2 text-center'>
                     {convertUTCtoLocal({
-                      datetimeUTC: tabledata.ss_datetime,
-                      to_localcountryCode: 'NZ'
+                      datetimeUTC: tabledata.ss_datetime
                     })}
                   </td>
                   <td className='px-2 text-center'>{tabledata.ss_usid}</td>

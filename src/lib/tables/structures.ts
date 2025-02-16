@@ -11,7 +11,7 @@ export type structure_SessionsInfo = {
 
 export type structure_ContextInfo = {
   cx_usid: number
-  cx_id: number
+  cx_bsid: number
   cx_dbName: string
 }
 

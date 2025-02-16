@@ -27,7 +27,7 @@ export function convertUTCtoLocal({
   //
   const localDate = toZonedTime(datetimeUTC, userTimeZone)
   //
-  // Format the local datetime as 'yy-MMM-dd HH:mm'
+  // Format the local datetime
   //
   const formattedDate = format(localDate, to_dateFormat)
   return formattedDate
