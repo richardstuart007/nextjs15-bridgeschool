@@ -28,6 +28,7 @@ export default function Table() {
   //  Input selection
   //
   const [usid, setusid] = useState<number | string>(0)
+  const ref_selected_uoowner = useRef('')
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
@@ -35,6 +36,7 @@ export default function Table() {
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
   const [correct, setcorrect] = useState<number | string>('')
+  const [initialisationCompleted, setinitialisationCompleted] = useState(false)
   const [countryCode, setcountryCode] = useState('')
   //
   //  Show flags
@@ -50,6 +52,7 @@ export default function Table() {
   const ref_show_questions = useRef(false)
   const ref_show_correct = useRef(false)
   const ref_show_datetime = useRef(false)
+  const ref_to_dateFormat = useRef('MMM-dd')
   //
   //  Other state
   //
@@ -58,28 +61,70 @@ export default function Table() {
     []
   )
   const [totalPages, setTotalPages] = useState<number>(0)
-  const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
+  //......................................................................................
+  //  usid - Mandatory to continue
+  //......................................................................................
+  useEffect(() => {
+    //
+    //  Initialisation
+    //
+    const initialiseData = async () => {
+      //
+      //  Get user from context
+      //
+      if (sessionContext?.cx_usid && usid === 0) setusid(sessionContext.cx_usid)
+      //
+      //  Once user set
+      //
+      if (usid !== 0) {
+        //
+        //  Get users country code
+        //
+        const rows = await table_fetch({
+          table: 'tus_users',
+          whereColumnValuePairs: [{ column: 'us_usid', value: usid }]
+        } as table_fetch_Props)
+        const userRecord = rows[0]
+        setcountryCode(userRecord.us_fedcountry)
+      }
+      //
+      //  Once user set, get owner for user
+      //
+      fetchUserOwner()
+    }
+    //
+    //  Call the async function
+    //
+    initialiseData()
+    // eslint-disable-next-line
+  }, [sessionContext, usid])
   //......................................................................................
   // Debounce selection
   //......................................................................................
   type DebouncedState = {
-    usid: string | number
     owner: string | number
     subject: string | number
-    questions: string | number
-    title: string | number
     hsid: string | number
+    title: string | number
+    usid: string | number
+    name: string | number
+    questions: string | number
     correct: string | number
+    currentPage: number
+    initialisationCompleted: boolean
   }
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     usid: 0,
+    name: '',
     owner: '',
     subject: '',
     questions: 0,
     title: '',
     hsid: '',
-    correct: 0
+    correct: 0,
+    currentPage: 1,
+    initialisationCompleted: false
   })
   //
   //  Debounce message
@@ -93,28 +138,64 @@ export default function Table() {
   // Debounce the state
   //
   useEffect(() => {
+    //
+    //  The user-id must be set
+    //
+    if (usid === 0) return
+    //
+    //  Owner not set
+    //
+    if (!initialisationCompleted) return
+    //
+    // Adjust currentPage if it exceeds totalPages
+    //
+    if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
+    //
+    //  Debounce
+    //
     setMessage('Applying filters...')
     //
-    //  Do not timeout on first render
+    // Input change
     //
-    const timeout = firstRender.current ? 1 : 1000
+    const inputChange =
+      hsid !== debouncedState.hsid ||
+      title !== debouncedState.title ||
+      usid !== debouncedState.usid ||
+      name !== debouncedState.name ||
+      correct !== debouncedState.correct ||
+      questions !== debouncedState.questions ||
+      subject !== debouncedState.subject
+    //
+    // Dropdown change
+    //
+    const dropdownChange =
+      owner !== debouncedState.owner || subject !== debouncedState.subject
+    //
+    // Determine debounce time
+    //
+    const timeout = firstRender.current
+      ? 1
+      : inputChange
+        ? 1000
+        : dropdownChange
+          ? 200
+          : 1
     //
     //  Debounce
     //
     const handler = setTimeout(() => {
       setDebouncedState({
         usid: Number(usid as string),
+        name,
         owner,
         subject,
         questions: Number(questions as string),
         title,
         hsid: Number(hsid as string),
-        correct: Number(correct as string)
+        correct: Number(correct as string),
+        currentPage,
+        initialisationCompleted
       })
-      //
-      //  Normal debounce if data initialised
-      //
-      setShouldFetchData(true)
       //
       //  Default timeout after first render
       //
@@ -126,44 +207,20 @@ export default function Table() {
     return () => {
       clearTimeout(handler)
     }
-    //
-    //  Values to debounce
-    //
-  }, [usid, owner, subject, questions, title, hsid, correct])
-  //......................................................................................
-  //  Screen change
-  //......................................................................................
-  useEffect(() => {
-    updateColumns()
-    updateRows()
     // eslint-disable-next-line
-  }, [])
-  //......................................................................................
-  //  usid
-  //......................................................................................
-  useEffect(() => {
-    const fetchData = async () => {
-      if (sessionContext?.cx_usid) {
-        setusid(sessionContext.cx_usid)
-        //
-        //  Get users country code
-        //
-        const rows = await table_fetch({
-          table: 'tus_users',
-          whereColumnValuePairs: [
-            { column: 'us_usid', value: sessionContext.cx_usid }
-          ]
-        } as table_fetch_Props)
-        const userRecord = rows[0]
-        setcountryCode(userRecord.us_fedcountry)
-        //
-        //  Fetch the data
-        //
-        setShouldFetchData(true)
-      }
-    }
-    fetchData() // Call the async function
-  }, [sessionContext])
+  }, [
+    usid,
+    name,
+    owner,
+    subject,
+    questions,
+    title,
+    hsid,
+    correct,
+    currentPage,
+    initialisationCompleted
+  ])
+
   //......................................................................................
   // Reset the subject when the owner changes
   //......................................................................................
@@ -171,89 +228,59 @@ export default function Table() {
     setsubject('')
   }, [owner])
   //......................................................................................
-  // Fetch on mount and when shouldFetchData changes
+  // Fetch on mount and debounce
   //......................................................................................
   //
-  // Adjust currentPage if it exceeds totalPages
+  // Should fetch data
   //
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-  //
-  // Change of current page
-  //
-  useEffect(() => {
-    setShouldFetchData(true)
-  }, [currentPage])
-  //
-  // Change of current page or should fetch data
-  //
-  useEffect(() => {
-    if (shouldFetchData) {
-      fetchdata()
-      setShouldFetchData(false)
-      setMessage('')
-    }
+    fetchdata()
+    setMessage('')
     // eslint-disable-next-line
-  }, [shouldFetchData, debouncedState])
+  }, [debouncedState])
   //----------------------------------------------------------------------------------------------
-  //  Width - update columns
+  // fetch Owner for a user
   //----------------------------------------------------------------------------------------------
-  function updateColumns() {
+  async function fetchUserOwner() {
     //
-    //  2xl, xl, lg, md, sm
+    //  The user-id must be set & filters
     //
-    const innerWidth = window.innerWidth
-    let widthNumber = 1
-    if (innerWidth >= 1536) widthNumber = 5
-    else if (innerWidth >= 1280) widthNumber = 4
-    else if (innerWidth >= 1024) widthNumber = 3
-    else if (innerWidth >= 768) widthNumber = 2
-    else widthNumber = 1
+    if (usid === 0) return
     //
-    //  Small to large screens
+    //  Already set
     //
-    if (widthNumber >= 1) {
-      ref_show_title.current = true
+    if (initialisationCompleted) return
+    //
+    //  Continue
+    //
+    try {
+      //
+      //  Set the owner if only 1
+      //
+      const rows = await table_fetch({
+        table: 'tuo_usersowner',
+        whereColumnValuePairs: [{ column: 'uo_usid', value: usid }]
+      } as table_fetch_Props)
+      if (rows.length === 1) {
+        const uo_owner = rows[0].uo_owner
+        ref_selected_uoowner.current = uo_owner
+        setowner(uo_owner)
+      }
+      //
+      //  Update Columns and rows
+      //
+      updateColumns()
+      updateRows()
+      //
+      //  Allow fetch of data
+      //
+      setinitialisationCompleted(true)
+      //
+      //  Errors
+      //
+    } catch (error) {
+      console.error('Error fetching tuo_usersowner:', error)
     }
-    if (widthNumber >= 2) {
-      ref_show_usid.current = true
-    }
-    if (widthNumber >= 3) {
-      ref_show_correct.current = true
-      ref_show_name.current = true
-    }
-    if (widthNumber >= 4) {
-      ref_show_owner.current = true
-      ref_show_subject.current = true
-    }
-    if (widthNumber >= 5) {
-      ref_show_questions.current = true
-      ref_show_hsid.current = true
-      ref_show_sbid.current = true
-      ref_show_datetime.current = true
-    }
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Height - update rows & fetch data
-  //----------------------------------------------------------------------------------------------
-  function updateRows() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const height = window.screen.height
-    const innerheight = window.innerHeight
-    let screenRows = 5
-    if (height >= 1024) screenRows = 20
-    else if (innerheight >= 768) screenRows = 15
-    else if (innerheight >= 600) screenRows = 12
-    else screenRows = 9
-    //
-    //  Set the screenRows per page
-    //
-    ref_rowsPerPage.current = screenRows
   }
   //----------------------------------------------------------------------------------------------
   // fetchdata
@@ -328,29 +355,91 @@ export default function Table() {
     }
   }
   //----------------------------------------------------------------------------------------------
+  //  Width - update columns
+  //----------------------------------------------------------------------------------------------
+  function updateColumns() {
+    //
+    //  2xl, xl, lg, md, sm
+    //
+    const innerWidth = window.innerWidth
+    let widthNumber = 1
+    if (innerWidth >= 1536) widthNumber = 5
+    else if (innerWidth >= 1280) widthNumber = 4
+    else if (innerWidth >= 1024) widthNumber = 3
+    else if (innerWidth >= 768) widthNumber = 2
+    else widthNumber = 1
+    //
+    //  Small to large screens
+    //
+    if (widthNumber >= 1) {
+      ref_show_title.current = true
+      ref_show_datetime.current = true
+    }
+    if (widthNumber >= 2) {
+      ref_show_correct.current = true
+      ref_to_dateFormat.current = 'yy-MMM-dd HH:mm'
+    }
+    if (widthNumber >= 3) {
+      ref_show_name.current = true
+    }
+    if (widthNumber >= 4) {
+      if (!ref_selected_uoowner.current) ref_show_owner.current = true
+      ref_show_subject.current = true
+    }
+    if (widthNumber >= 5) {
+      ref_show_questions.current = true
+      ref_show_hsid.current = true
+      ref_show_sbid.current = true
+      ref_show_usid.current = true
+    }
+  }
+  //----------------------------------------------------------------------------------------------
+  //  Height - update rows & fetch data
+  //----------------------------------------------------------------------------------------------
+  function updateRows() {
+    //
+    //  2xl, xl, lg, md, sm
+    //
+    const height = window.screen.height
+    const innerheight = window.innerHeight
+    let screenRows = 5
+    if (height >= 1024) screenRows = 20
+    else if (innerheight >= 768) screenRows = 15
+    else if (innerheight >= 600) screenRows = 12
+    else screenRows = 9
+    //
+    //  Set the screenRows per page
+    //
+    ref_rowsPerPage.current = screenRows
+  }
+  //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
+  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** TABLE                                                                */}
-      {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        {/** -------------------------------------------------------------------- */}
+        {/** Selected Values                                                      */}
+        {/** -------------------------------------------------------------------- */}
+        {ref_selected_uoowner.current && (
+          <div className='pl-2 py-2 text-xxs md:text-xs'>
+            <span className='font-bold'>Owner: </span>
+            <span className='text-green-500'>{owner}</span>
+          </div>
+        )}
+        {/** -------------------------------------------------------------------- */}
+        {/** TABLE                                                                */}
+        {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal text-xxs md:text-xs'>
             {/* ---------------------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs'>
-              {ref_show_sbid.current && (
-                <th scope='col' className=' font-medium px-2'>
-                  sbid
-                </th>
-              )}
+            <tr className='text-xxs md:text-xs'>
               {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
@@ -359,6 +448,11 @@ export default function Table() {
               {ref_show_subject.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Subject
+                </th>
+              )}
+              {ref_show_sbid.current && (
+                <th scope='col' className=' font-medium px-2'>
+                  sbid
                 </th>
               )}
               {ref_show_hsid.current && (
@@ -406,11 +500,7 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
-              {/* ................................................... */}
-              {/* sbid                                                 */}
-              {/* ................................................... */}
-              {ref_show_sbid.current && <th scope='col' className=' px-2'></th>}
+            <tr className='text-xxs md:text-xs align-bottom'>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
@@ -453,6 +543,10 @@ export default function Table() {
                 </th>
               )}
               {/* ................................................... */}
+              {/* sbid                                                 */}
+              {/* ................................................... */}
+              {ref_show_sbid.current && <th scope='col' className=' px-2'></th>}
+              {/* ................................................... */}
               {/* hsid                                                 */}
               {/* ................................................... */}
               {ref_show_hsid.current && (
@@ -486,7 +580,7 @@ export default function Table() {
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass='w-40  rounded-md border border-blue-500 font-normal h-6 text-xxs'
+                    overrideClass='w-20 md:40 rounded-md border border-blue-500 font-normal h-6 text-xxs'
                     type='text'
                     value={title}
                     onChange={e => {
@@ -586,21 +680,21 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white text-xxs md:text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
                 <tr
                   key={`${tabledata.hs_hsid}-${index}`}
                   className='w-full border-b'
                 >
-                  {ref_show_sbid.current && (
-                    <td className=' px-2  text-left'>{tabledata.hs_sbid}</td>
-                  )}
                   {ref_show_owner.current && (
                     <td className=' px-2 '>{tabledata.hs_owner}</td>
                   )}
                   {ref_show_subject.current && (
                     <td className=' px-2 '>{tabledata.hs_subject}</td>
+                  )}
+                  {ref_show_sbid.current && (
+                    <td className=' px-2  text-left'>{tabledata.hs_sbid}</td>
                   )}
                   {ref_show_hsid.current && (
                     <td className=' px-2  text-center'>{tabledata.hs_hsid}</td>
@@ -609,7 +703,8 @@ export default function Table() {
                     <td className=' px-2  text-left'>
                       {convertUTCtoLocal({
                         datetimeUTC: tabledata.hs_datetime,
-                        to_localcountryCode: countryCode
+                        to_localcountryCode: countryCode,
+                        to_dateFormat: ref_to_dateFormat.current
                       })}
                     </td>
                   )}
@@ -648,7 +743,7 @@ export default function Table() {
                           pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                           query: { from: 'history' }
                         }}
-                        overrideClass='h-6 bg-green-500 text-white justify-center hover:bg-green-600 md:w-15'
+                        overrideClass='bg-green-500 text-white justify-center hover:bg-green-600 h-5 md:h6 w-12 md:w-16 text-xxs md:text-xs'
                       >
                         Review
                       </MyLink>
@@ -664,7 +759,7 @@ export default function Table() {
                           pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
                           query: { from: 'history', idColumn: 'qq_sbid' }
                         }}
-                        overrideClass='h-6 bg-blue-500 text-white justify-center hover:bg-blue-600 md:w-15'
+                        overrideClass='bg-blue-500 text-white justify-center hover:bg-blue-600 h-5 md:h6 w-12 md:w-16 text-xxs md:text-xs'
                       >
                         Quiz
                       </MyLink>
@@ -684,7 +779,7 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600 text-xs'>{message}</p>
+      <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}

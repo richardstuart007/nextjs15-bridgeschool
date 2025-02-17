@@ -84,12 +84,12 @@ export default function NavSide(props: Props) {
             <div className='grow invisible'></div>
             <MyButton
               onClick={logout}
-              overrideClass='px:0 h-8 justify-center bg-gray-700 hover:bg-gray-800  md:flex-none'
+              overrideClass='px:0  justify-center bg-gray-600 hover:bg-gray-800 hover:text-red-600  h-5 md:h-6 md:flex-none text-xxs md:text-xs'
             >
               Logoff
             </MyButton>
           </div>
-          <div className='hidden md:block h-8'></div>
+          <div className='hidden md:block h-6'></div>
         </>
       )}
     </div>

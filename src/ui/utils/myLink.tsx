@@ -39,7 +39,9 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
     hrefValue = href // If it's a string, just use it as is
   } else if (typeof href === 'object' && href.pathname) {
     // If it's an object, format it accordingly
-    const queryParams = href.query ? `?${new URLSearchParams(href.query).toString()}` : ''
+    const queryParams = href.query
+      ? `?${new URLSearchParams(href.query).toString()}`
+      : ''
     hrefValue = `${href.pathname}${queryParams}`
   }
   //

@@ -39,7 +39,9 @@ export default function NavLinks(props: Props) {
     let linksupdate
     baseURL === 'admin'
       ? (linksupdate = links_admin)
-      : (linksupdate = bsadmin ? links_dashboard.concat(links_dashboard_admin) : links_dashboard)
+      : (linksupdate = bsadmin
+          ? links_dashboard.concat(links_dashboard_admin)
+          : links_dashboard)
     setLinks(linksupdate)
     // eslint-disable-next-line
   }, [])
@@ -51,10 +53,12 @@ export default function NavLinks(props: Props) {
   return (
     <>
       {links.map(link => {
-        const isActiveColour = pathname === link.href ? 'bg-sky-100 text-blue-600' : ''
+        const isActiveColour =
+          pathname === link.href ? 'bg-sky-100 text-blue-600' : ''
         const overrideClass = clsx(
           'grow justify-center',
-          'h-8',
+          'h-5 md:h6 w-12 md:w-16',
+          'text-xxs md:text-xs',
           'gap-1 p-1',
           'bg-gray-50 ',
           'hover:bg-sky-200 hover:text-red-600',
@@ -64,26 +68,37 @@ export default function NavLinks(props: Props) {
 
         const iconClass = clsx(
           'flex items-center justify-center',
-          'h-8',
+          'h-5 md:h6',
           'bg-gray-50 ',
           'hover:bg-sky-200 hover:text-red-600',
           'md:flex-none md:p-2 md:px-2',
           `${isActiveColour}`
         )
 
-        // Conditionally render Link or MyLink
+        // Conditionally render Icon or text
         if (link.name === 'User') {
           return (
-            <div key={link.name} className='h-8 w-full flex items-center justify-center'>
-              <MyLink key={link.name} href={link.href} overrideClass={iconClass}>
+            <div
+              key={link.name}
+              className='w-full flex items-center justify-center h-6 md:h-8'
+            >
+              <MyLink
+                key={link.name}
+                href={link.href}
+                overrideClass={iconClass}
+              >
                 <Cog6ToothIcon className='h-5 w-5' />
               </MyLink>
             </div>
           )
         } else {
           return (
-            <MyLink key={link.name} href={link.href} overrideClass={overrideClass}>
-              <p className='text-xs'>{link.name}</p>
+            <MyLink
+              key={link.name}
+              href={link.href}
+              overrideClass={overrideClass}
+            >
+              <p className='text-xxs md:text-xs'>{link.name}</p>
             </MyLink>
           )
         }

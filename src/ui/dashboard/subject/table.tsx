@@ -27,7 +27,7 @@ export default function Table() {
   //  Selection
   //
   const [usid, setusid] = useState<string | number>(0)
-  const ref_selected_sbowner = useRef('')
+  const ref_selected_uoowner = useRef('')
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [questions, setquestions] = useState<number | string>(1)
@@ -114,7 +114,7 @@ export default function Table() {
     //
     const inputChange = questions !== debouncedState.questions
     //
-    // Input change
+    // Dropdown change
     //
     const dropdownChange =
       owner !== debouncedState.owner || subject !== debouncedState.subject
@@ -195,7 +195,7 @@ export default function Table() {
       } as table_fetch_Props)
       if (rows.length === 1) {
         const uo_owner = rows[0].uo_owner
-        ref_selected_sbowner.current = uo_owner
+        ref_selected_uoowner.current = uo_owner
         setowner(uo_owner)
       }
       //
@@ -311,9 +311,10 @@ export default function Table() {
     //
     //  smaller screens
     //
+    ref_show_subject.current = true
     if (widthNumber >= 2) {
-      if (!ref_selected_sbowner.current) ref_show_owner.current = true
-      ref_show_subject.current = true
+      if (!ref_selected_uoowner.current) ref_show_owner.current = true
+
       ref_show_questions.current = true
       ref_show_references.current = true
     }
@@ -349,21 +350,18 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   // Loading ?
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
+  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      {/** -------------------------------------------------------------------- */}
-      {/** TABLE                                                                */}
-      {/** -------------------------------------------------------------------- */}
       <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {ref_selected_sbowner.current && (
-          <div className='pl-2 py-2 text-xs'>
+        {ref_selected_uoowner.current && (
+          <div className='pl-2 py-2 text-xxs md:text-xs'>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
           </div>
@@ -372,11 +370,11 @@ export default function Table() {
         {/** TABLE                                                                */}
         {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='rounded-lg text-left font-normal text-xxs md:text-xs'>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs'>
+            <tr className='text-xxs md:text-xs'>
               {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
@@ -412,7 +410,7 @@ export default function Table() {
               {/* OWNER                                                 */}
               {/* ................................................... */}
               {ref_show_owner.current && (
-                <th scope='col' className='px-2'>
+                <th scope='col' className='px-2 '>
                   <DropdownGeneric
                     selectedOption={owner}
                     setSelectedOption={setowner}
@@ -423,7 +421,7 @@ export default function Table() {
                     tableColumnValue={usid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs'
+                    overrideClass_Dropdown='h-6 w-28 text-xxs md:text-xs'
                     includeBlank={true}
                   />
                 </th>
@@ -443,7 +441,7 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='sb_title'
                       optionValue='sb_subject'
-                      overrideClass_Dropdown='h-6 w-40 text-xxs'
+                      overrideClass_Dropdown='h-6 w-40 text-xxs md:text-xs'
                       includeBlank={true}
                     />
                   )}
@@ -457,7 +455,7 @@ export default function Table() {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xxs text-center`}
+                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-center text-xxs md:text-xs`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -484,18 +482,28 @@ export default function Table() {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.sb_sbid} className='w-full border-b'>
+                {/* ................................................... */}
+                {/* Owner                                           */}
+                {/* ................................................... */}
                 {ref_show_owner.current && (
-                  <td className=' px-2 '>{tabledata.sb_owner}</td>
+                  <td className=' px-2 text-xxs md:text-xs '>
+                    {tabledata.sb_owner}
+                  </td>
                 )}
+                {/* ................................................... */}
+                {/* Subject                                          */}
+                {/* ................................................... */}
                 {ref_show_subject.current && (
-                  <td className=' px-2 '>{tabledata.sb_title}</td>
+                  <td className=' px-2 text-xxs md:text-xs'>
+                    {tabledata.sb_title}
+                  </td>
                 )}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
                 {ref_show_questions.current &&
                   'sb_cntquestions' in tabledata && (
-                    <td className='px-2  text-center'>
+                    <td className='px-2  text-center text-xxs md:text-xs'>
                       {tabledata.sb_cntquestions > 0
                         ? tabledata.sb_cntquestions
                         : ' '}
@@ -513,7 +521,7 @@ export default function Table() {
                             pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
                             query: { from: 'subject', idColumn: 'qq_sbid' }
                           }}
-                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600 text-xxs md:text-xs'
                         >
                           Quiz
                         </MyLink>
@@ -525,7 +533,7 @@ export default function Table() {
                 {/* ................................................... */}
                 {ref_show_references.current &&
                   'sb_cntquestions' in tabledata && (
-                    <td className='px-2  text-center'>
+                    <td className='px-2  text-center text-xxs md:text-xs'>
                       {tabledata.sb_cntreference > 0
                         ? tabledata.sb_cntreference
                         : ' '}
@@ -546,7 +554,7 @@ export default function Table() {
                               selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
                             }
                           }}
-                          overrideClass='h-6 bg-green-500 text-white hover:bg-green-600'
+                          overrideClass='h-6 bg-green-500 text-white hover:bg-green-600 text-xxs md:text-xs'
                         >
                           Reference
                         </MyLink>
@@ -562,11 +570,11 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600 text-xs'>{message}</p>
+      <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Pagination                */}
       {/* ---------------------------------------------------------------------------------- */}
-      <div className='mt-5 flex w-full justify-center'>
+      <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
         <Pagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
