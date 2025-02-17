@@ -23,15 +23,16 @@ export default function Table() {
   //  User context
   //
   const { sessionContext } = useUserContext()
+  const ref_selected_cx_usid = useRef(0)
+  const [initialisationCompleted, setinitialisationCompleted] = useState(false)
+  const ref_selected_uoowner = useRef('')
   //
   //  Selection
   //
-  const [usid, setusid] = useState<string | number>(0)
-  const ref_selected_uoowner = useRef('')
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [questions, setquestions] = useState<number | string>(1)
-  const [initialisationCompleted, setinitialisationCompleted] = useState(false)
+
   //
   //  Show columns
   //
@@ -49,24 +50,47 @@ export default function Table() {
   const [totalPages, setTotalPages] = useState<number>(0)
   const [loading, setloading] = useState(true)
   //......................................................................................
-  //  usid - Mandatory to continue
+  //  cx_usid - Mandatory to continue
   //......................................................................................
   useEffect(() => {
     //
-    //  Get user from context
+    //  Initialisation
     //
-    if (sessionContext?.cx_usid && usid === 0) setusid(sessionContext.cx_usid)
+    const initialiseData = async () => {
+      //
+      //  Already initialised
+      //
+      if (initialisationCompleted) return
+      //
+      //  Get user from context
+      //
+      if (sessionContext?.cx_usid && ref_selected_cx_usid.current === 0) {
+        ref_selected_cx_usid.current = sessionContext.cx_usid
+        //
+        //  Get owner for user
+        //
+        await fetchUserOwner()
+        //
+        //  Update Columns and rows
+        //
+        updateColumns()
+        updateRows()
+        //
+        //  Allow fetch of data
+        //
+        setinitialisationCompleted(true)
+      }
+    }
     //
-    //  Once user set, get owner for user
+    //  Call the async function
     //
-    if (usid !== 0) fetchUserOwner()
+    initialiseData()
     // eslint-disable-next-line
-  }, [sessionContext, usid])
+  }, [sessionContext])
   //......................................................................................
   // Debounce selection
   //......................................................................................
   type DebouncedState = {
-    usid: string | number
     owner: string | number
     subject: string | number
     questions: string | number
@@ -74,7 +98,6 @@ export default function Table() {
     initialisationCompleted: boolean
   }
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    usid: 0,
     owner: '',
     subject: '',
     questions: 0,
@@ -94,9 +117,9 @@ export default function Table() {
   //
   useEffect(() => {
     //
-    //  The user-id must be set
+    //  The current usid must be set
     //
-    if (usid === 0) return
+    if (ref_selected_cx_usid.current === 0) return
     //
     //  Owner not set
     //
@@ -133,7 +156,6 @@ export default function Table() {
     //
     const handler = setTimeout(() => {
       setDebouncedState({
-        usid,
         owner,
         subject,
         questions: Number(questions as string),
@@ -152,7 +174,7 @@ export default function Table() {
       clearTimeout(handler)
     }
     // eslint-disable-next-line
-  }, [usid, owner, subject, questions, currentPage, initialisationCompleted])
+  }, [owner, subject, questions, currentPage, initialisationCompleted])
   //......................................................................................
   // Reset the subject when the owner changes
   //......................................................................................
@@ -175,10 +197,6 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchUserOwner() {
     //
-    //  The user-id must be set & filters
-    //
-    if (usid === 0) return
-    //
     //  Already set
     //
     if (initialisationCompleted) return
@@ -191,22 +209,16 @@ export default function Table() {
       //
       const rows = await table_fetch({
         table: 'tuo_usersowner',
-        whereColumnValuePairs: [{ column: 'uo_usid', value: usid }]
+        whereColumnValuePairs: [
+          { column: 'uo_usid', value: ref_selected_cx_usid.current }
+        ]
       } as table_fetch_Props)
       if (rows.length === 1) {
         const uo_owner = rows[0].uo_owner
         ref_selected_uoowner.current = uo_owner
         setowner(uo_owner)
       }
-      //
-      //  Update Columns and rows
-      //
-      updateColumns()
-      updateRows()
-      //
-      //  Allow fetch of data
-      //
-      setinitialisationCompleted(true)
+
       //
       //  Errors
       //
@@ -219,15 +231,10 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    //  The user-id must be set & filters
-    //
-    if (usid === 0) return
-    if (!initialisationCompleted) return
-    //
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'uo_usid', value: usid, operator: '=' },
+      { column: 'uo_usid', value: ref_selected_cx_usid.current, operator: '=' },
       { column: 'sb_owner', value: owner, operator: '=' },
       { column: 'sb_subject', value: subject, operator: '=' },
       { column: 'sb_cntquestions', value: questions, operator: '>=' }
@@ -418,7 +425,7 @@ export default function Table() {
                     name='owner'
                     table='tuo_usersowner'
                     tableColumn='uo_usid'
-                    tableColumnValue={usid}
+                    tableColumnValue={ref_selected_cx_usid.current}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
                     overrideClass_Dropdown='h-6 w-28 text-xxs md:text-xs'
