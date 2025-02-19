@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 
-export default function NavShrink() {
+export default function NavDev() {
   //
   //  User context
   //
   const { sessionContext, setSessionContext } = useUserContext()
   //  Shrink
   //
-  const [shrink, setshrink] = useState(true)
+  const [detail, setdetail] = useState(true)
   //......................................................................................
   //  cx_usid - Mandatory to continue
   //......................................................................................
@@ -18,8 +18,8 @@ export default function NavShrink() {
     //
     //  Get context
     //
-    if (sessionContext?.cx_shrink) {
-      setshrink(sessionContext?.cx_shrink)
+    if (sessionContext?.cx_detail) {
+      setdetail(sessionContext?.cx_detail)
     }
     // eslint-disable-next-line
   }, [])
@@ -32,24 +32,24 @@ export default function NavShrink() {
     //
     setSessionContext(prev => ({
       ...prev,
-      cx_shrink: shrink
+      cx_detail: detail
     }))
     // eslint-disable-next-line
-  }, [shrink])
+  }, [detail])
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>
       <MyButton
-        onClick={() => setshrink(prev => !prev)}
+        onClick={() => setdetail(prev => !prev)}
         overrideClass={
-          shrink
+          detail
             ? 'flex items-center justify-center bg-green-600 hover:bg-green-800 hover:text-red-600 px:1 h-5 w-10 text-xxs'
             : 'flex items-center justify-center bg-green-600 hover:bg-green-800 hover:text-red-600 px:0 md:px-2  h-5 md:h-6 md:flex-none text-xxs md:text-xs'
         }
       >
-        {shrink ? 'Small' : 'Large'}
+        {detail ? 'Detail' : 'Normal'}
       </MyButton>
     </>
   )

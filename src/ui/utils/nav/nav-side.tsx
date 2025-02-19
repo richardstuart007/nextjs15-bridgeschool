@@ -14,6 +14,7 @@ import {
   table_fetch_Props
 } from '@/src/lib/tables/tableGeneric/table_fetch'
 import NavShrink from '@/src/ui/utils/nav/nav-shrink'
+import NavDetail from '@/src/ui/utils/nav/nav-detail'
 
 interface Props {
   baseURL: string
@@ -64,7 +65,8 @@ export default function NavSide(props: Props) {
         cx_usid: sessionData.bsuid,
         cx_bsid: sessionData.bsid,
         cx_dbName: dbName,
-        cx_shrink: false
+        cx_shrink: false,
+        cx_detail: false
       }
       setSessionContext(structure_ContextInfo)
       setSessionInfo(sessionData)
@@ -84,8 +86,9 @@ export default function NavSide(props: Props) {
           <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2'>
             <NavLinks sessionInfo={sessionInfo} baseURL={baseURL} />
             <div className='grow invisible'></div>
-            <div className='flex flex-col items-center space-y-2'>
+            <div className='flex items-center space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
               <NavShrink />
+              <NavDetail />
               <MyButton
                 onClick={logout}
                 overrideClass='px:0  justify-center bg-gray-600 hover:bg-gray-800 hover:text-red-600  h-5 md:h-6 md:flex-none text-xxs md:text-xs'

@@ -12,6 +12,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 
 interface QuestionsFormProps {
   questions: table_Questions[]
+  rfid: number
 }
 //...................................................................................
 //.  Main Line
@@ -32,6 +33,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   const [questions, setQuestions] = useState<table_Questions[]>(
     props.questions || []
   )
+  const rfid = props.rfid
   //
   //  Fetch session data when the component mounts
   //
@@ -177,7 +179,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
         { column: 'hs_totalpoints', value: hs_totalpoints },
         { column: 'hs_correctpercent', value: hs_correctpercent },
         { column: 'hs_sbid', value: question.qq_sbid },
-        { column: 'hs_rfid', value: question.qq_rfid }
+        { column: 'hs_rfid', value: rfid }
       ]
     }
     //

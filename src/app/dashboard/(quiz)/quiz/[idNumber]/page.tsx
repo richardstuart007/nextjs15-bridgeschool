@@ -34,6 +34,7 @@ export default async function Page({
   //
   const idColumn = resolvedSearchParams?.idColumn || 'unknown'
   const idNumber = resolvedParams.idNumber
+  const rfid = idColumn === 'qq_rfid' ? idNumber : 0
   //
   //  Get the data
   //
@@ -72,7 +73,7 @@ export default async function Page({
           }
         ]}
       />
-      <Form questions={questions} />
+      <Form questions={questions} rfid={rfid} />
     </div>
   )
 }

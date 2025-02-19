@@ -45,18 +45,21 @@ export default function Table() {
   //  Show flags
   //
   const ref_rowsPerPage = useRef(0)
-  const ref_show_sbid = useRef(false)
-  const ref_show_rfid = useRef(false)
-  const ref_show_owner = useRef(false)
-  const ref_show_subject = useRef(false)
-  const ref_show_hsid = useRef(false)
-  const ref_show_usid = useRef(false)
-  const ref_show_title = useRef(false)
-  const ref_show_name = useRef(false)
-  const ref_show_questions = useRef(false)
-  const ref_show_correct = useRef(false)
-  const ref_show_datetime = useRef(false)
-  const ref_to_dateFormat = useRef('MMM-dd')
+  //
+  //  Show flags
+  //
+  const [ref_show_sbid, setref_show_sbid] = useState(false)
+  const [ref_show_rfid, setref_show_rfid] = useState(false)
+  const [ref_show_owner, setref_show_owner] = useState(false)
+  const [ref_show_subject, setref_show_subject] = useState(false)
+  const [ref_show_hsid, setref_show_hsid] = useState(false)
+  const [ref_show_usid, setref_show_usid] = useState(false)
+  const [ref_show_title, setref_show_title] = useState(false)
+  const [ref_show_name, setref_show_name] = useState(false)
+  const [ref_show_questions, setref_show_questions] = useState(false)
+  const [ref_show_correct, setref_show_correct] = useState(false)
+  const [ref_show_datetime, setref_show_datetime] = useState(false)
+  const [ref_to_dateFormat, setref_to_dateFormat] = useState('MMM-dd')
   //
   //  Other state
   //
@@ -67,7 +70,7 @@ export default function Table() {
   const [totalPages, setTotalPages] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   //
-  //  Shrink
+  //  Shrink/Detail
   //
   const [shrink, setshrink] = useState(false)
   const [shrink_Text, setshrink_Text] = useState('text-xxs md:text-xs')
@@ -80,7 +83,6 @@ export default function Table() {
     //  Initialisation
     //
     const initialiseData = async () => {
-      console.log('sessionContext', sessionContext)
       //
       //  Get user from context
       //
@@ -89,9 +91,9 @@ export default function Table() {
         //
         //  Set Shrink
         //
-        const shrink = sessionContext.cx_shrink
-        setshrink(shrink)
-        if (shrink) {
+        const cx_shrink = sessionContext.cx_shrink
+        setshrink(cx_shrink)
+        if (cx_shrink) {
           setshrink_Text('text-xxs')
           setshrink_Button('h-5 w-12')
         } else {
@@ -99,32 +101,31 @@ export default function Table() {
           setshrink_Button('h-5 md:h6 w-12 md:w-16')
         }
         //
-        //  Already initialised
-        //
-        if (initialisationCompleted) return
-        //
         //  Default curent user
         //
         setusid(sessionContext.cx_usid)
         //
         //  Get users country code
         //
-        const rows = await table_fetch({
-          table: 'tus_users',
-          whereColumnValuePairs: [
-            { column: 'us_usid', value: ref_selected_cx_usid.current }
-          ]
-        } as table_fetch_Props)
-        const userRecord = rows[0]
-        setcountryCode(userRecord.us_fedcountry)
-        //
-        //  Get owner for user
-        //
-        await fetchUserOwner()
+        if (!initialisationCompleted) {
+          const rows = await table_fetch({
+            table: 'tus_users',
+            whereColumnValuePairs: [
+              { column: 'us_usid', value: ref_selected_cx_usid.current }
+            ]
+          } as table_fetch_Props)
+          const userRecord = rows[0]
+          setcountryCode(userRecord.us_fedcountry)
+          //
+          //  Get owner for user
+          //
+          await fetchUserOwner()
+        }
         //
         //  Update Columns and rows
         //
-        updateColumns()
+        const cx_detail = sessionContext.cx_detail
+        updateColumns(cx_detail)
         updateRows()
         //
         //  Allow fetch of data
@@ -395,7 +396,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
-  function updateColumns() {
+  function updateColumns(cx_detail: boolean) {
     //
     //  2xl, xl, lg, md, sm
     //
@@ -410,26 +411,26 @@ export default function Table() {
     //  Small to large screens
     //
     if (widthNumber >= 1) {
-      ref_show_title.current = true
-      ref_show_datetime.current = true
+      setref_show_title(true)
+      setref_show_datetime(true)
     }
     if (widthNumber >= 2) {
-      ref_show_correct.current = true
-      ref_to_dateFormat.current = 'yy-MMM-dd HH:mm'
+      setref_show_correct(true)
+      setref_to_dateFormat('yy-MMM-dd HH:mm')
     }
     if (widthNumber >= 3) {
-      ref_show_name.current = true
+      cx_detail ? setref_show_name(true) : setref_show_name(false)
     }
     if (widthNumber >= 4) {
-      if (!ref_selected_uoowner.current) ref_show_owner.current = true
-      ref_show_subject.current = true
+      if (!ref_selected_uoowner.current) setref_show_owner(true)
+      cx_detail ? setref_show_subject(true) : setref_show_subject(false)
     }
     if (widthNumber >= 5) {
-      ref_show_questions.current = true
-      ref_show_hsid.current = true
-      ref_show_sbid.current = true
-      ref_show_rfid.current = true
-      ref_show_usid.current = true
+      cx_detail ? setref_show_questions(true) : setref_show_questions(false)
+      cx_detail ? setref_show_hsid(true) : setref_show_hsid(false)
+      cx_detail ? setref_show_sbid(true) : setref_show_sbid(false)
+      cx_detail ? setref_show_rfid(true) : setref_show_rfid(false)
+      cx_detail ? setref_show_usid(true) : setref_show_usid(false)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -464,7 +465,7 @@ export default function Table() {
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {ref_selected_uoowner.current && (
+        {ref_selected_uoowner && (
           <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
@@ -479,57 +480,57 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className={`${shrink_Text}`}>
-              {ref_show_owner.current && (
+              {ref_show_owner && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {ref_show_subject.current && (
+              {ref_show_subject && (
                 <th scope='col' className=' font-medium px-2'>
                   Subject
                 </th>
               )}
-              {ref_show_sbid.current && (
+              {ref_show_sbid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   sbid
                 </th>
               )}
-              {ref_show_rfid.current && (
+              {ref_show_rfid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   rfid
                 </th>
               )}
-              {ref_show_hsid.current && (
+              {ref_show_hsid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   hsid
                 </th>
               )}
-              {ref_show_datetime.current && (
+              {ref_show_datetime && (
                 <th scope='col' className=' font-medium px-2'>
                   Date
                 </th>
               )}
-              {ref_show_title.current && (
+              {ref_show_title && (
                 <th scope='col' className=' font-medium px-2'>
                   Title
                 </th>
               )}
-              {ref_show_usid.current && (
+              {ref_show_usid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   usid
                 </th>
               )}
-              {ref_show_name.current && (
+              {ref_show_name && (
                 <th scope='col' className=' font-medium px-2'>
                   User-Name
                 </th>
               )}
-              {ref_show_questions.current && (
+              {ref_show_questions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
               )}
-              {ref_show_correct.current && (
+              {ref_show_correct && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   %
                 </th>
@@ -548,7 +549,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {ref_show_owner.current && (
+              {ref_show_owner && (
                 <th scope='col' className='px-2'>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -568,7 +569,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* SUBJECT                                                 */}
               {/* ................................................... */}
-              {ref_show_subject.current && (
+              {ref_show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -593,7 +594,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* sbid                                                 */}
               {/* ................................................... */}
-              {ref_show_sbid.current && (
+              {ref_show_sbid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='sbid'
@@ -614,7 +615,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* rfid                                                 */}
               {/* ................................................... */}
-              {ref_show_rfid.current && (
+              {ref_show_rfid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='rfid'
@@ -635,7 +636,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* hsid                                                 */}
               {/* ................................................... */}
-              {ref_show_hsid.current && (
+              {ref_show_hsid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='hsid'
@@ -656,13 +657,13 @@ export default function Table() {
               {/* ................................................... */}
               {/* DateTime                                          */}
               {/* ................................................... */}
-              {ref_show_datetime.current && (
+              {ref_show_datetime && (
                 <th scope='col' className={`px-2 ${shrink_Text}`}></th>
               )}
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
-              {ref_show_title.current && (
+              {ref_show_title && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='title'
@@ -684,7 +685,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* usid                                                 */}
               {/* ................................................... */}
-              {ref_show_usid.current && (
+              {ref_show_usid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='usid'
@@ -706,7 +707,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* Name                                                 */}
               {/* ................................................... */}
-              {ref_show_name.current && (
+              {ref_show_name && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='name'
@@ -729,7 +730,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {ref_show_questions.current && (
+              {ref_show_questions && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='questions'
@@ -750,7 +751,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* correct                                           */}
               {/* ................................................... */}
-              {ref_show_correct.current && (
+              {ref_show_correct && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='correct'
@@ -784,41 +785,41 @@ export default function Table() {
                   key={`${tabledata.hs_hsid}-${index}`}
                   className='w-full border-b'
                 >
-                  {ref_show_owner.current && (
+                  {ref_show_owner && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.hs_owner}
                     </td>
                   )}
-                  {ref_show_subject.current && (
+                  {ref_show_subject && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.hs_subject}
                     </td>
                   )}
-                  {ref_show_sbid.current && (
+                  {ref_show_sbid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.sb_sbid > 0 ? tabledata.sb_sbid : ' '}
                     </td>
                   )}
-                  {ref_show_rfid.current && (
+                  {ref_show_rfid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_rfid > 0 ? tabledata.hs_rfid : ' '}
                     </td>
                   )}
-                  {ref_show_hsid.current && (
+                  {ref_show_hsid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_hsid}
                     </td>
                   )}
-                  {ref_show_datetime.current && (
+                  {ref_show_datetime && (
                     <td className={`px-2 text-left  ${shrink_Text}`}>
                       {convertUTCtoLocal({
                         datetimeUTC: tabledata.hs_datetime,
                         to_localcountryCode: countryCode,
-                        to_dateFormat: ref_to_dateFormat.current
+                        to_dateFormat: ref_to_dateFormat
                       })}
                     </td>
                   )}
-                  {ref_show_title.current && (
+                  {ref_show_title && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.sb_title
                         ? tabledata.sb_title.length > 35
@@ -827,22 +828,22 @@ export default function Table() {
                         : ' '}
                     </td>
                   )}
-                  {ref_show_usid.current && (
+                  {ref_show_usid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_usid}
                     </td>
                   )}
-                  {ref_show_name.current && (
+                  {ref_show_name && (
                     <td className={`px-2   ${shrink_Text}`}>
                       {tabledata.us_name}
                     </td>
                   )}
-                  {ref_show_questions.current && (
+                  {ref_show_questions && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_questions}
                     </td>
                   )}
-                  {ref_show_correct.current && (
+                  {ref_show_correct && (
                     <td className={`px-2   text-center ${shrink_Text}`}>
                       {tabledata.hs_correctpercent}
                     </td>
@@ -869,10 +870,17 @@ export default function Table() {
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
-                        href={{
-                          pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
-                          query: { from: 'history', idColumn: 'qq_sbid' }
-                        }}
+                        href={
+                          tabledata.hs_rfid > 0
+                            ? {
+                                pathname: `/dashboard/quiz/${tabledata.hs_rfid}`,
+                                query: { from: 'history', idColumn: 'qq_rfid' }
+                              }
+                            : {
+                                pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
+                                query: { from: 'history', idColumn: 'qq_sbid' }
+                              }
+                        }
                         overrideClass={`bg-blue-500 text-white justify-center hover:bg-blue-600 ${shrink_Button} ${shrink_Text}`}
                       >
                         Quiz

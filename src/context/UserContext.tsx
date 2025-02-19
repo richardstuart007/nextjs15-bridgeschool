@@ -13,7 +13,8 @@ const defaultContext: structure_ContextInfo = {
   cx_bsid: 0,
   cx_usid: 0,
   cx_dbName: '',
-  cx_shrink: false
+  cx_shrink: false,
+  cx_detail: false
 }
 //
 // Create the context
