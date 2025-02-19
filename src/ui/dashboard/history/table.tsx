@@ -202,12 +202,12 @@ export default function Table() {
     // Input change
     //
     const inputChange =
-      hsid !== debouncedState.hsid ||
+      Number(hsid) !== debouncedState.hsid ||
       title !== debouncedState.title ||
-      usid !== debouncedState.usid ||
+      Number(usid) !== debouncedState.usid ||
       name !== debouncedState.name ||
-      correct !== debouncedState.correct ||
-      questions !== debouncedState.questions ||
+      Number(correct) !== debouncedState.correct ||
+      Number(questions) !== debouncedState.questions ||
       subject !== debouncedState.subject
     //
     // Dropdown change

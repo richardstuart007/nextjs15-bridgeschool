@@ -86,16 +86,18 @@ export default function NavSide(props: Props) {
           <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2'>
             <NavLinks sessionInfo={sessionInfo} baseURL={baseURL} />
             <div className='grow invisible'></div>
-            <div className='flex items-center space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
+            <div className='hidden md:block justify-center flex-none p-1 px-2'>
               <NavShrink />
-              <NavDetail />
-              <MyButton
-                onClick={logout}
-                overrideClass='px:0  justify-center bg-gray-600 hover:bg-gray-800 hover:text-red-600  h-5 md:h-6 md:flex-none text-xxs md:text-xs'
-              >
-                Logoff
-              </MyButton>
             </div>
+            <div className='hidden md:block justify-center flex-none p-1 px-2'>
+              <NavDetail />
+            </div>
+            <MyButton
+              onClick={logout}
+              overrideClass='justify-center h-5 md:h6 text-xxs md:text-xs bg-gray-600 hover:bg-gray-800 hover:text-red-600 md:flex-none md:p-2 md:px-2'
+            >
+              Logoff
+            </MyButton>
           </div>
           <div className='hidden md:block h-6'></div>
         </>

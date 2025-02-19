@@ -1,7 +1,6 @@
 'use client'
 
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
-import clsx from 'clsx'
 
 interface PaginationProps {
   totalPages: number
@@ -28,13 +27,18 @@ export default function Pagination({
     position?: 'first' | 'last' | 'middle' | 'single'
     isActive: boolean
   }) {
-    const className = clsx('flex h-6 w-6 items-center justify-center text-xs border', {
-      'rounded-l-md': position === 'first' || position === 'single',
-      'rounded-r-md': position === 'last' || position === 'single',
-      'z-10 bg-blue-600 border-blue-600 text-white': isActive,
-      'hover:bg-gray-100 cursor-pointer': !isActive && position !== 'middle',
-      'text-gray-300': position === 'middle'
-    })
+    const className = [
+      'flex items-center justify-center border',
+      'text-xxs md:text-xs',
+      'h-5 md:h-6 w-5 md:w-6',
+      position === 'first' || position === 'single' ? 'rounded-l-md' : '',
+      position === 'last' || position === 'single' ? 'rounded-r-md' : '',
+      isActive ? 'z-10 bg-blue-600 border-blue-600 text-white' : '',
+      !isActive && position !== 'middle'
+        ? 'hover:bg-gray-100 cursor-pointer'
+        : '',
+      position === 'middle' ? 'text-gray-300' : ''
+    ].join(' ')
 
     const handleClick = () => {
       if (typeof page === 'number') {
@@ -48,7 +52,6 @@ export default function Pagination({
       </div>
     )
   }
-
   //--------------------------------------------------------------------------------------------
   // Arrow Component
   //--------------------------------------------------------------------------------------------
@@ -59,19 +62,27 @@ export default function Pagination({
     direction: 'left' | 'right'
     isDisabled?: boolean
   }) {
-    const className = clsx('flex h-6 w-6 items-center justify-center rounded-md border', {
-      'pointer-events-none text-gray-300': isDisabled,
-      'hover:bg-gray-100 cursor-pointer': !isDisabled,
-      'mr-2 md:mr-4': direction === 'left',
-      'ml-2 md:ml-4': direction === 'right'
-    })
+    const className = [
+      'flex items-center justify-center rounded-md border',
+      isDisabled ? 'pointer-events-none text-gray-300' : '',
+      !isDisabled ? 'hover:bg-gray-100 cursor-pointer' : '',
+      direction === 'left' ? 'mr-2 md:mr-4' : '',
+      direction === 'right' ? 'ml-2 md:ml-4' : '',
+      'w-4 h-4 md:w-6 md:h-6'
+    ].join(' ')
 
     const icon =
-      direction === 'left' ? <ArrowLeftIcon className='w-4' /> : <ArrowRightIcon className='w-4' />
+      direction === 'left' ? (
+        <ArrowLeftIcon className='w-4' />
+      ) : (
+        <ArrowRightIcon className='w-4' />
+      )
 
     const handleClick = () => {
       if (!isDisabled) {
-        setStateCurrentPage(direction === 'left' ? statecurrentPage - 1 : statecurrentPage + 1)
+        setStateCurrentPage(
+          direction === 'left' ? statecurrentPage - 1 : statecurrentPage + 1
+        )
       }
     }
 
@@ -81,15 +92,26 @@ export default function Pagination({
       </div>
     )
   }
-
   //--------------------------------------------------------------------------------------------
   // Generate Pagination Logic
   //--------------------------------------------------------------------------------------------
-  function generatePagination(statecurrentPage: number, totalPages: number): (number | string)[] {
-    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
+  function generatePagination(
+    statecurrentPage: number,
+    totalPages: number
+  ): (number | string)[] {
+    if (totalPages <= 7)
+      return Array.from({ length: totalPages }, (_, i) => i + 1)
     if (statecurrentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages]
     if (statecurrentPage >= totalPages - 3)
-      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
+      return [
+        1,
+        '...',
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages
+      ]
     return [
       1,
       '...',
@@ -100,7 +122,6 @@ export default function Pagination({
       totalPages
     ]
   }
-
   //--------------------------------------------------------------------------------------------
   // Render Pagination
   //--------------------------------------------------------------------------------------------
@@ -149,7 +170,10 @@ export default function Pagination({
       {/* --------------------------------------------------------------------- */}
       {/* Right Arrow                                                          */}
       {/* --------------------------------------------------------------------- */}
-      <PaginationArrow direction='right' isDisabled={statecurrentPage >= totalPages} />
+      <PaginationArrow
+        direction='right'
+        isDisabled={statecurrentPage >= totalPages}
+      />
     </div>
   )
 }

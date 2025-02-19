@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import clsx from 'clsx'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
@@ -55,53 +54,29 @@ export default function NavLinks(props: Props) {
       {links.map(link => {
         const isActiveColour =
           pathname === link.href ? 'bg-sky-100 text-blue-600' : ''
-        const overrideClass = clsx(
-          'grow justify-center',
-          'h-5 md:h6 w-12 md:w-16',
-          'text-xxs md:text-xs',
-          'gap-1 p-1',
-          'bg-gray-50 ',
-          'hover:bg-sky-200 hover:text-red-600',
-          'md:flex-none md:p-2 md:px-2',
-          `${isActiveColour}`
-        )
-
-        const iconClass = clsx(
-          'flex items-center justify-center',
+        const overrideClass = [
+          'justify-center',
           'h-5 md:h6',
-          'bg-gray-50 ',
+          'text-xxs md:text-xs',
+          'bg-gray-50',
           'hover:bg-sky-200 hover:text-red-600',
           'md:flex-none md:p-2 md:px-2',
-          `${isActiveColour}`
-        )
+          isActiveColour
+        ].join(' ')
 
-        // Conditionally render Icon or text
-        if (link.name === 'User') {
-          return (
-            <div
-              key={link.name}
-              className='w-full flex items-center justify-center h-6 md:h-8'
-            >
-              <MyLink
-                key={link.name}
-                href={link.href}
-                overrideClass={iconClass}
-              >
-                <Cog6ToothIcon className='h-5 w-5' />
-              </MyLink>
-            </div>
-          )
-        } else {
-          return (
-            <MyLink
-              key={link.name}
-              href={link.href}
-              overrideClass={overrideClass}
-            >
+        return (
+          <MyLink
+            key={link.name}
+            href={link.href}
+            overrideClass={overrideClass}
+          >
+            {link.name === 'User' ? (
+              <Cog6ToothIcon className='h-5 w-5' />
+            ) : (
               <p className='text-xxs md:text-xs'>{link.name}</p>
-            </MyLink>
-          )
-        }
+            )}
+          </MyLink>
+        )
       })}
     </>
   )
