@@ -31,19 +31,22 @@ export default function Table() {
   //
   //  Input selection
   //
-  const [usid, setusid] = useState<number | string>(0)
+  const [usid, setusid] = useState<number | string>('')
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
-  const [hsid, sethsid] = useState<number | string>(0)
+  const [hsid, sethsid] = useState<number | string>('')
   const [name, setname] = useState('')
   const [questions, setquestions] = useState<number | string>('')
   const [correct, setcorrect] = useState<number | string>('')
+  const [sbid, setsbid] = useState<number | string>('')
+  const [rfid, setrfid] = useState<number | string>('')
   //
   //  Show flags
   //
   const ref_rowsPerPage = useRef(0)
   const ref_show_sbid = useRef(false)
+  const ref_show_rfid = useRef(false)
   const ref_show_owner = useRef(false)
   const ref_show_subject = useRef(false)
   const ref_show_hsid = useRef(false)
@@ -63,6 +66,12 @@ export default function Table() {
   )
   const [totalPages, setTotalPages] = useState<number>(0)
   const [loading, setLoading] = useState(true)
+  //
+  //  Shrink
+  //
+  const [shrink, setshrink] = useState(false)
+  const [shrink_Text, setshrink_Text] = useState('text-xxs md:text-xs')
+  const [shrink_Button, setshrink_Button] = useState('h-5 md:h6 w-12 md:w-16')
   //......................................................................................
   //  cx_usid - Mandatory to continue
   //......................................................................................
@@ -71,15 +80,28 @@ export default function Table() {
     //  Initialisation
     //
     const initialiseData = async () => {
-      //
-      //  Already initialised
-      //
-      if (initialisationCompleted) return
+      console.log('sessionContext', sessionContext)
       //
       //  Get user from context
       //
-      if (sessionContext?.cx_usid && ref_selected_cx_usid.current === 0) {
+      if (sessionContext?.cx_usid) {
         ref_selected_cx_usid.current = sessionContext.cx_usid
+        //
+        //  Set Shrink
+        //
+        const shrink = sessionContext.cx_shrink
+        setshrink(shrink)
+        if (shrink) {
+          setshrink_Text('text-xxs')
+          setshrink_Button('h-5 w-12')
+        } else {
+          setshrink_Text('text-xxs md:text-xs')
+          setshrink_Button('h-5 md:h6 w-12 md:w-16')
+        }
+        //
+        //  Already initialised
+        //
+        if (initialisationCompleted) return
         //
         //  Default curent user
         //
@@ -123,6 +145,8 @@ export default function Table() {
     owner: string | number
     subject: string | number
     hsid: string | number
+    sbid: string | number
+    rfid: string | number
     title: string | number
     usid: string | number
     name: string | number
@@ -139,6 +163,8 @@ export default function Table() {
     questions: 0,
     title: '',
     hsid: '',
+    sbid: '',
+    rfid: '',
     correct: 0,
     currentPage: 1,
     initialisationCompleted: false
@@ -209,6 +235,8 @@ export default function Table() {
         questions: Number(questions as string),
         title,
         hsid: Number(hsid as string),
+        sbid: Number(sbid as string),
+        rfid: Number(rfid as string),
         correct: Number(correct as string),
         currentPage,
         initialisationCompleted
@@ -233,6 +261,8 @@ export default function Table() {
     questions,
     title,
     hsid,
+    sbid,
+    rfid,
     correct,
     currentPage,
     initialisationCompleted
@@ -303,7 +333,9 @@ export default function Table() {
       { column: 'hs_hsid', value: hsid, operator: '=' },
       { column: 'hs_questions', value: questions, operator: '>=' },
       { column: 'hs_correctpercent', value: correct, operator: '>=' },
-      { column: 'us_name', value: name, operator: 'LIKE' }
+      { column: 'us_name', value: name, operator: 'LIKE' },
+      { column: 'hs_sbid', value: sbid, operator: '=' },
+      { column: 'hs_rfid', value: rfid, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -396,6 +428,7 @@ export default function Table() {
       ref_show_questions.current = true
       ref_show_hsid.current = true
       ref_show_sbid.current = true
+      ref_show_rfid.current = true
       ref_show_usid.current = true
     }
   }
@@ -432,7 +465,7 @@ export default function Table() {
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
         {ref_selected_uoowner.current && (
-          <div className='pl-2 py-2 text-xxs md:text-xs'>
+          <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
           </div>
@@ -441,11 +474,11 @@ export default function Table() {
         {/** TABLE                                                                */}
         {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xxs md:text-xs'>
+          <thead className='rounded-lg text-left'>
             {/* ---------------------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xxs md:text-xs'>
+            <tr className={`${shrink_Text}`}>
               {ref_show_owner.current && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
@@ -457,8 +490,13 @@ export default function Table() {
                 </th>
               )}
               {ref_show_sbid.current && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-medium px-2 text-center'>
                   sbid
+                </th>
+              )}
+              {ref_show_rfid.current && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  rfid
                 </th>
               )}
               {ref_show_hsid.current && (
@@ -506,7 +544,7 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xxs md:text-xs align-bottom'>
+            <tr className={`align-bottom ${shrink_Text}`}>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
@@ -522,7 +560,7 @@ export default function Table() {
                     tableColumnValue={sessionContext.cx_usid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs'
+                    overrideClass_Dropdown={`h-6 w-28 ${shrink_Text}`}
                     includeBlank={true}
                   />
                 </th>
@@ -542,7 +580,11 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='sb_title'
                       optionValue='sb_subject'
-                      overrideClass_Dropdown='w-36 h-6 text-xxs'
+                      overrideClass_Dropdown={
+                        shrink
+                          ? `h-6 w-28 ${shrink_Text}`
+                          : `h-6 w-36 ${shrink_Text}`
+                      }
                       includeBlank={true}
                     />
                   )}
@@ -551,7 +593,45 @@ export default function Table() {
               {/* ................................................... */}
               {/* sbid                                                 */}
               {/* ................................................... */}
-              {ref_show_sbid.current && <th scope='col' className=' px-2'></th>}
+              {ref_show_sbid.current && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='sbid'
+                    name='sbid'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
+                    type='text'
+                    value={sbid}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      setsbid(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              {/* ................................................... */}
+              {/* rfid                                                 */}
+              {/* ................................................... */}
+              {ref_show_rfid.current && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='rfid'
+                    name='rfid'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
+                    type='text'
+                    value={rfid}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      setrfid(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
               {/* ................................................... */}
               {/* hsid                                                 */}
               {/* ................................................... */}
@@ -560,13 +640,14 @@ export default function Table() {
                   <MyInput
                     id='hsid'
                     name='hsid'
-                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
                     type='text'
                     value={hsid}
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
                       sethsid(parsedValue)
                     }}
                   />
@@ -576,7 +657,7 @@ export default function Table() {
               {/* DateTime                                          */}
               {/* ................................................... */}
               {ref_show_datetime.current && (
-                <th scope='col' className=' px-2'></th>
+                <th scope='col' className={`px-2 ${shrink_Text}`}></th>
               )}
               {/* ................................................... */}
               {/* Title                                                 */}
@@ -586,7 +667,11 @@ export default function Table() {
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass='w-20 md:40 rounded-md border border-blue-500 font-normal h-6 text-xxs'
+                    overrideClass={
+                      shrink
+                        ? `h-6 w-28 ${shrink_Text}`
+                        : `h-6 w-36 md:40 ${shrink_Text}`
+                    }
                     type='text'
                     value={title}
                     onChange={e => {
@@ -604,13 +689,14 @@ export default function Table() {
                   <MyInput
                     id='usid'
                     name='usid'
-                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center w-12 h-6 ${shrink_Text}`}
                     type='text'
                     value={usid}
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
                       setusid(parsedValue)
                       setname('')
                     }}
@@ -625,7 +711,11 @@ export default function Table() {
                   <MyInput
                     id='name'
                     name='name'
-                    overrideClass='w-40  rounded-md border border-blue-500   font-normal h-6 text-xxs'
+                    overrideClass={
+                      shrink
+                        ? `h-6 w-28 ${shrink_Text}`
+                        : `h-6 w-36 md:40 ${shrink_Text}`
+                    }
                     type='text'
                     value={name}
                     onChange={e => {
@@ -644,13 +734,14 @@ export default function Table() {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12  ${shrink_Text}`}
                     type='text'
                     value={questions}
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
                       setquestions(parsedValue)
                     }}
                   />
@@ -664,7 +755,7 @@ export default function Table() {
                   <MyInput
                     id='correct'
                     name='correct'
-                    overrideClass='w-12  rounded-md border border-blue-500  px-2 font-normal text-center h-6 text-xxs'
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12  ${shrink_Text}`}
                     type='text'
                     value={correct}
                     onChange={e => {
@@ -694,19 +785,32 @@ export default function Table() {
                   className='w-full border-b'
                 >
                   {ref_show_owner.current && (
-                    <td className=' px-2 '>{tabledata.hs_owner}</td>
+                    <td className={`px-2 ${shrink_Text}`}>
+                      {tabledata.hs_owner}
+                    </td>
                   )}
                   {ref_show_subject.current && (
-                    <td className=' px-2 '>{tabledata.hs_subject}</td>
+                    <td className={`px-2 ${shrink_Text}`}>
+                      {tabledata.hs_subject}
+                    </td>
                   )}
                   {ref_show_sbid.current && (
-                    <td className=' px-2  text-left'>{tabledata.hs_sbid}</td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>
+                      {tabledata.sb_sbid > 0 ? tabledata.sb_sbid : ' '}
+                    </td>
+                  )}
+                  {ref_show_rfid.current && (
+                    <td className={`px-2 text-center  ${shrink_Text}`}>
+                      {tabledata.hs_rfid > 0 ? tabledata.hs_rfid : ' '}
+                    </td>
                   )}
                   {ref_show_hsid.current && (
-                    <td className=' px-2  text-center'>{tabledata.hs_hsid}</td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>
+                      {tabledata.hs_hsid}
+                    </td>
                   )}
                   {ref_show_datetime.current && (
-                    <td className=' px-2  text-left'>
+                    <td className={`px-2 text-left  ${shrink_Text}`}>
                       {convertUTCtoLocal({
                         datetimeUTC: tabledata.hs_datetime,
                         to_localcountryCode: countryCode,
@@ -715,7 +819,7 @@ export default function Table() {
                     </td>
                   )}
                   {ref_show_title.current && (
-                    <td className='px-2 '>
+                    <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.sb_title
                         ? tabledata.sb_title.length > 35
                           ? `${tabledata.sb_title.slice(0, 30)}...`
@@ -724,23 +828,27 @@ export default function Table() {
                     </td>
                   )}
                   {ref_show_usid.current && (
-                    <td className='px-2  text-center'>{tabledata.hs_usid}</td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>
+                      {tabledata.hs_usid}
+                    </td>
                   )}
                   {ref_show_name.current && (
-                    <td className='px-2 '>{tabledata.us_name}</td>
+                    <td className={`px-2   ${shrink_Text}`}>
+                      {tabledata.us_name}
+                    </td>
                   )}
                   {ref_show_questions.current && (
-                    <td className='px-2  text-center'>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_questions}
                     </td>
                   )}
                   {ref_show_correct.current && (
-                    <td className='px-2   text-center '>
+                    <td className={`px-2   text-center ${shrink_Text}`}>
                       {tabledata.hs_correctpercent}
                     </td>
                   )}
                   {/* ................................................... */}
-                  {/* MyButton  1                                                */}
+                  {/* Review                                              */}
                   {/* ................................................... */}
                   <td className='px-2  text-center'>
                     <div className='inline-flex justify-center items-center'>
@@ -749,14 +857,14 @@ export default function Table() {
                           pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                           query: { from: 'history' }
                         }}
-                        overrideClass='bg-green-500 text-white justify-center hover:bg-green-600 h-5 md:h6 w-12 md:w-16 text-xxs md:text-xs'
+                        overrideClass={`bg-green-500 text-white justify-center hover:bg-green-600 ${shrink_Button} ${shrink_Text}`}
                       >
                         Review
                       </MyLink>
                     </div>
                   </td>
                   {/* ................................................... */}
-                  {/* MyButton  2                                                 */}
+                  {/* Quiz                                             */}
                   {/* ................................................... */}
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
@@ -765,7 +873,7 @@ export default function Table() {
                           pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
                           query: { from: 'history', idColumn: 'qq_sbid' }
                         }}
-                        overrideClass='bg-blue-500 text-white justify-center hover:bg-blue-600 h-5 md:h6 w-12 md:w-16 text-xxs md:text-xs'
+                        overrideClass={`bg-blue-500 text-white justify-center hover:bg-blue-600 ${shrink_Button} ${shrink_Text}`}
                       >
                         Quiz
                       </MyLink>

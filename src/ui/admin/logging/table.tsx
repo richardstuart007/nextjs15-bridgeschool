@@ -215,7 +215,7 @@ export default function Table() {
                 <MyInput
                   id='functionname'
                   name='functionname'
-                  overrideClass={`w-40  rounded-md border border-blue-500   font-normal text-xs`}
+                  overrideClass={`w-28  rounded-md border border-blue-500   font-normal text-xs`}
                   type='text'
                   value={functionname}
                   onChange={e => {

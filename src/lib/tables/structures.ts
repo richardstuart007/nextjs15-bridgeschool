@@ -13,6 +13,7 @@ export type structure_ContextInfo = {
   cx_usid: number
   cx_bsid: number
   cx_dbName: string
+  cx_shrink: boolean
 }
 
 export type structure_UserAuth = {

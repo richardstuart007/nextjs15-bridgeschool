@@ -4,7 +4,6 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   overrideClass?: string
   inputName: string
   inputValue: boolean
-  description: string
   onChange: React.ChangeEventHandler<HTMLInputElement>
 }
 
@@ -12,7 +11,6 @@ export function MyCheckbox({
   overrideClass = '',
   inputName,
   inputValue,
-  description,
   onChange,
   ...rest
 }: Props) {
@@ -41,24 +39,25 @@ export function MyCheckbox({
   const checkbox_name = `checkbox_${inputName}`
   return (
     <>
-      <div className='mt-4 flex items-center justify-end w-72'>
-        <div className='mr-auto block text-xs font-medium text-gray-900'>{description}</div>
-
-        <input id={inputName} type='hidden' name={inputName} value={inputValue_string} />
-        <label className='inline-flex items-center cursor-pointer'>
-          <input
-            type='checkbox'
-            id={checkbox_name}
-            className='sr-only peer'
-            name={checkbox_name}
-            checked={inputValue}
-            onChange={e => onChange(e)}
-            {...rest}
-          />
-          {/* prettier-ignore */}
-          <div className={classValue}></div>
-        </label>
-      </div>
+      <input
+        id={inputName}
+        type='hidden'
+        name={inputName}
+        value={inputValue_string}
+      />
+      <label className='inline-flex items-center cursor-pointer'>
+        <input
+          type='checkbox'
+          id={checkbox_name}
+          className='sr-only peer'
+          name={checkbox_name}
+          checked={inputValue}
+          onChange={e => onChange(e)}
+          {...rest}
+        />
+        {/* prettier-ignore */}
+        <div className={classValue}></div>
+      </label>
     </>
   )
 }

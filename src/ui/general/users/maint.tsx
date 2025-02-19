@@ -308,41 +308,44 @@ export default function Form({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         {/*   Toggle - SKIP Correct */}
         {/*  ...................................................................................*/}
-        <MyCheckbox
-          overrideClass=''
-          inputName='us_skipcorrect'
-          inputValue={us_skipcorrect}
-          description='Skip Correct on Review'
-          onChange={() => setus_skipcorrect(prev => !prev)}
-        />
+        <div className='mt-4 flex items-center justify-end w-72'>
+          <div className='mr-auto block text-xs font-medium text-gray-900'>
+            Skip correct questions
+          </div>
+          <MyCheckbox
+            overrideClass=''
+            inputName='us_skipcorrect'
+            inputValue={us_skipcorrect}
+            onChange={() => setus_skipcorrect(prev => !prev)}
+          />
+        </div>
         {/*  ...................................................................................*/}
         {/*   Toggle - Random Sort questions */}
         {/*  ...................................................................................*/}
-        <MyCheckbox
-          overrideClass=''
-          inputName='us_sortquestions'
-          inputValue={us_sortquestions}
-          description='Random Sort Questions'
-          onChange={() => setus_sortquestions(prev => !prev)}
-        />
+        <div className='mt-4 flex items-center justify-end w-72'>
+          <div className='mr-auto block text-xs font-medium text-gray-900'>
+            Random Sort Questions
+          </div>
+          <MyCheckbox
+            overrideClass=''
+            inputName='us_sortquestions'
+            inputValue={us_sortquestions}
+            onChange={() => setus_sortquestions(prev => !prev)}
+          />
+        </div>
         {/*  ...................................................................................*/}
         {/*   Toggle - Admin */}
         {/*  ...................................................................................*/}
-        {admin_uid ? (
-          <MyCheckbox
-            overrideClass=''
-            inputName='us_admin'
-            inputValue={us_admin}
-            description='Admin'
-            onChange={() => setus_admin(prev => !prev)}
-          />
-        ) : (
-          <div className='relative'>
-            <MyInput
-              id='us_admin'
-              type='hidden'
-              name='us_admin'
-              value={us_admin.toString()}
+        {admin_uid && (
+          <div className='mt-4 flex items-center justify-end w-72'>
+            <div className='mr-auto block text-xs font-medium text-gray-900'>
+              Admin
+            </div>
+            <MyCheckbox
+              overrideClass=''
+              inputName='us_admin'
+              inputValue={us_admin}
+              onChange={() => setus_admin(prev => !prev)}
             />
           </div>
         )}

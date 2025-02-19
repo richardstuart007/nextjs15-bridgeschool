@@ -12,7 +12,8 @@ type UserContextType = {
 const defaultContext: structure_ContextInfo = {
   cx_bsid: 0,
   cx_usid: 0,
-  cx_dbName: ''
+  cx_dbName: '',
+  cx_shrink: false
 }
 //
 // Create the context

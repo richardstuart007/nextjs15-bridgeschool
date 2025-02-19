@@ -31,8 +31,8 @@ export default function Table() {
   //
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
-  const [questions, setquestions] = useState<number | string>(1)
-
+  const [cntquestions, setcntquestions] = useState<number | string>(1)
+  const [cntreference, setcntreference] = useState<number | string>('')
   //
   //  Show columns
   //
@@ -40,8 +40,8 @@ export default function Table() {
   const ref_rowsPerPage = useRef(0)
   const ref_show_owner = useRef(false)
   const ref_show_subject = useRef(false)
-  const ref_show_questions = useRef(false)
-  const ref_show_references = useRef(false)
+  const ref_show_cntquestions = useRef(false)
+  const ref_show_cntreference = useRef(false)
   //
   //  Data
   //
@@ -93,14 +93,16 @@ export default function Table() {
   type DebouncedState = {
     owner: string | number
     subject: string | number
-    questions: string | number
+    cntquestions: string | number
+    cntreference: string | number
     currentPage: number
     initialisationCompleted: boolean
   }
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
     owner: '',
     subject: '',
-    questions: 0,
+    cntquestions: 0,
+    cntreference: 0,
     currentPage: 1,
     initialisationCompleted: false
   })
@@ -135,7 +137,7 @@ export default function Table() {
     //
     // Input change
     //
-    const inputChange = questions !== debouncedState.questions
+    const inputChange = cntquestions !== debouncedState.cntquestions
     //
     // Dropdown change
     //
@@ -158,7 +160,8 @@ export default function Table() {
       setDebouncedState({
         owner,
         subject,
-        questions: Number(questions as string),
+        cntquestions: Number(cntquestions as string),
+        cntreference: Number(cntreference as string),
         currentPage,
         initialisationCompleted
       })
@@ -174,7 +177,14 @@ export default function Table() {
       clearTimeout(handler)
     }
     // eslint-disable-next-line
-  }, [owner, subject, questions, currentPage, initialisationCompleted])
+  }, [
+    owner,
+    subject,
+    cntquestions,
+    cntreference,
+    currentPage,
+    initialisationCompleted
+  ])
   //......................................................................................
   // Reset the subject when the owner changes
   //......................................................................................
@@ -237,7 +247,8 @@ export default function Table() {
       { column: 'uo_usid', value: ref_selected_cx_usid.current, operator: '=' },
       { column: 'sb_owner', value: owner, operator: '=' },
       { column: 'sb_subject', value: subject, operator: '=' },
-      { column: 'sb_cntquestions', value: questions, operator: '>=' }
+      { column: 'sb_cntquestions', value: cntquestions, operator: '>=' },
+      { column: 'sb_cntreference', value: cntreference, operator: '>=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -322,8 +333,8 @@ export default function Table() {
     if (widthNumber >= 2) {
       if (!ref_selected_uoowner.current) ref_show_owner.current = true
 
-      ref_show_questions.current = true
-      ref_show_references.current = true
+      ref_show_cntquestions.current = true
+      ref_show_cntreference.current = true
     }
     // Description width
     ref_widthDesc.current =
@@ -392,7 +403,7 @@ export default function Table() {
                   Subject
                 </th>
               )}
-              {ref_show_questions.current && (
+              {ref_show_cntquestions.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
@@ -400,7 +411,7 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Quiz
               </th>
-              {ref_show_references.current && (
+              {ref_show_cntreference.current && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   References
                 </th>
@@ -457,28 +468,49 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {ref_show_questions.current && (
+              {ref_show_cntquestions.current && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
-                    id='questions'
-                    name='questions'
+                    id='cntquestions'
+                    name='cntquestions'
                     overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-center text-xxs md:text-xs`}
                     type='text'
-                    value={questions}
+                    value={cntquestions}
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
-                      setquestions(parsedValue)
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      setcntquestions(parsedValue)
                     }}
                   />
                 </th>
               )}
               {/* ................................................... */}
-              {/* Other                                       */}
+              {/* quiz                                       */}
               {/* ................................................... */}
               <th scope='col' className=' px-2'></th>
-              <th scope='col' className=' px-2'></th>
+              {/* ................................................... */}
+              {/* cntreference                                           */}
+              {/* ................................................... */}
+              {ref_show_cntreference.current && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='cntreference'
+                    name='cntreference'
+                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-center text-xxs md:text-xs`}
+                    type='text'
+                    value={cntreference}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      setcntreference(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
               <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
             </tr>
@@ -508,7 +540,7 @@ export default function Table() {
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_questions.current &&
+                {ref_show_cntquestions.current &&
                   'sb_cntquestions' in tabledata && (
                     <td className='px-2  text-center text-xxs md:text-xs'>
                       {tabledata.sb_cntquestions > 0
@@ -538,7 +570,7 @@ export default function Table() {
                 {/* ................................................... */}
                 {/* References                                            */}
                 {/* ................................................... */}
-                {ref_show_references.current &&
+                {ref_show_cntreference.current &&
                   'sb_cntquestions' in tabledata && (
                     <td className='px-2  text-center text-xxs md:text-xs'>
                       {tabledata.sb_cntreference > 0
