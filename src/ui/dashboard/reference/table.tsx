@@ -31,32 +31,38 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //  User context
   //
   const { sessionContext } = useUserContext()
+  const ref_selected_cx_usid = useRef(0)
+  const [initialisationCompleted, setinitialisationCompleted] = useState(false)
   //
-  //  Selection
+  //  Parameter Selection
   //
-  const [uid, setuid] = useState(0)
+  const ref_sb_owner = useRef('')
+  const ref_sb_subject = useRef('')
+  const ref_sb_cntreferences = useRef('')
+  const ref_sb_cntquestions = useRef(0)
+  //
+  //  Input
+  //
   const [owner, setowner] = useState<number | string>('')
   const [subject, setsubject] = useState<number | string>('')
-
   const [desc, setdesc] = useState('')
   const [who, setwho] = useState<number | string>('')
   const [ref, setref] = useState('')
   const [type, settype] = useState<number | string>('')
   const [questions, setquestions] = useState<number | string>(0)
-  const [sb_references, setsb_references] = useState<number | string>(0)
-  const [sb_cntquestions, setsb_cntquestions] = useState<number | string>(0)
   //
   //  Show columns
   //
-  const ref_widthDesc = useRef(0)
   const ref_rowsPerPage = useRef(0)
-  const ref_show_owner = useRef(false)
-  const ref_show_subject = useRef(false)
-  const ref_show_who = useRef(false)
-  const ref_show_ref = useRef(false)
-  const ref_show_type = useRef(false)
-  const ref_show_questions = useRef(false)
-  const ref_show_quiz = useRef(false)
+
+  const [widthDesc, setwidthDesc] = useState(0)
+  const [show_owner, setshow_owner] = useState(false)
+  const [show_subject, setshow_subject] = useState(false)
+  const [show_who, setshow_who] = useState(false)
+  const [show_ref, setshow_ref] = useState(false)
+  const [show_type, setshow_type] = useState(false)
+  const [show_questions, setshow_questions] = useState(false)
+  const [show_quiz, setshow_quiz] = useState(false)
   //
   //  Data
   //
@@ -65,49 +71,71 @@ export default function Table({ selected_sbsbid }: FormProps) {
     (table_Reference | table_ReferenceSubject)[]
   >([])
   const [totalPages, setTotalPages] = useState<number>(0)
-  const [shouldFetchData, setShouldFetchData] = useState(false)
   //
   //  Initialisation
   //
   const [loading, setLoading] = useState(true)
-  const ref_initialised = useRef(false)
-  const ref_initialisedSelection = useRef(false)
+  //
+  //  Shrink/Detail
+  //
+  const [shrink, setshrink] = useState(false)
+  const [shrink_Text, setshrink_Text] = useState('text-xxs md:text-xs')
   //......................................................................................
-  //  Screen change
+  //  Initilaisation - context
   //......................................................................................
   useEffect(() => {
-    updateColumns()
-    updateRows()
+    //
+    //  No context
+    //
+    if (!sessionContext) return
+    //
+    //  Get user from context
+    //
+    ref_selected_cx_usid.current = sessionContext.cx_usid
+    //
+    //  Set Shrink
+    //
+    const cx_shrink = sessionContext.cx_shrink
+    setshrink(cx_shrink)
+    if (cx_shrink) {
+      setshrink_Text('text-xxs')
+    } else {
+      setshrink_Text('text-xxs md:text-xs')
+    }
     // eslint-disable-next-line
-  }, [])
+  }, [sessionContext])
   //......................................................................................
-  //  Initilaisation
+  //  Initilaisation - after context usid
   //......................................................................................
   useEffect(() => {
+    //
+    //  Initialisation
+    //
     const initialize = async () => {
-      //
-      //  Ensure the userid is set
-      //
-      if (sessionContext?.cx_usid) {
-        setuid(sessionContext.cx_usid)
-      }
       //
       //  Set the selected values
       //
       if (selected_sbsbid) await selectedOwnerSubject()
-      ref_initialisedSelection.current = true
+      //
+      //  Update Columns and rows
+      //
+      updateColumns()
+      updateRows()
+      //
+      //  Allow fetch of data
+      //
+      setinitialisationCompleted(true)
     }
     //
-    //  Initialise the data
+    //  Initialise the data when USID set
     //
-    initialize()
+    if (ref_selected_cx_usid.current > 0) initialize()
     // eslint-disable-next-line
-  }, [sessionContext])
+  }, [ref_selected_cx_usid.current])
   //......................................................................................
   // Debounce selection
   //......................................................................................
   type DebouncedState = {
-    uid: string | number
     owner: string | number
     subject: string | number
     ref: string | number
@@ -115,17 +143,20 @@ export default function Table({ selected_sbsbid }: FormProps) {
     who: string | number
     questions: string | number
     type: string | number
+    currentPage: number
+    initialisationCompleted: boolean
   }
 
   const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    uid: 0,
     owner: '',
     subject: '',
     ref: '',
     desc: '',
     who: '',
     questions: 0,
-    type: ''
+    type: '',
+    currentPage: 1,
+    initialisationCompleted: false
   })
   //
   //  Debounce message
@@ -140,85 +171,91 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //
   useEffect(() => {
     //
-    //  Data initialised
+    //  Initialisation not complete
     //
-    if (uid > 0 && ref_initialisedSelection.current)
-      ref_initialised.current = true
+    if (!initialisationCompleted) return
     //
-    //  Only debounce if the data is initialised
+    // Adjust currentPage if it exceeds totalPages
     //
-    if (ref_initialised.current) {
-      setMessage('Applying filters...')
+    if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
+    //
+    //  Reset subject if Owner changes
+    //
+    if (owner !== debouncedState.owner && subject) setsubject('')
+    //
+    //  Debounce Message
+    //
+    setMessage('Debouncing...')
+    //
+    // Input change
+    //
+    const inputChange =
+      ref !== debouncedState.ref ||
+      desc !== debouncedState.desc ||
+      Number(questions) !== debouncedState.questions
+    //
+    // Dropdown change
+    //
+    const dropdownChange =
+      owner !== debouncedState.owner ||
+      subject !== debouncedState.subject ||
+      who !== debouncedState.who ||
+      type !== debouncedState.type
+    //
+    // Determine debounce time
+    //
+    const timeout = firstRender.current
+      ? 1
+      : inputChange
+        ? 1000
+        : dropdownChange
+          ? 200
+          : 1
+    //
+    //  Debounce
+    //
+    const handler = setTimeout(() => {
+      setDebouncedState({
+        owner,
+        subject,
+        ref,
+        desc,
+        who,
+        questions: Number(questions as string),
+        type,
+        currentPage,
+        initialisationCompleted
+      })
       //
-      //  Do not timeout on first render
+      //  Default timeout after first render
       //
-      const timeout = firstRender.current ? 1 : 1000
+      firstRender.current = false
       //
-      //  Debounce
+      //  Fetch the data
       //
-      const handler = setTimeout(() => {
-        setDebouncedState({
-          uid,
-          owner,
-          subject,
-          ref,
-          desc,
-          who,
-          questions: Number(questions as string),
-          type
-        })
-        //
-        //  Normal debounce if data initialised
-        //
-        setShouldFetchData(true)
-        //
-        //  Default timeout after first render
-        //
-        firstRender.current = false
-      }, timeout)
-      //
-      // Cleanup the timeout on change
-      //
-      return () => {
-        clearTimeout(handler)
-      }
+      fetchdata()
+    }, timeout)
+    //
+    // Cleanup the timeout on change
+    //
+    return () => {
+      clearTimeout(handler)
     }
     //
     //  Values to debounce
     //
     // eslint-disable-next-line
-  }, [uid, owner, subject, ref, desc, who, questions, type])
-  //......................................................................................
-  // Reset the subject when the owner changes
-  //......................................................................................
-  useEffect(() => {
-    if (!selected_sbsbid) setsubject('')
-  }, [owner, selected_sbsbid])
-  //
-  // Adjust currentPage if it exceeds totalPages
-  //
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-  //
-  // Change of current page
-  //
-  useEffect(() => {
-    setShouldFetchData(true)
-  }, [currentPage])
-  //
-  // Change of current page or should fetch data
-  //
-  useEffect(() => {
-    if (ref_initialised.current && shouldFetchData) {
-      fetchdata()
-      setShouldFetchData(false)
-      setMessage('')
-    }
-    // eslint-disable-next-line
-  }, [shouldFetchData, debouncedState])
+  }, [
+    owner,
+    subject,
+    ref,
+    desc,
+    who,
+    questions,
+    type,
+    currentPage,
+    initialisationCompleted
+  ])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -236,21 +273,21 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //
     //  smaller screens
     //
-    ref_show_quiz.current = true
+    setshow_quiz(true)
     if (widthNumber >= 2) {
-      if (!selected_sbsbid) ref_show_owner.current = true
-      if (!selected_sbsbid) ref_show_subject.current = true
-      ref_show_questions.current = true
-      ref_show_type.current = true
+      if (!selected_sbsbid) setshow_owner(true)
+      if (!selected_sbsbid) setshow_subject(true)
+      setshow_questions(true)
+      setshow_type(true)
     }
     if (widthNumber >= 3) {
-      ref_show_who.current = true
+      setshow_who(true)
     }
     if (widthNumber >= 4) {
-      ref_show_ref.current = true
+      setshow_ref(true)
     }
     // Description width
-    ref_widthDesc.current =
+    setwidthDesc(
       widthNumber >= 4
         ? 100
         : widthNumber >= 3
@@ -258,6 +295,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
           : widthNumber >= 2
             ? 40
             : 30
+    )
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -295,10 +333,13 @@ export default function Table({ selected_sbsbid }: FormProps) {
         whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
       } as table_fetch_Props)
       const row = rows[0]
-      setowner(row.sb_owner)
-      setsubject(row.sb_subject)
-      setsb_references(row.sb_cntreference)
-      setsb_cntquestions(row.sb_cntquestions)
+      //
+      //  Restrict to owner/subject
+      //
+      ref_sb_owner.current = row.sb_owner
+      ref_sb_subject.current = row.sb_subject
+      ref_sb_cntreferences.current = row.sb_cntreference
+      ref_sb_cntquestions.current = row.sb_cntquestions
       //
       //  Errors
       //
@@ -311,22 +352,43 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    //  The user-id must be set & filters
+    //  Message selected_sbsbid
     //
-    if (uid === 0) return
+    setMessage('Applying filters...')
     //
     // Construct filters dynamically from input fields
     //
     const filtersToUpdate: Filter[] = [
-      { column: 'uo_usid', value: uid, operator: '=' },
-      { column: 'rf_owner', value: owner, operator: '=' },
-      { column: 'rf_subject', value: subject, operator: '=' },
+      { column: 'uo_usid', value: ref_selected_cx_usid.current, operator: '=' },
       { column: 'rf_who', value: who, operator: '=' },
       { column: 'rf_type', value: type, operator: '=' },
       { column: 'rf_ref', value: ref, operator: 'LIKE' },
       { column: 'rf_desc', value: desc, operator: 'LIKE' },
       { column: 'rf_cntquestions', value: questions, operator: '>=' }
     ]
+    //
+    //  Passed values
+    //
+    if (selected_sbsbid) {
+      const additions: Filter[] = [
+        {
+          column: 'rf_sbid',
+          value: selected_sbsbid,
+          operator: '='
+        }
+      ]
+      filtersToUpdate.push(...additions)
+    }
+    //
+    //  Selected values
+    //
+    else {
+      const additions: Filter[] = [
+        { column: 'rf_owner', value: owner, operator: '=' },
+        { column: 'rf_subject', value: subject, operator: '=' }
+      ]
+      filtersToUpdate.push(...additions)
+    }
     //
     // Filter out any entries where `value` is not defined or empty
     //
@@ -340,7 +402,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
       //
       const table = 'trf_reference'
       //
-      //  Distinct - no uid selected
+      //  Distinct - no  usid selected
       //
       let distinctColumns: string[] = []
       //
@@ -350,7 +412,6 @@ export default function Table({ selected_sbsbid }: FormProps) {
         { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
         { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
       ]
-
       //
       // Calculate the offset for pagination
       //
@@ -381,6 +442,10 @@ export default function Table({ selected_sbsbid }: FormProps) {
       })
       setTotalPages(fetchedTotalPages)
       //
+      // Reset message after debounce completes
+      //
+      setMessage('')
+      //
       //  Data can be displayed
       //
       setLoading(false)
@@ -405,16 +470,20 @@ export default function Table({ selected_sbsbid }: FormProps) {
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
         {selected_sbsbid && (
-          <div className='pl-2 py-2 text-xs'>
+          <div className={`pl-2 py-2 ${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
-            <span className='text-green-500'>{owner}</span>
+            <span className='text-green-500'>{ref_sb_owner.current}</span>
             <span className='pl-2 font-bold'> Subject: </span>
-            <span className='text-green-500'>{subject}</span>
+            <span className='text-green-500'>{ref_sb_subject.current}</span>
             <span className='pl-2 font-bold'> References: </span>
-            <span className='text-green-500'>{sb_references}</span>
+            <span className='text-green-500'>
+              {ref_sb_cntreferences.current}
+            </span>
             <span className='pl-2 font-bold'> Questions: </span>
-            <span className='text-green-500'>{sb_cntquestions}</span>
-            {Number(sb_cntquestions) > 0 && (
+            <span className='text-green-500'>
+              {ref_sb_cntquestions.current}
+            </span>
+            {Number(ref_sb_cntquestions.current) > 0 && (
               <span>
                 <div className='pl-2 inline-flex justify-center items-center'>
                   <MyLink
@@ -422,7 +491,9 @@ export default function Table({ selected_sbsbid }: FormProps) {
                       pathname: `/dashboard/quiz/${selected_sbsbid}`,
                       query: { from: 'reference', idColumn: 'qq_sbid' }
                     }}
-                    overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                    overrideClass={`bg-blue-500 text-white hover:bg-blue-600 ${
+                      shrink ? 'h-5' : 'h-6'
+                    } ${shrink_Text}`}
                   >
                     Quiz
                   </MyLink>
@@ -439,40 +510,40 @@ export default function Table({ selected_sbsbid }: FormProps) {
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xs'>
-              {ref_show_owner.current && (
+            <tr className={`${shrink_Text}`}>
+              {show_owner && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {ref_show_subject.current && (
+              {show_subject && (
                 <th scope='col' className=' font-medium px-2'>
                   Subject-name
                 </th>
               )}
 
-              {ref_show_ref.current && (
+              {show_ref && (
                 <th scope='col' className=' font-medium px-2'>
                   Ref
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2'>
+              <th scope='col' className=' font-medium px-2 '>
                 Description
               </th>
-              {ref_show_who.current && (
-                <th scope='col' className=' font-medium px-2'>
+              {show_who && (
+                <th scope='col' className=' font-medium px-2 text-center'>
                   Who
                 </th>
               )}
               <th scope='col' className=' font-medium px-2 text-center'>
                 Type
               </th>
-              {ref_show_questions.current && (
+              {show_questions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
               )}
-              {ref_show_quiz.current && (
+              {show_quiz && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Quiz
                 </th>
@@ -485,7 +556,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {ref_show_owner.current && (
+              {show_owner && (
                 <th scope='col' className='px-2'>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -494,10 +565,14 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     name='owner'
                     table='tuo_usersowner'
                     tableColumn='uo_usid'
-                    tableColumnValue={uid}
+                    tableColumnValue={ref_selected_cx_usid.current}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs'
+                    overrideClass_Dropdown={
+                      shrink
+                        ? `h-5 w-24 ${shrink_Text}`
+                        : `h-6 w-28 ${shrink_Text}`
+                    }
                     includeBlank={true}
                   />
                 </th>
@@ -505,7 +580,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {/* SUBJECT                                                 */}
               {/* ................................................... */}
-              {ref_show_subject.current && (
+              {show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -517,17 +592,20 @@ export default function Table({ selected_sbsbid }: FormProps) {
                       tableColumnValue={owner}
                       optionLabel='sb_title'
                       optionValue='sb_subject'
-                      overrideClass_Dropdown='h-6 w-36 text-xxs'
+                      overrideClass_Dropdown={
+                        shrink
+                          ? `h-5 w-32 ${shrink_Text}`
+                          : `h-6 w-36 ${shrink_Text}`
+                      }
                       includeBlank={true}
                     />
                   )}
                 </th>
               )}
-
               {/* ................................................... */}
               {/* REF                                                 */}
               {/* ................................................... */}
-              {ref_show_ref.current && (
+              {show_ref && (
                 <th scope='col' className=' px-2 '>
                   <label htmlFor='ref' className='sr-only'>
                     Reference
@@ -535,7 +613,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   <MyInput
                     id='ref'
                     name='ref'
-                    overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xxs`}
+                    overrideClass={
+                      shrink
+                        ? `h-5 w-32 ${shrink_Text}`
+                        : `h-6 w-40 ${shrink_Text}`
+                    }
                     type='text'
                     value={ref}
                     onChange={e => {
@@ -555,7 +637,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={`h-6 w-40 rounded-md border border-blue-500  py-2 font-normal text-xss`}
+                  overrideClass={
+                    shrink
+                      ? `h-5 w-40 ${shrink_Text}`
+                      : `h-6 w-48 ${shrink_Text}`
+                  }
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -567,8 +653,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {/* WHO                                                 */}
               {/* ................................................... */}
-              {ref_show_who.current && (
-                <th scope='col' className=' px-2'>
+              {show_who && (
+                <th scope='col' className=' px-2 text-center'>
                   <DropdownGeneric
                     selectedOption={who}
                     setSelectedOption={setwho}
@@ -576,7 +662,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     table='twh_who'
                     optionLabel='wh_title'
                     optionValue='wh_who'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs'
+                    overrideClass_Dropdown={
+                      shrink
+                        ? `h-5 w-28 ${shrink_Text}`
+                        : `h-6 w-32 ${shrink_Text}`
+                    }
                     includeBlank={true}
                   />
                 </th>
@@ -585,7 +675,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {/* type                                                 */}
               {/* ................................................... */}
-              {ref_show_type.current && (
+              {show_type && (
                 <th scope='col' className=' px-2 text-center'>
                   <DropdownGeneric
                     selectedOption={type}
@@ -594,7 +684,11 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     table='trt_reftype'
                     optionLabel='rt_title'
                     optionValue='rt_type'
-                    overrideClass_Dropdown='h-6 w-24 text-xxs'
+                    overrideClass_Dropdown={
+                      shrink
+                        ? `h-5 w-20 ${shrink_Text}`
+                        : `h-6 w-24 ${shrink_Text}`
+                    }
                     includeBlank={true}
                   />
                 </th>
@@ -602,12 +696,14 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {ref_show_questions.current && (
+              {show_questions && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-xxs text-center`}
+                    overrideClass={`text-center ${
+                      shrink ? 'h-5 w-10' : 'h-6 w-12'
+                    } ${shrink_Text}`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -632,43 +728,66 @@ export default function Table({ selected_sbsbid }: FormProps) {
           <tbody className='bg-white text-xs'>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                {ref_show_owner.current && (
-                  <td className=' px-2 '>{tabledata.rf_owner}</td>
+                {/* ................................................... */}
+                {/* Owner                                          */}
+                {/* ................................................... */}
+                {show_owner && (
+                  <td
+                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                  >
+                    {tabledata.rf_owner}
+                  </td>
                 )}
-                {ref_show_subject.current && (
-                  <td className=' px-2 '>{tabledata.rf_subject}</td>
+                {/* ................................................... */}
+                {/* Subject                                          */}
+                {/* ................................................... */}
+                {show_subject && (
+                  <td
+                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                  >
+                    {tabledata.rf_subject}
+                  </td>
                 )}
-
                 {/* ................................................... */}
                 {/* Ref                                          */}
                 {/* ................................................... */}
-                {ref_show_ref.current && (
-                  <td className=' px-2 '>{tabledata.rf_ref}</td>
+                {show_ref && (
+                  <td
+                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                  >
+                    {tabledata.rf_ref}
+                  </td>
                 )}
                 {/* ................................................... */}
                 {/* desc                                          */}
                 {/* ................................................... */}
-                <td className='px-2 '>
-                  {tabledata.rf_desc.length > ref_widthDesc.current
-                    ? `${tabledata.rf_desc.slice(0, ref_widthDesc.current - 3)}...`
+                <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                  {tabledata.rf_desc.length > widthDesc
+                    ? `${tabledata.rf_desc.slice(0, widthDesc - 3)}...`
                     : tabledata.rf_desc}
                 </td>
                 {/* ................................................... */}
                 {/* who                                          */}
                 {/* ................................................... */}
-                {ref_show_who.current && (
-                  <td className=' px-2 '>{tabledata.rf_who}</td>
+                {show_who && (
+                  <td
+                    className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                  >
+                    {tabledata.rf_who}
+                  </td>
                 )}
                 {/* ................................................... */}
                 {/* Read/video                                                */}
                 {/* ................................................... */}
-                <td className='px-2 text-center'>
+                <td
+                  className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                >
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
                         window.open(`${tabledata.rf_link}`, '_blank')
                       }
-                      overrideClass={`h-6 ${
+                      overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text} ${
                         tabledata.rf_type === 'youtube'
                           ? 'bg-orange-500 hover:bg-orange-600'
                           : 'bg-green-500 hover:bg-green-600'
@@ -681,18 +800,19 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_questions.current &&
-                  'rf_cntquestions' in tabledata && (
-                    <td className='px-2  text-center'>
-                      {tabledata.rf_cntquestions > 0
-                        ? tabledata.rf_cntquestions
-                        : ' '}
-                    </td>
-                  )}
+                {show_questions && 'rf_cntquestions' in tabledata && (
+                  <td
+                    className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                  >
+                    {tabledata.rf_cntquestions > 0
+                      ? tabledata.rf_cntquestions
+                      : ' '}
+                  </td>
+                )}
                 {/* ................................................... */}
                 {/* Quiz                                                */}
                 {/* ................................................... */}
-                {ref_show_quiz.current && (
+                {show_quiz && (
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
                       {'rf_cntquestions' in tabledata &&
@@ -702,7 +822,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                             pathname: `/dashboard/quiz/${tabledata.rf_rfid}`,
                             query: { from: 'reference', idColumn: 'qq_rfid' }
                           }}
-                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600'
+                          overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
                         >
                           Quiz
                         </MyLink>

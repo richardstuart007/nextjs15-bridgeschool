@@ -1,32 +1,54 @@
 import clsx from 'clsx'
 
 /**
- * Merges default classes with override classes.
+ * Merges default classes with override classes, and removes duplicates.
  * @param {string} defaultClass - The default classes as a string.
  * @param {string} overrideClass - The override classes as a string.
- * @returns {string} - The merged class string.
+ * @returns {string} - The merged class string with duplicates removed.
  */
-export function myMergeClasses(defaultClass: string, overrideClass: string): string {
+export function myMergeClasses(
+  defaultClass: string,
+  overrideClass: string
+): string {
   //
-  //  Classes to replace
+  //  Classes to replace (including text and background colors, but not size classes)
   //
-  const patternsToReplace = ['h-', 'w-', 'px-', 'py-']
+  const patternsToReplace = ['h-', 'w-', 'px-', 'py-', 'text-', 'bg-']
+
   //
   //  Split into arrays
   //
   const overrideClassArray = overrideClass.split(' ')
   const defaultClassArray = defaultClass.split(' ')
+
   //
-  // Replace default classes with matching override classes
+  // Function to extract the core property (e.g., "md:h-" → "h-")
+  //
+  const getCoreClass = (cls: string) => {
+    return cls.replace(/^(sm:|md:|lg:|xl:|2xl:)/, '') // Remove responsive prefix
+  }
+
+  //
+  // Check if the class is a size class like 'text-xs', 'text-sm', etc.
+  const isSizeClass = (cls: string) => {
+    return cls.startsWith('text-') && /-([a-z]+|[0-9]+)$/.test(cls)
+  }
+
+  //
+  // Replace default classes with matching override classes (excluding size classes)
   //
   const updatedClassArray = defaultClassArray.map(defaultCls => {
     const matchingOverride = overrideClassArray.find(overrideCls =>
       patternsToReplace.some(
-        pattern => defaultCls.startsWith(pattern) && overrideCls.startsWith(pattern)
+        pattern =>
+          getCoreClass(defaultCls).startsWith(pattern) &&
+          getCoreClass(overrideCls).startsWith(pattern) &&
+          !isSizeClass(overrideCls) // Do not replace size-related classes
       )
     )
     return matchingOverride || defaultCls
   })
+
   //
   // Add override classes not present in default classes
   //
@@ -34,13 +56,20 @@ export function myMergeClasses(defaultClass: string, overrideClass: string): str
     overrideCls =>
       !defaultClassArray.some(defaultCls =>
         patternsToReplace.some(
-          pattern => defaultCls.startsWith(pattern) && overrideCls.startsWith(pattern)
+          pattern =>
+            getCoreClass(defaultCls).startsWith(pattern) &&
+            getCoreClass(overrideCls).startsWith(pattern) &&
+            !isSizeClass(overrideCls) // Do not replace size-related classes
         )
       )
   )
+
   //
-  //  Merge the classes
+  //  Merge the classes and remove duplicates
   //
-  const mergedClasses = clsx([...updatedClassArray, ...additionalOverrides])
-  return mergedClasses
+  const mergedClasses = [...updatedClassArray, ...additionalOverrides].filter(
+    (value, index, self) => self.indexOf(value) === index
+  ) // Remove duplicates
+
+  return clsx(mergedClasses) // Merge the final classes into a string
 }

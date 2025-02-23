@@ -45,20 +45,18 @@ export default function Table() {
   //  Show flags
   //
   const ref_rowsPerPage = useRef(0)
-  //
-  //  Show flags
-  //
-  const [ref_show_sbid, setref_show_sbid] = useState(false)
-  const [ref_show_rfid, setref_show_rfid] = useState(false)
-  const [ref_show_owner, setref_show_owner] = useState(false)
-  const [ref_show_subject, setref_show_subject] = useState(false)
-  const [ref_show_hsid, setref_show_hsid] = useState(false)
-  const [ref_show_usid, setref_show_usid] = useState(false)
-  const [ref_show_title, setref_show_title] = useState(false)
-  const [ref_show_name, setref_show_name] = useState(false)
-  const [ref_show_questions, setref_show_questions] = useState(false)
-  const [ref_show_correct, setref_show_correct] = useState(false)
-  const [ref_show_datetime, setref_show_datetime] = useState(false)
+
+  const [show_sbid, setshow_sbid] = useState(false)
+  const [show_rfid, setshow_rfid] = useState(false)
+  const [show_owner, setshow_owner] = useState(false)
+  const [show_subject, setshow_subject] = useState(false)
+  const [show_hsid, setshow_hsid] = useState(false)
+  const [show_usid, setshow_usid] = useState(false)
+  const [show_title, setshow_title] = useState(false)
+  const [show_name, setshow_name] = useState(false)
+  const [show_questions, setshow_questions] = useState(false)
+  const [show_correct, setshow_correct] = useState(false)
+  const [show_datetime, setshow_datetime] = useState(false)
   const [ref_to_dateFormat, setref_to_dateFormat] = useState('MMM-dd')
   //
   //  Other state
@@ -74,7 +72,6 @@ export default function Table() {
   //
   const [shrink, setshrink] = useState(false)
   const [shrink_Text, setshrink_Text] = useState('text-xxs md:text-xs')
-  const [shrink_Button, setshrink_Button] = useState('h-5 md:h6 w-12 md:w-16')
   //......................................................................................
   //  cx_usid - Mandatory to continue
   //......................................................................................
@@ -95,10 +92,8 @@ export default function Table() {
         setshrink(cx_shrink)
         if (cx_shrink) {
           setshrink_Text('text-xxs')
-          setshrink_Button('h-5 w-12')
         } else {
           setshrink_Text('text-xxs md:text-xs')
-          setshrink_Button('h-5 md:h6 w-12 md:w-16')
         }
         //
         //  Default curent user
@@ -183,11 +178,7 @@ export default function Table() {
   //
   useEffect(() => {
     //
-    //  The current usid must be set
-    //
-    if (ref_selected_cx_usid.current === 0) return
-    //
-    //  Owner not set
+    //  Initialisation not complete
     //
     if (!initialisationCompleted) return
     //
@@ -195,20 +186,26 @@ export default function Table() {
     //
     if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
     //
-    //  Debounce
+    //  Reset subject if Owner changes
     //
-    setMessage('Applying filters...')
+    if (owner !== debouncedState.owner && subject) setsubject('')
+    //
+    //  Debounce Message
+    //
+    setMessage('Debouncing...')
     //
     // Input change
     //
     const inputChange =
+      subject !== debouncedState.subject ||
+      Number(sbid) !== debouncedState.sbid ||
+      Number(rfid) !== debouncedState.rfid ||
       Number(hsid) !== debouncedState.hsid ||
       title !== debouncedState.title ||
       Number(usid) !== debouncedState.usid ||
       name !== debouncedState.name ||
-      Number(correct) !== debouncedState.correct ||
       Number(questions) !== debouncedState.questions ||
-      subject !== debouncedState.subject
+      Number(correct) !== debouncedState.correct
     //
     // Dropdown change
     //
@@ -246,6 +243,10 @@ export default function Table() {
       //  Default timeout after first render
       //
       firstRender.current = false
+      //
+      //  Fetch the data
+      //
+      fetchdata()
     }, timeout)
     //
     // Cleanup the timeout on change
@@ -268,23 +269,6 @@ export default function Table() {
     currentPage,
     initialisationCompleted
   ])
-  //......................................................................................
-  // Reset the subject when the owner changes
-  //......................................................................................
-  useEffect(() => {
-    setsubject('')
-  }, [owner])
-  //......................................................................................
-  // Fetch on mount and debounce
-  //......................................................................................
-  //
-  // Should fetch data
-  //
-  useEffect(() => {
-    fetchdata()
-    setMessage('')
-    // eslint-disable-next-line
-  }, [debouncedState])
   //----------------------------------------------------------------------------------------------
   // fetch Owner for a user
   //----------------------------------------------------------------------------------------------
@@ -311,7 +295,6 @@ export default function Table() {
         ref_selected_uoowner.current = uo_owner
         setowner(uo_owner)
       }
-
       //
       //  Errors
       //
@@ -323,6 +306,10 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
+    //
+    //  Message
+    //
+    setMessage('Applying filters...')
     //
     // Construct filters dynamically from input fields
     //
@@ -383,6 +370,10 @@ export default function Table() {
       })
       setTotalPages(fetchedTotalPages)
       //
+      // Reset message after debounce completes
+      //
+      setMessage('')
+      //
       //  Data can be displayed
       //
       setLoading(false)
@@ -411,26 +402,26 @@ export default function Table() {
     //  Small to large screens
     //
     if (widthNumber >= 1) {
-      setref_show_title(true)
-      setref_show_datetime(true)
+      setshow_title(true)
+      setshow_datetime(true)
     }
     if (widthNumber >= 2) {
-      setref_show_correct(true)
+      setshow_correct(true)
       setref_to_dateFormat('yy-MMM-dd HH:mm')
     }
     if (widthNumber >= 3) {
-      cx_detail ? setref_show_name(true) : setref_show_name(false)
+      cx_detail ? setshow_name(true) : setshow_name(false)
     }
     if (widthNumber >= 4) {
-      if (!ref_selected_uoowner.current) setref_show_owner(true)
-      cx_detail ? setref_show_subject(true) : setref_show_subject(false)
+      if (!ref_selected_uoowner.current) setshow_owner(true)
+      cx_detail ? setshow_subject(true) : setshow_subject(false)
     }
     if (widthNumber >= 5) {
-      cx_detail ? setref_show_questions(true) : setref_show_questions(false)
-      cx_detail ? setref_show_hsid(true) : setref_show_hsid(false)
-      cx_detail ? setref_show_sbid(true) : setref_show_sbid(false)
-      cx_detail ? setref_show_rfid(true) : setref_show_rfid(false)
-      cx_detail ? setref_show_usid(true) : setref_show_usid(false)
+      cx_detail ? setshow_questions(true) : setshow_questions(false)
+      cx_detail ? setshow_hsid(true) : setshow_hsid(false)
+      cx_detail ? setshow_sbid(true) : setshow_sbid(false)
+      cx_detail ? setshow_rfid(true) : setshow_rfid(false)
+      cx_detail ? setshow_usid(true) : setshow_usid(false)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -465,7 +456,7 @@ export default function Table() {
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {ref_selected_uoowner && (
+        {ref_selected_uoowner.current && (
           <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
@@ -480,57 +471,57 @@ export default function Table() {
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className={`${shrink_Text}`}>
-              {ref_show_owner && (
+              {show_owner && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {ref_show_subject && (
+              {show_subject && (
                 <th scope='col' className=' font-medium px-2'>
                   Subject
                 </th>
               )}
-              {ref_show_sbid && (
+              {show_sbid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   sbid
                 </th>
               )}
-              {ref_show_rfid && (
+              {show_rfid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   rfid
                 </th>
               )}
-              {ref_show_hsid && (
+              {show_hsid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   hsid
                 </th>
               )}
-              {ref_show_datetime && (
+              {show_datetime && (
                 <th scope='col' className=' font-medium px-2'>
                   Date
                 </th>
               )}
-              {ref_show_title && (
+              {show_title && (
                 <th scope='col' className=' font-medium px-2'>
                   Title
                 </th>
               )}
-              {ref_show_usid && (
+              {show_usid && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   usid
                 </th>
               )}
-              {ref_show_name && (
+              {show_name && (
                 <th scope='col' className=' font-medium px-2'>
                   User-Name
                 </th>
               )}
-              {ref_show_questions && (
+              {show_questions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
               )}
-              {ref_show_correct && (
+              {show_correct && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   %
                 </th>
@@ -549,7 +540,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {ref_show_owner && (
+              {show_owner && (
                 <th scope='col' className='px-2'>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -561,7 +552,11 @@ export default function Table() {
                     tableColumnValue={sessionContext.cx_usid}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
-                    overrideClass_Dropdown={`h-6 w-28 ${shrink_Text}`}
+                    overrideClass_Dropdown={
+                      shrink
+                        ? `h-5 w-24 ${shrink_Text}`
+                        : `h-6 w-28 ${shrink_Text}`
+                    }
                     includeBlank={true}
                   />
                 </th>
@@ -569,7 +564,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* SUBJECT                                                 */}
               {/* ................................................... */}
-              {ref_show_subject && (
+              {show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -583,7 +578,7 @@ export default function Table() {
                       optionValue='sb_subject'
                       overrideClass_Dropdown={
                         shrink
-                          ? `h-6 w-28 ${shrink_Text}`
+                          ? `h-5 w-28 ${shrink_Text}`
                           : `h-6 w-36 ${shrink_Text}`
                       }
                       includeBlank={true}
@@ -594,12 +589,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* sbid                                                 */}
               {/* ................................................... */}
-              {ref_show_sbid && (
+              {show_sbid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='sbid'
                     name='sbid'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={sbid}
                     onChange={e => {
@@ -615,12 +610,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* rfid                                                 */}
               {/* ................................................... */}
-              {ref_show_rfid && (
+              {show_rfid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='rfid'
                     name='rfid'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={rfid}
                     onChange={e => {
@@ -636,12 +631,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* hsid                                                 */}
               {/* ................................................... */}
-              {ref_show_hsid && (
+              {show_hsid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='hsid'
                     name='hsid'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12 ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={hsid}
                     onChange={e => {
@@ -657,22 +652,18 @@ export default function Table() {
               {/* ................................................... */}
               {/* DateTime                                          */}
               {/* ................................................... */}
-              {ref_show_datetime && (
+              {show_datetime && (
                 <th scope='col' className={`px-2 ${shrink_Text}`}></th>
               )}
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
-              {ref_show_title && (
+              {show_title && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='title'
                     name='title'
-                    overrideClass={
-                      shrink
-                        ? `h-6 w-28 ${shrink_Text}`
-                        : `h-6 w-36 md:40 ${shrink_Text}`
-                    }
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-5 md:h6 w-28 md:w-36`}`}
                     type='text'
                     value={title}
                     onChange={e => {
@@ -685,12 +676,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* usid                                                 */}
               {/* ................................................... */}
-              {ref_show_usid && (
+              {show_usid && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='usid'
                     name='usid'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center w-12 h-6 ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={usid}
                     onChange={e => {
@@ -707,16 +698,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* Name                                                 */}
               {/* ................................................... */}
-              {ref_show_name && (
+              {show_name && (
                 <th scope='col' className='px-2'>
                   <MyInput
                     id='name'
                     name='name'
-                    overrideClass={
-                      shrink
-                        ? `h-6 w-28 ${shrink_Text}`
-                        : `h-6 w-36 md:40 ${shrink_Text}`
-                    }
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-5 md:h6 w-28 md:w-36`}`}
                     type='text'
                     value={name}
                     onChange={e => {
@@ -730,12 +717,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {ref_show_questions && (
+              {show_questions && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12  ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -751,12 +738,12 @@ export default function Table() {
               {/* ................................................... */}
               {/* correct                                           */}
               {/* ................................................... */}
-              {ref_show_correct && (
+              {show_correct && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='correct'
                     name='correct'
-                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center h-6 w-12  ${shrink_Text}`}
+                    overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
                     type='text'
                     value={correct}
                     onChange={e => {
@@ -785,32 +772,32 @@ export default function Table() {
                   key={`${tabledata.hs_hsid}-${index}`}
                   className='w-full border-b'
                 >
-                  {ref_show_owner && (
+                  {show_owner && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.hs_owner}
                     </td>
                   )}
-                  {ref_show_subject && (
+                  {show_subject && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.hs_subject}
                     </td>
                   )}
-                  {ref_show_sbid && (
+                  {show_sbid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.sb_sbid > 0 ? tabledata.sb_sbid : ' '}
                     </td>
                   )}
-                  {ref_show_rfid && (
+                  {show_rfid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_rfid > 0 ? tabledata.hs_rfid : ' '}
                     </td>
                   )}
-                  {ref_show_hsid && (
+                  {show_hsid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_hsid}
                     </td>
                   )}
-                  {ref_show_datetime && (
+                  {show_datetime && (
                     <td className={`px-2 text-left  ${shrink_Text}`}>
                       {convertUTCtoLocal({
                         datetimeUTC: tabledata.hs_datetime,
@@ -819,7 +806,7 @@ export default function Table() {
                       })}
                     </td>
                   )}
-                  {ref_show_title && (
+                  {show_title && (
                     <td className={`px-2 ${shrink_Text}`}>
                       {tabledata.sb_title
                         ? tabledata.sb_title.length > 35
@@ -828,28 +815,28 @@ export default function Table() {
                         : ' '}
                     </td>
                   )}
-                  {ref_show_usid && (
+                  {show_usid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_usid}
                     </td>
                   )}
-                  {ref_show_name && (
+                  {show_name && (
                     <td className={`px-2   ${shrink_Text}`}>
                       {tabledata.us_name}
                     </td>
                   )}
-                  {ref_show_questions && (
+                  {show_questions && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
                       {tabledata.hs_questions}
                     </td>
                   )}
-                  {ref_show_correct && (
+                  {show_correct && (
                     <td className={`px-2   text-center ${shrink_Text}`}>
                       {tabledata.hs_correctpercent}
                     </td>
                   )}
                   {/* ................................................... */}
-                  {/* Review                                              */}
+                  {/* Review                      h-5 md:h6 w-12 md:w-16                        */}
                   {/* ................................................... */}
                   <td className='px-2  text-center'>
                     <div className='inline-flex justify-center items-center'>
@@ -858,7 +845,7 @@ export default function Table() {
                           pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                           query: { from: 'history' }
                         }}
-                        overrideClass={`bg-green-500 text-white justify-center hover:bg-green-600 ${shrink_Button} ${shrink_Text}`}
+                        overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
                       >
                         Review
                       </MyLink>
@@ -881,7 +868,7 @@ export default function Table() {
                                 query: { from: 'history', idColumn: 'qq_sbid' }
                               }
                         }
-                        overrideClass={`bg-blue-500 text-white justify-center hover:bg-blue-600 ${shrink_Button} ${shrink_Text}`}
+                        overrideClass={`text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
                       >
                         Quiz
                       </MyLink>

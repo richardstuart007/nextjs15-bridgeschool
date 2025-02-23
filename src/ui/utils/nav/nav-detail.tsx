@@ -45,8 +45,8 @@ export default function NavDev() {
         onClick={() => setdetail(prev => !prev)}
         overrideClass={
           detail
-            ? 'flex items-center justify-center bg-green-600 hover:bg-green-800 hover:text-red-600 px:1 h-5 w-10 text-xxs'
-            : 'flex items-center justify-center bg-green-600 hover:bg-green-800 hover:text-red-600 px:0 md:px-2  h-5 md:h-6 md:flex-none text-xxs md:text-xs'
+            ? 'flex items-center justify-center bg-green-400 hover:bg-green-500 hover:text-red-600 px:1 h-5 w-10 text-xxs'
+            : 'flex items-center justify-center bg-green-400 hover:bg-green-500 hover:text-red-600 px:0 md:px-2  h-5 md:h-6 md:flex-none text-xxs md:text-xs'
         }
       >
         {detail ? 'Detail' : 'Normal'}

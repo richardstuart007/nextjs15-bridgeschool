@@ -34,23 +34,28 @@ export default function Table() {
   const [cntquestions, setcntquestions] = useState<number | string>(1)
   const [cntreference, setcntreference] = useState<number | string>('')
   //
-  //  Show columns
+  //  Show flags
   //
-  const ref_widthDesc = useRef(0)
   const ref_rowsPerPage = useRef(0)
-  const ref_show_owner = useRef(false)
-  const ref_show_subject = useRef(false)
-  const ref_show_cntquestions = useRef(false)
-  const ref_show_cntreference = useRef(false)
+
+  const [show_owner, setshow_owner] = useState(false)
+  const [show_subject, setshow_subject] = useState(false)
+  const [show_cntquestions, setshow_cntquestions] = useState(false)
+  const [show_cntreference, setshow_cntreference] = useState(false)
   //
-  //  Data
+  //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
   const [tabledata, setTabledata] = useState<table_Subject[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [loading, setloading] = useState(true)
+  //
+  //  Shrink/Detail
+  //
+  const [shrink, setshrink] = useState(false)
+  const [shrink_Text, setshrink_Text] = useState('text-xxs md:text-xs')
   //......................................................................................
-  //  cx_usid - Mandatory to continue
+  //  Initilaisation
   //......................................................................................
   useEffect(() => {
     //
@@ -58,27 +63,35 @@ export default function Table() {
     //
     const initialiseData = async () => {
       //
-      //  Already initialised
-      //
-      if (initialisationCompleted) return
-      //
       //  Get user from context
       //
-      if (sessionContext?.cx_usid && ref_selected_cx_usid.current === 0) {
+      if (sessionContext?.cx_usid) {
         ref_selected_cx_usid.current = sessionContext.cx_usid
+        //
+        //  Set Shrink
+        //
+        const cx_shrink = sessionContext.cx_shrink
+        setshrink(cx_shrink)
+        if (cx_shrink) {
+          setshrink_Text('text-xxs')
+        } else {
+          setshrink_Text('text-xxs md:text-xs')
+        }
         //
         //  Get owner for user
         //
-        await fetchUserOwner()
-        //
-        //  Update Columns and rows
-        //
-        updateColumns()
-        updateRows()
-        //
-        //  Allow fetch of data
-        //
-        setinitialisationCompleted(true)
+        if (!initialisationCompleted) {
+          await fetchUserOwner()
+          //
+          //  Update Columns and rows
+          //
+          updateColumns()
+          updateRows()
+          //
+          //  Allow fetch of data
+          //
+          setinitialisationCompleted(true)
+        }
       }
     }
     //
@@ -119,11 +132,7 @@ export default function Table() {
   //
   useEffect(() => {
     //
-    //  The current usid must be set
-    //
-    if (ref_selected_cx_usid.current === 0) return
-    //
-    //  Owner not set
+    //  Initialisation not complete
     //
     if (!initialisationCompleted) return
     //
@@ -131,13 +140,19 @@ export default function Table() {
     //
     if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
     //
-    //  Debounce
+    //  Reset subject if Owner changes
     //
-    setMessage('Applying filters...')
+    if (owner !== debouncedState.owner && subject) setsubject('')
+    //
+    //  Debounce Message
+    //
+    setMessage('Debouncing...')
     //
     // Input change
     //
-    const inputChange = cntquestions !== debouncedState.cntquestions
+    const inputChange =
+      Number(cntquestions) !== debouncedState.cntquestions ||
+      Number(cntreference) !== debouncedState.cntreference
     //
     // Dropdown change
     //
@@ -169,6 +184,10 @@ export default function Table() {
       //  Default timeout after first render
       //
       firstRender.current = false
+      //
+      //  Fetch the data
+      //
+      fetchdata()
     }, timeout)
     //
     // Cleanup the timeout on change
@@ -185,23 +204,6 @@ export default function Table() {
     currentPage,
     initialisationCompleted
   ])
-  //......................................................................................
-  // Reset the subject when the owner changes
-  //......................................................................................
-  useEffect(() => {
-    setsubject('')
-  }, [owner])
-  //......................................................................................
-  // Fetch on mount and debounce
-  //......................................................................................
-  //
-  // Should fetch data
-  //
-  useEffect(() => {
-    fetchdata()
-    setMessage('')
-    // eslint-disable-next-line
-  }, [debouncedState])
   //----------------------------------------------------------------------------------------------
   // fetch Owner for a user
   //----------------------------------------------------------------------------------------------
@@ -228,7 +230,6 @@ export default function Table() {
         ref_selected_uoowner.current = uo_owner
         setowner(uo_owner)
       }
-
       //
       //  Errors
       //
@@ -240,6 +241,10 @@ export default function Table() {
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
+    //
+    //  Message
+    //
+    setMessage('Applying filters...')
     //
     // Construct filters dynamically from input fields
     //
@@ -302,6 +307,10 @@ export default function Table() {
       })
       setTotalPages(fetchedTotalPages)
       //
+      // Reset message after debounce completes
+      //
+      setMessage('')
+      //
       //  Data can be displayed
       //
       setloading(false)
@@ -329,22 +338,12 @@ export default function Table() {
     //
     //  smaller screens
     //
-    ref_show_subject.current = true
+    setshow_subject(true)
     if (widthNumber >= 2) {
-      if (!ref_selected_uoowner.current) ref_show_owner.current = true
-
-      ref_show_cntquestions.current = true
-      ref_show_cntreference.current = true
+      if (!ref_selected_uoowner.current) setshow_owner(true)
+      setshow_cntquestions(true)
+      setshow_cntreference(true)
     }
-    // Description width
-    ref_widthDesc.current =
-      widthNumber >= 4
-        ? 100
-        : widthNumber >= 3
-          ? 75
-          : widthNumber >= 2
-            ? 40
-            : 30
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -379,7 +378,7 @@ export default function Table() {
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
         {ref_selected_uoowner.current && (
-          <div className='pl-2 py-2 text-xxs md:text-xs'>
+          <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
           </div>
@@ -388,22 +387,22 @@ export default function Table() {
         {/** TABLE                                                                */}
         {/** -------------------------------------------------------------------- */}
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xxs md:text-xs'>
+          <thead className='rounded-lg text-left'>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
-            <tr className='text-xxs md:text-xs'>
-              {ref_show_owner.current && (
+            <tr className={`${shrink_Text}`}>
+              {show_owner && (
                 <th scope='col' className=' font-medium px-2'>
                   Owner
                 </th>
               )}
-              {ref_show_subject.current && (
+              {show_subject && (
                 <th scope='col' className=' font-medium px-2'>
                   Subject
                 </th>
               )}
-              {ref_show_cntquestions.current && (
+              {show_cntquestions && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   Questions
                 </th>
@@ -411,7 +410,7 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2 text-center'>
                 Quiz
               </th>
-              {ref_show_cntreference.current && (
+              {show_cntreference && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   References
                 </th>
@@ -423,11 +422,11 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className={`align-bottom ${shrink_Text}`}>
               {/* ................................................... */}
               {/* OWNER                                                 */}
               {/* ................................................... */}
-              {ref_show_owner.current && (
+              {show_owner && (
                 <th scope='col' className='px-2 '>
                   <DropdownGeneric
                     selectedOption={owner}
@@ -439,7 +438,11 @@ export default function Table() {
                     tableColumnValue={ref_selected_cx_usid.current}
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
-                    overrideClass_Dropdown='h-6 w-28 text-xxs md:text-xs'
+                    overrideClass_Dropdown={
+                      shrink
+                        ? `h-5 w-28 ${shrink_Text}`
+                        : `h-6 w-32 ${shrink_Text}`
+                    }
                     includeBlank={true}
                   />
                 </th>
@@ -447,7 +450,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* SUBJECT                                                 */}
               {/* ................................................... */}
-              {ref_show_subject.current && (
+              {show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
                     <DropdownGeneric
@@ -459,7 +462,11 @@ export default function Table() {
                       tableColumnValue={owner}
                       optionLabel='sb_title'
                       optionValue='sb_subject'
-                      overrideClass_Dropdown='h-6 w-40 text-xxs md:text-xs'
+                      overrideClass_Dropdown={
+                        shrink
+                          ? `h-5 w-28 ${shrink_Text}`
+                          : `h-6 w-40 ${shrink_Text}`
+                      }
                       includeBlank={true}
                     />
                   )}
@@ -468,12 +475,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
-              {ref_show_cntquestions.current && (
+              {show_cntquestions && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='cntquestions'
                     name='cntquestions'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-center text-xxs md:text-xs`}
+                    overrideClass={`text-center ${
+                      shrink ? 'h-5 w-10' : 'h-6 w-12'
+                    } ${shrink_Text}`}
                     type='text'
                     value={cntquestions}
                     onChange={e => {
@@ -493,12 +502,14 @@ export default function Table() {
               {/* ................................................... */}
               {/* cntreference                                           */}
               {/* ................................................... */}
-              {ref_show_cntreference.current && (
+              {show_cntreference && (
                 <th scope='col' className='px-2 text-center'>
                   <MyInput
                     id='cntreference'
                     name='cntreference'
-                    overrideClass={`h-6 w-12  rounded-md border border-blue-500  px-2 font-normal text-center text-xxs md:text-xs`}
+                    overrideClass={`text-center ${
+                      shrink ? 'h-5 w-10' : 'h-6 w-12'
+                    } ${shrink_Text}`}
                     type='text'
                     value={cntreference}
                     onChange={e => {
@@ -524,32 +535,31 @@ export default function Table() {
                 {/* ................................................... */}
                 {/* Owner                                           */}
                 {/* ................................................... */}
-                {ref_show_owner.current && (
-                  <td className=' px-2 text-xxs md:text-xs '>
+                {show_owner && (
+                  <td className={`px-2 ${shrink_Text}`}>
                     {tabledata.sb_owner}
                   </td>
                 )}
                 {/* ................................................... */}
                 {/* Subject                                          */}
                 {/* ................................................... */}
-                {ref_show_subject.current && (
-                  <td className=' px-2 text-xxs md:text-xs'>
+                {show_subject && (
+                  <td className={`px-2 ${shrink_Text}`}>
                     {tabledata.sb_title}
                   </td>
                 )}
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
-                {ref_show_cntquestions.current &&
-                  'sb_cntquestions' in tabledata && (
-                    <td className='px-2  text-center text-xxs md:text-xs'>
-                      {tabledata.sb_cntquestions > 0
-                        ? tabledata.sb_cntquestions
-                        : ' '}
-                    </td>
-                  )}
+                {show_cntquestions && 'sb_cntquestions' in tabledata && (
+                  <td className={`px-2 text-center ${shrink_Text}`}>
+                    {tabledata.sb_cntquestions > 0
+                      ? tabledata.sb_cntquestions
+                      : ' '}
+                  </td>
+                )}
                 {/* ................................................... */}
-                {/* MyButton  1                                                */}
+                {/* Quiz  Button                                         */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
                   {'sb_cntquestions' in tabledata &&
@@ -560,7 +570,7 @@ export default function Table() {
                             pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
                             query: { from: 'subject', idColumn: 'qq_sbid' }
                           }}
-                          overrideClass='h-6 bg-blue-500 text-white hover:bg-blue-600 text-xxs md:text-xs'
+                          overrideClass={`text-white ${shrink_Text} h-5 w-10 ${!shrink ? 'md:h-6 md:w-12' : ''}`}
                         >
                           Quiz
                         </MyLink>
@@ -570,16 +580,15 @@ export default function Table() {
                 {/* ................................................... */}
                 {/* References                                            */}
                 {/* ................................................... */}
-                {ref_show_cntreference.current &&
-                  'sb_cntquestions' in tabledata && (
-                    <td className='px-2  text-center text-xxs md:text-xs'>
-                      {tabledata.sb_cntreference > 0
-                        ? tabledata.sb_cntreference
-                        : ' '}
-                    </td>
-                  )}
+                {show_cntreference && 'sb_cntquestions' in tabledata && (
+                  <td className={`px-2 text-center ${shrink_Text}`}>
+                    {tabledata.sb_cntreference > 0
+                      ? tabledata.sb_cntreference
+                      : ' '}
+                  </td>
+                )}
                 {/* ................................................... */}
-                {/* MyButton  2                                               */}
+                {/* Reference  Button                                   */}
                 {/* ................................................... */}
                 <td className='px-2 text-center'>
                   {'sb_cntreference' in tabledata &&
@@ -593,7 +602,7 @@ export default function Table() {
                               selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
                             }
                           }}
-                          overrideClass='h-6 bg-green-500 text-white hover:bg-green-600 text-xxs md:text-xs'
+                          overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                         >
                           Reference
                         </MyLink>

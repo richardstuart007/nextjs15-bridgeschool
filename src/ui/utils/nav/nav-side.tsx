@@ -24,7 +24,7 @@ export default function NavSide(props: Props) {
   //
   //  User context
   //
-  const { setSessionContext } = useUserContext()
+  const { sessionContext, setSessionContext } = useUserContext()
   //
   //  session info
   //
@@ -32,6 +32,13 @@ export default function NavSide(props: Props) {
     structure_SessionsInfo | undefined
   >(undefined)
   const [dbName, setdbName] = useState<string>('')
+  //
+  //  Shrink/Detail
+  //
+  const [shrink, setshrink] = useState(false)
+  //
+  //  Initialisation
+  //
   useEffect(() => {
     getSessionInfo()
     // eslint-disable-next-line
@@ -72,6 +79,16 @@ export default function NavSide(props: Props) {
       setSessionInfo(sessionData)
     }
   }
+  //......................................................................................
+  //  Shrink
+  //......................................................................................
+  useEffect(() => {
+    //
+    //  Set Shrink
+    //
+    setshrink(sessionContext.cx_shrink)
+    // eslint-disable-next-line
+  }, [sessionContext])
   //--------------------------------------------------------------------------------
   return (
     <div className='px-2 py-3 flex h-full flex-row md:flex-col md:items-center md:px-0 md:w-28'>
@@ -81,10 +98,18 @@ export default function NavSide(props: Props) {
       {sessionInfo && (
         <>
           <div className='hidden md:block'>
-            <NavSession sessionInfo={sessionInfo} dbName={dbName} />
+            <NavSession
+              sessionInfo={sessionInfo}
+              dbName={dbName}
+              shrink={shrink}
+            />
           </div>
-          <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2'>
-            <NavLinks sessionInfo={sessionInfo} baseURL={baseURL} />
+          <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2 md:items-center'>
+            <NavLinks
+              sessionInfo={sessionInfo}
+              baseURL={baseURL}
+              shrink={shrink}
+            />
             <div className='grow invisible'></div>
             <div className='hidden md:block justify-center flex-none p-1 px-2'>
               <NavShrink />
@@ -94,7 +119,7 @@ export default function NavSide(props: Props) {
             </div>
             <MyButton
               onClick={logout}
-              overrideClass='justify-center h-5 md:h6 text-xxs md:text-xs bg-gray-600 hover:bg-gray-800 hover:text-red-600 md:flex-none md:p-2 md:px-2'
+              overrideClass='text-white  h-5 md:h6 bg-gray-800 hover:bg-gray-900 hover:text-red-600 md:flex-none md:p-2 md:px-2'
             >
               Logoff
             </MyButton>

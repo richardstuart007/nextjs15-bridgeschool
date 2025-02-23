@@ -10,10 +10,14 @@ export function MyButton({ children, overrideClass = '', ...rest }: Props) {
   //  Default Class
   //
   const defaultClass = [
-    'flex items-center',
-    'h-8 px-1 md:px-2',
-    'rounded-md bg-blue-500 hover:bg-blue-600',
-    'text-xs font-medium text-white',
+    'flex items-center justify-center',
+    'h-8',
+    'px-2',
+    'font-normal',
+    'text-white',
+    'text-xs',
+    'rounded-md',
+    'bg-blue-500 hover:bg-blue-600',
     'transition-colors',
     'focus-visible:outline focus-visible:outline-blue-500',
     'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'

@@ -13,12 +13,13 @@ import {
 interface Props {
   sessionInfo: structure_SessionsInfo
   baseURL: string
+  shrink: boolean
 }
 export default function NavLinks(props: Props) {
   //
   //  Deconstruct props
   //
-  const { baseURL, sessionInfo } = props
+  const { baseURL, sessionInfo, shrink } = props
   const { bsadmin } = sessionInfo
   //
   // Define the Link type
@@ -48,6 +49,7 @@ export default function NavLinks(props: Props) {
   //  Get path name
   //
   const pathname = usePathname()
+
   //--------------------------------------------------------------------------------
   return (
     <>
@@ -56,10 +58,11 @@ export default function NavLinks(props: Props) {
           pathname === link.href ? 'bg-sky-100 text-blue-600' : ''
         const overrideClass = [
           'justify-center',
-          'h-5 md:h6',
-          'text-xxs md:text-xs',
-          'bg-gray-50',
-          'hover:bg-sky-200 hover:text-red-600',
+          shrink ? 'h-5' : 'h-5 md:h-6',
+          shrink ? 'text-xxs' : 'text-xxs md:text-xs',
+          'bg-yellow-300',
+          'hover:bg-yellow-500',
+          'hover:bg-yellow-500 hover:text-red-600',
           'md:flex-none md:p-2 md:px-2',
           isActiveColour
         ].join(' ')
@@ -71,9 +74,13 @@ export default function NavLinks(props: Props) {
             overrideClass={overrideClass}
           >
             {link.name === 'User' ? (
-              <Cog6ToothIcon className='h-5 w-5' />
+              <Cog6ToothIcon className='text-black h-5 w-5' />
             ) : (
-              <p className='text-xxs md:text-xs'>{link.name}</p>
+              <p
+                className={`text-black ${shrink ? 'text-xxs' : 'text-xxs md:text-xs'}`}
+              >
+                {link.name}
+              </p>
             )}
           </MyLink>
         )
