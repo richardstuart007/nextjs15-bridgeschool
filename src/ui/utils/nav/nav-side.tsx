@@ -69,8 +69,8 @@ export default function NavSide(props: Props) {
     if (sessionId) {
       const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
-        cx_usid: sessionData.bsuid,
-        cx_bsid: sessionData.bsid,
+        cx_usid: sessionData.si_usid,
+        cx_ssid: sessionData.si_ssid,
         cx_dbName: dbName,
         cx_shrink: false,
         cx_detail: false
@@ -83,15 +83,21 @@ export default function NavSide(props: Props) {
   //  Shrink
   //......................................................................................
   useEffect(() => {
-    //
-    //  Set Shrink
-    //
     setshrink(sessionContext.cx_shrink)
     // eslint-disable-next-line
   }, [sessionContext])
   //--------------------------------------------------------------------------------
+  const overrideClass_logoff = [
+    'text-white',
+    shrink ? 'h-5' : 'h-5 md:h-6',
+    shrink ? 'text-xxs' : 'text-xxs md:text-xs',
+    'bg-gray-700',
+    'hover:bg-gray-800 hover:text-red-600',
+    'md:flex-none md:p-2 px-1 md:px-2'
+  ].join(' ')
+  //--------------------------------------------------------------------------------
   return (
-    <div className='px-2 py-3 flex h-full flex-row md:flex-col md:items-center md:px-0 md:w-28'>
+    <div className='py-3 flex h-full flex-row md:flex-col md:items-center md:px-0 md:w-28'>
       <div className='hidden md:block'>
         <SchoolLogo />
       </div>
@@ -117,10 +123,7 @@ export default function NavSide(props: Props) {
             <div className='hidden md:block justify-center flex-none p-1 px-2'>
               <NavDetail />
             </div>
-            <MyButton
-              onClick={logout}
-              overrideClass='text-white  h-5 md:h6 bg-gray-800 hover:bg-gray-900 hover:text-red-600 md:flex-none md:p-2 md:px-2'
-            >
+            <MyButton onClick={logout} overrideClass={overrideClass_logoff}>
               Logoff
             </MyButton>
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect, type JSX } from 'react'
+import { useState, useEffect } from 'react'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface RadioOption {
@@ -13,7 +13,7 @@ interface RadioSubjectProps {
   onChange: (value: number) => void
 }
 
-export default function RadioSubject(props: RadioSubjectProps): JSX.Element {
+export default function RadioSubject(props: RadioSubjectProps) {
   const { options, selectedOption, onChange } = props
   const [selectedValue, setSelectedValue] = useState<number>(selectedOption)
   //
@@ -36,7 +36,10 @@ export default function RadioSubject(props: RadioSubjectProps): JSX.Element {
     <>
       {options.map(option => (
         <div key={option.id} className='flex items-center ml-2'>
-          <label htmlFor={option.id} className='flex items-center cursor-pointer'>
+          <label
+            htmlFor={option.id}
+            className='flex items-center cursor-pointer'
+          >
             <div className='w-6 h-6 relative'>
               <MyInput
                 type='radio'

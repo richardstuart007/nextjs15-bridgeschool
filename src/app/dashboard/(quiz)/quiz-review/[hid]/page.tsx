@@ -26,7 +26,7 @@ export default async function Page(props: {
     //  Get Session Info
     //
     const SessionInfo = await fetchSessionInfo()
-    const bsskipcorrect = SessionInfo.bsskipcorrect
+    const si_skipcorrect = SessionInfo.si_skipcorrect
     //
     //  Get History
     //
@@ -39,9 +39,9 @@ export default async function Page(props: {
       notFound()
     }
     //
-    //  Process History: Remove correct answers if bsskipcorrect is true
+    //  Process History: Remove correct answers if si_skipcorrect is true
     //
-    if (bsskipcorrect) {
+    if (si_skipcorrect) {
       const newHs_qqid = []
       const newHs_ans = []
 

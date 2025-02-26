@@ -46,14 +46,14 @@ export async function fetchSessionInfo() {
     //  Return the session info
     //
     const structure_SessionsInfo: structure_SessionsInfo = {
-      bsid: row.ss_ssid,
-      bsuid: row.us_usid,
-      bsname: row.us_name,
-      bsemail: row.us_email,
-      bsadmin: row.us_admin,
-      bssortquestions: row.us_sortquestions,
-      bsskipcorrect: row.us_skipcorrect,
-      bsmaxquestions: row.us_maxquestions
+      si_ssid: row.ss_ssid,
+      si_usid: row.us_usid,
+      si_name: row.us_name,
+      si_email: row.us_email,
+      si_admin: row.us_admin,
+      si_sortquestions: row.us_sortquestions,
+      si_skipcorrect: row.us_skipcorrect,
+      si_maxquestions: row.us_maxquestions
     }
     return structure_SessionsInfo
     //
@@ -91,7 +91,7 @@ export async function isAdmin() {
     //
     //  Return admin flag
     //
-    return sessionInfo.bsadmin
+    return sessionInfo.si_admin
     //
     //  Errors
     //

@@ -1,14 +1,12 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 
-import type { JSX } from 'react'
-
 interface RadioSubjectProps {
   question: table_Questions
   QuizInfo: number
   quizTotal: number
 }
 
-export default function QuizInfo(props: RadioSubjectProps): JSX.Element {
+export default function QuizInfo(props: RadioSubjectProps) {
   //...................................................................................
   //.  Main Line
   //...................................................................................
@@ -23,7 +21,7 @@ export default function QuizInfo(props: RadioSubjectProps): JSX.Element {
   //
   //  Question Info
   //
-  let QuestionInfo = `${qq_owner}/${qq_subject}(${qq_qqid}) ${QuizInfo}/${quizTotal}`
+  const QuestionInfo = `${qq_owner}/${qq_subject}(${qq_qqid}) ${QuizInfo}/${quizTotal}`
   //...................................................................................
   //.  Render the form
   //...................................................................................

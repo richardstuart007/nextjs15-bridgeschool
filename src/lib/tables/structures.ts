@@ -1,17 +1,17 @@
 export type structure_SessionsInfo = {
-  bsuid: number
-  bsname: string
-  bsemail: string
-  bsadmin: boolean
-  bsid: number
-  bssortquestions: boolean
-  bsskipcorrect: boolean
-  bsmaxquestions: number
+  si_usid: number
+  si_name: string
+  si_email: string
+  si_admin: boolean
+  si_ssid: number
+  si_sortquestions: boolean
+  si_skipcorrect: boolean
+  si_maxquestions: number
 }
 
 export type structure_ContextInfo = {
   cx_usid: number
-  cx_bsid: number
+  cx_ssid: number
   cx_dbName: string
   cx_shrink: boolean
   cx_detail: boolean
@@ -24,7 +24,7 @@ export type structure_UserAuth = {
   password: string
 }
 
-export interface structure_UsershistoryTopResults {
+export type structure_UsershistoryTopResults = {
   hs_usid: number
   us_name: string
   record_count: number
@@ -33,7 +33,7 @@ export interface structure_UsershistoryTopResults {
   percentage: number
 }
 
-export interface structure_UsershistoryRecentResults {
+export type structure_UsershistoryRecentResults = {
   hs_hsid: number
   hs_usid: number
   us_name: string
@@ -42,13 +42,13 @@ export interface structure_UsershistoryRecentResults {
   hs_correctpercent: number
 }
 
-export interface structure_ProviderSignInParams {
+export type structure_ProviderSignInParams = {
   provider: string
   email: string
   name: string
 }
 
-export interface structure_Country {
+export type structure_Country = {
   code: string
   label: string
   phone: string

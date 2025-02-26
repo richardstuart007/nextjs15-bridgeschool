@@ -34,7 +34,11 @@ export default function Table() {
   const [cntquestions, setcntquestions] = useState<number | string>(1)
   const [cntreference, setcntreference] = useState<number | string>('')
   //
-  //  Show flags
+  //  Header show
+  //
+  const [show_h_owner, setshow_h_owner] = useState(false)
+  //
+  //  Table show
   //
   const ref_rowsPerPage = useRef(0)
 
@@ -82,16 +86,24 @@ export default function Table() {
         //
         if (!initialisationCompleted) {
           await fetchUserOwner()
-          //
-          //  Update Columns and rows
-          //
-          updateColumns()
-          updateRows()
-          //
-          //  Allow fetch of data
-          //
-          setinitialisationCompleted(true)
         }
+        //
+        //  Header info
+        //
+        const cx_detail = sessionContext.cx_detail
+        const shouldShowHeaderOwner = !!(
+          ref_selected_uoowner.current && cx_detail
+        )
+        setshow_h_owner(shouldShowHeaderOwner)
+        //
+        //  Table Info
+        //
+        updateColumns(cx_detail)
+        updateRows()
+        //
+        //  Allow fetch of data
+        //
+        setinitialisationCompleted(true)
       }
     }
     //
@@ -324,7 +336,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
-  function updateColumns() {
+  function updateColumns(cx_detail: boolean) {
     //
     //  2xl, xl, lg, md, sm
     //
@@ -341,8 +353,8 @@ export default function Table() {
     setshow_subject(true)
     if (widthNumber >= 2) {
       if (!ref_selected_uoowner.current) setshow_owner(true)
-      setshow_cntquestions(true)
-      setshow_cntreference(true)
+      cx_detail ? setshow_cntquestions(true) : setshow_cntquestions(false)
+      cx_detail ? setshow_cntreference(true) : setshow_cntreference(false)
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -377,7 +389,7 @@ export default function Table() {
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {ref_selected_uoowner.current && (
+        {show_h_owner && (
           <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
@@ -402,14 +414,7 @@ export default function Table() {
                   Subject
                 </th>
               )}
-              {show_cntquestions && (
-                <th scope='col' className=' font-medium px-2 text-center'>
-                  Questions
-                </th>
-              )}
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Quiz
-              </th>
+
               {show_cntreference && (
                 <th scope='col' className=' font-medium px-2 text-center'>
                   References
@@ -417,6 +422,14 @@ export default function Table() {
               )}
               <th scope='col' className=' font-medium px-2 text-center'>
                 Reference
+              </th>
+              {show_cntquestions && (
+                <th scope='col' className=' font-medium px-2 text-center'>
+                  Questions
+                </th>
+              )}
+              <th scope='col' className=' font-medium px-2 text-center'>
+                Quiz
               </th>
             </tr>
             {/* ---------------------------------------------------------------------------------- */}
@@ -472,6 +485,31 @@ export default function Table() {
                   )}
                 </th>
               )}
+
+              {/* ................................................... */}
+              {/* cntreference                                           */}
+              {/* ................................................... */}
+              {show_cntreference && (
+                <th scope='col' className='px-2 text-center'>
+                  <MyInput
+                    id='cntreference'
+                    name='cntreference'
+                    overrideClass={`text-center ${
+                      shrink ? 'h-5 w-10' : 'h-6 w-12'
+                    } ${shrink_Text}`}
+                    type='text'
+                    value={cntreference}
+                    onChange={e => {
+                      const value = e.target.value
+                      const numValue = Number(value)
+                      const parsedValue =
+                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      setcntreference(parsedValue)
+                    }}
+                  />
+                </th>
+              )}
+              <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
               {/* Questions                                           */}
               {/* ................................................... */}
@@ -500,30 +538,6 @@ export default function Table() {
               {/* ................................................... */}
               <th scope='col' className=' px-2'></th>
               {/* ................................................... */}
-              {/* cntreference                                           */}
-              {/* ................................................... */}
-              {show_cntreference && (
-                <th scope='col' className='px-2 text-center'>
-                  <MyInput
-                    id='cntreference'
-                    name='cntreference'
-                    overrideClass={`text-center ${
-                      shrink ? 'h-5 w-10' : 'h-6 w-12'
-                    } ${shrink_Text}`}
-                    type='text'
-                    value={cntreference}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
-                      setcntreference(parsedValue)
-                    }}
-                  />
-                </th>
-              )}
-              <th scope='col' className=' px-2'></th>
-              {/* ................................................... */}
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
@@ -548,35 +562,7 @@ export default function Table() {
                     {tabledata.sb_title}
                   </td>
                 )}
-                {/* ................................................... */}
-                {/* Questions                                            */}
-                {/* ................................................... */}
-                {show_cntquestions && 'sb_cntquestions' in tabledata && (
-                  <td className={`px-2 text-center ${shrink_Text}`}>
-                    {tabledata.sb_cntquestions > 0
-                      ? tabledata.sb_cntquestions
-                      : ' '}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Quiz  Button                                         */}
-                {/* ................................................... */}
-                <td className='px-2 text-center'>
-                  {'sb_cntquestions' in tabledata &&
-                    tabledata.sb_cntquestions > 0 && (
-                      <div className='inline-flex justify-center items-center'>
-                        <MyLink
-                          href={{
-                            pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
-                            query: { from: 'subject', idColumn: 'qq_sbid' }
-                          }}
-                          overrideClass={`text-white ${shrink_Text} h-5 w-10 ${!shrink ? 'md:h-6 md:w-12' : ''}`}
-                        >
-                          Quiz
-                        </MyLink>
-                      </div>
-                    )}
-                </td>
+
                 {/* ................................................... */}
                 {/* References                                            */}
                 {/* ................................................... */}
@@ -605,6 +591,35 @@ export default function Table() {
                           overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                         >
                           Reference
+                        </MyLink>
+                      </div>
+                    )}
+                </td>
+                {/* ................................................... */}
+                {/* Questions                                            */}
+                {/* ................................................... */}
+                {show_cntquestions && 'sb_cntquestions' in tabledata && (
+                  <td className={`px-2 text-center ${shrink_Text}`}>
+                    {tabledata.sb_cntquestions > 0
+                      ? tabledata.sb_cntquestions
+                      : ' '}
+                  </td>
+                )}
+                {/* ................................................... */}
+                {/* Quiz  Button                                         */}
+                {/* ................................................... */}
+                <td className='px-2 text-center'>
+                  {'sb_cntquestions' in tabledata &&
+                    tabledata.sb_cntquestions > 0 && (
+                      <div className='inline-flex justify-center items-center'>
+                        <MyLink
+                          href={{
+                            pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
+                            query: { from: 'subject', idColumn: 'qq_sbid' }
+                          }}
+                          overrideClass={`text-white ${shrink_Text} h-5 w-10 ${!shrink ? 'md:h-6 md:w-12' : ''}`}
+                        >
+                          Quiz
                         </MyLink>
                       </div>
                     )}

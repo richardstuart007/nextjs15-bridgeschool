@@ -11,7 +11,7 @@ export default function NavSession(props: FormProps) {
   //  Deconstruct props
   //
   const sessionInfo = props.sessionInfo
-  const { bsuid, bsid, bsname } = sessionInfo
+  const { si_usid, si_ssid, si_name } = sessionInfo
   const { dbName, shrink } = props
   return (
     <>
@@ -27,17 +27,17 @@ export default function NavSession(props: FormProps) {
         <div
           className={`text-white text-xs mb-1 text-center ${shrink ? `text-xxs` : `text-xs`}`}
         >
-          <p>{`Session: ${bsid}`}</p>
+          <p>{`Session: ${si_ssid}`}</p>
         </div>
         <div
           className={`text-white text-xs mb-1 text-center ${shrink ? `text-xxs` : `text-xs`}`}
         >
-          <p>{`User: ${bsuid}`}</p>
+          <p>{`User: ${si_usid}`}</p>
         </div>
         <div
           className={`text-white text-xs mb-1 text-center ${shrink ? `text-xxs` : `text-xs`}`}
         >
-          <p>{bsname.length > 10 ? `${bsname.slice(0, 10)}...` : bsname}</p>
+          <p>{si_name.length > 10 ? `${si_name.slice(0, 10)}...` : si_name}</p>
         </div>
       </div>
     </>

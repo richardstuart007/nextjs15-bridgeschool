@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
@@ -20,7 +19,7 @@ export default function NavLinks(props: Props) {
   //  Deconstruct props
   //
   const { baseURL, sessionInfo, shrink } = props
-  const { bsadmin } = sessionInfo
+  const { si_admin } = sessionInfo
   //
   // Define the Link type
   //
@@ -39,48 +38,45 @@ export default function NavLinks(props: Props) {
     let linksupdate
     baseURL === 'admin'
       ? (linksupdate = links_admin)
-      : (linksupdate = bsadmin
+      : (linksupdate = si_admin
           ? links_dashboard.concat(links_dashboard_admin)
           : links_dashboard)
     setLinks(linksupdate)
     // eslint-disable-next-line
   }, [])
+  //--------------------------------------------------------------------------------
   //
-  //  Get path name
+  //  Button
   //
-  const pathname = usePathname()
-
+  const overrideClass_mylinkButton = [
+    'justify-center',
+    shrink ? 'h-5' : 'h-5 md:h-6',
+    'bg-yellow-300',
+    'hover:bg-yellow-400 hover:text-red-600',
+    'md:flex-none md:p-2 px-1 md:px-2'
+  ].join(' ')
+  //
+  //  Text
+  //
+  const overrideClass_mylinkText = [
+    'text-black',
+    shrink ? 'text-xxs' : 'text-xxs md:text-xs',
+    'hover:text-red-600'
+  ].join(' ')
   //--------------------------------------------------------------------------------
   return (
     <>
       {links.map(link => {
-        const isActiveColour =
-          pathname === link.href ? 'bg-sky-100 text-blue-600' : ''
-        const overrideClass = [
-          'justify-center',
-          shrink ? 'h-5' : 'h-5 md:h-6',
-          shrink ? 'text-xxs' : 'text-xxs md:text-xs',
-          'bg-yellow-300',
-          'hover:bg-yellow-500',
-          'hover:bg-yellow-500 hover:text-red-600',
-          'md:flex-none md:p-2 md:px-2',
-          isActiveColour
-        ].join(' ')
-
         return (
           <MyLink
             key={link.name}
             href={link.href}
-            overrideClass={overrideClass}
+            overrideClass={overrideClass_mylinkButton}
           >
             {link.name === 'User' ? (
               <Cog6ToothIcon className='text-black h-5 w-5' />
             ) : (
-              <p
-                className={`text-black ${shrink ? 'text-xxs' : 'text-xxs md:text-xs'}`}
-              >
-                {link.name}
-              </p>
+              <p className={overrideClass_mylinkText}>{link.name}</p>
             )}
           </MyLink>
         )

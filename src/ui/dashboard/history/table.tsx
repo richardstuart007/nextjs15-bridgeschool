@@ -42,7 +42,11 @@ export default function Table() {
   const [sbid, setsbid] = useState<number | string>('')
   const [rfid, setrfid] = useState<number | string>('')
   //
-  //  Show flags
+  //  Header show
+  //
+  const [show_h_owner, setshow_h_owner] = useState(false)
+  //
+  //  Table show
   //
   const ref_rowsPerPage = useRef(0)
 
@@ -117,9 +121,16 @@ export default function Table() {
           await fetchUserOwner()
         }
         //
-        //  Update Columns and rows
+        //  Header info
         //
         const cx_detail = sessionContext.cx_detail
+        const shouldShowHeaderOwner = !!(
+          ref_selected_uoowner.current && cx_detail
+        )
+        setshow_h_owner(shouldShowHeaderOwner)
+        //
+        //  Update Columns and rows
+        //
         updateColumns(cx_detail)
         updateRows()
         //
@@ -456,7 +467,7 @@ export default function Table() {
         {/** -------------------------------------------------------------------- */}
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
-        {ref_selected_uoowner.current && (
+        {show_h_owner && (
           <div className={`${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{owner}</span>

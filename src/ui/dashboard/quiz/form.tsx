@@ -60,7 +60,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //
       //  Update variables
       //
-      const { bsmaxquestions, bssortquestions } = SessionInfo
+      const { si_maxquestions, si_sortquestions } = SessionInfo
       //
       //  Deconstruct props
       //
@@ -68,11 +68,11 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //
       //  Optionally shuffle array
       //
-      if (bssortquestions) questions_work = shuffleAndRestrict(questions_work)
+      if (si_sortquestions) questions_work = shuffleAndRestrict(questions_work)
       //
       //  Restrict array size
       //
-      questions_work = questions_work.slice(0, bsmaxquestions)
+      questions_work = questions_work.slice(0, si_maxquestions)
       //
       //  Update questions and initial question
       //
