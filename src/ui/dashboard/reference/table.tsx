@@ -512,39 +512,39 @@ export default function Table({ selected_sbsbid }: FormProps) {
             {/** -------------------------------------------------------------------- */}
             <tr className={`${shrink_Text}`}>
               {show_owner && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Owner
                 </th>
               )}
               {show_subject && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Subject-name
                 </th>
               )}
 
               {show_ref && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Ref
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2 '>
+              <th scope='col' className=' font-bold px-2 '>
                 Description
               </th>
               {show_who && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2'>
                   Who
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className=' font-bold px-2'>
                 Type
               </th>
               {show_questions && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   Questions
                 </th>
               )}
               {show_quiz && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   Quiz
                 </th>
               )}
@@ -654,7 +654,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* WHO                                                 */}
               {/* ................................................... */}
               {show_who && (
-                <th scope='col' className=' px-2 text-center'>
+                <th scope='col' className=' px-2'>
                   <DropdownGeneric
                     selectedOption={who}
                     setSelectedOption={setwho}
@@ -676,7 +676,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* type                                                 */}
               {/* ................................................... */}
               {show_type && (
-                <th scope='col' className=' px-2 text-center'>
+                <th scope='col' className=' px-2'>
                   <DropdownGeneric
                     selectedOption={type}
                     setSelectedOption={settype}
@@ -771,7 +771,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* ................................................... */}
                 {show_who && (
                   <td
-                    className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
                   >
                     {tabledata.rf_who}
                   </td>
@@ -779,9 +779,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* ................................................... */}
                 {/* Read/video                                                */}
                 {/* ................................................... */}
-                <td
-                  className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                >
+                <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>

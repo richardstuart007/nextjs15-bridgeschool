@@ -390,8 +390,8 @@ export default function Table() {
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
         {show_h_owner && (
-          <div className={`${shrink_Text}`}>
-            <span className='font-bold'>Owner: </span>
+          <div className={`px-2 ${shrink_Text}`}>
+            <span className='font-medium'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
           </div>
         )}
@@ -405,30 +405,30 @@ export default function Table() {
             {/** -------------------------------------------------------------------- */}
             <tr className={`${shrink_Text}`}>
               {show_owner && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Owner
                 </th>
               )}
               {show_subject && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Subject
                 </th>
               )}
 
               {show_cntreference && (
-                <th scope='col' className=' font-medium px-2 text-center'>
-                  References
+                <th scope='col' className=' font-bold px-2 text-center'>
+                  Ref Count
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className=' font-bold px-2 text-center'>
                 Reference
               </th>
               {show_cntquestions && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   Questions
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className=' font-bold px-2 text-center'>
                 Quiz
               </th>
             </tr>

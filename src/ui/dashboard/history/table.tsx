@@ -468,8 +468,8 @@ export default function Table() {
         {/** Selected Values                                                      */}
         {/** -------------------------------------------------------------------- */}
         {show_h_owner && (
-          <div className={`${shrink_Text}`}>
-            <span className='font-bold'>Owner: </span>
+          <div className={`px-2 ${shrink_Text}`}>
+            <span className='font-medium'>Owner: </span>
             <span className='text-green-500'>{owner}</span>
           </div>
         )}
@@ -483,64 +483,64 @@ export default function Table() {
             {/** -------------------------------------------------------------------- */}
             <tr className={`${shrink_Text}`}>
               {show_owner && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Owner
                 </th>
               )}
               {show_subject && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Subject
                 </th>
               )}
               {show_sbid && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   sbid
                 </th>
               )}
               {show_rfid && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   rfid
                 </th>
               )}
               {show_hsid && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   hsid
                 </th>
               )}
               {show_datetime && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Date
                 </th>
               )}
               {show_title && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   Title
                 </th>
               )}
               {show_usid && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   usid
                 </th>
               )}
               {show_name && (
-                <th scope='col' className=' font-medium px-2'>
+                <th scope='col' className=' font-bold px-2'>
                   User-Name
                 </th>
               )}
               {show_questions && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   Questions
                 </th>
               )}
               {show_correct && (
-                <th scope='col' className=' font-medium px-2 text-center'>
+                <th scope='col' className=' font-bold px-2 text-center'>
                   %
                 </th>
               )}
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className=' font-bold px-2 text-center'>
                 Review
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
+              <th scope='col' className=' font-bold px-2 text-center'>
                 Quiz
               </th>
             </tr>

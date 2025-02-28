@@ -14,6 +14,7 @@ export default function Breadcrumbs({
 }: {
   breadcrumbs: Breadcrumb[]
 }) {
+  console.log('Breadcrumbs', breadcrumbs)
   //
   //  User context
   //
@@ -31,11 +32,18 @@ export default function Breadcrumbs({
   }, [sessionContext])
   //--------------------------------------------------------------------------------
   //
+  //  Title
+  //
+  const overrideClass_title = [
+    'px-2',
+    shrink ? 'text-xxs' : 'text-xxs md:text-xs'
+  ].join(' ')
+  //
   //  Button
   //
   const overrideClass_mylinkButton = [
     'bg-transparent hover:bg-transparent',
-    'px-1 h-4'
+    'px-0 h-4'
   ].join(' ')
   //
   //  Text
@@ -48,27 +56,25 @@ export default function Breadcrumbs({
   //--------------------------------------------------------------------------------
   return (
     <nav aria-label='Breadcrumb' className='block mb-1'>
-      <div className='flex items-center space-x-1'>
-        <p className='text-xs'>Navigation:</p>
+      <div className='flex items-center space-x-0'>
+        <p className={overrideClass_title}>Navigation:</p>
         <ol className='flex'>
           {breadcrumbs.map((breadcrumb, index) => (
-            <>
-              <li key={breadcrumb.href} aria-current={breadcrumb.active}>
-                <MyLink
-                  href={breadcrumb.href}
-                  overrideClass={overrideClass_mylinkButton}
-                >
-                  <p className={overrideClass_mylinkText}>{breadcrumb.label}</p>
-                </MyLink>
-              </li>
-              {index === 0 && (
-                <li key='slash'>
-                  <p className='flex items-center justify-center px-0 text-xxs font-extralight'>
+            <li key={breadcrumb.href}>
+              <MyLink
+                href={breadcrumb.href}
+                overrideClass={overrideClass_mylinkButton}
+              >
+                {index > 0 && (
+                  <p className='text-black italic flex items-center justify-center px-1 text-xxs font-extralight'>
                     /
                   </p>
-                </li>
-              )}
-            </>
+                )}
+                <p
+                  className={overrideClass_mylinkText}
+                >{`${breadcrumb.label}`}</p>
+              </MyLink>
+            </li>
           ))}
         </ol>
       </div>
