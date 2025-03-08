@@ -5,7 +5,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/subject/maint-action'
 import type { table_Subject } from '@/src/lib/tables/definitions'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
@@ -66,7 +66,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Owner */}
         {/*  ...................................................................................*/}
         {sb_sbid === 0 ? (
-          <DropdownGeneric
+          <MyDropdown
             selectedOption={sb_owner}
             setSelectedOption={setogowner}
             name='sb_owner'

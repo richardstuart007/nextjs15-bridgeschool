@@ -11,7 +11,7 @@ import {
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyButton } from '@/src/ui/utils/myButton'
 
 interface FormProps {
@@ -23,9 +23,7 @@ export default function Table({ selected_uid }: FormProps) {
   //
   //  Selection
   //
-  const [uid, setuid] = useState<string | number>(
-    selected_uid ? selected_uid : 0
-  )
+  const [uid, setuid] = useState<string | number>(selected_uid ? selected_uid : 0)
   const [owner, setowner] = useState<string | number>('')
   //
   //  Data
@@ -222,7 +220,7 @@ export default function Table({ selected_uid }: FormProps) {
                 {selected_uid ? (
                   <h1>{selected_uid}</h1>
                 ) : (
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={uid}
                     setSelectedOption={setuid}
                     searchEnabled={true}
@@ -239,7 +237,7 @@ export default function Table({ selected_uid }: FormProps) {
               {/* OWNER                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2 text-center'>
-                <DropdownGeneric
+                <MyDropdown
                   selectedOption={owner}
                   setSelectedOption={setowner}
                   searchEnabled={false}
@@ -263,19 +261,12 @@ export default function Table({ selected_uid }: FormProps) {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr
-                key={`${tabledata.uo_usid}${tabledata.uo_owner}`}
-                className='w-full border-b'
-              >
+              <tr key={`${tabledata.uo_usid}${tabledata.uo_owner}`} className='w-full border-b'>
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>
-                  {tabledata.uo_usid}
-                </td>
-                <td className='text-xs px-2 py-1 text-center'>
-                  {tabledata.uo_owner}
-                </td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_usid}</td>
+                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
                 {/* ................................................... */}
                 {/* MyButton                                                  */}
                 {/* ................................................... */}
@@ -310,15 +301,10 @@ export default function Table({ selected_uid }: FormProps) {
       {/* ---------------------------------------------------------------------------------- */}
       <>
         {/* Add Modal */}
-        {isModelOpenAdd && (
-          <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
-        )}
+        {isModelOpenAdd && <MaintPopup isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />}
 
         {/* Confirmation Dialog */}
-        <ConfirmDialog
-          confirmDialog={confirmDialog}
-          setConfirmDialog={setConfirmDialog}
-        />
+        <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
       </>
       {/* ---------------------------------------------------------------------------------- */}
     </>

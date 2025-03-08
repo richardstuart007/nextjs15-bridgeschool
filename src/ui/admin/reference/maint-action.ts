@@ -2,14 +2,11 @@
 
 import { z } from 'zod'
 import validateReference from '@/src/ui/admin/reference/maint-validate'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
+import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -44,10 +41,7 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function action(
-  _prevState: StateSetup,
-  formData: FormData
-): Promise<StateSetup> {
+export async function action(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
   const functionName = 'action'
   //
   //  Validate form data
@@ -73,8 +67,7 @@ export async function action(
   //
   // Unpack form data
   //
-  const { rf_desc, rf_link, rf_who, rf_type, rf_owner, rf_ref, rf_subject } =
-    validatedFields.data
+  const { rf_desc, rf_link, rf_who, rf_type, rf_owner, rf_ref, rf_subject } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
@@ -109,14 +102,9 @@ export async function action(
     //
     //  Get the subject id
     //
-    const rows = await table_fetch({
-      table: 'tsb_subject',
-      whereColumnValuePairs: [
-        { column: 'sb_owner', value: rf_owner },
-        { column: 'sb_subject', value: rf_subject }
-      ]
-    } as table_fetch_Props)
-    const rf_sbid = rows[0].sb_sbid
+    const row = await row_fetch_subject(rf_owner, rf_subject)
+    const { sb_sbid } = row
+    const rf_sbid = sb_sbid
     //
     // Common column-value pairs
     //

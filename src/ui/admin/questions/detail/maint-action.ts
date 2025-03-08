@@ -3,15 +3,12 @@
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
 import validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
+import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -127,16 +124,11 @@ export async function Maint_detail(
       //
       qq_seq = await getNextSeq(qq_owner, qq_subject)
       //
-      //  Get subject id - qq_sbid
+      //  Get the subject id
       //
-      const rows = await table_fetch({
-        table: 'tsb_subject',
-        whereColumnValuePairs: [
-          { column: 'sb_owner', value: qq_owner },
-          { column: 'sb_subject', value: qq_subject }
-        ]
-      } as table_fetch_Props)
-      const qq_sbid = rows[0].sb_sbid
+      const row = await row_fetch_subject(qq_owner, qq_subject)
+      const { sb_sbid } = row
+      const qq_sbid = sb_sbid
       //
       //  Write Parameters
       //

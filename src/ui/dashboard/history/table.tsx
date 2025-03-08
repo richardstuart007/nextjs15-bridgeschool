@@ -9,15 +9,12 @@ import {
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 export default function Table() {
   //
@@ -66,9 +63,7 @@ export default function Table() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>(
-    []
-  )
+  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [loading, setLoading] = useState(true)
   //
@@ -109,9 +104,7 @@ export default function Table() {
         if (!initialisationCompleted) {
           const rows = await table_fetch({
             table: 'tus_users',
-            whereColumnValuePairs: [
-              { column: 'us_usid', value: ref_selected_cx_usid.current }
-            ]
+            whereColumnValuePairs: [{ column: 'us_usid', value: ref_selected_cx_usid.current }]
           } as table_fetch_Props)
           const userRecord = rows[0]
           setcountryCode(userRecord.us_fedcountry)
@@ -124,9 +117,7 @@ export default function Table() {
         //  Header info
         //
         const cx_detail = sessionContext.cx_detail
-        const shouldShowHeaderOwner = !!(
-          ref_selected_uoowner.current && cx_detail
-        )
+        const shouldShowHeaderOwner = !!(ref_selected_uoowner.current && cx_detail)
         setshow_h_owner(shouldShowHeaderOwner)
         //
         //  Update Columns and rows
@@ -220,18 +211,11 @@ export default function Table() {
     //
     // Dropdown change
     //
-    const dropdownChange =
-      owner !== debouncedState.owner || subject !== debouncedState.subject
+    const dropdownChange = owner !== debouncedState.owner || subject !== debouncedState.subject
     //
     // Determine debounce time
     //
-    const timeout = firstRender.current
-      ? 1
-      : inputChange
-        ? 1000
-        : dropdownChange
-          ? 200
-          : 1
+    const timeout = firstRender.current ? 1 : inputChange ? 1000 : dropdownChange ? 200 : 1
     //
     //  Debounce
     //
@@ -297,9 +281,7 @@ export default function Table() {
       //
       const rows = await table_fetch({
         table: 'tuo_usersowner',
-        whereColumnValuePairs: [
-          { column: 'uo_usid', value: ref_selected_cx_usid.current }
-        ]
+        whereColumnValuePairs: [{ column: 'uo_usid', value: ref_selected_cx_usid.current }]
       } as table_fetch_Props)
       if (rows.length === 1) {
         const uo_owner = rows[0].uo_owner
@@ -553,7 +535,7 @@ export default function Table() {
               {/* ................................................... */}
               {show_owner && (
                 <th scope='col' className='px-2'>
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -564,9 +546,7 @@ export default function Table() {
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
                     overrideClass_Dropdown={
-                      shrink
-                        ? `h-5 w-24 ${shrink_Text}`
-                        : `h-6 w-28 ${shrink_Text}`
+                      shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
                     }
                     includeBlank={true}
                   />
@@ -578,7 +558,7 @@ export default function Table() {
               {show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
-                    <DropdownGeneric
+                    <MyDropdown
                       selectedOption={subject}
                       setSelectedOption={setsubject}
                       name='subject'
@@ -588,9 +568,7 @@ export default function Table() {
                       optionLabel='sb_title'
                       optionValue='sb_subject'
                       overrideClass_Dropdown={
-                        shrink
-                          ? `h-5 w-28 ${shrink_Text}`
-                          : `h-6 w-36 ${shrink_Text}`
+                        shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
                       }
                       includeBlank={true}
                     />
@@ -611,8 +589,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
                       setsbid(parsedValue)
                     }}
                   />
@@ -632,8 +609,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
                       setrfid(parsedValue)
                     }}
                   />
@@ -653,8 +629,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
                       sethsid(parsedValue)
                     }}
                   />
@@ -663,9 +638,7 @@ export default function Table() {
               {/* ................................................... */}
               {/* DateTime                                          */}
               {/* ................................................... */}
-              {show_datetime && (
-                <th scope='col' className={`px-2 ${shrink_Text}`}></th>
-              )}
+              {show_datetime && <th scope='col' className={`px-2 ${shrink_Text}`}></th>}
               {/* ................................................... */}
               {/* Title                                                 */}
               {/* ................................................... */}
@@ -698,8 +671,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
                       setusid(parsedValue)
                       setname('')
                     }}
@@ -739,8 +711,7 @@ export default function Table() {
                     onChange={e => {
                       const value = e.target.value
                       const numValue = Number(value)
-                      const parsedValue =
-                        isNaN(numValue) || numValue === 0 ? '' : numValue
+                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
                       setquestions(parsedValue)
                     }}
                   />
@@ -779,19 +750,10 @@ export default function Table() {
           <tbody className='bg-white text-xxs md:text-xs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map((tabledata, index) => (
-                <tr
-                  key={`${tabledata.hs_hsid}-${index}`}
-                  className='w-full border-b'
-                >
-                  {show_owner && (
-                    <td className={`px-2 ${shrink_Text}`}>
-                      {tabledata.hs_owner}
-                    </td>
-                  )}
+                <tr key={`${tabledata.hs_hsid}-${index}`} className='w-full border-b'>
+                  {show_owner && <td className={`px-2 ${shrink_Text}`}>{tabledata.hs_owner}</td>}
                   {show_subject && (
-                    <td className={`px-2 ${shrink_Text}`}>
-                      {tabledata.hs_subject}
-                    </td>
+                    <td className={`px-2 ${shrink_Text}`}>{tabledata.hs_subject}</td>
                   )}
                   {show_sbid && (
                     <td className={`px-2 text-center  ${shrink_Text}`}>
@@ -804,9 +766,7 @@ export default function Table() {
                     </td>
                   )}
                   {show_hsid && (
-                    <td className={`px-2 text-center  ${shrink_Text}`}>
-                      {tabledata.hs_hsid}
-                    </td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_hsid}</td>
                   )}
                   {show_datetime && (
                     <td className={`px-2 text-left  ${shrink_Text}`}>
@@ -827,19 +787,11 @@ export default function Table() {
                     </td>
                   )}
                   {show_usid && (
-                    <td className={`px-2 text-center  ${shrink_Text}`}>
-                      {tabledata.hs_usid}
-                    </td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_usid}</td>
                   )}
-                  {show_name && (
-                    <td className={`px-2   ${shrink_Text}`}>
-                      {tabledata.us_name}
-                    </td>
-                  )}
+                  {show_name && <td className={`px-2   ${shrink_Text}`}>{tabledata.us_name}</td>}
                   {show_questions && (
-                    <td className={`px-2 text-center  ${shrink_Text}`}>
-                      {tabledata.hs_questions}
-                    </td>
+                    <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_questions}</td>
                   )}
                   {show_correct && (
                     <td className={`px-2   text-center ${shrink_Text}`}>

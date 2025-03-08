@@ -5,7 +5,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/admin/reference/maint-action'
 import type { table_Reference } from '@/src/lib/tables/definitions'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 interface FormProps {
@@ -105,7 +105,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           {rf_rfid === 0 && !selected_owner ? (
-            <DropdownGeneric
+            <MyDropdown
               selectedOption={rf_owner}
               setSelectedOption={setLrowner}
               name='rf_owner'
@@ -134,7 +134,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           {rf_rfid === 0 && !selected_subject && rf_owner ? (
-            <DropdownGeneric
+            <MyDropdown
               selectedOption={rf_subject}
               setSelectedOption={setrf_subject}
               name='rf_subject'
@@ -227,7 +227,7 @@ export default function Form({
         {/*  Who  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <DropdownGeneric
+          <MyDropdown
             selectedOption={rf_who}
             setSelectedOption={setLrwho}
             name='rf_who'
@@ -243,7 +243,7 @@ export default function Form({
         {/*  Type  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <DropdownGeneric
+          <MyDropdown
             selectedOption={rf_type}
             setSelectedOption={setLrtype}
             name='rf_type'

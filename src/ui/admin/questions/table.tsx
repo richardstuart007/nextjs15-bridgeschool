@@ -17,7 +17,7 @@ import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
 import { MyButton } from '@/src/ui/utils/myButton'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
 import {
   Comparison_operator,
@@ -29,17 +29,13 @@ interface FormProps {
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({
-  selected_sbid,
-  selected_owner,
-  selected_subject
-}: FormProps) {
+export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
   const rowsPerPage = 17
   //
   //  Selection
   //
-  const [owner, setowner] = useState<string | number>('')
-  const [subject, setsubject] = useState<string | number>('')
+  const [owner, setowner] = useState<string | number>(selected_owner ?? '')
+  const [subject, setsubject] = useState<string | number>(selected_subject ?? '')
   const [detail, setdetail] = useState('')
   const [rfid, setrfid] = useState<number | string>('')
 
@@ -85,16 +81,7 @@ export default function Table({
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [
-    currentPage,
-    shouldFetchData,
-    selected_sbid,
-    owner,
-    subject,
-    detail,
-    rfid,
-    rfid_cmp
-  ])
+  }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail, rfid, rfid_cmp])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -233,9 +220,7 @@ export default function Table({
         //
         const Params = {
           table: 'tqq_questions',
-          whereColumnValuePairs: [
-            { column: 'qq_qqid', value: questions.qq_qqid }
-          ]
+          whereColumnValuePairs: [{ column: 'qq_qqid', value: questions.qq_qqid }]
         }
         await table_delete(Params)
         //
@@ -264,9 +249,7 @@ export default function Table({
     //
     // If the value is a valid operator, update the state; otherwise, set it to blank
     //
-    const validOperator = Comparison_values.some(
-      option => option.optionValue === value
-    )
+    const validOperator = Comparison_values.some(option => option.optionValue === value)
       ? (value as Comparison_operator)
       : '='
     //
@@ -323,7 +306,7 @@ export default function Table({
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Detail
               </th>
-              <th scope='col' className='text-xs px-2 py-2  text-left'>
+              <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Help
               </th>
               <th scope='col' className='text-xs px-2 py-2  text-center'>
@@ -354,7 +337,7 @@ export default function Table({
                 {selected_owner ? (
                   <h1>{selected_owner}</h1>
                 ) : (
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -370,11 +353,11 @@ export default function Table({
               {/* ................................................... */}
               {/* SUBJECT                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='text-xs  px-2'>
+              <th scope='col' className='text-xs  px-2 text-left'>
                 {selected_subject ? (
                   <h1>{selected_subject}</h1>
                 ) : owner === '' ? null : (
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={subject}
                     setSelectedOption={setsubject}
                     name='subject'
@@ -391,7 +374,7 @@ export default function Table({
               {/* ................................................... */}
               {/* sbid                                                 */}
               {/* ................................................... */}
-              <th scope='col' className='text-xs  px-2'>
+              <th scope='col' className='text-xs  px-2 text-center'>
                 {selected_sbid ? <h1>{selected_sbid}</h1> : null}
               </th>
               <th scope='col' className='text-xs  px-2'></th>
@@ -422,7 +405,7 @@ export default function Table({
                   {/* ................................................... */}
                   {/* Comparison                                                */}
                   {/* ................................................... */}
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={rfid_cmp}
                     setSelectedOption={handleOperatorChange}
                     name='rfid_cmp'
@@ -441,11 +424,7 @@ export default function Table({
                     onChange={e => {
                       const value = e.target.value
                       const numberValue = value === '' ? '' : Number(value)
-                      setrfid(
-                        numberValue === '' || isNaN(numberValue)
-                          ? ''
-                          : numberValue
-                      )
+                      setrfid(numberValue === '' || isNaN(numberValue) ? '' : numberValue)
                     }}
                   />
                 </div>
@@ -457,28 +436,19 @@ export default function Table({
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr
-                key={record.qq_qqid}
-                className='w-full border-b py-2                    '
-              >
+              <tr key={record.qq_qqid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
                 <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
-                <td className='text-xs px-2 py-1 text-center '>
-                  {record.qq_sbid}
-                </td>
-                <td className='text-xs px-2 py-1 text-center  '>
-                  {record.qq_seq}
-                </td>
-                <td className='text-xs px-2 py-1 text-center '>
-                  {record.qq_qqid}
-                </td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_sbid}</td>
+                <td className='text-xs px-2 py-1 text-center  '>{record.qq_seq}</td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
                 <td className='text-xs px-2 py-1  '>
                   <MyButton
                     onClick={() => handleClickEdit_detail(record)}
-                    overrideClass='h-6 w-96  bg-blue-400  hover:bg-blue-500 px-2 py-1'
+                    overrideClass='h-6 w-auto  bg-blue-400  hover:bg-blue-500 px-2 py-1'
                   >
                     {record.qq_detail.length > 100
                       ? `${record.qq_detail.slice(0, 100)}...`
@@ -488,15 +458,11 @@ export default function Table({
                 {/* --------------------------------------------------------------------- */}
                 {/* Help                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1  '>
-                  {record.qq_help ? 'Y' : 'N'}
-                </td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_help ? 'Y' : 'N'}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Reference ID                                                              */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center '>
-                  {record.qq_rfid}
-                </td>
+                <td className='text-xs px-2 py-1 text-center '>{record.qq_rfid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
@@ -521,17 +487,13 @@ export default function Table({
                       onClick={() => handleClickEdit_hands(record)}
                       overrideClass='h-6 bg-blue-400 hover:bg-blue-500 px-2 py-1 text-xxs'
                     >
-                      {record.qq_north &&
-                      !record.qq_north.every(card => card === 'n')
+                      {record.qq_north && !record.qq_north.every(card => card === 'n')
                         ? 'N: ' + record.qq_north.join(', ')
-                        : record.qq_east &&
-                            !record.qq_east.every(card => card === 'n')
+                        : record.qq_east && !record.qq_east.every(card => card === 'n')
                           ? 'E: ' + record.qq_east.join(', ')
-                          : record.qq_south &&
-                              !record.qq_south.every(card => card === 'n')
+                          : record.qq_south && !record.qq_south.every(card => card === 'n')
                             ? 'S: ' + record.qq_south.join(', ')
-                            : record.qq_west &&
-                                !record.qq_west.every(card => card === 'n')
+                            : record.qq_west && !record.qq_west.every(card => card === 'n')
                               ? 'W: ' + record.qq_west.join(', ')
                               : 'N'}
                     </MyButton>
@@ -626,10 +588,7 @@ export default function Table({
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

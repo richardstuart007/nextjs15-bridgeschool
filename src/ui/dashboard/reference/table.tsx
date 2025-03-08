@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import {
-  table_Reference,
-  table_ReferenceSubject
-} from '@/src/lib/tables/definitions'
+import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
@@ -12,15 +9,12 @@ import {
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import Pagination from '@/src/ui/utils/paginationState'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
   selected_sbsbid?: string | undefined
@@ -67,9 +61,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<
-    (table_Reference | table_ReferenceSubject)[]
-  >([])
+  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   //
   //  Initialisation
@@ -204,13 +196,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //
     // Determine debounce time
     //
-    const timeout = firstRender.current
-      ? 1
-      : inputChange
-        ? 1000
-        : dropdownChange
-          ? 200
-          : 1
+    const timeout = firstRender.current ? 1 : inputChange ? 1000 : dropdownChange ? 200 : 1
     //
     //  Debounce
     //
@@ -245,17 +231,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
     //  Values to debounce
     //
     // eslint-disable-next-line
-  }, [
-    owner,
-    subject,
-    ref,
-    desc,
-    who,
-    questions,
-    type,
-    currentPage,
-    initialisationCompleted
-  ])
+  }, [owner, subject, ref, desc, who, questions, type, currentPage, initialisationCompleted])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
@@ -287,15 +263,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
       setshow_ref(true)
     }
     // Description width
-    setwidthDesc(
-      widthNumber >= 4
-        ? 100
-        : widthNumber >= 3
-          ? 75
-          : widthNumber >= 2
-            ? 40
-            : 30
-    )
+    setwidthDesc(widthNumber >= 4 ? 100 : widthNumber >= 3 ? 75 : widthNumber >= 2 ? 40 : 30)
   }
   //----------------------------------------------------------------------------------------------
   //  Height affects ROWS
@@ -476,13 +444,9 @@ export default function Table({ selected_sbsbid }: FormProps) {
             <span className='pl-2 font-bold'> Subject: </span>
             <span className='text-green-500'>{ref_sb_subject.current}</span>
             <span className='pl-2 font-bold'> References: </span>
-            <span className='text-green-500'>
-              {ref_sb_cntreferences.current}
-            </span>
+            <span className='text-green-500'>{ref_sb_cntreferences.current}</span>
             <span className='pl-2 font-bold'> Questions: </span>
-            <span className='text-green-500'>
-              {ref_sb_cntquestions.current}
-            </span>
+            <span className='text-green-500'>{ref_sb_cntquestions.current}</span>
             {Number(ref_sb_cntquestions.current) > 0 && (
               <span>
                 <div className='pl-2 inline-flex justify-center items-center'>
@@ -558,7 +522,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {show_owner && (
                 <th scope='col' className='px-2'>
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -569,9 +533,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     optionLabel='uo_owner'
                     optionValue='uo_owner'
                     overrideClass_Dropdown={
-                      shrink
-                        ? `h-5 w-24 ${shrink_Text}`
-                        : `h-6 w-28 ${shrink_Text}`
+                      shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
                     }
                     includeBlank={true}
                   />
@@ -583,7 +545,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {show_subject && (
                 <th scope='col' className=' px-2'>
                   {owner === undefined || owner === '' ? null : (
-                    <DropdownGeneric
+                    <MyDropdown
                       selectedOption={subject}
                       setSelectedOption={setsubject}
                       name='subject'
@@ -593,9 +555,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                       optionLabel='sb_title'
                       optionValue='sb_subject'
                       overrideClass_Dropdown={
-                        shrink
-                          ? `h-5 w-32 ${shrink_Text}`
-                          : `h-6 w-36 ${shrink_Text}`
+                        shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
                       }
                       includeBlank={true}
                     />
@@ -613,11 +573,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   <MyInput
                     id='ref'
                     name='ref'
-                    overrideClass={
-                      shrink
-                        ? `h-5 w-32 ${shrink_Text}`
-                        : `h-6 w-40 ${shrink_Text}`
-                    }
+                    overrideClass={shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`}
                     type='text'
                     value={ref}
                     onChange={e => {
@@ -637,11 +593,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={
-                    shrink
-                      ? `h-5 w-40 ${shrink_Text}`
-                      : `h-6 w-48 ${shrink_Text}`
-                  }
+                  overrideClass={shrink ? `h-5 w-40 ${shrink_Text}` : `h-6 w-48 ${shrink_Text}`}
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -655,7 +607,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {show_who && (
                 <th scope='col' className=' px-2'>
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={who}
                     setSelectedOption={setwho}
                     name='who'
@@ -663,9 +615,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     optionLabel='wh_title'
                     optionValue='wh_who'
                     overrideClass_Dropdown={
-                      shrink
-                        ? `h-5 w-28 ${shrink_Text}`
-                        : `h-6 w-32 ${shrink_Text}`
+                      shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
                     }
                     includeBlank={true}
                   />
@@ -677,7 +627,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
               {/* ................................................... */}
               {show_type && (
                 <th scope='col' className=' px-2'>
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={type}
                     setSelectedOption={settype}
                     name='type'
@@ -685,9 +635,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                     optionLabel='rt_title'
                     optionValue='rt_type'
                     overrideClass_Dropdown={
-                      shrink
-                        ? `h-5 w-20 ${shrink_Text}`
-                        : `h-6 w-24 ${shrink_Text}`
+                      shrink ? `h-5 w-20 ${shrink_Text}` : `h-6 w-24 ${shrink_Text}`
                     }
                     includeBlank={true}
                   />
@@ -701,9 +649,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                   <MyInput
                     id='questions'
                     name='questions'
-                    overrideClass={`text-center ${
-                      shrink ? 'h-5 w-10' : 'h-6 w-12'
-                    } ${shrink_Text}`}
+                    overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
                     type='text'
                     value={questions}
                     onChange={e => {
@@ -732,9 +678,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* Owner                                          */}
                 {/* ................................................... */}
                 {show_owner && (
-                  <td
-                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                  >
+                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                     {tabledata.rf_owner}
                   </td>
                 )}
@@ -742,9 +686,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* Subject                                          */}
                 {/* ................................................... */}
                 {show_subject && (
-                  <td
-                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                  >
+                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                     {tabledata.rf_subject}
                   </td>
                 )}
@@ -752,9 +694,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* Ref                                          */}
                 {/* ................................................... */}
                 {show_ref && (
-                  <td
-                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                  >
+                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                     {tabledata.rf_ref}
                   </td>
                 )}
@@ -770,9 +710,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* who                                          */}
                 {/* ................................................... */}
                 {show_who && (
-                  <td
-                    className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                  >
+                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                     {tabledata.rf_who}
                   </td>
                 )}
@@ -782,9 +720,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
-                      onClick={() =>
-                        window.open(`${tabledata.rf_link}`, '_blank')
-                      }
+                      onClick={() => window.open(`${tabledata.rf_link}`, '_blank')}
                       overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text} ${
                         tabledata.rf_type === 'youtube'
                           ? 'bg-orange-500 hover:bg-orange-600'
@@ -799,12 +735,8 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {/* Questions                                            */}
                 {/* ................................................... */}
                 {show_questions && 'rf_cntquestions' in tabledata && (
-                  <td
-                    className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                  >
-                    {tabledata.rf_cntquestions > 0
-                      ? tabledata.rf_cntquestions
-                      : ' '}
+                  <td className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
@@ -813,8 +745,7 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 {show_quiz && (
                   <td className='px-2 text-center'>
                     <div className='inline-flex justify-center items-center'>
-                      {'rf_cntquestions' in tabledata &&
-                      tabledata.rf_cntquestions > 0 ? (
+                      {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
                         <MyLink
                           href={{
                             pathname: `/dashboard/quiz/${tabledata.rf_rfid}`,

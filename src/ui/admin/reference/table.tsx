@@ -3,10 +3,7 @@
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reference/maintPopup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
-import {
-  table_Reference,
-  table_ReferenceSubject
-} from '@/src/lib/tables/definitions'
+import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
@@ -16,7 +13,7 @@ import {
 import Pagination from '@/src/ui/utils/paginationState'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 
@@ -25,22 +22,14 @@ interface FormProps {
   selected_owner?: string | undefined
   selected_subject?: string | undefined
 }
-export default function Table({
-  selected_sbid,
-  selected_owner,
-  selected_subject
-}: FormProps) {
+export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
   const rowsPerPage = 17
   const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
-  const [owner, setowner] = useState<string | number>(
-    selected_owner ? selected_owner : ''
-  )
-  const [subject, setsubject] = useState<string | number>(
-    selected_subject ? selected_subject : ''
-  )
+  const [owner, setowner] = useState<string | number>(selected_owner ? selected_owner : '')
+  const [subject, setsubject] = useState<string | number>(selected_subject ? selected_subject : '')
   const [desc, setdesc] = useState('')
   const [who, setwho] = useState<string | number>('')
   const [ref, setref] = useState('')
@@ -50,9 +39,7 @@ export default function Table({
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<
-    (table_Reference | table_ReferenceSubject)[]
-  >([])
+  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   //
@@ -94,17 +81,7 @@ export default function Table({
     fetchdata()
     setShouldFetchData(false)
     // eslint-disable-next-line
-  }, [
-    currentPage,
-    shouldFetchData,
-    owner,
-    subject,
-    who,
-    type,
-    ref,
-    desc,
-    questions
-  ])
+  }, [currentPage, shouldFetchData, owner, subject, who, type, ref, desc, questions])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -329,7 +306,7 @@ export default function Table({
                 {selected_owner ? (
                   <h1>{selected_owner}</h1>
                 ) : (
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -349,7 +326,7 @@ export default function Table({
                 {selected_subject ? (
                   <h1>{selected_subject}</h1>
                 ) : owner === '' ? null : (
-                  <DropdownGeneric
+                  <MyDropdown
                     selectedOption={subject}
                     setSelectedOption={setsubject}
                     name='subject'
@@ -409,7 +386,7 @@ export default function Table({
               {/* WHO                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                <DropdownGeneric
+                <MyDropdown
                   selectedOption={who}
                   setSelectedOption={setwho}
                   name='who'
@@ -424,7 +401,7 @@ export default function Table({
               {/* type                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                <DropdownGeneric
+                <MyDropdown
                   selectedOption={type}
                   setSelectedOption={settype}
                   name='type'
@@ -467,14 +444,10 @@ export default function Table({
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
               <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                <td className='text-xs  px-2 pt-2 text-left'>
-                  {tabledata.rf_sbid}
-                </td>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_sbid}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_owner}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_subject}</td>
-                <td className='text-xs  px-2 pt-2 text-left'>
-                  {tabledata.rf_rfid}
-                </td>
+                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_rfid}</td>
                 <td className='text-xs  px-2 pt-2'>{tabledata.rf_ref}</td>
                 <td className='text-xs px-2 pt-2'>
                   {tabledata.rf_desc.length > 40
@@ -488,9 +461,7 @@ export default function Table({
                 {/* ................................................... */}
                 {'rf_cntquestions' in tabledata && (
                   <td className='text-xs px-2 pt-2 text-center'>
-                    {tabledata.rf_cntquestions > 0
-                      ? tabledata.rf_cntquestions
-                      : ' '}
+                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
@@ -560,10 +531,7 @@ export default function Table({
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* ---------------------------------------------------------------------------------- */}
     </>

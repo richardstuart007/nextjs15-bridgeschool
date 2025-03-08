@@ -4,7 +4,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { ActionUsersowner } from '@/src/ui/admin/usersowner/maint-action'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 
 interface FormProps {
   onSuccess: () => void
@@ -49,7 +49,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/* USER                                                 */}
         {/* ................................................... */}
         <div className='px-2'>
-          <DropdownGeneric
+          <MyDropdown
             selectedOption={uid}
             setSelectedOption={setuid}
             searchEnabled={true}
@@ -66,7 +66,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='px-2'>
-          <DropdownGeneric
+          <MyDropdown
             selectedOption={owner}
             setSelectedOption={setowner}
             searchEnabled={true}

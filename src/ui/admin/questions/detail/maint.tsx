@@ -1,16 +1,14 @@
 'use client'
-import { useState, useActionState, useEffect } from 'react'
+import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import DropdownGeneric from '@/src/ui/utils/dropdown/dropdownGeneric'
+import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { MyTextarea } from '@/src/ui/utils/myTextarea'
+import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
 
 interface FormProps {
   questionRecord: table_Questions | undefined
@@ -43,37 +41,31 @@ export default function Form({
   const [qq_sbid, setqq_sbid] = useState(questionRecord?.qq_sbid || 0)
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
   const [qq_help, setqq_help] = useState(questionRecord?.qq_help || '')
-  const [qq_rfid, setqq_rfid] = useState<string | number>(
-    questionRecord?.qq_rfid || 0
-  )
-  //
+  const [qq_rfid, setqq_rfid] = useState<string | number>(questionRecord?.qq_rfid || 0)
+
+  const [loading, setLoading] = useState(true)
+  //-------------------------------------------------------------------------
   //  Get the subject
-  //
+  //-------------------------------------------------------------------------
+  const getSubject = useCallback(async () => {
+    if (qq_owner === '' || qq_subject === '') return
+
+    try {
+      const row = await row_fetch_subject(String(qq_owner), String(qq_subject))
+      if (row) {
+        const { sb_sbid } = row
+        setqq_sbid(sb_sbid)
+      }
+    } catch (error) {
+      console.error('Error fetching subject:', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [qq_owner, qq_subject])
+
   useEffect(() => {
     getSubject()
-    // eslint-disable-next-line
-  }, [qq_owner, qq_subject])
-  //-------------------------------------------------------------------------
-  //  Get the subject id
-  //-------------------------------------------------------------------------
-  async function getSubject() {
-    //
-    //  Do not fetch if Owner/Subject are empty
-    //
-    if (qq_owner === '' || qq_subject === '') return
-    //
-    //  Get subject id - qq_sbid
-    //
-    const rows = await table_fetch({
-      table: 'tsb_subject',
-      whereColumnValuePairs: [
-        { column: 'sb_owner', value: qq_owner },
-        { column: 'sb_subject', value: qq_subject }
-      ]
-    } as table_fetch_Props)
-    const sb_sbid = rows[0].sb_sbid
-    setqq_sbid(sb_sbid)
-  }
+  }, [getSubject])
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -84,10 +76,7 @@ export default function Form({
     const { pending } = useFormStatus()
     return (
       <div className='pt-2'>
-        <MyButton
-          overrideClass='mt-2 w-72  px-4 justify-center'
-          aria-disabled={pending}
-        >
+        <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
           {qq_qqid === 0 ? 'Create' : 'Update'}
         </MyButton>
       </div>
@@ -101,16 +90,20 @@ export default function Form({
     onSuccess()
     return null
   }
-
+  //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p className='text-xs'>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
   return (
     <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
         {/*  ...................................................................................*/}
         {/*  Title */}
         {/*  ...................................................................................*/}
-        <div className='pt-2 block text-xl font-semibold text-green-500'>
-          Details
-        </div>
+        <div className='pt-2 block text-xl font-semibold text-green-500'>Details</div>
         {/*  ...................................................................................*/}
         {/*  ID  */}
         {/*  ...................................................................................*/}
@@ -127,7 +120,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           {qq_qqid === 0 && !selected_owner ? (
-            <DropdownGeneric
+            <MyDropdown
               selectedOption={qq_owner}
               setSelectedOption={setqq_owner}
               name='qq_owner'
@@ -152,12 +145,7 @@ export default function Form({
                   <span className='block w-72  px-4 py-2 rounded-md bg-gray-200 border-none  text-xs '>
                     {qq_owner}
                   </span>
-                  <MyInput
-                    id='qq_owner'
-                    type='hidden'
-                    name='qq_owner'
-                    value={qq_owner}
-                  />
+                  <MyInput id='qq_owner' type='hidden' name='qq_owner' value={qq_owner} />
                 </>
               </div>
             </>
@@ -168,7 +156,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           {qq_qqid === 0 && !selected_subject && qq_owner ? (
-            <DropdownGeneric
+            <MyDropdown
               selectedOption={qq_subject}
               setSelectedOption={setqq_subject}
               name='qq_subject'
@@ -189,18 +177,13 @@ export default function Form({
                   className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
                   htmlFor='qq_subject'
                 >
-                  Owner Subject
+                  Subject
                 </label>
                 <>
                   <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
                     {qq_subject}
                   </span>
-                  <MyInput
-                    id='qq_subject'
-                    type='hidden'
-                    name='qq_subject'
-                    value={qq_subject}
-                  />
+                  <MyInput id='qq_subject' type='hidden' name='qq_subject' value={qq_subject} />
                 </>
               </div>
             </>
@@ -211,19 +194,19 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           {qq_seq !== 0 && (
-            <label
-              className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
-              htmlFor='qq_qqid'
-            >
-              Seq
-            </label>
+            <>
+              <label
+                className='text-xs font-semibold mb-1 pt-2 block   text-gray-900'
+                htmlFor='qq_qqid'
+              >
+                Seq
+              </label>
+              <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
+                {qq_seq}
+              </span>
+            </>
           )}
-          <>
-            <span className='block  w-72  px-4 py-2 rounded-md bg-gray-200 border-none text-xs '>
-              {qq_seq}
-            </span>
-            <MyInput id='qq_seq' type='hidden' name='qq_seq' value={qq_seq} />
-          </>
+          <MyInput id='qq_seq' type='hidden' name='qq_seq' value={qq_seq} />
         </div>
         {/*  ...................................................................................*/}
         {/*  Description */}
@@ -236,10 +219,10 @@ export default function Form({
             Question
           </label>
           <div className='relative'>
-            <MyInput
+            <MyTextarea
               overrideClass='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
               id='qq_detail'
-              type='text'
+              rows={4}
               name='qq_detail'
               value={qq_detail}
               onChange={e => setqq_detail(e.target.value)}
@@ -255,10 +238,10 @@ export default function Form({
             ))}
         </div>
         {/*  ...................................................................................*/}
-        {/*  id */}
+        {/*  rfid */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          <DropdownGeneric
+          <MyDropdown
             overrideClass_Label='font-semibold pt-2'
             selectedOption={qq_rfid}
             setSelectedOption={setqq_rfid}
@@ -271,7 +254,7 @@ export default function Form({
             optionLabel='rf_desc'
             optionValue='rf_rfid'
             overrideClass_Dropdown='w-96'
-            includeBlank={true}
+            includeBlank={false}
           />
           <div id='error-qq_rfid' aria-live='polite' aria-atomic='true'>
             {formState.errors?.qq_rfid &&
@@ -310,11 +293,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         {/*   Error Messages */}
         {/*  ...................................................................................*/}
-        <div
-          className='flex h-8 items-end space-x-1'
-          aria-live='polite'
-          aria-atomic='true'
-        >
+        <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
           {formState.message && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
