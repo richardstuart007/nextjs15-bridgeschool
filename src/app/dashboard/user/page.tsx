@@ -1,4 +1,4 @@
-import Form from '@/src/ui/general/users/maint'
+import Form from '@/src/ui/dashboard/users/maint'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
 

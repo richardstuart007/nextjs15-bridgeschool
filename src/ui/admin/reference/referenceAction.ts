@@ -1,15 +1,13 @@
 'use server'
 
 import { z } from 'zod'
-import validateReference from '@/src/ui/admin/reference/maint-validate'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
-// ----------------------------------------------------------------------
-//  Update Setup
-// ----------------------------------------------------------------------
+import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
+import type { table_Reference } from '@/src/lib/tables/definitions'
 //
 //  Form Schema for validation
 //
@@ -25,7 +23,7 @@ const FormSchemaSetup = z.object({
 //
 //  Errors and Messages
 //
-export type StateSetup = {
+type StateSetup = {
   errors?: {
     rf_owner?: string[]
     rf_subject?: string[]
@@ -40,9 +38,14 @@ export type StateSetup = {
 }
 
 const Setup = FormSchemaSetup
-
-export async function action(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'action'
+//-------------------------------------------------------------------------
+//  Export
+//-------------------------------------------------------------------------
+export async function referenceAction(
+  _prevState: StateSetup,
+  formData: FormData
+): Promise<StateSetup> {
+  const functionName = 'referenceAction'
   //
   //  Validate form data
   //
@@ -164,5 +167,45 @@ export async function action(_prevState: StateSetup, formData: FormData): Promis
       errors: undefined,
       databaseUpdated: false
     }
+  }
+}
+//-------------------------------------------------------------------------
+//  Validation Function (not exported)
+//-------------------------------------------------------------------------
+async function validateReference(record: table_Reference): Promise<StateSetup> {
+  const { rf_rfid, rf_ref, rf_owner, rf_subject } = record
+  let errors: StateSetup['errors'] = {}
+
+  //
+  //  Check for Add duplicate
+  //
+  if (rf_rfid === 0) {
+    const tableColumnValuePairs = [
+      {
+        table: 'trf_reference',
+        whereColumnValuePairs: [
+          { column: 'rf_owner', value: rf_owner },
+          { column: 'rf_subject', value: rf_subject },
+          { column: 'rf_ref', value: rf_ref }
+        ]
+      }
+    ]
+    const exists = await table_check(tableColumnValuePairs)
+    if (exists.found) errors.rf_ref = ['Owner/Subject/Ref must be unique']
+  }
+  //
+  // Return error messages
+  //
+  if (Object.keys(errors).length > 0) {
+    return {
+      errors,
+      message: 'Form validation failed.'
+    }
+  }
+  //
+  //  No errors
+  //
+  return {
+    message: null
   }
 }

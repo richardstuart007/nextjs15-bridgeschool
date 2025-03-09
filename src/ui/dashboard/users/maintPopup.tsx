@@ -1,6 +1,6 @@
 'use client'
 import Popup from '@/src/ui/utils/popup'
-import Form from '@/src/ui/general/users/maint'
+import Form from '@/src/ui/dashboard/users/maint'
 
 interface Props {
   uid: number

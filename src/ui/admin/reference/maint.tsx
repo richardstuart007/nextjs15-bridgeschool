@@ -3,7 +3,7 @@ import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
-import { action } from '@/src/ui/admin/reference/maint-action'
+import { referenceAction } from '@/src/ui/admin/reference/referenceAction'
 import type { table_Reference } from '@/src/lib/tables/definitions'
 import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -47,7 +47,7 @@ export default function Form({
     message: null,
     databaseUpdated: false
   }
-  const [formState, formAction] = useActionState(action, initialState)
+  const [formState, formAction] = useActionState(referenceAction, initialState)
   //
   //  State and Initial values
   //
@@ -58,11 +58,11 @@ export default function Form({
   const [rf_subject, setrf_subject] = useState<string | number>(
     referenceRecord?.rf_subject || selected_subject || ''
   )
-  const [rf_ref, setLrref] = useState<string | number>(referenceRecord?.rf_ref || '')
-  const [rf_desc, setLrdesc] = useState(referenceRecord?.rf_desc || '')
-  const [rf_who, setLrwho] = useState<string | number>(referenceRecord?.rf_who || '')
-  const [rf_type, setLrtype] = useState<string | number>(referenceRecord?.rf_type || '')
-  const [rf_link, setLrlink] = useState(referenceRecord?.rf_link || '')
+  const [rf_ref, setrf_ref] = useState<string | number>(referenceRecord?.rf_ref || '')
+  const [rf_desc, setrf_desc] = useState(referenceRecord?.rf_desc || '')
+  const [rf_who, setrf_who] = useState<string | number>(referenceRecord?.rf_who || '')
+  const [rf_type, setrf_type] = useState<string | number>(referenceRecord?.rf_type || '')
+  const [rf_link, setrf_link] = useState(referenceRecord?.rf_link || '')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -73,7 +73,6 @@ export default function Form({
     const { pending } = useFormStatus()
     return (
       <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
-        {' '}
         {rf_rfid === 0 ? 'Create' : 'Update'}
       </MyButton>
     )
@@ -175,7 +174,7 @@ export default function Form({
                 type='text'
                 name='rf_ref'
                 value={rf_ref}
-                onChange={e => setLrref(e.target.value.replace(/\s+/g, ''))}
+                onChange={e => setrf_ref(e.target.value.replace(/\s+/g, ''))}
               />
             ) : (
               /* -----------------Edit ------------------*/
@@ -211,7 +210,7 @@ export default function Form({
               type='text'
               name='rf_desc'
               value={rf_desc}
-              onChange={e => setLrdesc(e.target.value)}
+              onChange={e => setrf_desc(e.target.value)}
             />
           </div>
         </div>
@@ -229,7 +228,7 @@ export default function Form({
         <div className='mt-4'>
           <MyDropdown
             selectedOption={rf_who}
-            setSelectedOption={setLrwho}
+            setSelectedOption={setrf_who}
             name='rf_who'
             label='Who'
             table='twh_who'
@@ -245,7 +244,7 @@ export default function Form({
         <div className='mt-4'>
           <MyDropdown
             selectedOption={rf_type}
-            setSelectedOption={setLrtype}
+            setSelectedOption={setrf_type}
             name='rf_type'
             label='Type'
             table='trt_reftype'
@@ -269,7 +268,7 @@ export default function Form({
               type='text'
               name='rf_link'
               value={rf_link}
-              onChange={e => setLrlink(e.target.value)}
+              onChange={e => setrf_link(e.target.value)}
             />
           </div>
         </div>

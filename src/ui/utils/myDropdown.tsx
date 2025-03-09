@@ -159,7 +159,6 @@ export default function MyDropdown<T extends string, U extends string>({
         //
         //  Set options
         //
-        console.log('updatedOptions', updatedOptions)
         setDropdownOptions(updatedOptions)
         //
         //  Errors

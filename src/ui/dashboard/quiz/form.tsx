@@ -30,9 +30,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //
   //  Questions state updated in initial load
   //
-  const [questions, setQuestions] = useState<table_Questions[]>(
-    props.questions || []
-  )
+  const [questions, setQuestions] = useState<table_Questions[]>(props.questions || [])
   const rfid = props.rfid
   //
   //  Fetch session data when the component mounts
@@ -45,9 +43,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //  State variables
   //
   const [index, setIndex] = useState(0)
-  const [question, setQuestion] = useState(
-    questions.length > 0 ? questions[0] : null
-  )
+  const [question, setQuestion] = useState(questions.length > 0 ? questions[0] : null)
   const [answer, setAnswer] = useState<number[]>([])
   const [showSubmit, setShowSubmit] = useState(false)
   //-------------------------------------------------------------------------
@@ -73,6 +69,14 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //  Restrict array size
       //
       questions_work = questions_work.slice(0, si_maxquestions)
+      //
+      // Sort the array by qq_sbid, qq_rfid, qq_qqid
+      //
+      questions_work.sort((a, b) => {
+        if (a.qq_sbid !== b.qq_sbid) return a.qq_sbid - b.qq_sbid
+        if (a.qq_rfid !== b.qq_rfid) return a.qq_rfid - b.qq_rfid
+        return a.qq_qqid - b.qq_qqid
+      })
       //
       //  Update questions and initial question
       //
@@ -207,11 +211,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       </div>
       <QuizBidding question={question} />
       <QuizHands question={question} />
-      <QuizChoice
-        question={question}
-        setAnswer={setAnswer}
-        setShowSubmit={setShowSubmit}
-      />
+      <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
       {showSubmit ? (
         <div className='whitespace-nowrap px-3 h-5'>
           <MyButton

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import UserEditPopup from '@/src/ui/general/users/maintPopup'
+import UserEditPopup from '@/src/ui/dashboard/users/maintPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import ConfirmDialog from '@/src/ui/utils/confirmDialog'
@@ -36,8 +36,7 @@ export default function Table() {
   const [isModalOpen, setisModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<table_Users | null>(null)
   const [selectedPwd, setSelectedPwd] = useState<table_Users | null>(null)
-  const [selectedUsersowner, setSelectedUsersowner] =
-    useState<table_Users | null>(null)
+  const [selectedUsersowner, setSelectedUsersowner] = useState<table_Users | null>(null)
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: '',
@@ -388,12 +387,8 @@ export default function Table() {
                 <td className='text-xs px-2 py-1 '>{user.us_name}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_email}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_fedid}</td>
-                <td className='text-xs px-2 py-1  text-center'>
-                  {user.us_admin ? 'Y' : ''}
-                </td>
-                <td className='text-xs px-2 py-1  text-center'>
-                  {user.us_fedcountry}
-                </td>
+                <td className='text-xs px-2 py-1  text-center'>{user.us_admin ? 'Y' : ''}</td>
+                <td className='text-xs px-2 py-1  text-center'>{user.us_fedcountry}</td>
                 <td className='text-xs px-2 py-1 '>{user.us_provider}</td>
                 <td className='text-xs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
@@ -459,11 +454,7 @@ export default function Table() {
 
       {/* User Edit Modal */}
       {selectedUser && (
-        <UserEditPopup
-          uid={selectedUser.us_usid}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
+        <UserEditPopup uid={selectedUser.us_usid} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
 
       {/* User Usersowner Modal */}
@@ -477,18 +468,11 @@ export default function Table() {
 
       {/* Password Edit Modal */}
       {selectedPwd && (
-        <PwdEditPopup
-          userRecord={selectedPwd}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
+        <PwdEditPopup userRecord={selectedPwd} isOpen={isModalOpen} onClose={handleCloseModal} />
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }
