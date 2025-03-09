@@ -70,12 +70,12 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       //
       questions_work = questions_work.slice(0, si_maxquestions)
       //
-      // Sort the array by qq_sbid, qq_rfid, qq_qqid
+      // Sort the array by qq_sbid, qq_rfid, qq_seq
       //
       questions_work.sort((a, b) => {
         if (a.qq_sbid !== b.qq_sbid) return a.qq_sbid - b.qq_sbid
         if (a.qq_rfid !== b.qq_rfid) return a.qq_rfid - b.qq_rfid
-        return a.qq_qqid - b.qq_qqid
+        return a.qq_seq - b.qq_seq
       })
       //
       //  Update questions and initial question
