@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { getCookieSessionId } from '@/src/lib/cookie_server'
+import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 //---------------------------------------------------------------------
 //  Write Logging
 //---------------------------------------------------------------------
@@ -25,12 +25,12 @@ export async function errorLogging({
       return false
     }
     //
-    // Only call getCookieSessionId() server-side
+    // Only call getCookieServer_co_ssid() server-side
     //
     let lg_ssid = 0
     if (typeof window === 'undefined') {
-      const sessionId = await getCookieSessionId()
-      lg_ssid = sessionId ? sessionId : 0
+      const co_ssid = await getCookieServer_co_ssid()
+      lg_ssid = co_ssid ? co_ssid : 0
     }
     //
     //  Get datetime
@@ -57,13 +57,7 @@ export async function errorLogging({
       )
     VALUES ($1,$2,$3,$4,$5)
   `
-    const queryValues = [
-      lg_datetime,
-      lg_msgTrim,
-      lg_functionname,
-      lg_ssid,
-      lg_severity
-    ]
+    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_ssid, lg_severity]
     //
     // Remove redundant spaces
     //

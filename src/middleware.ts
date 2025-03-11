@@ -8,7 +8,7 @@ import {
   Routes_Login,
   Routes_Register
 } from '@/src/validroutes'
-import { getCookieSessionId } from '@/src/lib/cookie_server'
+import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 
 export default async function middleware(req: any): Promise<any> {
   const functionName = 'middleware'
@@ -29,8 +29,8 @@ export default async function middleware(req: any): Promise<any> {
   //
   //  Login status
   //
-  const sessionId = await getCookieSessionId()
-  const isLoggedInCookie = !!sessionId
+  const co_ssid = await getCookieServer_co_ssid()
+  const isLoggedInCookie = !!co_ssid
   //-------------------------------------------------------------------------------------------------
   //  Allow all API routes
   //-------------------------------------------------------------------------------------------------

@@ -9,10 +9,7 @@ import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/lib/user-logout'
 import { MyButton } from '@/src/ui/utils/myButton'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import NavShrink from '@/src/ui/utils/nav/nav-shrink'
 import NavDetail from '@/src/ui/utils/nav/nav-detail'
 
@@ -28,9 +25,7 @@ export default function NavSide(props: Props) {
   //
   //  session info
   //
-  const [sessionInfo, setSessionInfo] = useState<
-    structure_SessionsInfo | undefined
-  >(undefined)
+  const [sessionInfo, setSessionInfo] = useState<structure_SessionsInfo | undefined>(undefined)
   const [dbName, setdbName] = useState<string>('')
   //
   //  Shrink/Detail
@@ -60,13 +55,13 @@ export default function NavSide(props: Props) {
     //
     //  Auth Session
     //
-    let sessionId
+    let au_ssid
     const authSession = await getAuthSession()
-    sessionId = authSession?.user?.sessionId
+    au_ssid = authSession?.user?.au_ssid
     //
     //  Get Session info from database & update Context
     //
-    if (sessionId) {
+    if (au_ssid) {
       const sessionData = await fetchSessionInfo()
       const structure_ContextInfo = {
         cx_usid: sessionData.si_usid,
@@ -104,18 +99,10 @@ export default function NavSide(props: Props) {
       {sessionInfo && (
         <>
           <div className='hidden md:block'>
-            <NavSession
-              sessionInfo={sessionInfo}
-              dbName={dbName}
-              shrink={shrink}
-            />
+            <NavSession sessionInfo={sessionInfo} dbName={dbName} shrink={shrink} />
           </div>
           <div className='flex grow justify-between space-x-1 md:flex-col md:space-x-0 md:space-y-2 md:items-center'>
-            <NavLinks
-              sessionInfo={sessionInfo}
-              baseURL={baseURL}
-              shrink={shrink}
-            />
+            <NavLinks sessionInfo={sessionInfo} baseURL={baseURL} shrink={shrink} />
             <div className='grow invisible'></div>
             <div className='hidden md:block justify-center flex-none p-1 px-2'>
               <NavShrink />

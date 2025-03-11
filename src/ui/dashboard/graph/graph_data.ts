@@ -8,7 +8,10 @@ import {
   TopResults_usersReturned,
   TopResults_limitMonths,
   RecentResults_usersReturned,
-  RecentResults_usersAverage
+  RecentResults_usersAverage,
+  CurrentUser_limitMonths_Average,
+  CurrentUser_limitMonths,
+  CurrentUser_limitCount
 } from '@/src/ui/dashboard/graph/graph_constants'
 //---------------------------------------------------------------------
 //  Top results data
@@ -189,6 +192,94 @@ export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
     //
     //  Errors
     //
+  } catch (error) {
+    const errorMessage = (error as Error).message
+    errorLogging({
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
+    })
+    console.error('Error:', errorMessage)
+  }
+}
+//---------------------------------------------------------------------
+//  Fetch average percentage for all results of a user within the last 'CurrentUser_limitMonths_Average' months
+//---------------------------------------------------------------------
+interface UserAverageProps {
+  userId: number
+}
+
+export async function fetch_UserAverage({ userId }: UserAverageProps) {
+  const functionName = 'fetch_UserAverage'
+
+  try {
+    const sqlQuery = `
+      SELECT
+         ROUND(
+            (SUM(hs_totalpoints)::NUMERIC / NULLIF(SUM(hs_maxpoints), 0)) * 100
+          ) AS avg_percentage
+      FROM
+        ths_history
+      WHERE
+        hs_usid = $1
+        AND hs_datetime >= NOW() - ($2 || ' months')::interval;
+    `
+    //
+    // Run SQL Query
+    //
+    const values = [userId, CurrentUser_limitMonths_Average]
+    const db = await sql()
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    //
+    // Return the average percentage
+    //
+    const avgPercentage = data.rows[0]?.avg_percentage || 0
+    return avgPercentage
+  } catch (error) {
+    const errorMessage = (error as Error).message
+    errorLogging({
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
+    })
+    console.error('Error:', errorMessage)
+  }
+}
+//---------------------------------------------------------------------
+//  Fetch latest results for the last 'RecentResults_usersReturned' users
+//---------------------------------------------------------------------
+interface RecentUserResultsProps {
+  userId: number
+}
+export async function fetch_UserResults({ userId }: RecentUserResultsProps) {
+  const functionName = 'fetch_UserResults'
+
+  try {
+    const sqlQuery = `
+    SELECT
+      hs_hsid,
+      hs_datetime,
+      hs_correctpercent
+    FROM
+      ths_history
+    WHERE
+      hs_usid = $1
+      AND hs_datetime >= NOW() - ($2 || ' months')::interval
+    ORDER BY
+      hs_hsid DESC
+    LIMIT $3;
+    `
+    //
+    // Run SQL Query
+    //
+    const values = [userId, CurrentUser_limitMonths, CurrentUser_limitCount]
+    const db = await sql()
+    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    //
+    // Return rows
+    //
+    const rows = data.rows
+    return rows
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({

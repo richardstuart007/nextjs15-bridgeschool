@@ -1,23 +1,16 @@
 'use server'
 
 import { auth } from '@/auth'
-import { updateCookieSessionId } from '@/src/lib/cookie_server'
+import { updateCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 // ----------------------------------------------------------------------
 //  Google Provider
 // ----------------------------------------------------------------------
-export async function providerSignIn({
-  provider,
-  email,
-  name
-}: structure_ProviderSignInParams) {
+export async function providerSignIn({ provider, email, name }: structure_ProviderSignInParams) {
   const functionName = 'providerSignIn'
   try {
     //
@@ -41,11 +34,11 @@ export async function providerSignIn({
     // Write session information
     //
     const ss_usid = userRecord.us_usid
-    const sessionId = await newSession(ss_usid)
+    const ss_ssid = await newSession(ss_usid)
     //
     //  Return Session ID
     //
-    return sessionId
+    return ss_ssid
     //
     //  Errors
     //
@@ -130,19 +123,19 @@ async function newSession(ss_usid: number) {
     ]
   })
   //
-  //  Get the sessionId
+  //  Get the ss_ssid
   //
   const sessionsRecord = sessionsRecords[0]
   if (!sessionsRecord) throw new Error('providerSignIn: Write Session Error')
-  const sessionId = sessionsRecord.ss_ssid
+  const ss_ssid = sessionsRecord.ss_ssid
   //
-  // Write cookie sessionId
+  // Write cookie ss_ssid
   //
-  await updateCookieSessionId(sessionId)
+  await updateCookieServer_co_ssid(ss_ssid)
   //
   //  Return Session ID
   //
-  return sessionId
+  return ss_ssid
 }
 // ----------------------------------------------------------------------
 //  Get Auth Session information

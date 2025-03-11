@@ -1,6 +1,7 @@
 import SummaryGraphs from '@/src/ui/dashboard/graph/graph_summary'
 import { SummarySkeleton } from '@/src/ui/dashboard/graph/skeleton_summary'
 import { Suspense } from 'react'
+export const dynamic = 'force-dynamic' // Force dynamic rendering
 
 export default async function Page() {
   return (

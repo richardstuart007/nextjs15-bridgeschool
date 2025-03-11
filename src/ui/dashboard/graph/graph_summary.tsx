@@ -1,17 +1,23 @@
 import {
   fetch_TopResults,
   fetch_RecentResults1,
-  fetch_RecentResultsAverages
+  fetch_RecentResultsAverages,
+  fetch_UserResults,
+  fetch_UserAverage
 } from '@/src/ui/dashboard/graph/graph_data'
-import { StackedBarChart } from '@/src/ui/dashboard/graph/stackedbarchart'
+import { MyBarChart, MyLineChart } from '@/src/ui/dashboard/graph/graph_charts'
 import {
   structure_UsershistoryTopResults,
   structure_UsershistoryRecentResults
 } from '@/src/lib/tables/structures'
+import { table_Usershistory } from '@/src/lib/tables/definitions'
 import {
   RecentResults_usersAverage,
-  TopResults_limitMonths
+  TopResults_limitMonths,
+  CurrentUser_limitMonths_Average
 } from '@/src/ui/dashboard/graph/graph_constants'
+import { getAuthSession } from '@/src/lib/data-auth'
+import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 //
 //  Graph Interfaces
 //
@@ -19,6 +25,8 @@ interface Datasets {
   label: string
   data: number[]
   backgroundColor?: string
+  borderColor?: string
+  tension?: number
 }
 interface GraphStructure {
   labels: string[]
@@ -27,12 +35,25 @@ interface GraphStructure {
 //--------------------------------------------------------------------------------
 export default async function SummaryGraphs() {
   //
+  //  Auth Session
+  //
+  const authSession = await getAuthSession()
+  const user = authSession?.user
+  const au_usid = Number(user.au_usid)
+  //
   //  Fetch the data
   //
-  const [dataTop, dataRecent]: [
+  const [dataTop, dataRecent, dataUserResults, dataUserAverage]: [
     structure_UsershistoryTopResults[],
-    structure_UsershistoryRecentResults[]
-  ] = await Promise.all([fetch_TopResults(), fetch_RecentResults1()])
+    structure_UsershistoryRecentResults[],
+    table_Usershistory[],
+    number
+  ] = await Promise.all([
+    fetch_TopResults(),
+    fetch_RecentResults1(),
+    fetch_UserResults({ userId: au_usid }),
+    fetch_UserAverage({ userId: au_usid })
+  ])
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
@@ -44,6 +65,11 @@ export default async function SummaryGraphs() {
   // TOP graph
   //
   const TopGraphData: GraphStructure = topGraph(dataTop)
+  //
+  // Line graph for Top Results
+  //
+  const sortedDataUserResults = dataUserResults.sort((a, b) => a.hs_hsid - b.hs_hsid)
+  const UserLineGraph: GraphStructure = lineGraph(sortedDataUserResults)
   //
   // Recent graph
   //
@@ -67,6 +93,40 @@ export default async function SummaryGraphs() {
           label: `Top % over ${TopResults_limitMonths} months`,
           data: percentages,
           backgroundColor: 'rgba(255, 165, 0, 0.6)'
+        }
+      ]
+    }
+    return GraphData
+  }
+  //--------------------------------------------------------------------------------
+  //  Generate the data for the Users results graph
+  //--------------------------------------------------------------------------------
+  function lineGraph(
+    dataUserResults: { hs_datetime: Date; hs_correctpercent: number }[]
+  ): GraphStructure {
+    //
+    //  Derive the names and percentages from the data
+    //
+    const labels: string[] = dataUserResults.map(item => {
+      return convertUTCtoLocal({
+        datetimeUTC: item.hs_datetime,
+        to_localcountryCode: 'NZ',
+        to_dateFormat: 'MMMdd'
+      })
+    })
+    const percentages: number[] = dataUserResults.map(item => item.hs_correctpercent)
+    //
+    //  Datasets
+    //
+    const GraphData: GraphStructure = {
+      labels: labels,
+      datasets: [
+        {
+          label: `Score % `,
+          data: percentages,
+          borderColor: 'rgba(75, 192, 192, 1)', // Line color
+          backgroundColor: 'rgba(75, 192, 192, 0.6)', // Solid color for the legend box
+          tension: 0.4 // Smooth curve
         }
       ]
     }
@@ -178,24 +238,35 @@ export default async function SummaryGraphs() {
   return (
     <div className='h-screen flex flex-col gap-4'>
       {/* --------------------------------------------------------------- */}
+      {/* Top Results Section - UserLineGraph (Line Chart) */}
+      {/* --------------------------------------------------------------- */}
+      <div className='flex-none h-[30vh]'>
+        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+          <h2 className='text-sm'>{`Your Results: ${CurrentUser_limitMonths_Average} month average ${dataUserAverage}`}</h2>
+          <div className='flex-grow overflow-hidden'>
+            <MyLineChart LineGraphData={UserLineGraph} />
+          </div>
+        </div>
+      </div>
+      {/* --------------------------------------------------------------- */}
       {/* Top Results Section - TopGraphData  */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
+      <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-lg'>Top Results</h2>
+          <h2 className='text-sm'>Top Results</h2>
           <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={TopGraphData} />
+            <MyBarChart StackedGraphData={TopGraphData} />
           </div>
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
       {/* Recent Results Section - RecentGraphData   */}
       {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[40vh]'>
+      <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-lg'>Recent Results</h2>
+          <h2 className='text-sm'>Recent Results</h2>
           <div className='flex-grow overflow-hidden'>
-            <StackedBarChart StackedGraphData={RecentGraphData} />
+            <MyBarChart StackedGraphData={RecentGraphData} />
           </div>
         </div>
       </div>

@@ -22,6 +22,8 @@ export type structure_UserAuth = {
   name: string
   email: string
   password: string
+  au_usid: string
+  au_ssid: string
 }
 
 export type structure_UsershistoryTopResults = {

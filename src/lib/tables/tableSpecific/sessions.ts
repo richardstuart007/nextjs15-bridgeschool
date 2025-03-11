@@ -3,8 +3,8 @@
 import { sql } from '@/src/lib/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { getCookieSessionId } from '@/src/lib/cookie_server'
-import { getAuthSessionId } from '@/src/lib/getAuthSessionId'
+import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
@@ -13,7 +13,7 @@ export async function fetchSessionInfo() {
   //
   //  Get the session id
   //
-  const sessionId = await getAuthSessionId()
+  const co_ssid = await getAuthServer_au_ssid()
 
   try {
     const sqlQuery = `
@@ -31,7 +31,7 @@ export async function fetchSessionInfo() {
       ON   ss_usid = us_usid
       WHERE ss_ssid = $1
     `
-    const queryValues = [sessionId]
+    const queryValues = [co_ssid]
     //
     //  Execute the sql
     //
@@ -79,11 +79,11 @@ export async function isAdmin() {
     //
     //  Get session id
     //
-    const sessionId = await getCookieSessionId()
+    const co_ssid = await getCookieServer_co_ssid()
     //
     //  No session then not logged in
     //
-    if (!sessionId) return false
+    if (!co_ssid) return false
     //
     //  Session info
     //

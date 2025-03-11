@@ -4,17 +4,17 @@ import { cookies } from 'next/headers'
 // ----------------------------------------------------------------------
 //  Update Cookie information
 // ----------------------------------------------------------------------
-export async function updateCookieSessionId(sessionId: number) {
-  const functionName = 'updateCookieSessionId'
+export async function updateCookieServer_co_ssid(co_ssid: number) {
+  const functionName = 'updateCookieServer_co_ssid'
   try {
     //
     //  Cookiename
     //
-    const cookieName = 'SessionId'
+    const cookieName = 'BridgeCookie'
     //
     // Write the cookie
     //
-    const cookieValue = JSON.stringify(sessionId)
+    const cookieValue = JSON.stringify(co_ssid)
     const cookieStore = await cookies()
     cookieStore.set(cookieName, cookieValue, {
       httpOnly: false,
@@ -33,8 +33,8 @@ export async function updateCookieSessionId(sessionId: number) {
 // ----------------------------------------------------------------------
 //  Delete Cookie
 // ----------------------------------------------------------------------
-export async function deleteCookie(cookieName: string = 'SessionId') {
-  const functionName = 'deleteCookie'
+export async function deleteCookieServer_co_ssid(cookieName: string = 'BridgeCookie') {
+  const functionName = 'deleteCookieServer_co_ssid'
   try {
     const cookieStore = await cookies()
     cookieStore.delete(cookieName)
@@ -49,8 +49,10 @@ export async function deleteCookie(cookieName: string = 'SessionId') {
 // ----------------------------------------------------------------------
 //  Get Cookie information
 // ----------------------------------------------------------------------
-export async function getCookieSessionId(cookieName: string = 'SessionId'): Promise<number | null> {
-  const functionName = 'getCookieSessionId'
+export async function getCookieServer_co_ssid(
+  cookieName: string = 'BridgeCookie'
+): Promise<number | null> {
+  const functionName = 'getCookieServer_co_ssid'
   try {
     const cookieStore = await cookies()
     const cookie = cookieStore.get(cookieName)

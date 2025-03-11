@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { lusitana } from '@/src/fonts'
-import { deleteCookie } from '@/src/lib/cookie_server'
+import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import { MyLink } from '../ui/utils/myLink'
 
 export default function Page() {
   const [logoSize, setLogoSize] = useState(90)
 
   useEffect(() => {
-    deleteCookie()
+    deleteCookieServer_co_ssid()
     // eslint-disable-next-line
   }, [])
 

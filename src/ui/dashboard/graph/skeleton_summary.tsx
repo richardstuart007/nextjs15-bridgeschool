@@ -3,7 +3,7 @@ import {
   fetch_RecentResults1,
   fetch_RecentResultsAverages
 } from '@/src/ui/dashboard/graph/skeleton_data'
-import { StackedBarChart } from '@/src/ui/dashboard/graph/stackedbarchart'
+import { MyBarChart } from '@/src/ui/dashboard/graph/graph_charts'
 import { structure_UsershistoryRecentResults } from '@/src/lib/tables/structures'
 //-----------------------------------------------------------------------------
 //  Graph skeleton
@@ -171,7 +171,7 @@ export function SummarySkeleton() {
       <div className='box-border' style={{ height: '40%' }}>
         <div className='w-full max-w-2xl bg-gray-100 h-full'>
           <h2 className='text-lg'>Top Results</h2>
-          <StackedBarChart StackedGraphData={TopGraphData} />
+          <MyBarChart StackedGraphData={TopGraphData} />
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
@@ -180,7 +180,7 @@ export function SummarySkeleton() {
       <div className='box-border' style={{ height: '40%' }}>
         <div className='w-full max-w-2xl bg-gray-100 h-full'>
           <h2 className='text-lg'>Recent Results</h2>
-          <StackedBarChart StackedGraphData={RecentGraphData} />
+          <MyBarChart StackedGraphData={RecentGraphData} />
         </div>
       </div>
     </div>

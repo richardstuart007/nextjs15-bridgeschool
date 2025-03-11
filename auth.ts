@@ -11,10 +11,18 @@ import { providerSignIn } from '@/src/lib/data-auth'
 import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+//
+//  Extend the user
+//
+import { DefaultSession } from 'next-auth'
+export type ExtendedUser = DefaultSession['user'] & {
+  au_ssid: string
+  au_usid?: string
+}
 // ----------------------------------------------------------------------
 //  Check User/Password
 // ----------------------------------------------------------------------
-let sessionId = 0
+let au_ssid = 0
 export const {
   handlers: { GET, POST },
   auth,
@@ -22,7 +30,13 @@ export const {
   signOut
 } = NextAuth({
   trustHost: true,
+  //
+  //  Callback functions
+  //
   callbacks: {
+    //
+    //  Sign in
+    //
     async signIn({ user, account }) {
       const { email, name } = user
       const provider = account?.provider
@@ -39,7 +53,20 @@ export const {
         name: name
       }
       try {
-        sessionId = await providerSignIn(signInData)
+        // Fetch the user from the database
+        const fetchParams = {
+          table: 'tus_users',
+          whereColumnValuePairs: [{ column: 'us_email', value: email }]
+        }
+        const rows = await table_fetch(fetchParams)
+        const userRecord = rows[0]
+        if (userRecord) {
+          ;(user as ExtendedUser).au_usid = userRecord.us_usid.toString()
+        }
+        //
+        //  Get au_ssid
+        //
+        au_ssid = await providerSignIn(signInData)
         return true
         //
         //  Errors
@@ -54,18 +81,23 @@ export const {
     //
     async session({ token, session }) {
       if (token.sub && session.user) session.user.id = token.sub
-      if (token.sessionId && session.user)
-        session.user.sessionId = token.sessionId as string
+      if (token.au_ssid && session.user) {
+        session.user.au_ssid = token.au_ssid as string
+        session.user.au_usid = token.au_usid as string
+      }
       return session
     },
     //
-    //  update token sessionId to latest
+    //  update token au_ssid to latest
     //
-    async jwt({ token }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.au_usid = (user as ExtendedUser).au_usid
+      }
       if (!token.sub) return token
-      let tokenSessionId = 0
-      if (typeof token.sessionId === 'number') tokenSessionId = token.sessionId
-      if (sessionId > tokenSessionId) token.sessionId = sessionId
+      let token_au_ssid = 0
+      if (typeof token.au_ssid === 'number') token_au_ssid = token.au_ssid
+      if (au_ssid > token_au_ssid) token.au_ssid = au_ssid
       return token
     }
   },
@@ -90,9 +122,7 @@ export const {
         //
         //  Fail credentials then return
         //
-        if (!parsedCredentials.success) {
-          return null
-        }
+        if (!parsedCredentials.success) return null
         //
         //  Get userpwd from database
         //
@@ -107,16 +137,12 @@ export const {
           }
           const pwdRows = await table_fetch(pwdParams)
           const userPwd = pwdRows[0]
-          if (!userPwd) {
-            return null
-          }
+          if (!userPwd) return null
           //
           //  Check password if exists
           //
           const passwordsMatch = await bcrypt.compare(password, userPwd.up_hash)
-          if (!passwordsMatch) {
-            return null
-          }
+          if (!passwordsMatch) return null
           //
           //  Get User record
           //
@@ -126,17 +152,15 @@ export const {
           }
           const rows = await table_fetch(fetchParams)
           const userRecord = rows[0]
-          if (!userRecord) {
-            return null
-          }
+          if (!userRecord) return null
           //
           //  Return in correct format
           //
           const rtnData = {
-            id: userRecord.us_usid.toString(),
             name: userRecord.us_name,
             email: userRecord.us_email,
-            password: userPwd.up_hash
+            password: userPwd.up_hash,
+            au_usid: userRecord.us_usid.toString()
           }
           return rtnData as structure_UserAuth
           //
