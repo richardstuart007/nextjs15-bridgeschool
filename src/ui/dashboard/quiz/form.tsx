@@ -119,10 +119,10 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //...................................................................................
   async function handleQuizCompleted() {
     //
-    // If the question is null, skip the writing process
+    //  No questions answered
     //
-    if (!question) {
-      console.error('Question is null, skipping write operation.')
+    if (!question || answer.length === 0) {
+      router.back()
       return
     }
     //
@@ -198,11 +198,12 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     router.push(`/dashboard/quiz-review/${hs_hsid}`)
   }
   //...................................................................................
+  //.  no questions
+  //...................................................................................
+  if (!question) return <div>No questions...</div>
+  //...................................................................................
   //.  Render the form
   //...................................................................................
-  // return <div>testing...</div>
-  if (!question) return <div>No questions...</div>
-
   return (
     <>
       <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
@@ -212,16 +213,30 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       <QuizBidding question={question} />
       <QuizHands question={question} />
       <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
-      {showSubmit ? (
-        <div className='whitespace-nowrap px-3 h-5'>
+
+      <div className='flex items-center justify-between min-w-[300px] max-w-[400px]'>
+        {showSubmit ? (
+          <div className='whitespace-nowrap px-1 h-5'>
+            <MyButton
+              overrideClass='py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-700'
+              onClick={handleNextQuestion}
+            >
+              Submit Selection
+            </MyButton>
+          </div>
+        ) : (
+          <div className='flex-1'></div>
+        )}
+
+        <div className='whitespace-nowrap px-1 h-5'>
           <MyButton
-            overrideClass='px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
-            onClick={handleNextQuestion}
+            overrideClass='h-4 text-xxs bg-red-300 text-white rounded-md shadow-md hover:bg-red-500'
+            onClick={handleQuizCompleted}
           >
-            Submit Selection
+            End Quiz
           </MyButton>
         </div>
-      ) : null}
+      </div>
     </>
   )
 }

@@ -17,6 +17,7 @@ import {
   CurrentUser_limitMonths_Average
 } from '@/src/ui/dashboard/graph/graph_constants'
 import { getAuthSession } from '@/src/lib/data-auth'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 //
 //  Graph Interfaces
@@ -24,6 +25,8 @@ import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 interface Datasets {
   label: string
   data: number[]
+  keys: number[]
+  keyType: string
   backgroundColor?: string
   borderColor?: string
   tension?: number
@@ -40,6 +43,15 @@ export default async function SummaryGraphs() {
   const authSession = await getAuthSession()
   const user = authSession?.user
   const au_usid = Number(user.au_usid)
+  //
+  //  Get users country code
+  //
+  const rows = await table_fetch({
+    table: 'tus_users',
+    whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
+  } as table_fetch_Props)
+  const userRecord = rows[0]
+  const countryCode = userRecord.us_fedcountry
   //
   //  Fetch the data
   //
@@ -77,12 +89,15 @@ export default async function SummaryGraphs() {
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
-  function topGraph(dataTop: { us_name: string; percentage: number }[]): GraphStructure {
+  function topGraph(
+    dataTop: { hs_usid: number; us_name: string; percentage: number }[]
+  ): GraphStructure {
     //
     //  Derive the names and percentages from the data
     //
     const names: string[] = dataTop.map(item => item.us_name)
-    const percentages: number[] = dataTop.map(item => item.percentage)
+    const data: number[] = dataTop.map(item => item.percentage)
+    const keys: number[] = dataTop.map(item => item.hs_usid)
     //
     //  Datasets
     //
@@ -91,7 +106,9 @@ export default async function SummaryGraphs() {
       datasets: [
         {
           label: `Top % over ${TopResults_limitMonths} months`,
-          data: percentages,
+          data: data,
+          keys: keys,
+          keyType: 'usid',
           backgroundColor: 'rgba(255, 165, 0, 0.6)'
         }
       ]
@@ -102,7 +119,7 @@ export default async function SummaryGraphs() {
   //  Generate the data for the Users results graph
   //--------------------------------------------------------------------------------
   function lineGraph(
-    dataUserResults: { hs_datetime: Date; hs_correctpercent: number }[]
+    dataUserResults: { hs_hsid: number; hs_datetime: Date; hs_correctpercent: number }[]
   ): GraphStructure {
     //
     //  Derive the names and percentages from the data
@@ -110,11 +127,12 @@ export default async function SummaryGraphs() {
     const labels: string[] = dataUserResults.map(item => {
       return convertUTCtoLocal({
         datetimeUTC: item.hs_datetime,
-        to_localcountryCode: 'NZ',
+        to_localcountryCode: countryCode,
         to_dateFormat: 'MMMdd'
       })
     })
-    const percentages: number[] = dataUserResults.map(item => item.hs_correctpercent)
+    const data: number[] = dataUserResults.map(item => item.hs_correctpercent)
+    const keys: number[] = dataUserResults.map(item => item.hs_hsid)
     //
     //  Datasets
     //
@@ -123,7 +141,9 @@ export default async function SummaryGraphs() {
       datasets: [
         {
           label: `Score % `,
-          data: percentages,
+          data: data,
+          keys: keys,
+          keyType: 'hsid',
           borderColor: 'rgba(75, 192, 192, 1)', // Line color
           backgroundColor: 'rgba(75, 192, 192, 0.6)', // Solid color for the legend box
           tension: 0.4 // Smooth curve
@@ -143,11 +163,15 @@ export default async function SummaryGraphs() {
     //  Derive the names
     //
     const names: string[] = dataRecent.map(item => item.us_name)
-    const individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
+    const data_individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
     //
     //  Derive percentages from the data
     //
-    const averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
+    const data_averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
+    //
+    //  Keys
+    //
+    const keys: number[] = [...userIds]
     //
     //  Datasets
     //
@@ -156,11 +180,15 @@ export default async function SummaryGraphs() {
       datasets: [
         {
           label: 'Latest %',
-          data: individualPercentages
+          data: data_individualPercentages,
+          keys: keys,
+          keyType: 'usid'
         },
         {
           label: `${RecentResults_usersAverage}-Average %`,
-          data: averagePercentages
+          data: data_averagePercentages,
+          keys: keys,
+          keyType: 'usid'
         }
       ]
     }
@@ -242,7 +270,7 @@ export default async function SummaryGraphs() {
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-sm'>{`Your Results: ${CurrentUser_limitMonths_Average} month average ${dataUserAverage}`}</h2>
+          <h2 className='text-sm'>{`Your Results: ${CurrentUser_limitMonths_Average} month average ${dataUserAverage}%`}</h2>
           <div className='flex-grow overflow-hidden'>
             <MyLineChart LineGraphData={UserLineGraph} />
           </div>

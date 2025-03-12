@@ -18,6 +18,8 @@ import { DefaultSession } from 'next-auth'
 export type ExtendedUser = DefaultSession['user'] & {
   au_ssid: string
   au_usid?: string
+  au_name?: string
+  au_email?: string
 }
 // ----------------------------------------------------------------------
 //  Check User/Password
@@ -60,8 +62,13 @@ export const {
         }
         const rows = await table_fetch(fetchParams)
         const userRecord = rows[0]
+        //
+        //  Extend user
+        //
         if (userRecord) {
           ;(user as ExtendedUser).au_usid = userRecord.us_usid.toString()
+          ;(user as ExtendedUser).au_name = userRecord.us_name
+          ;(user as ExtendedUser).au_email = userRecord.us_email
         }
         //
         //  Get au_ssid
@@ -84,6 +91,8 @@ export const {
       if (token.au_ssid && session.user) {
         session.user.au_ssid = token.au_ssid as string
         session.user.au_usid = token.au_usid as string
+        session.user.au_name = token.au_name as string
+        session.user.au_email = token.au_email as string
       }
       return session
     },
@@ -93,6 +102,8 @@ export const {
     async jwt({ token, user }) {
       if (user) {
         token.au_usid = (user as ExtendedUser).au_usid
+        token.au_name = (user as ExtendedUser).au_name
+        token.au_email = (user as ExtendedUser).au_email
       }
       if (!token.sub) return token
       let token_au_ssid = 0
@@ -160,7 +171,9 @@ export const {
             name: userRecord.us_name,
             email: userRecord.us_email,
             password: userPwd.up_hash,
-            au_usid: userRecord.us_usid.toString()
+            au_usid: userRecord.us_usid.toString(),
+            au_name: userRecord.us_name,
+            au_email: userRecord.us_email
           }
           return rtnData as structure_UserAuth
           //

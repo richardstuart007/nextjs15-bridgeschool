@@ -94,14 +94,14 @@ export function MyBarChart({
           display: GridDisplayY // Remove y-axis gridlines
         }
       }
-    }
+    },
+    onClick: (event: any, elements: any[]) => handle_Click(elements, event.chart)
   }
   //
   //  Return the Bar component
   //
   return <Bar data={modifiedGraphData} options={options} />
 }
-
 //-------------------------------------------------------------------------------
 //  Line Chart component
 //-------------------------------------------------------------------------------
@@ -171,10 +171,27 @@ export function MyLineChart({
           }
         }
       }
-    }
+    },
+    onClick: (event: any, elements: any[]) => handle_Click(elements, event.chart)
   }
   //
   //  Return the Line component
   //
   return <Line data={modifiedGraphData} options={options} />
+}
+//--------------------------------------------------------------------------------
+//  Clicked on the Line Chart
+//--------------------------------------------------------------------------------
+function handle_Click(elements: any[], chart: any) {
+  if (elements.length > 0) {
+    const clickedElement = elements[0]
+    const datasetIndex = clickedElement.datasetIndex
+    const index = clickedElement.index
+    const data = chart.data.datasets[datasetIndex].data[index]
+    const key = chart.data.datasets[datasetIndex].keys[index]
+    const keyType = chart.data.datasets[datasetIndex].keyType
+    console.log('data', data)
+    console.log('key', key)
+    console.log('keyType', keyType)
+  }
 }
