@@ -3,24 +3,41 @@ import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
+import menuRouting from '@/src/lib/menuRouting'
 
 export const metadata: Metadata = {
   title: 'Quiz Review'
 }
-
-export default async function Page(props: {
-  params: Promise<{ hid: number }>
+//
+//  App route
+//
+export default async function Page({
+  params,
+  searchParams
+}: {
+  params: Promise<Record<string, string | string[]>>
+  searchParams: Promise<Record<string, string | string[]>>
 }) {
-  const params = await props.params
+  //
+  // Await the params promise
+  //
+  const urlParams = await params
+  const urlSearch = await searchParams
+  const urlRoute = '/dashboard/quiz-review'
+  //
+  //  Write the MenuRoute
+  //
+  await menuRouting({
+    urlParams: urlParams,
+    urlSearch: urlSearch,
+    urlRoute: urlRoute
+  })
   //
   //  Variables used in the return statement
   //
-  const hid: number = params.hid
+  const hid: number = Number(urlParams.hid)
   try {
     //
     //  Get Session Info
@@ -84,7 +101,7 @@ export default async function Page(props: {
             { label: 'History', href: '/dashboard/history' },
             {
               label: 'Quiz-Review',
-              href: `/dashboard/quiz-review/${hid}`,
+              href: `${urlRoute}${hid}`,
               active: true
             }
           ]}
@@ -92,9 +109,7 @@ export default async function Page(props: {
         {questions.length > 0 ? (
           <ReviewForm history={history} questions={questions} />
         ) : (
-          <p className='text-xs text-red-600'>
-            All correct. No bad answers to review
-          </p>
+          <p className='text-xs text-red-600'>All correct. No bad answers to review</p>
         )}
       </div>
     )

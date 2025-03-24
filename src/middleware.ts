@@ -7,7 +7,7 @@ import {
   Routes_Prefix_admin,
   Routes_Login,
   Routes_Register
-} from '@/src/validroutes'
+} from '@/src/root/validroutes'
 import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 
 export default async function middleware(req: any): Promise<any> {

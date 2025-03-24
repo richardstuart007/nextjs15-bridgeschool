@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
 import { MyButton } from '@/src/ui/utils/myButton'
-import { Routes_AfterLogin_redirect } from '@/src/validroutes'
+import { Routes_AfterLogin_redirect } from '@/src/root/validroutes'
 
 export default function Socials() {
   //

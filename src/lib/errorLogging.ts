@@ -33,10 +33,7 @@ export async function errorLogging({
       lg_ssid = co_ssid ? co_ssid : 0
     }
     //
-    //  Get datetime
-    //
-    //
-    //  Get date in UTC
+    //  Get datetime in UTC
     //
     const currentDate = new Date()
     const lg_datetime = currentDate.toISOString()

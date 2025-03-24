@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import { lusitana } from '@/src/fonts'
+import { lusitana } from '@/src/root/fonts'
 import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import { MyLink } from '../ui/utils/myLink'
 

@@ -1,12 +1,9 @@
-import '@/src/global.css'
-import { inter } from '@/src/fonts'
+import '@/src/root/global.css'
+import { inter } from '@/src/root/fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
-import {
-  table_fetch,
-  table_fetch_Props
-} from '@/src/lib/tables/tableGeneric/table_fetch'
-import { URL_current } from '@/src/constants'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { URL_current } from '@/src/root/URLconstants'
 import dotenv from 'dotenv'
 //
 //  Metadata
@@ -26,11 +23,7 @@ dotenv.config()
 //
 //  Root Layout
 //
-export default async function RootLayout({
-  children
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const db_name: string = await getDatabaseName()
   //
   // Determine the background color class based on db_name
@@ -58,8 +51,7 @@ export default async function RootLayout({
     //
     // If the value exists, return it
     //
-    if (globalCachedDName.cachedDName !== undefined)
-      return globalCachedDName.cachedDName
+    if (globalCachedDName.cachedDName !== undefined) return globalCachedDName.cachedDName
     //
     //  Fetch database name
     //
@@ -81,9 +73,7 @@ export default async function RootLayout({
   //-----------------------------------------------------------------------------
   return (
     <html lang='en'>
-      <body
-        className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}
-      >
+      <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
         <UserProvider>{children}</UserProvider>
       </body>
     </html>
