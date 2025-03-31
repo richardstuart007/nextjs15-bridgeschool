@@ -12,13 +12,15 @@ export type table_fetch_Props = {
   orderBy?: string
   distinct?: boolean
   columns?: string[]
+  limit?: number
 }
 export async function table_fetch({
   table,
   whereColumnValuePairs,
   orderBy,
   distinct = false,
-  columns
+  columns,
+  limit
 }: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
   //
@@ -43,6 +45,10 @@ export async function table_fetch({
     // Add ORDER BY clause
     //
     if (orderBy) sqlQuery += ` ORDER BY ${orderBy}`
+    //
+    // Add LIMIT
+    //
+    if (limit) sqlQuery += ` LIMIT ${limit}`
     //
     // Execute the query
     //

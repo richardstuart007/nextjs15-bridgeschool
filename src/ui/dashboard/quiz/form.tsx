@@ -9,10 +9,12 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
+import { MyLink } from '@/src/ui/utils/myLink'
 
 interface QuestionsFormProps {
   questions: table_Questions[]
   rfid: number
+  ps_route?: string
 }
 //...................................................................................
 //.  Main Line
@@ -31,7 +33,8 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //  Questions state updated in initial load
   //
   const [questions, setQuestions] = useState<table_Questions[]>(props.questions || [])
-  const rfid = props.rfid
+  const rfid = props.rfid || 0
+  const ps_route = props.ps_route ?? 'history'
   //
   //  Fetch session data when the component mounts
   //
@@ -46,6 +49,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   const [question, setQuestion] = useState(questions.length > 0 ? questions[0] : null)
   const [answer, setAnswer] = useState<number[]>([])
   const [showSubmit, setShowSubmit] = useState(false)
+  const [hs_hsid, seths_hsid] = useState(0)
   //-------------------------------------------------------------------------
   //  Get Data
   //-------------------------------------------------------------------------
@@ -192,10 +196,10 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     const historyRecords = await table_write(writeParams)
     const historyRecord = historyRecords[0]
     //
-    //  Go to the quiz review page
+    //  Allow review
     //
-    const { hs_hsid } = historyRecord
-    router.push(`/dashboard/quiz-review/${hs_hsid}`)
+    setShowSubmit(false)
+    seths_hsid(historyRecord.hs_hsid)
   }
   //...................................................................................
   //.  no questions
@@ -215,6 +219,9 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
       <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
 
       <div className='flex items-center justify-between min-w-[300px] max-w-[400px]'>
+        {/* ................................................... */}
+        {/* Submit                                       */}
+        {/* ................................................... */}
         {showSubmit ? (
           <div className='whitespace-nowrap px-1 h-5'>
             <MyButton
@@ -227,14 +234,40 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
         ) : (
           <div className='flex-1'></div>
         )}
-
+        {/* ................................................... */}
+        {/* Review                                          */}
+        {/* ................................................... */}
+        {hs_hsid > 0 ? (
+          <div className='whitespace-nowrap px-1 h-5'>
+            <MyLink
+              href={{
+                reference: 'quiz-review',
+                pathname: `/dashboard/quiz-review/${hs_hsid}`,
+                segment: String(hs_hsid),
+                query: { ps_Route: ps_route }
+              }}
+              overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center `}
+            >
+              Review
+            </MyLink>
+          </div>
+        ) : (
+          <div className='flex-1'></div>
+        )}
+        {/* ................................................... */}
+        {/* End                                    */}
+        {/* ................................................... */}
         <div className='whitespace-nowrap px-1 h-5'>
-          <MyButton
+          <MyLink
+            href={{
+              pathname: `/dashboard`,
+              reference: 'dashboard'
+            }}
             overrideClass='h-4 text-xxs bg-red-300 text-white rounded-md shadow-md hover:bg-red-500'
             onClick={handleQuizCompleted}
           >
             End Quiz
-          </MyButton>
+          </MyLink>
         </div>
       </div>
     </>

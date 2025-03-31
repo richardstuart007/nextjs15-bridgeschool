@@ -1,11 +1,9 @@
-import Table from '@/src/ui/dashboard/history/table'
-import { Suspense } from 'react'
-import { TableSkeleton } from '@/src/ui/dashboard/history/skeleton'
+import Table from '@/src/ui/admin/who/table'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'History'
+  title: 'who'
 }
 //
 //  App route
@@ -14,9 +12,7 @@ export default function Page() {
   return (
     <div className='w-full md:p-6'>
       <Breadcrumbs />
-      <Suspense fallback={<TableSkeleton />}>
-        <Table />
-      </Suspense>
+      <Table />
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import ReviewForm from '@/src/ui/dashboard/quizreview/form'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
-import menuRouting from '@/src/lib/menuRouting'
+import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Quiz Review'
@@ -14,30 +13,19 @@ export const metadata: Metadata = {
 //  App route
 //
 export default async function Page({
-  params,
-  searchParams
+  params
 }: {
   params: Promise<Record<string, string | string[]>>
-  searchParams: Promise<Record<string, string | string[]>>
 }) {
   //
   // Await the params promise
   //
   const urlParams = await params
-  const urlSearch = await searchParams
-  const urlRoute = '/dashboard/quiz-review'
-  //
-  //  Write the MenuRoute
-  //
-  await menuRouting({
-    urlParams: urlParams,
-    urlSearch: urlSearch,
-    urlRoute: urlRoute
-  })
   //
   //  Variables used in the return statement
   //
   const hid: number = Number(urlParams.hid)
+
   try {
     //
     //  Get Session Info
@@ -96,16 +84,7 @@ export default async function Page({
     //
     return (
       <div className='w-full md:p-6'>
-        <Breadcrumbs
-          breadcrumbs={[
-            { label: 'History', href: '/dashboard/history' },
-            {
-              label: 'Quiz-Review',
-              href: `${urlRoute}${hid}`,
-              active: true
-            }
-          ]}
-        />
+        <Breadcrumbs />
         {questions.length > 0 ? (
           <ReviewForm history={history} questions={questions} />
         ) : (

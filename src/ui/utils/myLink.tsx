@@ -1,22 +1,25 @@
+'use client'
 import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
 import Link from 'next/link'
+import menuLinks from '@/src/lib/menuLinks'
 
-// Define a custom type for the href to accept both string and object.
 interface LinkHref {
+  reference: string
   pathname: string
+  segment?: string
   query?: { [key: string]: string }
 }
 
 interface Props {
   children: React.ReactNode
   overrideClass?: string
-  href: string | LinkHref // Accept string or an object as href
-  [rest: string]: any // Allow other props to be passed like in AnchorHTMLAttributes
+  href: LinkHref
+  [rest: string]: any
 }
 
 export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
   //
-  //  Default Class
+  // Default Class
   //
   const defaultClass = [
     'flex items-center justify-center',
@@ -36,23 +39,65 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
   //
   const classValue = myMergeClasses(defaultClass, overrideClass)
   //
-  //  Determine the href
+  //  Determine the path and query
   //
   let hrefValue = ''
-  if (typeof href === 'string') {
-    hrefValue = href // If it's a string, just use it as is
-  } else if (typeof href === 'object' && href.pathname) {
-    // If it's an object, format it accordingly
-    const queryParams = href.query
-      ? `?${new URLSearchParams(href.query).toString()}`
-      : ''
-    hrefValue = `${href.pathname}${queryParams}`
+  let pathname = ''
+  let query = ''
+  const queryParams = href.query ? `?${new URLSearchParams(href.query).toString()}` : ''
+  pathname = href.pathname
+  query = queryParams
+  hrefValue = `${pathname}${queryParams}`
+  //
+  // Click
+  //
+  const handleClick = async () => {
+    //
+    //  Convert the query to JSON
+    //
+    const jsonObject: { [key: string]: string } = {}
+    const trimmedString = query.substring(1) // Removes the leading "?"
+    const pairs = trimmedString.split('&')
+    pairs.forEach(pair => {
+      const [key, value] = pair.split('=')
+      jsonObject[key] = value
+    })
+    const ml_query = JSON.stringify(jsonObject)
+    //
+    //  Route
+    //
+    const ml_path = pathname
+    //
+    // Reference
+    //
+    const ml_reference = href.reference
+      ? href.reference
+      : pathname.substring(pathname.lastIndexOf('/') + 1)
+    //
+    // Segment
+    //
+    const ml_segment = href.segment ? href.segment : ''
+    //
+    // Full URL
+    //
+    const ml_url = hrefValue
+    //
+    // Write to database
+    //
+    const dbRecord = await menuLinks({
+      ml_reference,
+      ml_url,
+      ml_path,
+      ml_segment,
+      ml_query
+    })
+    if (!dbRecord) console.log('No menuLink')
   }
   //
-  //  Output
+  // Output
   //
   return (
-    <Link href={hrefValue} {...rest} className={classValue}>
+    <Link href={hrefValue} {...rest} className={classValue} onClick={handleClick}>
       {children}
     </Link>
   )

@@ -8,7 +8,11 @@ export default function NotFound() {
       <h2 className='text-xl font-semibold'>404 Not Found</h2>
       <p>Could not find the requested User.</p>
       <MyLink
-        href='/dashboard'
+        href={{
+          pathname: '/dashboard',
+          query: { ps_Route: 'dashboard' },
+          reference: 'dashboard'
+        }}
         overrideClass='mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400'
       >
         Go Back

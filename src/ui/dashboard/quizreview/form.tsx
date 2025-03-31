@@ -7,10 +7,12 @@ import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import Pagination from '@/src/ui/utils/paginationState'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
 import { MyButton } from '@/src/ui/utils/myButton'
+import { MyLink } from '@/src/ui/utils/myLink'
 
 interface QuestionsFormProps {
   history: table_Usershistory
   questions: table_Questions[]
+  ps_route?: string
 }
 //...................................................................................
 //.  Main Line
@@ -29,6 +31,8 @@ export default function ReviewForm(props: QuestionsFormProps) {
   const [question, setQuestion] = useState(questions[questionIndex])
   const [ans, setAns] = useState(hs_ans[currentPage - 1])
   const [isHelpVisible, setIsHelpVisible] = useState(true)
+  const ps_route = props.ps_route ?? 'history'
+  const ps_dir = ps_route === 'reference' ? 'admin' : 'dashboard'
   //...................................................................................
   //.  Help Text
   //...................................................................................
@@ -99,6 +103,23 @@ export default function ReviewForm(props: QuestionsFormProps) {
         />
       </div>
       {renderHelpText()}
+      {/* ................................................... */}
+      {/* End                                         */}
+      {/* ................................................... */}
+      <div className='flex  py-2 px-2 h-10 rounded-md  min-w-[300px] max-w-[400px]'>
+        <MyLink
+          href={{
+            pathname: `/${ps_dir}/${ps_route}`,
+            query: {
+              ps_Route: ps_route
+            },
+            reference: ps_route
+          }}
+          overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center `}
+        >
+          Finish
+        </MyLink>
+      </div>
     </>
   )
 }

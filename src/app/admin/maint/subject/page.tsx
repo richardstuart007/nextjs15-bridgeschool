@@ -5,20 +5,13 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Subject'
 }
-
-export default async function Page() {
+//
+//  App route
+//
+export default function Page() {
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Admin', href: `/admin` },
-          {
-            label: 'Subject',
-            href: `/admin/subject`,
-            active: true
-          }
-        ]}
-      />
+      <Breadcrumbs />
       <Table />
     </div>
   )

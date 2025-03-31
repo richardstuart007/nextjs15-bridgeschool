@@ -1,28 +1,26 @@
-import Table from '@/src/ui/admin/reference/table'
+import Table from '@/src/ui/dashboard/reference/table'
+import { Suspense } from 'react'
+import { TableSkeleton } from '@/src/ui/dashboard/reference/skeleton'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
 
+const title = 'Reference'
 export const metadata: Metadata = {
-  title: 'Reference'
+  title: title
 }
-
-export default async function Page() {
+//
+//  App route
+//
+export default function Page() {
   //
-  //  Breadcrumbs
+  //  user interface
   //
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Admin', href: `/admin` },
-          {
-            label: 'Reference',
-            href: `/admin/reference`,
-            active: true
-          }
-        ]}
-      />
-      <Table />
+      <Breadcrumbs />
+      <Suspense fallback={<TableSkeleton />}>
+        <Table ps_route='reference' />
+      </Suspense>
     </div>
   )
 }

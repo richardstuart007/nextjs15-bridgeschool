@@ -18,9 +18,10 @@ import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/ta
 
 interface FormProps {
   selected_sbsbid?: string | undefined
+  ps_route?: string
 }
 
-export default function Table({ selected_sbsbid }: FormProps) {
+export default function Table({ selected_sbsbid, ps_route = 'reference_select' }: FormProps) {
   //
   //  User context
   //
@@ -452,8 +453,14 @@ export default function Table({ selected_sbsbid }: FormProps) {
                 <div className='pl-2 inline-flex justify-center items-center'>
                   <MyLink
                     href={{
-                      pathname: `/dashboard/quiz/${selected_sbsbid}`,
-                      query: { from: 'reference', idColumn: 'qq_sbid' }
+                      pathname: `/dashboard/quiz`,
+                      query: {
+                        ps_Route: ps_route,
+                        ps_Column: 'qq_sbid',
+                        ps_sbid: String(selected_sbsbid)
+                      },
+                      reference: 'quiz',
+                      segment: String(selected_sbsbid)
                     }}
                     overrideClass={`bg-blue-500 text-white hover:bg-blue-600 ${
                       shrink ? 'h-5' : 'h-6'
@@ -748,8 +755,14 @@ export default function Table({ selected_sbsbid }: FormProps) {
                       {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
                         <MyLink
                           href={{
-                            pathname: `/dashboard/quiz/${tabledata.rf_rfid}`,
-                            query: { from: 'reference', idColumn: 'qq_rfid' }
+                            pathname: `/dashboard/quiz`,
+                            query: {
+                              ps_Route: ps_route,
+                              ps_Column: 'qq_rfid',
+                              ps_rfid: String(tabledata.rf_rfid)
+                            },
+                            reference: 'quiz',
+                            segment: String(tabledata.rf_rfid)
                           }}
                           overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
                         >

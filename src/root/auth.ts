@@ -79,7 +79,7 @@ export const {
         //  Errors
         //
       } catch (error) {
-        console.log('Provider signIn error:', error)
+        console.error('Provider signIn error:', error)
         return false
       }
     },
@@ -180,7 +180,7 @@ export const {
           //  Errors
           //
         } catch (error) {
-          console.log('Authorization error:', error)
+          console.error('Authorization error:', error)
           return null
         }
       }

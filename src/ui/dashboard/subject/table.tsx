@@ -540,9 +540,11 @@ export default function Table() {
                         href={{
                           pathname: `/dashboard/reference_select`,
                           query: {
-                            from: 'subject',
+                            ps_Route: 'subject',
                             selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
-                          }
+                          },
+                          reference: 'reference_select',
+                          segment: String(tabledata.sb_sbid)
                         }}
                         overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                       >
@@ -567,8 +569,14 @@ export default function Table() {
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
-                          pathname: `/dashboard/quiz/${tabledata.sb_sbid}`,
-                          query: { from: 'subject', idColumn: 'qq_sbid' }
+                          pathname: `/dashboard/quiz/`,
+                          query: {
+                            ps_Route: 'subject',
+                            ps_Column: 'qq_sbid',
+                            ps_sbid: String(tabledata.sb_sbid)
+                          },
+                          reference: 'quiz',
+                          segment: String(tabledata.sb_sbid)
                         }}
                         overrideClass={`text-white ${shrink_Text} h-5 w-10 ${!shrink ? 'md:h-6 md:w-12' : ''}`}
                       >

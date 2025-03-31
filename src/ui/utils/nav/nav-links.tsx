@@ -26,6 +26,8 @@ export default function NavLinks(props: Props) {
   type Link = {
     name: string
     href: string
+    reference: string
+    parent: string
   }
   //
   // Links with hrefUser
@@ -38,9 +40,7 @@ export default function NavLinks(props: Props) {
     let linksupdate
     baseURL === 'admin'
       ? (linksupdate = links_admin)
-      : (linksupdate = si_admin
-          ? links_dashboard.concat(links_dashboard_admin)
-          : links_dashboard)
+      : (linksupdate = si_admin ? links_dashboard.concat(links_dashboard_admin) : links_dashboard)
     setLinks(linksupdate)
     // eslint-disable-next-line
   }, [])
@@ -70,7 +70,10 @@ export default function NavLinks(props: Props) {
         return (
           <MyLink
             key={link.name}
-            href={link.href}
+            href={{
+              pathname: String(link.href),
+              reference: String(link.reference)
+            }}
             overrideClass={overrideClass_mylinkButton}
           >
             {link.name === 'User' ? (

@@ -56,7 +56,10 @@ export default function Page() {
         </div>
         <MyLink
           overrideClass='flex items-center gap-5 self-center rounded-lg bg-blue-500 px-3 py-3 text-sm text-white transition-colors hover:bg-blue-400'
-          href='/login'
+          href={{
+            pathname: '/login',
+            reference: 'login'
+          }}
         >
           <span>Log in</span> <ArrowRightIcon className='w-5' />
         </MyLink>

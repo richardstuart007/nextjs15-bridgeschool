@@ -34,7 +34,10 @@ export default function Page() {
           {/* -------------------------------------------------------------------------------------------------------------------- */}
           <MyLink
             key='owner'
-            href='/admin/owner'
+            href={{
+              pathname: '/admin/maint/owner',
+              reference: 'owner'
+            }}
             overrideClass='w-36 justify-center'
           >
             Owner
@@ -42,7 +45,10 @@ export default function Page() {
 
           <MyLink
             key='subject'
-            href='/admin/subject'
+            href={{
+              pathname: '/admin/maint/subject',
+              reference: 'subject'
+            }}
             overrideClass='w-36 justify-center'
           >
             Owner Subject
@@ -55,7 +61,10 @@ export default function Page() {
 
           <MyLink
             key='reference'
-            href='/admin/reference'
+            href={{
+              pathname: '/admin/maint/reference',
+              reference: 'reference'
+            }}
             overrideClass='w-36 justify-center'
           >
             Reference
@@ -63,7 +72,10 @@ export default function Page() {
 
           <MyLink
             key='who'
-            href='/admin/who'
+            href={{
+              pathname: '/admin/maint/who',
+              reference: 'who'
+            }}
             overrideClass='w-36 justify-center'
           >
             Who
@@ -71,7 +83,10 @@ export default function Page() {
 
           <MyLink
             key='reftype'
-            href='/admin/reftype'
+            href={{
+              pathname: '/admin/maint/reftype',
+              reference: 'reftype'
+            }}
             overrideClass='w-36 justify-center'
           >
             Reftype
@@ -83,7 +98,10 @@ export default function Page() {
 
           <MyLink
             key='Questions'
-            href='/admin/questions'
+            href={{
+              pathname: '/admin/maint/questions',
+              reference: 'Questions'
+            }}
             overrideClass='w-36 justify-center'
           >
             Questions
@@ -95,7 +113,10 @@ export default function Page() {
 
           <MyLink
             key='users'
-            href='/admin/users'
+            href={{
+              pathname: '/admin/maint/users',
+              reference: 'users'
+            }}
             overrideClass='w-36 justify-center'
           >
             Users
@@ -103,7 +124,10 @@ export default function Page() {
 
           <MyLink
             key='UsersOwner'
-            href='/admin/usersowner'
+            href={{
+              pathname: '/admin/maint/usersowner',
+              reference: 'UsersOwner'
+            }}
             overrideClass='w-36 justify-center'
           >
             Users Owner
@@ -120,7 +144,10 @@ export default function Page() {
 
           <MyLink
             key='backuptable'
-            href='/admin/backuptable'
+            href={{
+              pathname: '/admin/maint/backuptable',
+              reference: 'backuptable'
+            }}
             overrideClass='w-36 justify-center'
           >
             Backup table
@@ -128,7 +155,10 @@ export default function Page() {
 
           <MyLink
             key='Logging'
-            href='/admin/logging'
+            href={{
+              pathname: '/admin/maint/logging',
+              reference: 'Logging'
+            }}
             overrideClass='w-36 justify-center'
           >
             Logging
@@ -136,7 +166,10 @@ export default function Page() {
 
           <MyLink
             key='Sessions'
-            href='/admin/sessions'
+            href={{
+              pathname: '/admin/maint/sessions',
+              reference: 'Sessions'
+            }}
             overrideClass='w-36 justify-center'
           >
             Sessions

@@ -8,7 +8,11 @@ export default function NotFound() {
       <h2 className='text-xl font-semibold'>404 Not Found</h2>
       <p>Could not find the requested quiz questions.</p>
       <MyLink
-        href='/dashboard/reference'
+        href={{
+          pathname: '/dashboard/subject',
+          query: { ps_Route: 'subject' },
+          reference: 'subject'
+        }}
         overrideClass='mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400'
       >
         Go Back

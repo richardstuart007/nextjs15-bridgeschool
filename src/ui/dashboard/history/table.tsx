@@ -799,14 +799,16 @@ export default function Table() {
                     </td>
                   )}
                   {/* ................................................... */}
-                  {/* Review                      h-5 md:h6 w-12 md:w-16                        */}
+                  {/* Review                                          */}
                   {/* ................................................... */}
                   <td className='px-2  text-center'>
                     <div className='inline-flex justify-center items-center'>
                       <MyLink
                         href={{
                           pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
-                          query: { from: 'history' }
+                          query: { ps_Route: 'history' },
+                          reference: 'quiz-review',
+                          segment: String(tabledata.hs_hsid)
                         }}
                         overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
                       >
@@ -823,12 +825,24 @@ export default function Table() {
                         href={
                           tabledata.hs_rfid > 0
                             ? {
-                                pathname: `/dashboard/quiz/${tabledata.hs_rfid}`,
-                                query: { from: 'history', idColumn: 'qq_rfid' }
+                                pathname: `/dashboard/quiz`,
+                                query: {
+                                  ps_Route: 'history',
+                                  ps_Column: 'qq_rfid',
+                                  ps_rfid: String(tabledata.hs_rfid)
+                                },
+                                reference: 'quiz',
+                                segment: String(tabledata.hs_rfid)
                               }
                             : {
-                                pathname: `/dashboard/quiz/${tabledata.hs_sbid}`,
-                                query: { from: 'history', idColumn: 'qq_sbid' }
+                                pathname: `/dashboard/quiz`,
+                                query: {
+                                  ps_Route: 'history',
+                                  ps_Column: 'qq_sbid',
+                                  ps_sbid: String(tabledata.hs_sbid)
+                                },
+                                reference: 'quiz',
+                                segment: String(tabledata.hs_sbid)
                               }
                         }
                         overrideClass={`text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
