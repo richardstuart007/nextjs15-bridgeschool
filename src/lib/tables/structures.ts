@@ -1,3 +1,4 @@
+import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
 export type structure_SessionsInfo = {
   si_usid: number
   si_name: string
@@ -63,7 +64,8 @@ export type structure_Country = {
 //
 export type ColumnValuePair = {
   column: string
-  value: string | number
+  value: string | number | (string | number)[]
+  operator?: Comparison_operator
 }
 export type TableColumnValuePairs = {
   table: string

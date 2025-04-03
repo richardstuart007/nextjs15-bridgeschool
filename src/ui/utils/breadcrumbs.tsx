@@ -55,6 +55,10 @@ export default function Breadcrumbs() {
   }, [])
   //--------------------------------------------------------------------------------
   //
+  //  Return if loading or no parent record
+  //
+  if (loading || !breadcrumbValue) return null
+  //
   //  Title
   //
   const overrideClass_title = ['px-2', shrink ? 'text-xxs' : 'text-xxs md:text-xs'].join(' ')
@@ -63,10 +67,6 @@ export default function Breadcrumbs() {
   //
   const overrideClass_mylinkButton = ['bg-transparent hover:bg-transparent', 'px-0 h-4'].join(' ')
   //
-  //  Return if loading or no parent record
-  //
-  if (loading || !breadcrumbValue) return null
-  //
   //  Text
   //
   const overrideClass_mylinkText = [
@@ -74,6 +74,10 @@ export default function Breadcrumbs() {
     'text-black font-bold hover:text-red-600',
     shrink ? 'text-xxs' : 'text-xxs md:text-xs'
   ].join(' ')
+  //
+  //
+  //
+  const overrideClass_ml_reference = ['pl-1', shrink ? 'text-xxs' : 'text-xxs md:text-xs'].join(' ')
   //--------------------------------------------------------------------------------
   return (
     <nav aria-label='Breadcrumb' className='block mb-1'>
@@ -88,8 +92,7 @@ export default function Breadcrumbs() {
         >
           <p className={overrideClass_mylinkText}>{breadcrumbValue.ml_reference_parent}</p>
         </MyLink>
-        <p className={overrideClass_title}>/</p>
-        <p className={overrideClass_title}>{breadcrumbValue.ml_reference}</p>
+        <p className={overrideClass_ml_reference}>{`/ ${breadcrumbValue.ml_reference}`}</p>
       </div>
     </nav>
   )

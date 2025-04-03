@@ -7,6 +7,7 @@ import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import Pagination from '@/src/ui/utils/paginationState'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
 import { MyButton } from '@/src/ui/utils/myButton'
+import MyLinkBack from '@/src/ui/utils/myLinkBack'
 import { MyLink } from '@/src/ui/utils/myLink'
 
 interface QuestionsFormProps {
@@ -31,8 +32,55 @@ export default function ReviewForm(props: QuestionsFormProps) {
   const [question, setQuestion] = useState(questions[questionIndex])
   const [ans, setAns] = useState(hs_ans[currentPage - 1])
   const [isHelpVisible, setIsHelpVisible] = useState(true)
-  const ps_route = props.ps_route ?? 'history'
-  const ps_dir = ps_route === 'reference' ? 'admin' : 'dashboard'
+  //...................................................................................
+  //.  Navigation
+  //...................................................................................
+  function render_nav() {
+    return (
+      <div className='mt-1 mb-2 p-1 rounded-md bg-yellow-50 border border-yellow-300 flex items-center justify-between text-xxs md:text-xs min-w-[300px] max-w-[400px]'>
+        {/* Back */}
+        <MyLinkBack overrideClass={`text-white h-5`}>Back</MyLinkBack>
+        {/* History */}
+        <MyLink
+          href={{
+            pathname: '/dashboard/history',
+            reference: 'history'
+          }}
+          overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
+        >
+          History
+        </MyLink>
+      </div>
+    )
+  }
+  //...................................................................................
+  //.  Question
+  //...................................................................................
+  function render_question() {
+    if (!question) return null
+
+    return (
+      <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
+        <p className='text-xs font-bold'>{hs_correctpercent}%</p>
+        <p className='ml-2 text-xs  font-medium'>{`${question.qq_subject}`}</p>
+        <p className='ml-2 text-xs font-normal text-gray-500'>{`History/Question(${hs_hsid}/${question.qq_qqid})`}</p>
+      </div>
+    )
+  }
+  //...................................................................................
+  //.  Pagination
+  //...................................................................................
+  function render_pagination() {
+    return (
+      <div className='flex bg-gray-50 py-2 px-2 h-10 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
+        <Pagination
+          totalPages={hs_ans.length}
+          statecurrentPage={currentPage}
+          setStateCurrentPage={handlePageChange}
+        />
+      </div>
+    )
+  }
   //...................................................................................
   //.  Help Text
   //...................................................................................
@@ -60,11 +108,14 @@ export default function ReviewForm(props: QuestionsFormProps) {
     //
     return (
       <div className='relative'>
-        <MyButton onClick={() => setIsHelpVisible(prev => !prev)} overrideClass='text-white mt-2'>
+        <MyButton
+          onClick={() => setIsHelpVisible(prev => !prev)}
+          overrideClass='text-white mt-2  h-5'
+        >
           {isHelpVisible ? 'Hide Help' : 'Show Help'}
         </MyButton>
         {isHelpVisible && (
-          <div className='flex flex-col text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
+          <div className='flex flex-col  text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
             <div dangerouslySetInnerHTML={{ __html: formattedText }} />
           </div>
         )}
@@ -87,39 +138,13 @@ export default function ReviewForm(props: QuestionsFormProps) {
   //...................................................................................
   return (
     <>
-      <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-        <p className='text-xs font-bold'>{hs_correctpercent}%</p>
-        <p className='ml-2 text-xs  font-medium'>{`${question.qq_subject}`}</p>
-        <p className='ml-2 text-xs font-normal text-gray-500'>{`History/Question(${hs_hsid}/${question.qq_qqid})`}</p>
-      </div>
+      {render_nav()}
+      {render_question()}
       <QuizBidding question={question} />
       <QuizHands question={question} />
       <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />
-      <div className='flex bg-gray-50 py-2 px-2 h-10 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-        <Pagination
-          totalPages={hs_ans.length}
-          statecurrentPage={currentPage}
-          setStateCurrentPage={handlePageChange}
-        />
-      </div>
+      {render_pagination()}
       {renderHelpText()}
-      {/* ................................................... */}
-      {/* End                                         */}
-      {/* ................................................... */}
-      <div className='flex  py-2 px-2 h-10 rounded-md  min-w-[300px] max-w-[400px]'>
-        <MyLink
-          href={{
-            pathname: `/${ps_dir}/${ps_route}`,
-            query: {
-              ps_Route: ps_route
-            },
-            reference: ps_route
-          }}
-          overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center `}
-        >
-          Finish
-        </MyLink>
-      </div>
     </>
   )
 }

@@ -10,6 +10,7 @@ import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyLink } from '@/src/ui/utils/myLink'
+import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 interface QuestionsFormProps {
   questions: table_Questions[]
@@ -202,6 +203,73 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     seths_hsid(historyRecord.hs_hsid)
   }
   //...................................................................................
+  //.  Navigation
+  //...................................................................................
+  function render_nav() {
+    return (
+      <div className='mt-1 mb-2 p-1 rounded-md bg-yellow-50 border border-yellow-300 flex items-center justify-between text-xxs md:text-xs min-w-[300px] max-w-[400px]'>
+        {/* Back */}
+        <MyLinkBack overrideClass={`text-white h-5`} onClick={handleQuizCompleted}>
+          Back
+        </MyLinkBack>
+      </div>
+    )
+  }
+  //...................................................................................
+  //.  Question
+  //...................................................................................
+  function render_question() {
+    if (!question) return null
+
+    return (
+      <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
+        <p className='text-xs  font-medium'>{`${question.qq_subject}/${question.qq_rfid}`}</p>
+        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qqid}) ${index + 1}/${questions.length}`}</p>
+      </div>
+    )
+  }
+  //...................................................................................
+  //.  Submit/Review
+  //...................................................................................
+  function render_submitreview() {
+    return (
+      <div className='flex items-center justify-center min-w-[300px] max-w-[400px] gap-2'>
+        {/* ................................................... */}
+        {/* Submit */}
+        {/* ................................................... */}
+        {showSubmit && (
+          <div className='whitespace-nowrap px-1'>
+            <MyButton
+              overrideClass='py-2 h-5 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-700'
+              onClick={handleNextQuestion}
+            >
+              Submit Selection
+            </MyButton>
+          </div>
+        )}
+        {/* ................................................... */}
+        {/* Review                                          */}
+        {/* ................................................... */}
+        {hs_hsid > 0 && (
+          <div className='whitespace-nowrap px-1'>
+            <MyLink
+              href={{
+                reference: 'quiz-review',
+                pathname: `/dashboard/quiz-review/${hs_hsid}`,
+                segment: String(hs_hsid),
+                query: { ps_Route: ps_route }
+              }}
+              overrideClass={`h-5 bg-green-500 hover:bg-green-600 text-white justify-center`}
+            >
+              Review
+            </MyLink>
+          </div>
+        )}
+        {/* ................................................... */}
+      </div>
+    )
+  }
+  //...................................................................................
   //.  no questions
   //...................................................................................
   if (!question) return <div>No questions...</div>
@@ -210,66 +278,12 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //...................................................................................
   return (
     <>
-      <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-        <p className='text-xs  font-medium'>{`${question.qq_subject}/${question.qq_rfid}`}</p>
-        <p className='ml-2 text-xs font-normal text-gray-500'>{`(${question.qq_qqid}) ${index + 1}/${questions.length}`}</p>
-      </div>
+      {render_nav()}
+      {render_question()}
       <QuizBidding question={question} />
       <QuizHands question={question} />
       <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
-
-      <div className='flex items-center justify-between min-w-[300px] max-w-[400px]'>
-        {/* ................................................... */}
-        {/* Submit                                       */}
-        {/* ................................................... */}
-        {showSubmit ? (
-          <div className='whitespace-nowrap px-1 h-5'>
-            <MyButton
-              overrideClass='py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-700'
-              onClick={handleNextQuestion}
-            >
-              Submit Selection
-            </MyButton>
-          </div>
-        ) : (
-          <div className='flex-1'></div>
-        )}
-        {/* ................................................... */}
-        {/* Review                                          */}
-        {/* ................................................... */}
-        {hs_hsid > 0 ? (
-          <div className='whitespace-nowrap px-1 h-5'>
-            <MyLink
-              href={{
-                reference: 'quiz-review',
-                pathname: `/dashboard/quiz-review/${hs_hsid}`,
-                segment: String(hs_hsid),
-                query: { ps_Route: ps_route }
-              }}
-              overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center `}
-            >
-              Review
-            </MyLink>
-          </div>
-        ) : (
-          <div className='flex-1'></div>
-        )}
-        {/* ................................................... */}
-        {/* End                                    */}
-        {/* ................................................... */}
-        <div className='whitespace-nowrap px-1 h-5'>
-          <MyLink
-            href={{
-              pathname: `/dashboard`,
-              reference: 'dashboard'
-            }}
-            overrideClass='h-4 text-xxs bg-red-300 text-white rounded-md shadow-md hover:bg-red-500'
-            onClick={handleQuizCompleted}
-          >
-            End Quiz
-          </MyLink>
-        </div>
-      </div>
+      {render_submitreview()}
     </>
   )
 }

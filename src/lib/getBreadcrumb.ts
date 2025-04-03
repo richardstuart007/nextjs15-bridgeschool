@@ -8,20 +8,36 @@ export default async function getBreadcrumb() {
   const co_ssid = await getCookieServer_co_ssid()
   const ml_ssid = Number(co_ssid)
   //
-  //  Get the Current/Parent
+  //  Get the Current
   //
-  const rows2 = await table_fetch({
+  const rows_current = await table_fetch({
     table: 'tml_menulinks',
     whereColumnValuePairs: [{ column: 'ml_ssid', value: ml_ssid }],
     orderBy: 'ml_mlid DESC',
-    limit: 2
+    limit: 1
   } as table_fetch_Props)
+  const current = rows_current[0]
+  const ml_reference = current.ml_reference
+  const ml_mlid = current.ml_mlid
   //
-  //  Extract breadcrumbs
+  //  Get the Parent
   //
-  const ml_reference = rows2[0].ml_reference
-  const ml_reference_parent = rows2[1]?.ml_reference ?? 'dashboard'
-  const ml_url_parent = rows2[1]?.ml_url ?? '/dashboard'
+  const rows_parent = await table_fetch({
+    table: 'tml_menulinks',
+    whereColumnValuePairs: [
+      { column: 'ml_ssid', value: ml_ssid },
+      { column: 'ml_mlid', value: ml_mlid, operator: '<' }
+      // { column: 'ml_reference', value: 'quiz', operator: '<>' }
+    ],
+    orderBy: 'ml_mlid DESC',
+    limit: 1
+  } as table_fetch_Props)
+  const parent = rows_parent[0]
+  const ml_reference_parent = parent?.ml_reference ?? 'dashboard'
+  const ml_url_parent = parent?.ml_url ?? '/dashboard'
+  //
+  //  Return breadcrumbs
+  //
   const ml_values = {
     ml_reference,
     ml_reference_parent,

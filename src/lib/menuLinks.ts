@@ -23,6 +23,7 @@ export default async function menuLinks(Props: Props) {
     //  Get the ssid
     //
     const co_ssid = await getCookieServer_co_ssid()
+    if (!co_ssid) return null
     const ml_ssid = Number(co_ssid)
     //
     //  Initialise work variables

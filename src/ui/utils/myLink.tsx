@@ -48,9 +48,9 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
   pathname = href.pathname
   query = queryParams
   hrefValue = `${pathname}${queryParams}`
-  //
+  //----------------------------------------------------------------------------------------------
   // Click
-  //
+  //----------------------------------------------------------------------------------------------
   const handleClick = async () => {
     //
     //  Convert the query to JSON
@@ -93,6 +93,7 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
     })
     if (!dbRecord) console.log('No menuLink')
   }
+  //----------------------------------------------------------------------------------------------
   //
   // Output
   //

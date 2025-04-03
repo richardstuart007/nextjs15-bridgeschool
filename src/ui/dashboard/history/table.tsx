@@ -15,7 +15,7 @@ import { MyLink } from '@/src/ui/utils/myLink'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-
+import MyLinkBack from '@/src/ui/utils/myLinkBack'
 export default function Table() {
   //
   //  User context
@@ -867,14 +867,21 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* Pagination & Back button               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <div className='mt-5 flex w-full justify-center'>
-        <Pagination
-          totalPages={totalPages}
-          statecurrentPage={currentPage}
-          setStateCurrentPage={setcurrentPage}
-        />
+      <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
+        <div className='flex justify-start'>
+          <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
+            Back
+          </MyLinkBack>
+        </div>
+        <div className='flex grow justify-center'>
+          <Pagination
+            totalPages={totalPages}
+            statecurrentPage={currentPage}
+            setStateCurrentPage={setcurrentPage}
+          />
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
     </>

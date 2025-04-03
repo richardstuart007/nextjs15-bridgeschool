@@ -1,5 +1,6 @@
 export type Comparison_operator =
   | '='
+  | '<>'
   | 'LIKE'
   | 'NOT LIKE'
   | '>'
@@ -8,9 +9,12 @@ export type Comparison_operator =
   | '<='
   | 'IN'
   | 'NOT IN'
+  | 'IS NULL'
+  | 'IS NOT NULL'
 
 export const Comparison_values = [
   { optionLabel: 'Equal', optionValue: '=' },
+  { optionLabel: 'Not Equal', optionValue: '<>' },
   { optionLabel: 'Like', optionValue: 'LIKE' },
   { optionLabel: 'Greater Than', optionValue: '>' },
   { optionLabel: 'Greater Than or Equal', optionValue: '>=' },

@@ -14,6 +14,7 @@ import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 export default function Table() {
   //
@@ -578,7 +579,7 @@ export default function Table() {
                           reference: 'quiz',
                           segment: String(tabledata.sb_sbid)
                         }}
-                        overrideClass={`text-white ${shrink_Text} h-5 w-10 ${!shrink ? 'md:h-6 md:w-12' : ''}`}
+                        overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                       >
                         Quiz
                       </MyLink>
@@ -596,14 +597,21 @@ export default function Table() {
       {/* ---------------------------------------------------------------------------------- */}
       <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* Pagination & Back button               */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
-        <Pagination
-          totalPages={totalPages}
-          statecurrentPage={currentPage}
-          setStateCurrentPage={setcurrentPage}
-        />
+        <div className='flex justify-start'>
+          <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
+            Back
+          </MyLinkBack>
+        </div>
+        <div className='flex grow justify-center'>
+          <Pagination
+            totalPages={totalPages}
+            statecurrentPage={currentPage}
+            setStateCurrentPage={setcurrentPage}
+          />
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
     </>

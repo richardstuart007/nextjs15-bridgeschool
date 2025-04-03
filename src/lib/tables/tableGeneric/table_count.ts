@@ -11,10 +11,7 @@ interface Props {
   whereColumnValuePairs?: ColumnValuePair[]
 }
 
-export async function table_count({
-  table,
-  whereColumnValuePairs
-}: Props): Promise<number> {
+export async function table_count({ table, whereColumnValuePairs }: Props): Promise<number> {
   const functionName = 'table_count'
   //
   // Build the base SQL query
@@ -22,14 +19,23 @@ export async function table_count({
   let sqlQuery = `SELECT COUNT(*) FROM ${table}`
   try {
     const values: (string | number)[] = []
-    //
-    // Add WHERE clause if conditions are provided
-    //
+    let paramIndex = 0 // Added to track parameter positions
     if (whereColumnValuePairs && whereColumnValuePairs.length > 0) {
       const whereClause = whereColumnValuePairs
-        .map(({ column }, index) => {
-          values.push(whereColumnValuePairs[index].value) // Add value to the array
-          return `${column} = $${index + 1}` // Use parameterized placeholders
+        .map(({ column, value, operator = '=' }) => {
+          // Changed destructuring to include operator with default
+          if (operator === 'IN' || operator === 'NOT IN') {
+            // Added multi-value handling
+            if (!Array.isArray(value)) {
+              throw new Error(`Value for ${operator} must be an array`)
+            }
+            const placeholders = value.map(() => `$${++paramIndex}`).join(', ')
+            values.push(...value)
+            return `${column} ${operator} (${placeholders})`
+          }
+          // Changed from index-based to paramIndex-based
+          values.push(value as string | number)
+          return `${column} ${operator} $${++paramIndex}` // Changed to use operator and paramIndex
         })
         .join(' AND ')
       sqlQuery += ` WHERE ${whereClause}`

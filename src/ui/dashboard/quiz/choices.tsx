@@ -76,7 +76,7 @@ export default function QuizChoice(props: QuizChoiceProps): JSX.Element {
   //...................................................................................
   return (
     <div className='my-1 p-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-      <p className='text-xs italic font-bold text-yellow-500 break-words w-full'>{questionText}</p>
+      <p className='text-xs italic font-bold text-red-500 break-words w-full'>{questionText}</p>
       <RadioSubject options={answers} selectedOption={selectedOption} onChange={handleSelect} />
     </div>
   )

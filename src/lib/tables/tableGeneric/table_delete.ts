@@ -30,13 +30,24 @@ export async function table_delete({
     //
     // WHERE clause
     //
+    let paramIndex = 0 // Added to track parameter positions
     if (whereColumnValuePairs.length > 0) {
-      const conditions = whereColumnValuePairs.map(({ column }, index) => {
-        return `${column} = $${index + 1}` // Use parameterized placeholders
+      const conditions = whereColumnValuePairs.map(({ column, value, operator = '=' }) => {
+        // Changed destructuring
+        if (operator === 'IN' || operator === 'NOT IN') {
+          // Added multi-value handling
+          if (!Array.isArray(value)) {
+            throw new Error(`Value for ${operator} must be an array`)
+          }
+          const placeholders = value.map(() => `$${++paramIndex}`).join(', ')
+          values.push(...value)
+          return `${column} ${operator} (${placeholders})`
+        }
+        values.push(value as string | number) // Changed from separate mapping
+        return `${column} ${operator} $${++paramIndex}` // Changed to use operator and paramIndex
       })
       const whereClause = conditions.join(' AND ')
       sqlQueryStatement += ` WHERE ${whereClause}`
-      values = whereColumnValuePairs.map(({ value }) => value)
     }
     //
     // RETURNING clause

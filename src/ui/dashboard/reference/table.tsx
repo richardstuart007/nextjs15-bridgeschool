@@ -15,6 +15,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyLink } from '@/src/ui/utils/myLink'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 interface FormProps {
   selected_sbsbid?: string | undefined
@@ -785,14 +786,21 @@ export default function Table({ selected_sbsbid, ps_route = 'reference_select' }
       {/* ---------------------------------------------------------------------------------- */}
       <p className='text-red-600 text-xs'>{message}</p>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* Pagination & Back button               */}
       {/* ---------------------------------------------------------------------------------- */}
-      <div className='mt-5 flex w-full justify-center'>
-        <Pagination
-          totalPages={totalPages}
-          statecurrentPage={currentPage}
-          setStateCurrentPage={setcurrentPage}
-        />
+      <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
+        <div className='flex justify-start'>
+          <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
+            Back
+          </MyLinkBack>
+        </div>
+        <div className='flex grow justify-center'>
+          <Pagination
+            totalPages={totalPages}
+            statecurrentPage={currentPage}
+            setStateCurrentPage={setcurrentPage}
+          />
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
     </>

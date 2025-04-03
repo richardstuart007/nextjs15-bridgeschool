@@ -34,9 +34,18 @@ export async function table_fetch({
     // Add WHERE clause
     //
     if (whereColumnValuePairs) {
-      const conditions = whereColumnValuePairs.map(({ column }, index) => {
-        values.push(whereColumnValuePairs[index].value)
-        return `${column} = $${index + 1}`
+      const conditions = whereColumnValuePairs.map(({ column, value, operator = '=' }, index) => {
+        if (operator === 'IN' || operator === 'NOT IN') {
+          if (!Array.isArray(value)) throw new Error(`Value for ${operator} must be an array`)
+          const placeholders = value.map((_, i) => `$${index + i + 1}`).join(', ')
+          values.push(...value)
+          return `${column} ${operator} (${placeholders})`
+        }
+        if (operator === 'IS NULL' || operator === 'IS NOT NULL') {
+          return `${column} ${operator}`
+        }
+        values.push(value as string | number)
+        return `${column} ${operator} $${index + 1}`
       })
       const whereClause = conditions.join(' AND ')
       sqlQuery += ` WHERE ${whereClause}`
