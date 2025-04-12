@@ -13,7 +13,7 @@ export async function table_drop(table: string): Promise<boolean> {
     // Run query
     //
     const db = await sql()
-    await db.query({ query: sqlQuery, functionName: functionName })
+    await db.query({ caller: '', query: sqlQuery, functionName: functionName })
     return true
   } catch (error) {
     //
@@ -22,6 +22,7 @@ export async function table_drop(table: string): Promise<boolean> {
     const errorMessage = `Table(${table}) DROP FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

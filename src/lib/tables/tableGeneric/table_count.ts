@@ -45,6 +45,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     //
     const db = await sql()
     const data = await db.query({
+      caller: '',
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -61,6 +62,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

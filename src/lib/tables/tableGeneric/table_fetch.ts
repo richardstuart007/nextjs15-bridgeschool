@@ -13,6 +13,7 @@ export type table_fetch_Props = {
   distinct?: boolean
   columns?: string[]
   limit?: number
+  caller: string
 }
 export async function table_fetch({
   table,
@@ -20,7 +21,8 @@ export async function table_fetch({
   orderBy,
   distinct = false,
   columns,
-  limit
+  limit,
+  caller = ''
 }: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
   //
@@ -65,7 +67,8 @@ export async function table_fetch({
     const data = await db.query({
       query: sqlQuery,
       params: values,
-      functionName: functionName
+      functionName: functionName,
+      caller: caller
     })
     //
     // Return rows
@@ -78,6 +81,7 @@ export async function table_fetch({
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

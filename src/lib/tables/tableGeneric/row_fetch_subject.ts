@@ -14,6 +14,7 @@ export const row_fetch_subject = async (owner: string, subject: string) => {
   //
   try {
     const rows = await table_fetch({
+      caller: functionName,
       table: 'tsb_subject',
       whereColumnValuePairs: [
         { column: 'sb_owner', value: owner },
@@ -36,6 +37,7 @@ export const row_fetch_subject = async (owner: string, subject: string) => {
     const errorMessage = `Error fetching subject: owner=(${owner}), subject=(${subject})`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

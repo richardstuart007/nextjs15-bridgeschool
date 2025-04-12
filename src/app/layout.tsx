@@ -24,6 +24,10 @@ dotenv.config()
 //  Root Layout
 //
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const functionName = 'RootLayout'
+  //
+  //  Determine database
+  //
   const db_name: string = await getDatabaseName()
   //
   // Determine the background color class based on db_name
@@ -56,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     //  Fetch database name
     //
     const rows = await table_fetch({
+      caller: functionName,
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
     } as table_fetch_Props)

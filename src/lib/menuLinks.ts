@@ -36,11 +36,11 @@ export default async function menuLinks(Props: Props) {
       const jsonObject = JSON.parse(ml_query)
       wk_route = jsonObject.ps_Route || ''
     }
-
     //
     //  Write the data
     //
     const rows = await table_write({
+      caller: functionName,
       table: 'tml_menulinks',
       columnValuePairs: [
         { column: 'ml_ssid', value: ml_ssid },
@@ -69,6 +69,7 @@ export default async function menuLinks(Props: Props) {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

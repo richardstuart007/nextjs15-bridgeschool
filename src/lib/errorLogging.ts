@@ -9,12 +9,14 @@ type Props = {
   lg_functionname: string
   lg_msg: string
   lg_severity?: string
+  lg_caller: string
 }
 
 export async function errorLogging({
   lg_functionname,
   lg_msg,
-  lg_severity = 'E'
+  lg_severity = 'E',
+  lg_caller = ''
 }: Props): Promise<boolean> {
   const functionName = 'errorLogging'
   try {
@@ -49,12 +51,13 @@ export async function errorLogging({
       lg_datetime,
       lg_msg,
       lg_functionname,
+      lg_caller,
       lg_ssid,
       lg_severity
       )
-    VALUES ($1,$2,$3,$4,$5)
+    VALUES ($1,$2,$3,$4,$5,$6)
   `
-    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_ssid, lg_severity]
+    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_caller, lg_ssid, lg_severity]
     //
     // Remove redundant spaces
     //
@@ -64,6 +67,7 @@ export async function errorLogging({
     //
     const db = await sql()
     await db.query({
+      caller: lg_caller,
       query: sqlQuery,
       params: queryValues,
       functionName: functionName

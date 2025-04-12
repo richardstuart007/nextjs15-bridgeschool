@@ -21,6 +21,7 @@ export type ExtendedUser = DefaultSession['user'] & {
   au_name?: string
   au_email?: string
 }
+const functionName = 'auth'
 // ----------------------------------------------------------------------
 //  Check User/Password
 // ----------------------------------------------------------------------
@@ -36,9 +37,9 @@ export const {
   //  Callback functions
   //
   callbacks: {
-    //
+    //-----------------------------------------------------------------------
     //  Sign in
-    //
+    //-----------------------------------------------------------------------
     async signIn({ user, account }) {
       const { email, name } = user
       const provider = account?.provider
@@ -55,8 +56,11 @@ export const {
         name: name
       }
       try {
+        //
         // Fetch the user from the database
+        //
         const fetchParams = {
+          caller: functionName,
           table: 'tus_users',
           whereColumnValuePairs: [{ column: 'us_email', value: email }]
         }
@@ -74,6 +78,9 @@ export const {
         //  Get au_ssid
         //
         au_ssid = await providerSignIn(signInData)
+        //
+        //  All OK
+        //
         return true
         //
         //  Errors
@@ -83,9 +90,9 @@ export const {
         return false
       }
     },
-    //
+    //-----------------------------------------------------------------------
     //  Update the session information from the Token
-    //
+    //-----------------------------------------------------------------------
     async session({ token, session }) {
       if (token.sub && session.user) session.user.id = token.sub
       if (token.au_ssid && session.user) {
@@ -96,9 +103,9 @@ export const {
       }
       return session
     },
-    //
+    //-----------------------------------------------------------------------
     //  update token au_ssid to latest
-    //
+    //-----------------------------------------------------------------------
     async jwt({ token, user }) {
       if (user) {
         token.au_usid = (user as ExtendedUser).au_usid
@@ -113,15 +120,27 @@ export const {
     }
   },
   ...authConfig,
+  //-----------------------------------------------------------------------
+  //  Providers
+  //-----------------------------------------------------------------------
   providers: [
+    //..............................
+    //  Github
+    //..............................
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
     }),
+    //..............................
+    // Google
+    //..............................
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
     }),
+    //..............................
+    //  Email & password
+    //..............................
     Credentials({
       async authorize(credentials) {
         //
@@ -140,9 +159,10 @@ export const {
         try {
           const { email, password } = parsedCredentials.data
           //
-          //  Get User record
+          //  Get Password record
           //
           const pwdParams = {
+            caller: functionName,
             table: 'tup_userspwd',
             whereColumnValuePairs: [{ column: 'up_email', value: email }]
           }
@@ -158,6 +178,7 @@ export const {
           //  Get User record
           //
           const fetchParams = {
+            caller: functionName,
             table: 'tus_users',
             whereColumnValuePairs: [{ column: 'us_email', value: email }]
           }
@@ -170,7 +191,6 @@ export const {
           const rtnData = {
             name: userRecord.us_name,
             email: userRecord.us_email,
-            password: userPwd.up_hash,
             au_usid: userRecord.us_usid.toString(),
             au_name: userRecord.us_name,
             au_email: userRecord.us_email

@@ -42,10 +42,12 @@ export default function NavSide(props: Props) {
   //  Session Info
   //--------------------------------------------------------------------------------
   async function getSessionInfo() {
+    const functionName = 'getSessionInfo'
     //
     //  Fetch database name
     //
     const rows = await table_fetch({
+      caller: functionName,
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
     } as table_fetch_Props)
@@ -62,16 +64,16 @@ export default function NavSide(props: Props) {
     //  Get Session info from database & update Context
     //
     if (au_ssid) {
-      const sessionData = await fetchSessionInfo()
+      const SessionInfo = await fetchSessionInfo({ caller: functionName })
       const structure_ContextInfo = {
-        cx_usid: sessionData.si_usid,
-        cx_ssid: sessionData.si_ssid,
+        cx_usid: SessionInfo.si_usid,
+        cx_ssid: SessionInfo.si_ssid,
         cx_dbName: dbName,
         cx_shrink: false,
         cx_detail: false
       }
       setSessionContext(structure_ContextInfo)
-      setSessionInfo(sessionData)
+      setSessionInfo(SessionInfo)
     }
   }
   //......................................................................................

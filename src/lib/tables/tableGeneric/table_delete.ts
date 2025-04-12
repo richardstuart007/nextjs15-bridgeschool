@@ -58,6 +58,7 @@ export async function table_delete({
     //
     const db = await sql()
     const data = await db.query({
+      caller: '',
       query: sqlQueryStatement,
       params: values,
       functionName: functionName
@@ -72,6 +73,7 @@ export async function table_delete({
     const errorMessage = `Table(${table}) DELETE FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

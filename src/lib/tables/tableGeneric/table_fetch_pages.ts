@@ -29,7 +29,8 @@ export async function fetchFiltered({
   orderBy,
   limit,
   offset,
-  distinctColumns = []
+  distinctColumns = [],
+  caller
 }: {
   table: string
   joins?: JoinParams[]
@@ -38,6 +39,7 @@ export async function fetchFiltered({
   limit?: number
   offset?: number
   distinctColumns?: string[]
+  caller: string
 }): Promise<any[]> {
   const functionName = 'fetchFiltered'
   const db = await sql()
@@ -64,6 +66,7 @@ export async function fetchFiltered({
     // Execute Query
     //
     const data = await db.query({
+      caller: caller,
       query: finalQuery,
       params: queryValues,
       functionName: functionName
@@ -74,6 +77,7 @@ export async function fetchFiltered({
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -89,13 +93,15 @@ export async function fetchTotalPages({
   joins = [],
   filters = [],
   items_per_page = ITEMS_PER_PAGE,
-  distinctColumns = []
+  distinctColumns = [],
+  caller = ''
 }: {
   table: string
   joins?: JoinParams[]
   filters?: Filter[]
   items_per_page?: number
   distinctColumns?: string[]
+  caller: string
 }): Promise<number> {
   const functionName = 'fetchTotalPages'
   const db = await sql()
@@ -117,7 +123,8 @@ export async function fetchTotalPages({
     const result = await db.query({
       query: countQuery,
       params: queryValues,
-      functionName: functionName
+      functionName: functionName,
+      caller: caller
     })
 
     //
@@ -129,6 +136,7 @@ export async function fetchTotalPages({
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -192,22 +200,14 @@ function buildSqlQuery({
       // Handle LIKE, NOT LIKE, and other standard operators
       //
       const adjustedColumn =
-        operator === 'LIKE' || operator === 'NOT LIKE'
-          ? `LOWER(${column})`
-          : column
+        operator === 'LIKE' || operator === 'NOT LIKE' ? `LOWER(${column})` : column
       const adjustedValue =
-        (operator === 'LIKE' || operator === 'NOT LIKE') &&
-        typeof value === 'string'
+        (operator === 'LIKE' || operator === 'NOT LIKE') && typeof value === 'string'
           ? `%${value.toLowerCase()}%`
           : value
 
-      if (
-        typeof adjustedValue !== 'string' &&
-        typeof adjustedValue !== 'number'
-      ) {
-        throw new Error(
-          `Invalid value type for operator ${operator}: ${typeof adjustedValue}`
-        )
+      if (typeof adjustedValue !== 'string' && typeof adjustedValue !== 'number') {
+        throw new Error(`Invalid value type for operator ${operator}: ${typeof adjustedValue}`)
       }
 
       queryValues.push(adjustedValue)

@@ -32,16 +32,13 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
 
     const sqlQuery = `SELECT setval($1, $2)`
     const values = [sequenceName, maxValue]
-    await db.query({
-      query: sqlQuery,
-      params: values,
-      functionName: functionName
-    })
+    await db.query({ caller: '', query: sqlQuery, params: values, functionName: functionName })
     //
     //  Completion message
     //
     const message = `Sequence ${sequenceName} for ${tableName}.${columnName} updated with maxValue ${maxValue} `
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: message,
       lg_severity: 'I'
@@ -54,6 +51,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

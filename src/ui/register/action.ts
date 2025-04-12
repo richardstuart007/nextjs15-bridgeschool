@@ -25,10 +25,8 @@ export type StateRegister = {
 
 const Register = FormSchemaRegister
 
-export async function action(
-  _prevState: StateRegister | undefined,
-  formData: FormData
-) {
+export async function action(_prevState: StateRegister | undefined, formData: FormData) {
+  const functionName = 'Action_Register'
   //
   //  Validate the fields using Zod
   //
@@ -85,6 +83,7 @@ export async function action(
   const us_fedcountry = 'ZZ'
   const us_provider = provider
   const userRecords = await table_write({
+    caller: functionName,
     table: 'tus_users',
     columnValuePairs: [
       { column: 'us_email', value: us_email },
@@ -108,6 +107,7 @@ export async function action(
   const up_email = email
 
   await table_write({
+    caller: functionName,
     table: 'tup_userspwd',
     columnValuePairs: [
       { column: 'up_usid', value: up_usid },

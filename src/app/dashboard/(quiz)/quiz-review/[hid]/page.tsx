@@ -17,6 +17,7 @@ export default async function Page({
 }: {
   params: Promise<Record<string, string | string[]>>
 }) {
+  const functionName = 'Page_Quiz'
   //
   // Await the params promise
   //
@@ -30,12 +31,13 @@ export default async function Page({
     //
     //  Get Session Info
     //
-    const SessionInfo = await fetchSessionInfo()
+    const SessionInfo = await fetchSessionInfo({ caller: functionName })
     const si_skipcorrect = SessionInfo.si_skipcorrect
     //
     //  Get History
     //
     const rows = await table_fetch({
+      caller: functionName,
       table: 'ths_history',
       whereColumnValuePairs: [{ column: 'hs_hsid', value: hid }]
     } as table_fetch_Props)
@@ -64,6 +66,7 @@ export default async function Page({
     //
     const qq_sbid = history.hs_sbid
     const questions_sbid = await table_fetch({
+      caller: functionName,
       table: 'tqq_questions',
       whereColumnValuePairs: [{ column: 'qq_sbid', value: qq_sbid }]
     })

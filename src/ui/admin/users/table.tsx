@@ -17,6 +17,7 @@ import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
+  const functionName = 'Table_Users'
   const rowsPerPage = 17
   const [loading, setLoading] = useState(true)
   //
@@ -102,6 +103,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         filters,
         orderBy: 'us_name',
@@ -113,6 +115,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         filters,
         items_per_page: rowsPerPage

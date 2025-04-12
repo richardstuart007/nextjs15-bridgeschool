@@ -306,6 +306,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       message = 'Database Error: Failed to Update.'
       const errorMessage = 'Database Error: Failed to Update Bidding.'
       errorLogging({
+        lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage,
         lg_severity: 'E'

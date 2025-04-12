@@ -40,7 +40,7 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
     //
     // Execute the query
     //
-    await db.query({ query: sqlQuery, functionName: functionName })
+    await db.query({ caller: '', query: sqlQuery, functionName: functionName })
     //
     // All ok
     //
@@ -51,6 +51,7 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -74,7 +75,7 @@ async function getColumns(db: any, table: string): Promise<string[]> {
   //
   // Execute the query
   //
-  const data = await db.query({ query: sqlQuery, functionName: functionName })
+  const data = await db.query({ caller: '', query: sqlQuery, functionName: functionName })
   //
   //  Extract and return the columns
   //

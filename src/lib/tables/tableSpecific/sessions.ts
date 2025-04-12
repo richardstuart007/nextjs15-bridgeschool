@@ -8,7 +8,13 @@ import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
-export async function fetchSessionInfo() {
+//
+// Props
+//
+export type Props = {
+  caller?: string
+}
+export async function fetchSessionInfo({ caller = '' }: Props) {
   const functionName = 'fetchSessionInfo'
   //
   //  Get the session id
@@ -39,7 +45,8 @@ export async function fetchSessionInfo() {
     const data = await db.query({
       query: sqlQuery,
       params: queryValues,
-      functionName: functionName
+      functionName: functionName,
+      caller: caller
     })
     const row = data.rows[0]
     //
@@ -62,6 +69,7 @@ export async function fetchSessionInfo() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -87,7 +95,7 @@ export async function isAdmin() {
     //
     //  Session info
     //
-    const sessionInfo = await fetchSessionInfo()
+    const sessionInfo = await fetchSessionInfo({ caller: functionName })
     //
     //  Return admin flag
     //
@@ -98,6 +106,7 @@ export async function isAdmin() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

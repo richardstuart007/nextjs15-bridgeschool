@@ -76,6 +76,7 @@ export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Pr
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Owner.'
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

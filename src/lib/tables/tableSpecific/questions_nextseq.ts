@@ -22,7 +22,12 @@ export async function getNextSeq(qq_owner: string, qq_subject: string) {
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      caller: '',
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
     //
     //  Return results
     //
@@ -34,6 +39,7 @@ export async function getNextSeq(qq_owner: string, qq_subject: string) {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

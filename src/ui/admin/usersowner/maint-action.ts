@@ -98,6 +98,7 @@ export async function ActionUsersowner(
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Usersowner.'
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

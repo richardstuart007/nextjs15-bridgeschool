@@ -16,6 +16,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
+  const functionName = 'Table_Who'
   const rowsPerPage = 17
   //
   //  Selection
@@ -81,6 +82,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         filters,
         orderBy: 'wh_who',
@@ -92,6 +94,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         filters,
         items_per_page: rowsPerPage
@@ -274,10 +277,7 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(who => (
-              <tr
-                key={who.wh_whid}
-                className='w-full border-b py-2                    '
-              >
+              <tr key={who.wh_whid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{who.wh_who}</td>
                 <td className='text-xs px-2 py-1  '>{who.wh_title}</td>
                 <td className='text-xs px-2 py-1  '>{who.wh_whid}</td>
@@ -318,32 +318,19 @@ export default function Table() {
 
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup
-          record={selectedRow}
-          isOpen={isModelOpenEdit}
-          onClose={handleModalCloseEdit}
-        />
+        <MaintPopup record={selectedRow} isOpen={isModelOpenEdit} onClose={handleModalCloseEdit} />
       )}
 
       {/* Add Modal */}
       {isModelOpenAdd && (
-        <MaintPopup
-          record={null}
-          isOpen={isModelOpenAdd}
-          onClose={handleModalCloseAdd}
-        />
+        <MaintPopup record={null} isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* Error message */}
-      <div className='mt-2'>
-        {message && <div className='text-red-600 mb-4'>{message}</div>}
-      </div>
+      <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>
     </>
   )
 }

@@ -10,11 +10,12 @@ export const metadata: Metadata = {
 //
 //  App route
 //
-export default async function Page({
+export default async function Form_Quiz({
   searchParams
 }: {
   searchParams: Promise<Record<string, string | string[]>>
 }) {
+  const functionName = 'Form_Quiz'
   //
   // Await the promise
   //
@@ -35,6 +36,7 @@ export default async function Page({
     //  Get Questions
     //
     const questionsData = await table_fetch({
+      caller: functionName,
       table: 'tqq_questions',
       whereColumnValuePairs: [{ column: ps_Column, value: Column_value }]
     } as table_fetch_Props)

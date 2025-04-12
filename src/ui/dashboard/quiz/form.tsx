@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, type JSX } from 'react'
+import { useState, useEffect } from 'react'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
@@ -20,7 +20,8 @@ interface QuestionsFormProps {
 //...................................................................................
 //.  Main Line
 //...................................................................................
-export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
+export default function Form_Quiz(props: QuestionsFormProps) {
+  const functionName = 'Form_Quiz'
   //
   //  Router
   //
@@ -56,7 +57,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
   //-------------------------------------------------------------------------
   async function initializeData() {
     try {
-      const SessionInfo = await fetchSessionInfo()
+      const SessionInfo = await fetchSessionInfo({ caller: functionName })
       if (!SessionInfo) throw Error('No SessionInfo')
       //
       //  Update variables
@@ -174,6 +175,7 @@ export default function QuestionsForm(props: QuestionsFormProps): JSX.Element {
     //  Create parameters
     //
     const writeParams = {
+      caller: functionName,
       table: 'ths_history',
       columnValuePairs: [
         { column: 'hs_datetime', value: UTC_datetime },

@@ -57,6 +57,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     `
     const values = [tableName]
     const sequenceResult = await db.query({
+      caller: '',
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -73,6 +74,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     if (!sequenceName) {
       const message = `No sequence found for ${tableName}`
       errorLogging({
+        lg_caller: '',
         lg_functionname: functionName,
         lg_msg: message,
         lg_severity: 'E'
@@ -84,6 +86,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     const message = `Sequence found: ${sequenceName} for ${tableName}.${columnName}`
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: message,
       lg_severity: 'I'
@@ -93,6 +96,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     const sqlQueryMax = `SELECT COALESCE((SELECT MAX(${columnName}) FROM ${tableName}), 1)`
     const maxValueResult = await db.query({
+      caller: '',
       query: sqlQueryMax,
       functionName: functionName
     })
@@ -103,6 +107,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     if (!maxValue) {
       const message = `No maxValue found for Table ${tableName} column ${columnName}`
       errorLogging({
+        lg_caller: '',
         lg_functionname: functionName,
         lg_msg: message,
         lg_severity: 'E'
@@ -114,6 +119,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     const message1 = `maxValue found: ${sequenceName} for ${tableName}.${columnName} with maxValue(${maxValue})`
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: message1,
       lg_severity: 'I'
@@ -133,6 +139,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

@@ -16,7 +16,11 @@ import {
 //---------------------------------------------------------------------
 //  Top results data
 //---------------------------------------------------------------------
-export async function fetch_TopResults() {
+interface fetch_TopResultsProps {
+  caller: string
+}
+
+export async function fetch_TopResults({ caller }: fetch_TopResultsProps) {
   const functionName = 'fetch_TopResults'
 
   try {
@@ -66,7 +70,12 @@ export async function fetch_TopResults() {
       TopResults_limitMonths
     ]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName,
+      caller: caller
+    })
     //
     //  Return rows
     //
@@ -78,6 +87,7 @@ export async function fetch_TopResults() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -88,7 +98,11 @@ export async function fetch_TopResults() {
 //---------------------------------------------------------------------
 //  Recent result data last
 //---------------------------------------------------------------------
-export async function fetch_RecentResults1() {
+interface fetch_RecentResults1Props {
+  caller: string
+}
+
+export async function fetch_RecentResults1({ caller }: fetch_RecentResults1Props) {
   const functionName = 'fetch_RecentResults1'
 
   try {
@@ -120,7 +134,12 @@ export async function fetch_RecentResults1() {
     //
     const values = [RecentResults_usersReturned]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName,
+      caller: caller
+    })
     //
     //  Return rows
     //
@@ -132,6 +151,7 @@ export async function fetch_RecentResults1() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -144,9 +164,10 @@ export async function fetch_RecentResults1() {
 //---------------------------------------------------------------------
 interface AveragesProps {
   userIds: number[]
+  caller: string
 }
 
-export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
+export async function fetch_RecentResultsAverages({ userIds, caller }: AveragesProps) {
   const functionName = 'fetch_RecentResultsAverages'
 
   try {
@@ -183,7 +204,12 @@ export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
     //  Run sql Query
     //
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName,
+      caller: caller
+    })
     //
     //  Return rows
     //
@@ -195,6 +221,7 @@ export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -207,9 +234,10 @@ export async function fetch_RecentResultsAverages({ userIds }: AveragesProps) {
 //---------------------------------------------------------------------
 interface UserAverageProps {
   userId: number
+  caller: string
 }
 
-export async function fetch_UserAverage({ userId }: UserAverageProps) {
+export async function fetch_UserAverage({ userId, caller }: UserAverageProps) {
   const functionName = 'fetch_UserAverage'
 
   try {
@@ -229,7 +257,12 @@ export async function fetch_UserAverage({ userId }: UserAverageProps) {
     //
     const values = [userId, CurrentUser_limitMonths_Average]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName,
+      caller: caller
+    })
     //
     // Return the average percentage
     //
@@ -238,6 +271,7 @@ export async function fetch_UserAverage({ userId }: UserAverageProps) {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -250,8 +284,9 @@ export async function fetch_UserAverage({ userId }: UserAverageProps) {
 //---------------------------------------------------------------------
 interface RecentUserResultsProps {
   userId: number
+  caller: string
 }
-export async function fetch_UserResults({ userId }: RecentUserResultsProps) {
+export async function fetch_UserResults({ userId, caller }: RecentUserResultsProps) {
   const functionName = 'fetch_UserResults'
 
   try {
@@ -274,7 +309,12 @@ export async function fetch_UserResults({ userId }: RecentUserResultsProps) {
     //
     const values = [userId, CurrentUser_limitMonths, CurrentUser_limitCount]
     const db = await sql()
-    const data = await db.query({ query: sqlQuery, params: values, functionName: functionName })
+    const data = await db.query({
+      query: sqlQuery,
+      params: values,
+      functionName: functionName,
+      caller: caller
+    })
     //
     // Return rows
     //
@@ -283,6 +323,7 @@ export async function fetch_UserResults({ userId }: RecentUserResultsProps) {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

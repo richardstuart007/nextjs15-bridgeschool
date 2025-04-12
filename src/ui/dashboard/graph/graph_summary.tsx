@@ -37,21 +37,26 @@ interface GraphStructure {
 }
 //--------------------------------------------------------------------------------
 export default async function SummaryGraphs() {
+  const functionName = 'SummaryGraphs'
   //
   //  Auth Session
   //
   const authSession = await getAuthSession()
   const user = authSession?.user
-  const au_usid = Number(user.au_usid)
+  const au_usid = Number(user.au_usid ?? 0)
   //
   //  Get users country code
   //
-  const rows = await table_fetch({
-    table: 'tus_users',
-    whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
-  } as table_fetch_Props)
-  const userRecord = rows[0]
-  const countryCode = userRecord.us_fedcountry
+  let countryCode = 'ZZ'
+  if (au_usid > 0) {
+    const rows = await table_fetch({
+      caller: functionName,
+      table: 'tus_users',
+      whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
+    } as table_fetch_Props)
+    const userRecord = rows[0]
+    countryCode = userRecord.us_fedcountry
+  }
   //
   //  Fetch the data
   //
@@ -61,17 +66,18 @@ export default async function SummaryGraphs() {
     table_Usershistory[],
     number
   ] = await Promise.all([
-    fetch_TopResults(),
-    fetch_RecentResults1(),
-    fetch_UserResults({ userId: au_usid }),
-    fetch_UserAverage({ userId: au_usid })
+    fetch_TopResults({ caller: functionName }),
+    fetch_RecentResults1({ caller: functionName }),
+    fetch_UserResults({ caller: functionName, userId: au_usid }),
+    fetch_UserAverage({ caller: functionName, userId: au_usid })
   ])
   //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
   const userIds: number[] = dataRecent.map(item => item.hs_usid)
   const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
-    userIds
+    userIds: userIds,
+    caller: functionName
   })
   //
   // TOP graph

@@ -8,6 +8,7 @@ type QueryOptions = {
   query: string
   params?: any[]
   functionName?: string
+  caller: string
 }
 let sqlHandler: { query: (options: QueryOptions) => Promise<any> } = {
   query: async () => Promise.resolve()
@@ -30,7 +31,8 @@ async function createDbQueryHandler(): Promise<void> {
     sqlHandler.query = async ({
       query,
       params = [],
-      functionName = 'Vercel_Unknown'
+      functionName = 'Vercel_Unknown',
+      caller = ''
     }: QueryOptions) => {
       //
       // Remove redundant spaces
@@ -39,7 +41,7 @@ async function createDbQueryHandler(): Promise<void> {
       //
       //  Logging
       //
-      await log_query(functionName, query, params)
+      await log_query(functionName, query, params, caller)
       //
       //  Run query
       //
@@ -50,6 +52,7 @@ async function createDbQueryHandler(): Promise<void> {
         const errorMessage = (error as Error).message
         if (functionName !== 'errorLogging') {
           errorLogging({
+            lg_caller: caller,
             lg_functionname: functionName,
             lg_msg: errorMessage,
             lg_severity: 'E'
@@ -67,7 +70,8 @@ async function createDbQueryHandler(): Promise<void> {
     sqlHandler.query = async ({
       query,
       params = [],
-      functionName = 'localhost_Unknown'
+      functionName = 'localhost_Unknown',
+      caller = ''
     }: QueryOptions) => {
       const client = new Client({
         connectionString: process.env.POSTGRES_URL
@@ -81,7 +85,7 @@ async function createDbQueryHandler(): Promise<void> {
         //
         //  Logging
         //
-        await log_query(functionName, query, params)
+        await log_query(functionName, query, params, caller)
         //
         //  Run query
         //
@@ -92,6 +96,7 @@ async function createDbQueryHandler(): Promise<void> {
         const errorMessage = (error as Error).message
         if (functionName !== 'errorLogging') {
           errorLogging({
+            lg_caller: caller,
             lg_functionname: functionName,
             lg_msg: errorMessage,
             lg_severity: 'E'
@@ -108,7 +113,12 @@ async function createDbQueryHandler(): Promise<void> {
 //---------------------------------------------------------------------
 //  logging
 //---------------------------------------------------------------------
-async function log_query(functionName: string, query: string, params: any[]): Promise<void> {
+async function log_query(
+  functionName: string,
+  query: string,
+  params: any[],
+  caller: string
+): Promise<void> {
   //
   //  Do not recursive for logging
   //
@@ -123,6 +133,7 @@ async function log_query(functionName: string, query: string, params: any[]): Pr
   errorLogging({
     lg_functionname: functionName,
     lg_msg: `${query}${valuesJson}`,
-    lg_severity: 'I'
+    lg_severity: 'I',
+    lg_caller: caller
   })
 }

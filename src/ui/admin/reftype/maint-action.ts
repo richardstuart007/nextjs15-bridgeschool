@@ -103,6 +103,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update reftype.'
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

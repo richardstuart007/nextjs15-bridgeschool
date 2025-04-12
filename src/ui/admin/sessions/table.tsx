@@ -13,6 +13,7 @@ import { MyInput } from '@/src/ui/utils/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 export default function Table() {
+  const functionName = 'Table_Sessions'
   //
   //  Input selection
   //
@@ -86,9 +87,7 @@ export default function Table() {
       //
       //  Joins
       //
-      const joins: JoinParams[] = [
-        { table: 'tus_users', on: 'ss_usid = us_usid' }
-      ]
+      const joins: JoinParams[] = [{ table: 'tus_users', on: 'ss_usid = us_usid' }]
       //
       // Calculate the offset for pagination
       //
@@ -97,6 +96,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         joins,
         filters,
@@ -109,6 +109,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         joins,
         filters,
@@ -273,9 +274,7 @@ export default function Table() {
                   <td className='px-2 text-center'>{tabledata.ss_usid}</td>
                   <td className='px-2 '>{tabledata.us_name}</td>
                   <td className='px-2 '>{tabledata.us_email}</td>
-                  <td className='px-2 text-center   '>
-                    {tabledata.us_provider}
-                  </td>
+                  <td className='px-2 text-center   '>{tabledata.us_provider}</td>
 
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>

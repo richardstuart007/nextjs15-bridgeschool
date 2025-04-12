@@ -108,9 +108,7 @@ export default function Table() {
       const tableList =
         mode === 'base'
           ? basetables
-          : tabledata.map(
-              baseTable => `${backupStartChar}${prefix_Z}${baseTable}`
-            )
+          : tabledata.map(baseTable => `${backupStartChar}${prefix_Z}${baseTable}`)
 
       // Construct filters
       const filtersToUpdate: Filter[] = [
@@ -127,6 +125,7 @@ export default function Table() {
         mode === 'base'
           ? await Promise.all([
               fetchFiltered({
+                caller: functionName,
                 table: 'pg_tables',
                 filters: updatedFilters,
                 orderBy: 'tablename',
@@ -134,6 +133,7 @@ export default function Table() {
                 offset
               }),
               fetchTotalPages({
+                caller: functionName,
                 table: 'pg_tables',
                 filters: updatedFilters,
                 items_per_page: rowsPerPage
@@ -141,6 +141,7 @@ export default function Table() {
             ])
           : [
               await fetchFiltered({
+                caller: functionName,
                 table: 'pg_tables',
                 filters: updatedFilters,
                 orderBy: 'tablename',
@@ -171,9 +172,7 @@ export default function Table() {
 
       // If fetching backup, determine existence
       if (mode === 'backup' && setExistsFn) {
-        const exists = tableList.map(table =>
-          filtered.some(row => row?.tablename === table)
-        )
+        const exists = tableList.map(table => filtered.some(row => row?.tablename === table))
         setExistsFn(exists)
       }
 
@@ -202,12 +201,8 @@ export default function Table() {
       //
       //  Update State
       //
-      const strippedDirTables = dirTables.map(table =>
-        table.replace('.json', '')
-      )
-      const exists = tabledata.map(table =>
-        strippedDirTables.includes(table) ? true : false
-      )
+      const strippedDirTables = dirTables.map(table => table.replace('.json', ''))
+      const exists = tabledata.map(table => (strippedDirTables.includes(table) ? true : false))
       setexists_D(exists)
       //
       // Clear loading state
@@ -222,11 +217,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Perform the Duplicate
   //----------------------------------------------------------------------------------------------
-  async function performDup(
-    tablebase: string,
-    tablebackup: string,
-    many: boolean = false
-  ) {
+  async function performDup(tablebase: string, tablebackup: string, many: boolean = false) {
     const functionName = 'performDup'
     try {
       //
@@ -264,11 +255,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Perform the Copy
   //----------------------------------------------------------------------------------------------
-  async function performCopy(
-    tablebase: string,
-    tablebackup: string,
-    many: boolean = false
-  ) {
+  async function performCopy(tablebase: string, tablebackup: string, many: boolean = false) {
     const functionName = 'performCopy'
     try {
       //
@@ -283,12 +270,7 @@ export default function Table() {
       //  Index check
       //
       const index = tabledata_Z.findIndex(row => row === tablebackup)
-      if (
-        !exists_Z[index] ||
-        tabledata_count[index] === 0 ||
-        tabledata_count_Z[index] > 0
-      )
-        return
+      if (!exists_Z[index] || tabledata_count[index] === 0 || tabledata_count_Z[index] > 0) return
       //
       // Call the server function to Duplicate
       //
@@ -394,11 +376,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Perform the Down
   //----------------------------------------------------------------------------------------------
-  async function performDown(
-    tablebase: string,
-    tabledown: string,
-    many: boolean = false
-  ) {
+  async function performDown(tablebase: string, tabledown: string, many: boolean = false) {
     const functionName = 'performDown'
     try {
       //
@@ -443,11 +421,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Perform the Upload
   //----------------------------------------------------------------------------------------------
-  async function performUpload(
-    filePath: string,
-    tablebackup: string,
-    many: boolean = false
-  ) {
+  async function performUpload(filePath: string, tablebackup: string, many: boolean = false) {
     const functionName = 'performUpload'
     try {
       //
@@ -494,11 +468,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Perform the ToBase
   //----------------------------------------------------------------------------------------------
-  async function performToBase(
-    tablebackup: string,
-    tablebase: string,
-    many: boolean = false
-  ) {
+  async function performToBase(tablebackup: string, tablebase: string, many: boolean = false) {
     const functionName = 'performToBase'
     try {
       //
@@ -860,11 +830,7 @@ export default function Table() {
           }
           break
         case 'COPY':
-          if (
-            tablebackup_exists &&
-            tablebase_count > 0 &&
-            tablebackup_count === 0
-          ) {
+          if (tablebackup_exists && tablebase_count > 0 && tablebackup_count === 0) {
             performCopy(tablebase, tablebackup, many)
           }
           break
@@ -1212,9 +1178,7 @@ export default function Table() {
             <tr key={row_tabledata} className='w-full border-b'>
               {/* Table Name */}
               <td className='text-xs px-2 pt-2'>{row_tabledata}</td>
-              <td className='text-xs px-2 pt-2 text-right'>
-                {row_tabledata_count}
-              </td>
+              <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count}</td>
 
               {/* ToBase MyButton -  */}
               <td className='text-xs px-2 py-1 text-center'>
@@ -1235,12 +1199,8 @@ export default function Table() {
               </td>
 
               <td className='text-xs px-2 pt-2'>{row_tabledata_Z}</td>
-              <td className='text-xs px-2 pt-2 text-center'>
-                {row_existsInZ ? 'Y' : ''}
-              </td>
-              <td className='text-xs px-2 pt-2 text-right'>
-                {row_tabledata_count_Z}
-              </td>
+              <td className='text-xs px-2 pt-2 text-center'>{row_existsInZ ? 'Y' : ''}</td>
+              <td className='text-xs px-2 pt-2 text-right'>{row_tabledata_count_Z}</td>
 
               {/* Drop MyButton - Only if Z table exists */}
               <td className='text-xs px-2 py-1 text-center'>
@@ -1363,30 +1323,26 @@ export default function Table() {
               </td>
 
               {/* Exists flag -  */}
-              <td className='text-xs px-2 pt-2 text-center'>
-                {row_existsInD ? 'Y' : ''}
-              </td>
+              <td className='text-xs px-2 pt-2 text-center'>{row_existsInD ? 'Y' : ''}</td>
 
               {/* Upload MyButton -  */}
               <td className='text-xs px-2 py-1 text-center'>
-                {row_existsInD &&
-                  row_existsInZ &&
-                  row_tabledata_count_Z === 0 && (
-                    <div className='inline-flex justify-center items-center'>
-                      <MyButton
-                        onClick={() =>
-                          handleRunClick1({
-                            routine: 'UPLOAD',
-                            tablebase: row_tabledata,
-                            index: index
-                          })
-                        }
-                        overrideClass='h-6 px-2 py-2 '
-                      >
-                        Upload
-                      </MyButton>
-                    </div>
-                  )}
+                {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
+                  <div className='inline-flex justify-center items-center'>
+                    <MyButton
+                      onClick={() =>
+                        handleRunClick1({
+                          routine: 'UPLOAD',
+                          tablebase: row_tabledata,
+                          index: index
+                        })
+                      }
+                      overrideClass='h-6 px-2 py-2 '
+                    >
+                      Upload
+                    </MyButton>
+                  </div>
+                )}
               </td>
             </tr>
           )
@@ -1435,10 +1391,7 @@ export default function Table() {
         </div>
       )}
 
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

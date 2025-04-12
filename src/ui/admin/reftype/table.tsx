@@ -16,6 +16,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
+  const functionName = 'Table_Reftype'
   const rowsPerPage = 17
   //
   //  Selection
@@ -80,6 +81,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         filters,
         orderBy: 'rt_type',
@@ -91,6 +93,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         filters,
         items_per_page: rowsPerPage
@@ -144,9 +147,7 @@ export default function Table() {
         const tableColumnValuePairs = [
           {
             table: 'trf_reference',
-            whereColumnValuePairs: [
-              { column: 'rf_type', value: reftype.rt_type }
-            ]
+            whereColumnValuePairs: [{ column: 'rf_type', value: reftype.rt_type }]
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
@@ -275,10 +276,7 @@ export default function Table() {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr
-                key={record.rt_rtid}
-                className='w-full border-b py-2                    '
-              >
+              <tr key={record.rt_rtid} className='w-full border-b py-2                    '>
                 <td className='text-xs px-2 py-1  '>{record.rt_type}</td>
                 <td className='text-xs px-2 py-1  '>{record.rt_title}</td>
                 <td className='text-xs px-2 py-1  '>{record.rt_rtid}</td>
@@ -319,32 +317,19 @@ export default function Table() {
 
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup
-          record={selectedRow}
-          isOpen={isModelOpenEdit}
-          onClose={handleModalCloseEdit}
-        />
+        <MaintPopup record={selectedRow} isOpen={isModelOpenEdit} onClose={handleModalCloseEdit} />
       )}
 
       {/* Add Modal */}
       {isModelOpenAdd && (
-        <MaintPopup
-          record={null}
-          isOpen={isModelOpenAdd}
-          onClose={handleModalCloseAdd}
-        />
+        <MaintPopup record={null} isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog
-        confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
-      />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* Error message */}
-      <div className='mt-2'>
-        {message && <div className='text-red-600 mb-4'>{message}</div>}
-      </div>
+      <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>
     </>
   )
 }

@@ -116,6 +116,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update.'
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

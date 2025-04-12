@@ -37,6 +37,7 @@ export async function table_check(
       //
       const db = await sql()
       const data = await db.query({
+        caller: '',
         query: sqlQuery,
         params: values,
         functionName: functionName
@@ -47,6 +48,7 @@ export async function table_check(
       if (data.rows.length > 0) {
         const errorMessage = `Keys exist in ${table} with conditions: ${JSON.stringify(whereColumnValuePairs)}`
         errorLogging({
+          lg_caller: '',
           lg_functionname: functionName,
           lg_msg: errorMessage,
           lg_severity: 'I'
@@ -64,6 +66,7 @@ export async function table_check(
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

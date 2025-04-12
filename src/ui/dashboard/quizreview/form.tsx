@@ -18,7 +18,7 @@ interface QuestionsFormProps {
 //...................................................................................
 //.  Main Line
 //...................................................................................
-export default function ReviewForm(props: QuestionsFormProps) {
+export default function Form_QuizReview(props: QuestionsFormProps) {
   const { questions, history } = props
   const hs_hsid = history.hs_hsid
   const hs_ans = history.hs_ans

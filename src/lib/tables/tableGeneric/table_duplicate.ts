@@ -22,7 +22,7 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
     // Execute the query
     //
     const db = await sql()
-    await db.query({ query: sqlQuery, functionName: functionName })
+    await db.query({ caller: '', query: sqlQuery, functionName: functionName })
     //
     // All ok
     //
@@ -33,6 +33,7 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

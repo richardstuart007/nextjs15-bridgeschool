@@ -21,6 +21,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //  Get User record
     //
     const rows = await table_fetch({
+      caller: functionName,
       table: 'tus_users',
       whereColumnValuePairs: [{ column: 'us_email', value: email }]
     } as table_fetch_Props)
@@ -45,6 +46,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -58,6 +60,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
 //  Write new user
 // ----------------------------------------------------------------------
 async function newUser(provider: string, email: string, name: string) {
+  const functionName = 'newUser'
   //
   //  Get date in UTC
   //
@@ -73,6 +76,7 @@ async function newUser(provider: string, email: string, name: string) {
   const us_fedcountry = 'ZZ'
   const us_provider = provider
   const userRecords = await table_write({
+    caller: functionName,
     table: 'tus_users',
     columnValuePairs: [
       { column: 'us_email', value: us_email },
@@ -94,6 +98,7 @@ async function newUser(provider: string, email: string, name: string) {
   const uo_usid = userRecord.us_usid
   const uo_owner = 'Richard'
   await table_write({
+    caller: functionName,
     table: 'tuo_usersowner',
     columnValuePairs: [
       { column: 'uo_usid', value: uo_usid },
@@ -107,6 +112,7 @@ async function newUser(provider: string, email: string, name: string) {
 //  Write session
 // ----------------------------------------------------------------------
 async function newSession(ss_usid: number) {
+  const functionName = 'newSession'
   //
   //  Get date in UTC
   //
@@ -116,6 +122,7 @@ async function newSession(ss_usid: number) {
   //  Write Session
   //
   const sessionsRecords = await table_write({
+    caller: functionName,
     table: 'tss_sessions',
     columnValuePairs: [
       { column: 'ss_datetime', value: UTC_datetime },
@@ -151,6 +158,7 @@ export async function getAuthSession() {
   } catch (error) {
     const errorMessage = (error as Error).message
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

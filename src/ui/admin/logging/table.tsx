@@ -11,6 +11,7 @@ import Pagination from '@/src/ui/utils/paginationState'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
+  const functionName = 'Table_Logging'
   //
   //  Input selection
   //
@@ -123,6 +124,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         filters,
         orderBy: 'lg_lgid DESC',
@@ -134,6 +136,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         filters,
         items_per_page: rowsPerPage
@@ -269,15 +272,9 @@ export default function Table() {
               tabledata?.map(tabledata => (
                 <tr key={tabledata.lg_lgid} className='w-full border-b'>
                   <td className='px-2 text-xxs '>{tabledata.lg_lgid}</td>
-                  <td className='px-2 text-center text-xxs  '>
-                    {tabledata.lg_ssid}
-                  </td>
-                  <td className='px-2 text-xxs '>
-                    {tabledata.lg_functionname}
-                  </td>
-                  <td className='px-2 text-center text-xxs  '>
-                    {tabledata.lg_severity}
-                  </td>
+                  <td className='px-2 text-center text-xxs  '>{tabledata.lg_ssid}</td>
+                  <td className='px-2 text-xxs '>{tabledata.lg_functionname}</td>
+                  <td className='px-2 text-center text-xxs  '>{tabledata.lg_severity}</td>
                   <td className='px-2 text-xxs '>{tabledata.lg_msg}</td>
                   {/* ---------------------------------------------------------------------------------- */}
                 </tr>

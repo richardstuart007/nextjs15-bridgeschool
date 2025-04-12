@@ -19,6 +19,7 @@ import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
+  const functionName = 'Table_Subject'
   const rowsPerPage = 17
   //
   //  Selection
@@ -87,6 +88,7 @@ export default function Table() {
       //  Get data
       //
       const data = await fetchFiltered({
+        caller: functionName,
         table,
         filters,
         orderBy: 'sb_owner, sb_subject',
@@ -98,6 +100,7 @@ export default function Table() {
       //  Total number of pages
       //
       const fetchedTotalPages = await fetchTotalPages({
+        caller: functionName,
         table,
         filters,
         items_per_page: rowsPerPage

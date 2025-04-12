@@ -15,12 +15,10 @@ interface ColumnValuePair {
 interface Props {
   table: string
   columnValuePairs: ColumnValuePair[]
+  caller?: string
 }
 
-export async function table_write({
-  table,
-  columnValuePairs
-}: Props): Promise<any[]> {
+export async function table_write({ table, columnValuePairs, caller = '' }: Props): Promise<any[]> {
   const functionName = 'table_write'
 
   //
@@ -28,9 +26,7 @@ export async function table_write({
   //
   const columns = columnValuePairs.map(({ column }) => column).join(', ')
   const values = columnValuePairs.map(({ value }) => value)
-  const placeholders = columnValuePairs
-    .map((_, index) => `$${index + 1}`)
-    .join(', ')
+  const placeholders = columnValuePairs.map((_, index) => `$${index + 1}`).join(', ')
   //
   // Build the SQL query
   //
@@ -46,7 +42,8 @@ export async function table_write({
     const data = await db.query({
       query: sqlQuery,
       params: values,
-      functionName: functionName
+      functionName: functionName,
+      caller: caller
     })
     //
     // Return the inserted rows
@@ -59,6 +56,7 @@ export async function table_write({
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
+      lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
