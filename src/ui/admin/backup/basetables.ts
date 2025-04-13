@@ -1,14 +1,16 @@
 export const basetables = [
-  'tdb_database',
   'trf_reference',
   'tow_owner',
   'tsb_subject',
   'tqq_questions',
   'trt_reftype',
-  'tss_sessions',
-  'tus_users',
-  'ths_history',
-  'tuo_usersowner',
-  'tup_userspwd',
   'twh_who'
+  // 'ths_history',
+  // 'tss_sessions'
+  // 'tus_users',
+  // 'tuo_usersowner',
+  // 'tup_userspwd',
+  // 'tdb_database',
+  // 'tlg_logging',
+  // 'tml_menulinks'
 ]
