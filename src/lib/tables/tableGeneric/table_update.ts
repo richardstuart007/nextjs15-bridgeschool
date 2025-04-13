@@ -13,12 +13,14 @@ interface ColumnValuePair {
 // Props
 //
 interface Props {
+  caller: string
   table: string
   columnValuePairs: ColumnValuePair[]
   whereColumnValuePairs: ColumnValuePair[]
 }
 
 export async function table_update({
+  caller,
   table,
   columnValuePairs,
   whereColumnValuePairs
@@ -56,7 +58,7 @@ export async function table_update({
     //
     const db = await sql()
     const data = await db.query({
-      caller: '',
+      caller: caller,
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -72,7 +74,7 @@ export async function table_update({
     const errorMessage = `Table(${table}) WHERE(${whereClause}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

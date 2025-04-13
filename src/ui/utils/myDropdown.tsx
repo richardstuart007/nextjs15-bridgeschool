@@ -265,8 +265,8 @@ export default function MyDropdown<T extends string, U extends string>({
               setSelectedOption(valueUpdate)
             }}
           >
-            {dropdownOptions.length > 0 ? (
-              dropdownOptions.map(option => (
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

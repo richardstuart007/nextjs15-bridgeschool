@@ -41,7 +41,7 @@ export async function Maint_detail(
   _prevState: StateSetup,
   formData: FormData
 ): Promise<StateSetup> {
-  const functionName = 'Maintdetail'
+  const functionName = 'Action_Maintdetail'
   //
   //  Validate form data
   //
@@ -105,6 +105,7 @@ export async function Maint_detail(
       //  update parameters
       //
       const updateParams = {
+        caller: functionName,
         table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qq_detail', value: qq_detail },
@@ -133,6 +134,7 @@ export async function Maint_detail(
       //  Write Parameters
       //
       const writeParams = {
+        caller: functionName,
         table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qq_owner', value: qq_owner },

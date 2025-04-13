@@ -29,7 +29,7 @@ export type StateSetup = {
 const Setup = FormSchemaSetup
 
 export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'PwdEdit'
+  const functionName = 'Action_PwdEdit'
   //
   //  Validate form data
   //
@@ -61,6 +61,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
     const up_usid = userid
     const up_hash = await bcrypt.hash(uppwd, 10)
     const updateParams = {
+      caller: functionName,
       table: 'tup_userspwd',
       columnValuePairs: [{ column: 'up_hash', value: up_hash }],
       whereColumnValuePairs: [{ column: 'up_usid', value: up_usid }]

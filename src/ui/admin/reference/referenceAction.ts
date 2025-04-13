@@ -45,7 +45,7 @@ export async function referenceAction(
   _prevState: StateSetup,
   formData: FormData
 ): Promise<StateSetup> {
-  const functionName = 'referenceAction'
+  const functionName = 'Action_Reference'
   //
   //  Validate form data
   //
@@ -125,10 +125,7 @@ export async function referenceAction(
     //  Write
     //
     if (rf_rfid === 0) {
-      const params = {
-        table: 'trf_reference',
-        columnValuePairs
-      }
+      const params = { caller: functionName, table: 'trf_reference', columnValuePairs }
       await table_write(params)
       //
       //  update counts in Subject
@@ -140,6 +137,7 @@ export async function referenceAction(
     //
     else {
       const updateParams = {
+        caller: functionName,
         table: 'trf_reference',
         columnValuePairs,
         whereColumnValuePairs: [{ column: 'rf_rfid', value: rf_rfid }]

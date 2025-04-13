@@ -59,12 +59,14 @@ export default function Form_User({ admin_uid }: Props) {
   const [us_maxquestions, setus_maxquestions] = useState<number>(0)
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
   const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
-  const [us_admin, setus_admin] = useState<boolean>(false)
+  const [us_admin, setus_admin] = useState<boolean>(!!admin_uid)
   const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
     []
   )
+  const [ow_owner, setow_owner] = useState<string | number>('')
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
+
   //-------------------------------------------------------------------------
   // Force refetch of data
   //-------------------------------------------------------------------------
@@ -115,10 +117,11 @@ export default function Form_User({ admin_uid }: Props) {
     //  No uid yet?
     //
     if (us_usid === 0) return
-    //
-    //  Get User Info
-    //
+
     try {
+      //---------------------------------
+      //  Get User Info
+      //---------------------------------
       const rows = await table_fetch({
         caller: functionName,
         table: 'tus_users',
@@ -145,9 +148,22 @@ export default function Form_User({ admin_uid }: Props) {
         label: label
       }))
       setformattedCountries(Countries)
+      //---------------------------------
+      //  Get Usersowner
+      //---------------------------------
+      const rows_usersowner = await table_fetch({
+        caller: functionName,
+        table: 'tuo_usersowner',
+        whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
+      } as table_fetch_Props)
+      const data_usersowner = rows_usersowner[0]
       //
+      // Set initial state with fetched data
+      //
+      setow_owner(data_usersowner.uo_owner)
+      //---------------------------------
       //  Data can be displayed
-      //
+      //---------------------------------
       setLoading(false)
       //
       //  Errors
@@ -313,6 +329,23 @@ export default function Form_User({ admin_uid }: Props) {
             inputName='us_sortquestions'
             inputValue={us_sortquestions}
             onChange={() => setus_sortquestions(prev => !prev)}
+          />
+        </div>
+        {/*  ...................................................................................*/}
+        {/*   Toggle - Random Sort questions */}
+        {/*  ...................................................................................*/}
+        <div className='mt-4'>
+          <MyDropdown
+            label='Owner'
+            selectedOption={ow_owner}
+            setSelectedOption={setow_owner}
+            searchEnabled={false}
+            name='ow_owner'
+            table='tow_owner'
+            optionLabel='ow_owner'
+            optionValue='ow_owner'
+            overrideClass_Dropdown='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+            includeBlank={false}
           />
         </div>
         {/*  ...................................................................................*/}

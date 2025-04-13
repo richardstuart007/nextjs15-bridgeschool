@@ -50,7 +50,7 @@ const handb_name = [
 ]
 
 export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'Mainthands'
+  const functionName = 'Action_Mainthands'
   //
   // Retrieve values from formData and store them in an array
   //
@@ -252,6 +252,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       //  update parameters
       //
       const updateParams = {
+        caller: functionName,
         table: 'tqq_questions',
         columnValuePairs: [
           { column: 'qq_north', value: northString },

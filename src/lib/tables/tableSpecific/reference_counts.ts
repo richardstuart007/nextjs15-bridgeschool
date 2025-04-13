@@ -18,6 +18,7 @@ export async function update_rfcntquestions(rfid: number) {
     //  update Subject
     //
     const updateParams = {
+      caller: functionName,
       table: 'trf_reference',
       columnValuePairs: [{ column: 'rf_cntquestions', value: rowCount }],
       whereColumnValuePairs: [{ column: 'rf_rfid', value: rfid }]
@@ -57,6 +58,7 @@ export async function update_sbcntreference(rfid: number) {
     //  update Subject
     //
     const updateParams = {
+      caller: functionName,
       table: 'trf_reference',
       columnValuePairs: [{ column: 'rf_cntquestions', value: rowCount }],
       whereColumnValuePairs: [{ column: 'rf_rfid', value: rfid }]

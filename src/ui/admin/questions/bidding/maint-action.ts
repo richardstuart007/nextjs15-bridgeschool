@@ -115,7 +115,7 @@ const VALIDVALUES = [
 const SPECIALBIDS = ['PASS', 'X', 'XX', '?']
 
 export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'MaintBidding'
+  const functionName = 'Action_MaintBidding'
   //
   // Retrieve values from formData and store them in an array
   //
@@ -288,6 +288,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       //  update parameters
       //
       const updateParams = {
+        caller: functionName,
         table: 'tqq_questions',
         columnValuePairs: [{ column: 'qq_rounds', value: qq_rounds }],
         whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]

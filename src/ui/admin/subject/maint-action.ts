@@ -32,7 +32,7 @@ export type StateSetup = {
 const Setup = FormSchemaSetup
 
 export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'MaintOwnerSubject'
+  const functionName = 'Action_MaintOwnerSubject'
   //
   //  Validate form data
   //
@@ -82,11 +82,13 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
   //
   try {
     const updateParams = {
+      caller: functionName,
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_title', value: sb_title }],
       whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
     }
     const writeParams = {
+      caller: functionName,
       table: 'tsb_subject',
       columnValuePairs: [
         { column: 'sb_owner', value: sb_owner },

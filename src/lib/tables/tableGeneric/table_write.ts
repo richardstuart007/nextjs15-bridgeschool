@@ -13,14 +13,13 @@ interface ColumnValuePair {
 // Define the props interface for the insert function
 //
 interface Props {
+  caller: string
   table: string
   columnValuePairs: ColumnValuePair[]
-  caller?: string
 }
 
-export async function table_write({ table, columnValuePairs, caller = '' }: Props): Promise<any[]> {
+export async function table_write({ table, columnValuePairs, caller }: Props): Promise<any[]> {
   const functionName = 'table_write'
-
   //
   // Prepare the columns and parameterized placeholders for the INSERT statement
   //

@@ -18,6 +18,7 @@ export async function update_sbcntquestions(sbid: number) {
     //  update Subject
     //
     const updateParams = {
+      caller: functionName,
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_cntquestions', value: rowCount }],
       whereColumnValuePairs: [{ column: 'sb_sbid', value: sbid }]
@@ -57,6 +58,7 @@ export async function update_sbcntreference(sbid: number) {
     //  update Subject
     //
     const updateParams = {
+      caller: functionName,
       table: 'tsb_subject',
       columnValuePairs: [{ column: 'sb_cntreference', value: rowCount }],
       whereColumnValuePairs: [{ column: 'sb_sbid', value: sbid }]

@@ -17,6 +17,7 @@ const FormSchemaSetup = z.object({
   us_maxquestions: z.number().min(3).max(50),
   us_skipcorrect: z.boolean(),
   us_sortquestions: z.boolean(),
+  ow_owner: z.string(),
   us_admin: z.boolean()
 })
 //
@@ -31,6 +32,7 @@ export type StateSetup = {
     us_maxquestions?: string[]
     us_skipcorrect?: string[]
     us_sortquestions?: string[]
+    ow_owner?: string[]
     us_admin?: string[]
   }
   message?: string | null
@@ -40,7 +42,7 @@ export type StateSetup = {
 const Setup = FormSchemaSetup
 
 export async function action(_prevState: StateSetup, formData: FormData) {
-  const functionName = 'action'
+  const functionName = 'Action_Users'
   //
   //  Validate form data
   //
@@ -52,6 +54,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     us_maxquestions: Number(formData.get('us_maxquestions')),
     us_sortquestions: formData.get('us_sortquestions') === 'true',
     us_skipcorrect: formData.get('us_skipcorrect') === 'true',
+    ow_owner: formData.get('ow_owner'),
     us_admin: formData.get('us_admin') === 'true'
   })
   //
@@ -74,6 +77,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     us_fedcountry,
     us_maxquestions,
     us_sortquestions,
+    ow_owner,
     us_skipcorrect,
     us_admin
   } = validatedFields.data
@@ -81,27 +85,32 @@ export async function action(_prevState: StateSetup, formData: FormData) {
   // Update data into the database
   //
   try {
-    //
-    // Common column-value pairs
-    //
-    const columnValuePairs = [
-      { column: 'us_name', value: us_name },
-      { column: 'us_fedid', value: us_fedid },
-      { column: 'us_fedcountry', value: us_fedcountry },
-      { column: 'us_maxquestions', value: us_maxquestions },
-      { column: 'us_sortquestions', value: us_sortquestions },
-      { column: 'us_skipcorrect', value: us_skipcorrect },
-      { column: 'us_admin', value: us_admin }
-    ]
-    const updateParams = {
+    // -----------------
+    // Update User
+    // -----------------
+    await table_update({
+      caller: functionName,
       table: 'tus_users',
-      columnValuePairs,
+      columnValuePairs: [
+        { column: 'us_name', value: us_name },
+        { column: 'us_fedid', value: us_fedid },
+        { column: 'us_fedcountry', value: us_fedcountry },
+        { column: 'us_maxquestions', value: us_maxquestions },
+        { column: 'us_sortquestions', value: us_sortquestions },
+        { column: 'us_skipcorrect', value: us_skipcorrect },
+        { column: 'us_admin', value: us_admin }
+      ],
       whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
-    }
-    //
-    //  Update the database
-    //
-    await table_update(updateParams)
+    })
+    // -----------------
+    // Update usersowner
+    // -----------------
+    await table_update({
+      caller: functionName,
+      table: 'tuo_usersowner',
+      columnValuePairs: [{ column: 'uo_owner', value: ow_owner }],
+      whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
+    })
     //
     //  OK
     //

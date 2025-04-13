@@ -7,22 +7,22 @@ import { ColumnValuePair } from '@/src/lib/tables/structures'
 // Props
 //
 export type table_fetch_Props = {
+  caller: string
   table: string
   whereColumnValuePairs?: ColumnValuePair[]
   orderBy?: string
   distinct?: boolean
   columns?: string[]
   limit?: number
-  caller: string
 }
 export async function table_fetch({
+  caller,
   table,
   whereColumnValuePairs,
   orderBy,
   distinct = false,
   columns,
-  limit,
-  caller = ''
+  limit
 }: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
   //
@@ -81,7 +81,7 @@ export async function table_fetch({
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     errorLogging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
