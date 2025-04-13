@@ -359,250 +359,246 @@ export default function Table_Subject() {
     ref_rowsPerPage.current = screenRows
   }
   //----------------------------------------------------------------------------------------------
-  // Loading ?
+  // Render selection
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
+  function render_selection() {
+    return (
+      show_h_owner && (
+        <div className={`px-2 ${shrink_Text}`}>
+          <span className='font-medium'>Owner: </span>
+          <span className='text-green-500'>{owner}</span>
+        </div>
+      )
+    )
+  }
   //----------------------------------------------------------------------------------------------
-  // Data loaded
+  // Render table header row 1
   //----------------------------------------------------------------------------------------------
-  return (
-    <>
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
-        {/** -------------------------------------------------------------------- */}
-        {/** Selected Values                                                      */}
-        {/** -------------------------------------------------------------------- */}
-        {show_h_owner && (
-          <div className={`px-2 ${shrink_Text}`}>
-            <span className='font-medium'>Owner: </span>
-            <span className='text-green-500'>{owner}</span>
-          </div>
+  function render_tr1() {
+    return (
+      <tr className={`${shrink_Text}`}>
+        {show_owner && (
+          <th scope='col' className=' font-bold px-2'>
+            Owner
+          </th>
         )}
-        {/** -------------------------------------------------------------------- */}
-        {/** TABLE                                                                */}
-        {/** -------------------------------------------------------------------- */}
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left'>
-            {/* --------------------------------------------------------------------- */}
-            {/** HEADINGS                                                                */}
-            {/** -------------------------------------------------------------------- */}
-            <tr className={`${shrink_Text}`}>
-              {show_owner && (
-                <th scope='col' className=' font-bold px-2'>
-                  Owner
-                </th>
-              )}
-              {show_subject && (
-                <th scope='col' className=' font-bold px-2'>
-                  Subject
-                </th>
-              )}
+        {show_subject && (
+          <th scope='col' className=' font-bold px-2'>
+            Subject
+          </th>
+        )}
 
-              {show_cntreference && (
-                <th scope='col' className=' font-bold px-2 text-center'>
-                  Ref Count
-                </th>
-              )}
-              <th scope='col' className=' font-bold px-2 text-center'>
-                Reference
-              </th>
-              {show_cntquestions && (
-                <th scope='col' className=' font-bold px-2 text-center'>
-                  Questions
-                </th>
-              )}
-              <th scope='col' className=' font-bold px-2 text-center'>
-                Quiz
-              </th>
-            </tr>
-            {/* ---------------------------------------------------------------------------------- */}
-            {/* DROPDOWN & SEARCHES             */}
-            {/* ---------------------------------------------------------------------------------- */}
-            <tr className={`align-bottom ${shrink_Text}`}>
-              {/* ................................................... */}
-              {/* OWNER                                                 */}
-              {/* ................................................... */}
-              {show_owner && (
-                <th scope='col' className='px-2 '>
-                  <MyDropdown
-                    selectedOption={owner}
-                    setSelectedOption={setowner}
-                    searchEnabled={false}
-                    name='owner'
-                    table='tuo_usersowner'
-                    tableColumn='uo_usid'
-                    tableColumnValue={ref_selected_cx_usid.current}
-                    optionLabel='uo_owner'
-                    optionValue='uo_owner'
-                    overrideClass_Dropdown={
-                      shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
-                    }
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* SUBJECT                                                 */}
-              {/* ................................................... */}
-              {show_subject && (
-                <th scope='col' className=' px-2'>
-                  {owner === undefined || owner === '' ? null : (
-                    <MyDropdown
-                      selectedOption={subject}
-                      setSelectedOption={setsubject}
-                      name='subject'
-                      table='tsb_subject'
-                      tableColumn='sb_owner'
-                      tableColumnValue={owner}
-                      optionLabel='sb_title'
-                      optionValue='sb_subject'
-                      overrideClass_Dropdown={
-                        shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`
-                      }
-                      includeBlank={true}
-                    />
-                  )}
-                </th>
-              )}
+        {show_cntreference && (
+          <th scope='col' className=' font-bold px-2 text-center'>
+            Ref Count
+          </th>
+        )}
+        <th scope='col' className=' font-bold px-2 text-center'>
+          Reference
+        </th>
+        {show_cntquestions && (
+          <th scope='col' className=' font-bold px-2 text-center'>
+            Questions
+          </th>
+        )}
+        <th scope='col' className=' font-bold px-2 text-center'>
+          Quiz
+        </th>
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table header row 2
+  //----------------------------------------------------------------------------------------------
+  // Dropdown Searches
+  //
+  function render_tr2() {
+    return (
+      <tr className={`align-bottom ${shrink_Text}`}>
+        {/* ................................................... */}
+        {/* OWNER                                                 */}
+        {/* ................................................... */}
+        {show_owner && (
+          <th scope='col' className='px-2 '>
+            <MyDropdown
+              selectedOption={owner}
+              setSelectedOption={setowner}
+              searchEnabled={false}
+              name='owner'
+              table='tuo_usersowner'
+              tableColumn='uo_usid'
+              tableColumnValue={ref_selected_cx_usid.current}
+              optionLabel='uo_owner'
+              optionValue='uo_owner'
+              overrideClass_Dropdown={
+                shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
+              }
+              includeBlank={true}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* SUBJECT                                                 */}
+        {/* ................................................... */}
+        {show_subject && (
+          <th scope='col' className=' px-2'>
+            {owner === undefined || owner === '' ? null : (
+              <MyDropdown
+                selectedOption={subject}
+                setSelectedOption={setsubject}
+                name='subject'
+                table='tsb_subject'
+                tableColumn='sb_owner'
+                tableColumnValue={owner}
+                optionLabel='sb_title'
+                optionValue='sb_subject'
+                overrideClass_Dropdown={
+                  shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`
+                }
+                includeBlank={true}
+              />
+            )}
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* cntreference                                           */}
+        {/* ................................................... */}
+        {show_cntreference && (
+          <th scope='col' className='px-2 text-center'>
+            <MyInput
+              id='cntreference'
+              name='cntreference'
+              overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
+              type='text'
+              value={cntreference}
+              onChange={e => {
+                const value = e.target.value
+                const numValue = Number(value)
+                const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
+                setcntreference(parsedValue)
+              }}
+            />
+          </th>
+        )}
+        <th scope='col' className=' px-2'></th>
+        {/* ................................................... */}
+        {/* Questions                                           */}
+        {/* ................................................... */}
+        {show_cntquestions && (
+          <th scope='col' className='px-2 text-center'>
+            <MyInput
+              id='cntquestions'
+              name='cntquestions'
+              overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
+              type='text'
+              value={cntquestions}
+              onChange={e => {
+                const value = e.target.value
+                const numValue = Number(value)
+                const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
+                setcntquestions(parsedValue)
+              }}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* quiz                                       */}
+        {/* ................................................... */}
+        <th scope='col' className=' px-2'></th>
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table body
+  //----------------------------------------------------------------------------------------------
+  function render_body() {
+    return (
+      <tbody className='bg-white text-xs'>
+        {tabledata?.map(tabledata => (
+          <tr key={tabledata.sb_sbid} className='w-full border-b'>
+            {/* ................................................... */}
+            {/* Owner                                           */}
+            {/* ................................................... */}
+            {show_owner && <td className={`px-2 ${shrink_Text}`}>{tabledata.sb_owner}</td>}
+            {/* ................................................... */}
+            {/* Subject                                          */}
+            {/* ................................................... */}
+            {show_subject && <td className={`px-2 ${shrink_Text}`}>{tabledata.sb_title}</td>}
 
-              {/* ................................................... */}
-              {/* cntreference                                           */}
-              {/* ................................................... */}
-              {show_cntreference && (
-                <th scope='col' className='px-2 text-center'>
-                  <MyInput
-                    id='cntreference'
-                    name='cntreference'
-                    overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
-                    type='text'
-                    value={cntreference}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
-                      setcntreference(parsedValue)
+            {/* ................................................... */}
+            {/* References                                            */}
+            {/* ................................................... */}
+            {show_cntreference && 'sb_cntquestions' in tabledata && (
+              <td className={`px-2 text-center ${shrink_Text}`}>
+                {tabledata.sb_cntreference > 0 ? tabledata.sb_cntreference : ' '}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Reference  Button                                   */}
+            {/* ................................................... */}
+            <td className='px-2 text-center'>
+              {'sb_cntreference' in tabledata && tabledata.sb_cntreference > 0 && (
+                <div className='inline-flex justify-center items-center'>
+                  <MyLink
+                    href={{
+                      pathname: `/dashboard/reference_select`,
+                      query: {
+                        ps_Route: 'subject',
+                        selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
+                      },
+                      reference: 'reference_select',
+                      segment: String(tabledata.sb_sbid)
                     }}
-                  />
-                </th>
+                    overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
+                  >
+                    Reference
+                  </MyLink>
+                </div>
               )}
-              <th scope='col' className=' px-2'></th>
-              {/* ................................................... */}
-              {/* Questions                                           */}
-              {/* ................................................... */}
-              {show_cntquestions && (
-                <th scope='col' className='px-2 text-center'>
-                  <MyInput
-                    id='cntquestions'
-                    name='cntquestions'
-                    overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
-                    type='text'
-                    value={cntquestions}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) || numValue === 0 ? '' : numValue
-                      setcntquestions(parsedValue)
+            </td>
+            {/* ................................................... */}
+            {/* Questions                                            */}
+            {/* ................................................... */}
+            {show_cntquestions && 'sb_cntquestions' in tabledata && (
+              <td className={`px-2 text-center ${shrink_Text}`}>
+                {tabledata.sb_cntquestions > 0 ? tabledata.sb_cntquestions : ' '}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Quiz  Button                                         */}
+            {/* ................................................... */}
+            <td className='px-2 text-center'>
+              {'sb_cntquestions' in tabledata && tabledata.sb_cntquestions > 0 && (
+                <div className='inline-flex justify-center items-center'>
+                  <MyLink
+                    href={{
+                      pathname: `/dashboard/quiz/`,
+                      query: {
+                        ps_Route: 'subject',
+                        ps_Column: 'qq_sbid',
+                        ps_sbid: String(tabledata.sb_sbid)
+                      },
+                      reference: 'quiz',
+                      segment: String(tabledata.sb_sbid)
                     }}
-                  />
-                </th>
+                    overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
+                  >
+                    Quiz
+                  </MyLink>
+                </div>
               )}
-              {/* ................................................... */}
-              {/* quiz                                       */}
-              {/* ................................................... */}
-              <th scope='col' className=' px-2'></th>
-              {/* ................................................... */}
-            </tr>
-          </thead>
-          {/* ---------------------------------------------------------------------------------- */}
-          {/* BODY                                 */}
-          {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
-            {tabledata?.map(tabledata => (
-              <tr key={tabledata.sb_sbid} className='w-full border-b'>
-                {/* ................................................... */}
-                {/* Owner                                           */}
-                {/* ................................................... */}
-                {show_owner && <td className={`px-2 ${shrink_Text}`}>{tabledata.sb_owner}</td>}
-                {/* ................................................... */}
-                {/* Subject                                          */}
-                {/* ................................................... */}
-                {show_subject && <td className={`px-2 ${shrink_Text}`}>{tabledata.sb_title}</td>}
-
-                {/* ................................................... */}
-                {/* References                                            */}
-                {/* ................................................... */}
-                {show_cntreference && 'sb_cntquestions' in tabledata && (
-                  <td className={`px-2 text-center ${shrink_Text}`}>
-                    {tabledata.sb_cntreference > 0 ? tabledata.sb_cntreference : ' '}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Reference  Button                                   */}
-                {/* ................................................... */}
-                <td className='px-2 text-center'>
-                  {'sb_cntreference' in tabledata && tabledata.sb_cntreference > 0 && (
-                    <div className='inline-flex justify-center items-center'>
-                      <MyLink
-                        href={{
-                          pathname: `/dashboard/reference_select`,
-                          query: {
-                            ps_Route: 'subject',
-                            selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
-                          },
-                          reference: 'reference_select',
-                          segment: String(tabledata.sb_sbid)
-                        }}
-                        overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
-                      >
-                        Reference
-                      </MyLink>
-                    </div>
-                  )}
-                </td>
-                {/* ................................................... */}
-                {/* Questions                                            */}
-                {/* ................................................... */}
-                {show_cntquestions && 'sb_cntquestions' in tabledata && (
-                  <td className={`px-2 text-center ${shrink_Text}`}>
-                    {tabledata.sb_cntquestions > 0 ? tabledata.sb_cntquestions : ' '}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Quiz  Button                                         */}
-                {/* ................................................... */}
-                <td className='px-2 text-center'>
-                  {'sb_cntquestions' in tabledata && tabledata.sb_cntquestions > 0 && (
-                    <div className='inline-flex justify-center items-center'>
-                      <MyLink
-                        href={{
-                          pathname: `/dashboard/quiz/`,
-                          query: {
-                            ps_Route: 'subject',
-                            ps_Column: 'qq_sbid',
-                            ps_sbid: String(tabledata.sb_sbid)
-                          },
-                          reference: 'quiz',
-                          segment: String(tabledata.sb_sbid)
-                        }}
-                        overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
-                      >
-                        Quiz
-                      </MyLink>
-                    </div>
-                  )}
-                </td>
-                {/* ---------------------------------------------------------------------------------- */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Message               */}
-      {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination & Back button               */}
-      {/* ---------------------------------------------------------------------------------- */}
+            </td>
+            {/* ---------------------------------------------------------------------------------- */}
+          </tr>
+        ))}
+      </tbody>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render pagination
+  //----------------------------------------------------------------------------------------------
+  function render_pagination() {
+    return (
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
         <div className='flex justify-start'>
           <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
@@ -617,7 +613,29 @@ export default function Table_Subject() {
           />
         </div>
       </div>
-      {/* ---------------------------------------------------------------------------------- */}
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
+  return (
+    <>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        {render_selection()}
+        <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left'>
+            {render_tr1()}
+            {render_tr2()}
+          </thead>
+          {render_body()}
+        </table>
+      </div>
+      {render_pagination()}
+      <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
     </>
   )
 }

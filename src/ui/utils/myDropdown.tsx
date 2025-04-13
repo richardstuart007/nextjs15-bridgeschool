@@ -150,18 +150,14 @@ export default function MyDropdown<T extends string, U extends string>({
         //
         //  Load the options
         //
-        const options = rows.map(row => ({
+        const updOptions = rows.map(row => ({
           value: row[optionValue as keyof RowData<T, U>],
           label: row[optionLabel as keyof RowData<T, U>]?.toString() || ''
         }))
         //
-        //  Add the optional blank option
-        //
-        const updatedOptions = includeBlank ? [{ value: '', label: '' }, ...options] : options
-        //
         //  Set options
         //
-        setDropdownOptions(updatedOptions)
+        setDropdownOptions(updOptions)
         //
         //  Errors
         //
@@ -171,16 +167,7 @@ export default function MyDropdown<T extends string, U extends string>({
         setLoading(false)
       }
     },
-    [
-      optionValue,
-      optionLabel,
-      tableData,
-      table,
-      tableColumn,
-      tableColumnValue,
-      orderBy,
-      includeBlank
-    ]
+    [optionValue, optionLabel, tableData, table, tableColumn, tableColumnValue, orderBy]
   )
   //---------------------------------------------------------------------
   //  Fetch options on component mount and whenever dependencies change
