@@ -33,15 +33,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Determine the background color class based on db_name
   //
   type Database = 'Vercel_DEV' | 'production' | 'localhost' | 'unknown'
-  const DatabaseColors: Record<Database, string> = {
-    Vercel_DEV: 'bg-yellow-100',
-    production: 'bg-blue-100',
-    localhost: 'bg-green-100',
-    unknown: 'bg-red-100'
+  const DatabaseStyles: Record<Database, { bgColor: string; text?: string }> = {
+    Vercel_DEV: { bgColor: 'bg-yellow-100', text: 'DEV' },
+    production: { bgColor: 'bg-blue-100' },
+    localhost: { bgColor: 'bg-green-100', text: 'LOCALHOST' },
+    unknown: { bgColor: 'bg-red-100' }
   }
 
-  const backgroundColor = DatabaseColors[db_name as Database] ?? 'bg-red-100'
-  const classNameColour = `${inter.className} antialiased ${backgroundColor}`
+  const { bgColor } = DatabaseStyles[db_name as Database] ?? { bgColor: 'bg-red-100' }
+  const classNameColour = `${inter.className} antialiased ${bgColor} relative`
   //-----------------------------------------------------------------------------
   //  Get the database
   //-----------------------------------------------------------------------------
@@ -78,7 +78,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   //-----------------------------------------------------------------------------
   return (
     <html lang='en'>
-      <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
+      <body
+        className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}
+        data-env={db_name}
+      >
         <UserProvider>{children}</UserProvider>
       </body>
     </html>
