@@ -6,6 +6,7 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import { Routes_AfterLogin_redirect } from '@/src/root/validroutes'
 
 export default function Socials() {
+  const NEXT_PUBLIC_APPENV_ISDEV = process.env.NEXT_PUBLIC_APPENV_ISDEV === 'true'
   //
   //  Signin using provider
   //
@@ -30,12 +31,14 @@ export default function Socials() {
         >
           <FcGoogle className='h-8 w-8' />
         </MyButton>
-        <MyButton
-          overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
-          onClick={event => signInProvider('github', event)}
-        >
-          <FaGithub className='h-8 w-8' />
-        </MyButton>
+        {NEXT_PUBLIC_APPENV_ISDEV && (
+          <MyButton
+            overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
+            onClick={event => signInProvider('github', event)}
+          >
+            <FaGithub className='h-8 w-8' />
+          </MyButton>
+        )}
       </div>
     </>
   )

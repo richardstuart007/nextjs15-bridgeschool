@@ -20,6 +20,8 @@ export const metadata: Metadata = {
 //  Load the Database variables
 //
 dotenv.config()
+const NEXT_PUBLIC_APPENV_ISDEV = process.env.NEXT_PUBLIC_APPENV_ISDEV === 'true'
+
 //
 //  Root Layout
 //
@@ -33,17 +35,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // Determine the background color class based on db_name
   //
   type Database = 'Vercel_DEV' | 'production' | 'localhost' | 'unknown'
-  const DatabaseStyles: Record<Database, { bgColor: string; text?: string }> = {
-    Vercel_DEV: { bgColor: 'bg-yellow-100', text: 'DEV' },
-    production: { bgColor: 'bg-blue-100', text: undefined },
-    localhost: { bgColor: 'bg-green-100', text: 'LOCALHOST' },
-    unknown: { bgColor: 'bg-red-100', text: undefined }
+  const DatabaseColors: Record<Database, string> = {
+    Vercel_DEV: 'bg-yellow-100',
+    production: 'bg-blue-100',
+    localhost: 'bg-green-100',
+    unknown: 'bg-red-100'
   }
 
-  const { bgColor, text: environmentText } = DatabaseStyles[db_name as Database] ?? {
-    bgColor: 'bg-red-100'
-  }
-  const classNameColour = `${inter.className} antialiased ${bgColor} relative`
+  const backgroundColor = DatabaseColors[db_name as Database] ?? 'bg-red-100'
+  const classNameColour = `${inter.className} antialiased ${backgroundColor}`
   //-----------------------------------------------------------------------------
   //  Get the database
   //-----------------------------------------------------------------------------
@@ -80,12 +80,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   //-----------------------------------------------------------------------------
   return (
     <html lang='en'>
-      <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full relative`}>
-        {environmentText && (
-          <div className='absolute top-0 right-0 w-full text-red-500 text-right text-xl leading-8 z-0 pointer-events-none pr-2'>
-            {environmentText}
+      <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
+        {/* Only show watermark for dev or localhost */}
+        {NEXT_PUBLIC_APPENV_ISDEV && (
+          <div
+            className='absolute top-0 right-0 h-full w-1/3 flex flex-col justify-center items-center pointer-events-none select-none'
+            style={{
+              fontSize: '3rem',
+              fontWeight: 'bold',
+              color: 'rgba(255,0,0,0.2)', // red, semi-transparent
+              transform: 'rotate(-25deg)',
+              textAlign: 'center',
+              lineHeight: '1.2'
+            }}
+          >
+            <span style={{ fontWeight: 'normal', fontSize: '1.5rem' }}>database</span>
+            <span>{db_name}</span>
           </div>
         )}
+
         <UserProvider>{children}</UserProvider>
       </body>
     </html>

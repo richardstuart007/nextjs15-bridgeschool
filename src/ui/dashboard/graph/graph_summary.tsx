@@ -72,6 +72,12 @@ export default async function SummaryGraphs() {
     fetch_UserAverage({ caller: functionName, userId: au_usid })
   ])
   //
+  //  No data
+  //
+  if (!dataTop || dataTop.length === 0) {
+    return null
+  }
+  //
   //  Extract the user IDs and get the data for the last 5 results for each user
   //
   const userIds: number[] = dataRecent.map(item => item.hs_usid)

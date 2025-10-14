@@ -27,7 +27,7 @@ async function createDbQueryHandler(): Promise<void> {
   //.........................................................................
   // Use VERCEL Postgres handler
   //.........................................................................
-  if (process.env.DATABASE_ENV !== 'localhost') {
+  if (process.env.NEXT_PUBLIC_APPENV_DBHANDLER === 'VERCEL_PG') {
     sqlHandler.query = async ({
       query,
       params = [],

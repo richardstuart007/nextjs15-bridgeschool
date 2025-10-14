@@ -23,7 +23,7 @@ export async function errorLogging({
     //
     // Skip logging for 'I' severity in production mode
     //
-    if (lg_severity === 'I' && process.env.ISDEV_ENV === 'false') {
+    if (lg_severity === 'I' && process.env.NEXT_PUBLIC_APPENV_ISDEV === 'false') {
       return false
     }
     //
