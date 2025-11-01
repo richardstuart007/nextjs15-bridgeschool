@@ -5,7 +5,6 @@ import { UserProvider } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { URL_current } from '@/src/root/URLconstants'
 import dotenv from 'dotenv'
-import { Analytics } from '@vercel/analytics/next'
 //
 //  Metadata
 //
@@ -101,7 +100,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
 
         <UserProvider>{children}</UserProvider>
-        <Analytics />
       </body>
     </html>
   )
