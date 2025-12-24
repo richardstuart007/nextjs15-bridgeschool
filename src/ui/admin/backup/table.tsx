@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import {
   fetchFiltered,
   fetchTotalPages,
@@ -54,7 +54,7 @@ export default function Table() {
   //
   //  Messages
   //
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',
@@ -270,7 +270,7 @@ export default function Table() {
       //  Index check
       //
       const index = tabledata_Z.findIndex(row => row === tablebackup)
-      if (!exists_Z[index] || tabledata_count[index] === 0 || tabledata_count_Z[index] > 0) return
+      if (!exists_Z[index] || tabledata_count[index] === 0) return
       //
       // Call the server function to Duplicate
       //
@@ -433,9 +433,9 @@ export default function Table() {
       //
       const index = tabledata_Z.findIndex(row => row === tablebackup)
       //
-      //  Do not upload if there are records already in the file
+      //  Do not upload if there are records already in the file (it is cleared first!!)
       //
-      if (tabledata_count_Z[index] > 0) return
+      // if (tabledata_count_Z[index] > 0) return
       //
       //  Status Message
       //
@@ -612,36 +612,36 @@ export default function Table() {
     const dirPath = `${dirPathPrefix}${dataDirectory}`
     switch (routine) {
       case 'DUP':
-        title = 'Confirm DUPLICATE for ALL'
-        subTitle = `Are you sure you want to Duplicate from BASE to BACKUP?`
+        title = 'DUPLICATE for ALL'
+        subTitle = `Duplicate from BASE to BACKUP`
         break
       case 'CLEAR':
-        title = 'Confirm CLEAR for ALL'
-        subTitle = `Are you sure you want to Clear BACKUP?`
+        title = 'CLEAR for ALL'
+        subTitle = `Clear BACKUP`
         break
       case 'COPY':
-        title = 'Confirm COPY for ALL'
-        subTitle = `Are you sure you want to Copy from BASE to BACKUP?`
+        title = 'COPY for ALL'
+        subTitle = `Copy from BASE to BACKUP`
         break
       case 'DROP':
-        title = 'Confirm DROP for ALL'
-        subTitle = `Are you sure you want to Drop BACKUP?`
+        title = 'DROP for ALL'
+        subTitle = `Drop BACKUP`
         break
       case 'TOBASE':
-        title = 'Confirm COPY for ALL to ToBase'
-        subTitle = `Are you sure you want to Copy from BACKUP to BASE?`
+        title = 'COPY for ALL to ToBase'
+        subTitle = `Copy from BACKUP to BASE`
         break
       case 'SEQRESET':
-        title = 'Confirm RESET SEQUENCE for ALL'
-        subTitle = `Are you sure you want to Reset Sequence on BASE?`
+        title = 'RESET SEQUENCE for ALL'
+        subTitle = `Reset Sequence on BASE`
         break
       case 'DOWN':
-        title = 'Confirm DOWN for ALL'
-        subTitle = `Are you sure you want to Down from BASE to (${dirPath}) ?`
+        title = 'DOWN for ALL'
+        subTitle = `Down from BASE to ${dirPath}`
         break
       case 'UPLOAD':
-        title = 'Confirm UPLOAD for ALL'
-        subTitle = `Are you sure you want to Upload from directory(${dirPath}) to BACKUP?`
+        title = 'UPLOAD for ALL'
+        subTitle = `Upload from directory ${dirPath} to BACKUP`
         break
       default:
         break
@@ -728,6 +728,10 @@ export default function Table() {
     //
     let title = ''
     let subTitle = ''
+    let line1: string | undefined
+    let line2: string | undefined
+    let line3: string | undefined
+    let line4: string | undefined
     //
     //  Get the parameters
     //
@@ -735,41 +739,64 @@ export default function Table() {
     const tablebackup = `${backupStartChar}${prefix_Z}${tablebase}`
     const tablebackup_exists = exists_Z[index]
     const tablebackup_count = tabledata_count_Z[index]
+    const tabledown = `${tablebase}.json`
+    const dirPath = `${dirPathPrefix}${dataDirectory}`
 
     switch (routine) {
       case 'DUP':
-        title = 'Confirm Duplicate'
-        subTitle = `Are you sure you want to Duplicate (${tablebase}) to (${tablebackup}) ?`
+        title = 'DUPLICATE'
+        subTitle = `Database to Backup`
+        line1 = `FROM`
+        line2 = `${tablebase}`
+        line3 = `TO`
+        line4 = `${tablebackup}`
         break
       case 'CLEAR':
-        title = 'Confirm Clear'
-        subTitle = `Are you sure you want to CLEAR (${tablebackup})?`
+        title = 'CLEAR'
+        subTitle = `Backup`
+        line1 = `${tablebackup}`
         break
       case 'COPY':
-        title = 'Confirm Copy'
-        subTitle = `Are you sure you want to Copy Data from (${tablebase}) to (${tablebackup}) ?`
+        title = 'COPY'
+        subTitle = `Database to Backup`
+        line1 = `FROM`
+        line2 = `${tablebase}`
+        line3 = `TO`
+        line4 = `${tablebackup}`
         break
       case 'DROP':
-        title = 'Confirm Drop'
-        subTitle = `Are you sure you want to DROP (${tablebackup})?`
+        title = 'DROP'
+        subTitle = `Backup`
+        line1 = `${tablebackup}`
         break
       case 'TOBASE':
-        title = 'Confirm Copy to ToBase'
-        subTitle = `Are you sure you want to Copy Data FROM (${tablebackup}) TO (${tablebase}) ?`
+        title = 'TOBASE'
+        subTitle = `Copy Backup to Database`
+        line1 = `FROM`
+        line2 = `${tablebackup}`
+        line3 = `TO`
+        line4 = `${tablebase}`
         break
       case 'SEQRESET':
-        title = 'Confirm SEQRESET of Base'
-        subTitle = `Are you sure you want to Reset Sequences on (${tablebase}) ?`
+        title = 'SEQRESET'
+        subTitle = `Database`
+        line1 = `${tablebase}`
         break
       case 'DOWN':
-        const tabledown = `${tablebase}.json`
-        const dirPath = `${dirPathPrefix}${dataDirectory}`
-        title = 'Confirm Down'
-        subTitle = `Are you sure you want to Down Data from (${tablebase}) to (${dirPath}/${tabledown}) ?`
+        title = 'DOWNLOAD'
+        subTitle = `Download in JSON format from Database to Directory`
+        line1 = `FROM`
+        line2 = `${tablebase}`
+        line3 = `TO`
+        line4 = `${dirPath}/${tabledown}`
         break
       case 'UPLOAD':
-        title = ''
-        subTitle = ''
+        title = 'UPLOAD'
+        subTitle = `Upload JSON from Directory to Backup`
+        line1 = `FROM`
+        line2 = `${dirPath}/${tabledown}`
+        line3 = `TO`
+        line4 = `${tablebackup}`
         break
       default:
         break
@@ -781,6 +808,10 @@ export default function Table() {
       isOpen: true,
       title: title,
       subTitle: subTitle,
+      line1,
+      line2,
+      line3,
+      line4,
       onConfirm: () =>
         perform_Run1({
           routine,
@@ -820,26 +851,50 @@ export default function Table() {
     try {
       switch (routine) {
         case 'DUP':
+          //
+          //  The backup table must NOT exist
+          //
           if (!tablebackup_exists) {
             return performDup(tablebase, tablebackup, many)
           }
           break
         case 'CLEAR':
+          //
+          //  The backup table MUST exist AND have records
+          //
           if (tablebackup_exists && tablebackup_count > 0) {
             return performClear(tablebackup, many)
           }
           break
         case 'COPY':
-          if (tablebackup_exists && tablebase_count > 0 && tablebackup_count === 0) {
-            performCopy(tablebase, tablebackup, many)
+          //
+          //  The TO backup table MUST exist AND the FROM have data
+          //
+          if (tablebackup_exists && tablebase_count > 0) {
+            //
+            // If TO table has data, clear it first
+            //
+            if (tablebackup_count > 0) {
+              await performClear(tablebackup, many)
+            }
+            //
+            // Then copy from base to backup
+            //
+            return performCopy(tablebase, tablebackup, many)
           }
           break
         case 'DROP':
+          //
+          //  The backup table MUST exist
+          //
           if (tablebackup_exists) {
             return performDrop(tablebackup, many)
           }
           break
         case 'TOBASE':
+          //
+          //  The TO backup table MUST exist AND have data
+          //
           if (tablebackup_exists && tablebackup_count > 0) {
             return performToBase(tablebackup, tablebase, many)
           }
@@ -847,13 +902,28 @@ export default function Table() {
         case 'SEQRESET':
           return performSeqReset(tablebase, many)
         case 'DOWN':
+          //
+          //  The Table MUST have data
+          //
           if (tablebase_count > 0) {
             const tabledown = `${tablebase}.json`
             return performDown(tablebase, tabledown, many)
           }
           break
         case 'UPLOAD':
-          if (tablebackup_count === 0) {
+          //
+          //  The TO backup table MUST exist
+          //
+          if (tablebackup_exists) {
+            //
+            // If TO backup table has data, clear it first
+            //
+            if (tablebackup_count > 0) {
+              await performClear(tablebackup, many)
+            }
+            //
+            // Upload the data
+            //
             const tableUpload = `${tablebase}.json`
             const filePath = `${dirPathPrefix}${dataDirectory}/${tableUpload}`
             return performUpload(filePath, tablebackup, many)
@@ -1327,7 +1397,7 @@ export default function Table() {
 
               {/* Upload MyButton -  */}
               <td className='text-xs px-2 py-1 text-center'>
-                {row_existsInD && row_existsInZ && row_tabledata_count_Z === 0 && (
+                {row_existsInD && row_existsInZ && (
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() =>
