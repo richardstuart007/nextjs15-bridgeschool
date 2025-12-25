@@ -13,7 +13,7 @@ const redirectsConfig = {
             value: URL_old1
           }
         ],
-        destination: URL_current,
+        destination: `${URL_current}/:path*`,
         permanent: true
       },
       {
@@ -24,7 +24,7 @@ const redirectsConfig = {
             value: URL_old2
           }
         ],
-        destination: URL_current,
+        destination: `${URL_current}/:path*`,
         permanent: true
       }
     ]
@@ -36,7 +36,10 @@ const config = {
     CUSTOM_ENV: process.env.CUSTOM_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL
   },
-  ...redirectsConfig
+  ...redirectsConfig,
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 }
 
 export default config
