@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import MaintPopup_Subject from '@/src/ui/admin/subject/maintPopup'
 import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import { table_Subject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -42,7 +42,7 @@ export default function Table() {
   const [isModelOpenAdd_subject, setIsModelOpenAdd_subject] = useState(false)
   const [selectedRow, setSelectedRow] = useState<table_Subject | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',

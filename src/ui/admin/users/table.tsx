@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import UserEditPopup from '@/src/ui/dashboard/users/maintPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -38,7 +38,7 @@ export default function Table() {
   const [selectedUser, setSelectedUser] = useState<table_Users | null>(null)
   const [selectedPwd, setSelectedPwd] = useState<table_Users | null>(null)
   const [selectedUsersowner, setSelectedUsersowner] = useState<table_Users | null>(null)
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',

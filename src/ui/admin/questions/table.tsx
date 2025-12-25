@@ -5,7 +5,7 @@ import MaintPopup_detail from '@/src/ui/admin/questions/detail/maintPopup'
 import MaintPopup_answers from '@/src/ui/admin/questions/answers/maintPopup'
 import MaintPopup_hands from '@/src/ui/admin/questions/hands/maintPopup'
 import MaintPopup_bidding from '@/src/ui/admin/questions/bidding/maintPopup'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -58,7 +58,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   const [isModelOpenEdit_bidding, setIsModelOpenEdit_bidding] = useState(false)
 
   const [selectedRow, setSelectedRow] = useState<table_Questions | null>(null)
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',

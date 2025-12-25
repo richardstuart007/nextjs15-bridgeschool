@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import { table_Usersowner } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -38,7 +38,7 @@ export default function Table({ selected_uid }: FormProps) {
   //  Maintenance
   //
   const [isModelOpenAdd, setIsModelOpenAdd] = useState(false)
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',

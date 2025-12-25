@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/who/maintPopup'
-import ConfirmDialog from '@/src/ui/utils/confirmDialog'
+import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
 import { table_Who } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -37,7 +37,7 @@ export default function Table() {
   const [isModelOpenAdd, setIsModelOpenAdd] = useState(false)
   const [selectedRow, setSelectedRow] = useState<table_Who | null>(null)
   const [message, setMessage] = useState<string | null>(null)
-  const [confirmDialog, setConfirmDialog] = useState({
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
     isOpen: false,
     title: '',
     subTitle: '',
