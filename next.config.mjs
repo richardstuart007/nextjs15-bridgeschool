@@ -36,10 +36,7 @@ const config = {
     CUSTOM_ENV: process.env.CUSTOM_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL
   },
-  ...redirectsConfig,
-  eslint: {
-    ignoreDuringBuilds: true
-  }
+  ...redirectsConfig
 }
 
 export default config

@@ -10,7 +10,7 @@ import {
 } from '@/src/root/validroutes'
 import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 
-export default async function middleware(req: any): Promise<any> {
+export default async function proxy(req: any): Promise<any> {
   const functionName = 'middleware'
   const { nextUrl } = req
   //
