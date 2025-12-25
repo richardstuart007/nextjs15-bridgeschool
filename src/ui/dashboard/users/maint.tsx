@@ -75,7 +75,6 @@ export default function Form_User({ admin_uid }: Props) {
       formState.databaseUpdated = false
       setShouldFetchData(true)
     }
-    // eslint-disable-next-line
   }, [formState.databaseUpdated])
   //......................................................................................
   //  Get the UID
@@ -97,7 +96,6 @@ export default function Form_User({ admin_uid }: Props) {
         setShouldFetchData(true)
       }
     }
-    // eslint-disable-next-line
   }, [sessionContext, us_usid])
   //......................................................................................
   //  Get user info
@@ -107,7 +105,6 @@ export default function Form_User({ admin_uid }: Props) {
       fetchdata()
       setShouldFetchData(false)
     }
-    // eslint-disable-next-line
   }, [shouldFetchData, us_usid])
   //----------------------------------------------------------------------------------------------
   // fetchdata

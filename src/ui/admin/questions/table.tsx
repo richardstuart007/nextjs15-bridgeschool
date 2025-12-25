@@ -81,7 +81,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, selected_sbid, owner, subject, detail, rfid, rfid_cmp])
   //----------------------------------------------------------------------------------------------
   // fetchdata

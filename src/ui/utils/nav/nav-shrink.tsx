@@ -21,7 +21,6 @@ export default function NavShrink() {
     if (sessionContext?.cx_shrink) {
       setshrink(sessionContext?.cx_shrink)
     }
-    // eslint-disable-next-line
   }, [])
   //......................................................................................
   // Change text size
@@ -34,7 +33,6 @@ export default function NavShrink() {
       ...prev,
       cx_shrink: shrink
     }))
-    // eslint-disable-next-line
   }, [shrink])
   //----------------------------------------------------------------------------------------------
   // Data loaded

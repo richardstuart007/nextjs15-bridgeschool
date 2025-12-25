@@ -61,7 +61,6 @@ export default function Table({ selected_uid }: FormProps) {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, uid, owner])
   //----------------------------------------------------------------------------------------------
   // fetchdata

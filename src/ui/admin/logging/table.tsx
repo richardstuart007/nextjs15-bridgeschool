@@ -91,7 +91,6 @@ export default function Table() {
     fetchdata()
     setShouldFetchData(false)
     setMessage('')
-    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, debouncedState])
   //----------------------------------------------------------------------------------------------
   // fetchdata

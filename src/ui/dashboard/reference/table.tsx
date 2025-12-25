@@ -100,7 +100,6 @@ export default function Table_Reference({
     } else {
       setshrink_Text('text-xxs md:text-xs')
     }
-    // eslint-disable-next-line
   }, [sessionContext])
   //......................................................................................
   //  Initilaisation - after context usid
@@ -128,7 +127,6 @@ export default function Table_Reference({
     //  Initialise the data when USID set
     //
     if (ref_selected_cx_usid.current > 0) initialize()
-    // eslint-disable-next-line
   }, [ref_selected_cx_usid.current])
   //......................................................................................
   // Debounce selection
@@ -236,7 +234,6 @@ export default function Table_Reference({
     //
     //  Values to debounce
     //
-    // eslint-disable-next-line
   }, [owner, subject, ref, desc, who, questions, type, currentPage, initialisationCompleted])
   //----------------------------------------------------------------------------------------------
   //  Update the columns based on screen width

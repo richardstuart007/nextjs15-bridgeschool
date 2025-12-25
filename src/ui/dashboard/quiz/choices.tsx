@@ -25,7 +25,6 @@ export default function QuizChoice(props: QuizChoiceProps): JSX.Element {
   //
   useEffect(() => {
     loadChoices()
-    // eslint-disable-next-line
   }, [question])
   //...................................................................................
   //  Load the Choices

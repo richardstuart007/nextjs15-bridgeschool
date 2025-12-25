@@ -61,7 +61,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   useEffect(() => {
     buildbidding_value()
-    // eslint-disable-next-line
   }, [record])
   //
   // Close the popup if the update was successful

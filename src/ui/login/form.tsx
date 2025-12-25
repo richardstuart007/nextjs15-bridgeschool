@@ -50,7 +50,6 @@ export default function LoginForm() {
   //
   useEffect(() => {
     deleteCookieServer_co_ssid()
-    // eslint-disable-next-line
   }, [])
   //-------------------------------------------------------------------------
   //  Login MyButton

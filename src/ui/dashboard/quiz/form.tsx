@@ -42,7 +42,6 @@ export default function Form_Quiz(props: QuestionsFormProps) {
   //
   useEffect(() => {
     initializeData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   //
   //  State variables

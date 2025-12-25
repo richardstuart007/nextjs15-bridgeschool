@@ -36,7 +36,6 @@ export default function NavSide(props: Props) {
   //
   useEffect(() => {
     getSessionInfo()
-    // eslint-disable-next-line
   }, [])
   //--------------------------------------------------------------------------------
   //  Session Info
@@ -81,7 +80,6 @@ export default function NavSide(props: Props) {
   //......................................................................................
   useEffect(() => {
     setshrink(sessionContext.cx_shrink)
-    // eslint-disable-next-line
   }, [sessionContext])
   //--------------------------------------------------------------------------------
   const overrideClass_logoff = [

@@ -11,7 +11,6 @@ export default function Page() {
 
   useEffect(() => {
     deleteCookieServer_co_ssid()
-    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {

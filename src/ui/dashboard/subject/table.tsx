@@ -107,7 +107,6 @@ export default function Table_Subject() {
     //  Call the async function
     //
     initialiseData()
-    // eslint-disable-next-line
   }, [sessionContext])
   //......................................................................................
   // Debounce selection
@@ -197,7 +196,6 @@ export default function Table_Subject() {
     return () => {
       clearTimeout(handler)
     }
-    // eslint-disable-next-line
   }, [owner, subject, cntquestions, cntreference, currentPage, initialisationCompleted])
   //----------------------------------------------------------------------------------------------
   // fetch Owner for a user

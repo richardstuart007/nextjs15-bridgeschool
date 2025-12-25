@@ -21,7 +21,6 @@ export default function NavDev() {
     if (sessionContext?.cx_detail) {
       setdetail(sessionContext?.cx_detail)
     }
-    // eslint-disable-next-line
   }, [])
   //......................................................................................
   // Change text size
@@ -34,7 +33,6 @@ export default function NavDev() {
       ...prev,
       cx_detail: detail
     }))
-    // eslint-disable-next-line
   }, [detail])
   //----------------------------------------------------------------------------------------------
   // Data loaded

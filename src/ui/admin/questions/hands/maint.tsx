@@ -52,7 +52,6 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   useEffect(() => {
     buildhand_value()
-    // eslint-disable-next-line
   }, [record])
   //
   // Close the popup if the update was successful

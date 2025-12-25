@@ -81,7 +81,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, owner, subject, who, type, ref, desc, questions])
   //----------------------------------------------------------------------------------------------
   // fetchdata

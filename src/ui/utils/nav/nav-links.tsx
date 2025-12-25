@@ -42,7 +42,6 @@ export default function NavLinks(props: Props) {
       ? (linksupdate = links_admin)
       : (linksupdate = si_admin ? links_dashboard.concat(links_dashboard_admin) : links_dashboard)
     setLinks(linksupdate)
-    // eslint-disable-next-line
   }, [])
   //--------------------------------------------------------------------------------
   //

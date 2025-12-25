@@ -81,7 +81,6 @@ export default function Table() {
       setTableDataCountFn: settabledata_count,
       setTotalPagesFn: setTotalPages
     })
-    // eslint-disable-next-line
   }, [currentPage])
   //----------------------------------------------------------------------------------------------
   //  Fetch tables & update counts/exist

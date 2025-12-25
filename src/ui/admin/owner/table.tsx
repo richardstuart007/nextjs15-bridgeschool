@@ -59,7 +59,6 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-    // eslint-disable-next-line
   }, [currentPage, shouldFetchData, owner])
   //----------------------------------------------------------------------------------------------
   // fetchdata

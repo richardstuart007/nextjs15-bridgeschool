@@ -136,7 +136,6 @@ export default function Table_History() {
     //  Call the async function
     //
     initialiseData()
-    // eslint-disable-next-line
   }, [sessionContext])
   //......................................................................................
   // Debounce selection
@@ -251,7 +250,6 @@ export default function Table_History() {
     return () => {
       clearTimeout(handler)
     }
-    // eslint-disable-next-line
   }, [
     usid,
     name,

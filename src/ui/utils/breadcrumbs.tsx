@@ -28,7 +28,6 @@ export default function Breadcrumbs() {
   //......................................................................................
   useEffect(() => {
     setshrink(sessionContext.cx_shrink)
-    // eslint-disable-next-line
   }, [sessionContext])
   //......................................................................................
   //  Get Parent Record
