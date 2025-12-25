@@ -8,7 +8,6 @@
     "locallocalprod": "set PORT=3000 && copy /Y .env.locallocalprod .env && next dev",
     "localdev": "set PORT=3001 && copy /Y .env.localdev .env && next dev",
     "localprod": "set PORT=3002 && copy /Y .env.localproduction .env && next dev",
-    "lint": "eslint .",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown ."
   },

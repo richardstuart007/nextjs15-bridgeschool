@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
@@ -172,8 +171,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {/* Row Label */}
           {/*  ...................................................................................*/}
           {['1', '2', '3', '4', '5', '6', '7'].map((label, rowIndex) => (
-            <React.Fragment key={`row-${rowIndex}`}>
-              <div className='flex items-center justify-center font-bold'>{label}</div>
+            <>
+              <div className='flex items-center justify-center font-bold' key={`row-${rowIndex}`}>
+                {label}
+              </div>
               {Array.from({ length: 4 }).map((_, colIndex) => {
                 const inputName = bidding_names[
                   rowIndex * 4 + colIndex
@@ -188,16 +189,15 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                       onChange={handleInputChange}
                       overrideClass='w-full p-2 border border-gray-300 rounded-md'
                     />
-                    {/* Dynamic Error Handling */}
                     <div id={`${inputName}-error`} aria-live='polite' aria-atomic='true'>
                       {formState.errors?.[inputName] && (
-                        <p className='mt-2 text-xs  text-red-500'>{formState.errors[inputName]}</p>
+                        <p className='mt-2 text-xs text-red-500'>{formState.errors[inputName]}</p>
                       )}
                     </div>
                   </div>
                 )
               })}
-            </React.Fragment>
+            </>
           ))}
         </div>
         {/*  ...................................................................................*/}

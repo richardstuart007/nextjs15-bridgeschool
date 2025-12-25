@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import React, { useState, useEffect, useActionState } from 'react'
+import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
@@ -180,8 +180,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {/* Row Label */}
           {/*  ...................................................................................*/}
           {['North', 'East', 'South', 'West'].map((label, rowIndex) => (
-            <React.Fragment key={label}>
-              <div className='flex items-center justify-center font-bold'>{label}</div>
+            <>
+              <div className='flex items-center justify-center font-bold' key={label}>
+                {label}
+              </div>
               {/*  ...................................................................................*/}
               {/* Row of Inputs */}
               {/*  ...................................................................................*/}
@@ -208,7 +210,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                   </div>
                 )
               })}
-            </React.Fragment>
+            </>
           ))}
         </div>
 
