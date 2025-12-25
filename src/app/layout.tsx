@@ -1,4 +1,5 @@
 import '@/src/root/global.css'
+export const dynamic = 'force-dynamic'
 import { inter } from '@/src/root/fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'

@@ -1,27 +1,26 @@
-import { defineConfig } from "eslint/config";
-import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import unusedImports from "eslint-plugin-unused-imports";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals.js' // Note the .js extension
+import unusedImports from 'eslint-plugin-unused-imports'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export default [
+  // Spread the Next.js core-web-vitals rules directly
+  ...nextCoreWebVitals,
 
-export default defineConfig([{
-    extends: [...nextCoreWebVitals],
-
+  {
     plugins: {
-        "unused-imports": unusedImports,
+      'unused-imports': unusedImports
     },
 
     rules: {
-        "unused-imports/no-unused-imports": "error",
-
-        "unused-imports/no-unused-vars": ["warn", {
-            vars: "all",
-            varsIgnorePattern: "^_",
-            args: "after-used",
-            argsIgnorePattern: "^_",
-        }],
-    },
-}]);
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          varsIgnorePattern: '^_',
+          args: 'after-used',
+          argsIgnorePattern: '^_'
+        }
+      ]
+    }
+  }
+]
