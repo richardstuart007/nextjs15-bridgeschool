@@ -5,6 +5,7 @@ import { signIn } from '@/auth'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import bcrypt from 'bcryptjs'
+import { Default_owner, Default_fedcountry } from '@/src/root/constants_other'
 // ----------------------------------------------------------------------
 //  Register
 // ----------------------------------------------------------------------
@@ -80,7 +81,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   const us_joined = UTC_datetime
   const us_fedid = ''
   const us_admin = false
-  const us_fedcountry = 'ZZ'
+  const us_fedcountry = Default_fedcountry
   const us_provider = provider
   const userRecords = await table_write({
     caller: functionName,
@@ -119,7 +120,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   //  Write the usersowner data
   //
   const uo_usid = userRecord.us_usid
-  const uo_owner = 'Richard'
+  const uo_owner = Default_owner
   await table_write({
     caller: functionName,
     table: 'tuo_usersowner',

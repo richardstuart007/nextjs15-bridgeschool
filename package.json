@@ -50,7 +50,7 @@
   "description": "Bridge School",
   "version": "4.0.0",
   "main": "next.config.js",
-  "author": "Richard",
+  "author": "Richard Stuart",
   "license": "ISC",
   "overrides": {
     "@types/react": "19.2.7",

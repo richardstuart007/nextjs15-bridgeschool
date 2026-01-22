@@ -1,10 +1,10 @@
 import '@/src/root/global.css'
 export const dynamic = 'force-dynamic'
-import { inter } from '@/src/root/fonts'
+import { inter } from '@/src/root/constants_fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { URL_current } from '@/src/root/URLconstants'
+import { URL_current } from '@/src/root/constants_URL'
 import dotenv from 'dotenv'
 //
 //  Metadata
