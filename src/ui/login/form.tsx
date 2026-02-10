@@ -9,15 +9,14 @@ import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/utils/myInput'
+import { LoadingMessage } from '@/src/ui/utils/loadingMessage'
 
 export default function LoginForm() {
-  //
-  //  Router
-  //
   const router = useRouter()
-  //
-  // Define the StateSession type
-  //
+
+  // -------------------------------------------------------------------------
+  //  STATE DECLARATIONS
+  // -------------------------------------------------------------------------
   type actionState = {
     errors?: {
       email?: string[]
@@ -25,9 +24,7 @@ export default function LoginForm() {
     }
     message?: string | null
   }
-  //
-  // Initialize the form state with default empty errors object
-  //
+
   const initialState: actionState = {
     errors: {},
     message: null
@@ -35,63 +32,83 @@ export default function LoginForm() {
   const [formState, formAction] = useActionState(action, initialState)
 
   const errorMessage = formState?.message || null
-  //
-  // Local state to manage submitting status
-  //
   const [submitting, setSubmitting] = useState(false)
-  //
-  //  Error message on submission
-  //
-  useEffect(() => {
-    if (errorMessage) setSubmitting(false)
-  }, [errorMessage])
-  //
-  //  One time only
-  //
-  useEffect(() => {
-    deleteCookieServer_co_ssid()
-  }, [])
-  //-------------------------------------------------------------------------
-  //  Login MyButton
-  //-------------------------------------------------------------------------
-  function LoginMyButton() {
-    return (
-      <MyButton overrideClass='mt-4 w-full flex justify-center' disabled={submitting} type='submit'>
-        {submitting ? 'Logging In...' : 'Login'}
-      </MyButton>
-    )
-  }
-  //-------------------------------------------------------------------------
-  //  Go to Register
-  //-------------------------------------------------------------------------
-  function RegisterMyButton() {
-    return (
-      <MyButton
-        overrideClass='mt-4 w-full flex items-center justify-center bg-gray-700 text-white border-none shadow-none hover:bg-gray-900'
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          event.preventDefault()
-          router.push('/register')
-        }}
-      >
-        Not Registered yet? Click here
-      </MyButton>
-    )
-  }
-  //-------------------------------------------------------------------------
-  //  Handle Login
-  //-------------------------------------------------------------------------
+
+  // -------------------------------------------------------------------------
+  //  EVENT HANDLERS
+  // -------------------------------------------------------------------------
   const onSubmit_login = () => {
     setSubmitting(true)
     if (formState) formState.message = null
   }
-  //--------------------------------------------------------------------------------
-  return (
-    <form action={formAction} className='space-y-3' onSubmit={onSubmit_login}>
-      <div className='flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8'>
-        <h1 className={`${lusitana.className} mb-3 text-2xl  text-orange-500`}>Login</h1>
-        {/* -------------------------------------------------------------------------------- */}
-        {/* email   */}
-        {/* -------------------------------------------------------------------------------- */}
+
+  // -------------------------------------------------------------------------
+  //  EFFECTS
+  // -------------------------------------------------------------------------
+
+  // Handle successful login redirect
+  useEffect(() => {
+    if (formState?.message === 'LOGIN_SUCCESS') {
+      setSubmitting(false)
+      router.push('/dashboard')
+    }
+  }, [formState, router])
+
+  useEffect(() => {
+    if (errorMessage) {
+      setSubmitting(false)
+    }
+  }, [errorMessage])
+
+  useEffect(() => {
+    deleteCookieServer_co_ssid()
+  }, [])
+
+  // -------------------------------------------------------------------------
+  //  FINAL RETURN
+  // -------------------------------------------------------------------------
+  return renderForm()
+
+  // -------------------------------------------------------------------------
+  //  renderForm - Returns the complete form JSX (TOP LEVEL)
+  // -------------------------------------------------------------------------
+  function renderForm() {
+    return (
+      <form action={formAction} className='space-y-3' onSubmit={onSubmit_login}>
+        <div className='flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8'>
+          <h1 className={`${lusitana.className} mb-3 text-2xl text-orange-500`}>
+            {submitting ? 'Logging In...' : 'Login'}
+          </h1>
+
+          {renderContent()}
+        </div>
+      </form>
+    )
+  }
+  // -------------------------------------------------------------------------
+  //  renderContent - Returns the main content based on submitting state
+  // -------------------------------------------------------------------------
+  function renderContent() {
+    if (submitting) {
+      return (
+        <LoadingMessage message1='Please wait..' message2='Signin in progress'></LoadingMessage>
+      )
+    }
+
+    return (
+      <>
+        {renderCredentials()}
+        <Socials setSubmitting={setSubmitting} />
+        {renderRegisterButton()}
+      </>
+    )
+  }
+  // -------------------------------------------------------------------------
+  //  renderCredentials - Returns credentials form JSX
+  // -------------------------------------------------------------------------
+  function renderCredentials() {
+    return (
+      <>
         <div>
           <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='email'>
             Email
@@ -104,13 +121,10 @@ export default function LoginForm() {
               name='email'
               placeholder='Enter your email address'
               autoComplete='email'
-              disabled={submitting}
             />
           </div>
         </div>
-        {/* -------------------------------------------------------------------------------- */}
-        {/* password                                                                         */}
-        {/* -------------------------------------------------------------------------------- */}
+
         <div className='mt-4'>
           <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='password'>
             Password
@@ -123,13 +137,10 @@ export default function LoginForm() {
               name='password'
               placeholder='Enter password'
               autoComplete='current-password'
-              disabled={submitting}
             />
           </div>
         </div>
-        {/* -------------------------------------------------------------------------------- */}
-        {/* Errors                                                */}
-        {/* -------------------------------------------------------------------------------- */}
+
         <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
           {errorMessage && (
             <>
@@ -138,13 +149,27 @@ export default function LoginForm() {
             </>
           )}
         </div>
-        {/* -------------------------------------------------------------------------------- */}
-        {/* buttons */}
-        {/* -------------------------------------------------------------------------------- */}
-        <LoginMyButton />
-        {!submitting && <Socials />}
-        {!submitting && <RegisterMyButton />}
-      </div>
-    </form>
-  )
+
+        <MyButton overrideClass='mt-4 w-full flex justify-center' type='submit'>
+          Login
+        </MyButton>
+      </>
+    )
+  }
+  // -------------------------------------------------------------------------
+  //  renderRegisterButton - Returns register button JSX
+  // -------------------------------------------------------------------------
+  function renderRegisterButton() {
+    return (
+      <MyButton
+        overrideClass='mt-4 w-full flex items-center justify-center bg-gray-700 text-white border-none shadow-none hover:bg-gray-900'
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          event.preventDefault()
+          router.push('/register')
+        }}
+      >
+        Not Registered yet? Click here
+      </MyButton>
+    )
+  }
 }

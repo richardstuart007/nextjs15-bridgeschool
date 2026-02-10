@@ -179,7 +179,10 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {/* Row Label */}
           {/*  ...................................................................................*/}
           {['North', 'East', 'South', 'West'].map((label, rowIndex) => (
-            <>
+            <div
+              key={label}
+              className='contents' // ← very important!
+            >
               <div className='flex items-center justify-center font-bold' key={label}>
                 {label}
               </div>
@@ -209,10 +212,9 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                   </div>
                 )
               })}
-            </>
+            </div>
           ))}
         </div>
-
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}
         {/*  ...................................................................................*/}

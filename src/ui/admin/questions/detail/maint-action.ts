@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import validate from '@/src/ui/admin/questions/detail/maint-validate'
+import maint_detail_validate from '@/src/ui/admin/questions/detail/maint-validate'
 import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
@@ -19,15 +19,14 @@ const FormSchemaSetup = z.object({
   qq_owner: z.string(),
   qq_subject: z.string(),
   qq_detail: z.string(),
-  qq_help: z.string()
+  qq_help: z.string(),
+  qq_rfid: z.string()
 })
 //
 //  Errors and Messages
 //
 export type StateSetup = {
   errors?: {
-    qq_owner?: string[]
-    qq_subject?: string[]
     qq_detail?: string[]
     qq_rfid?: string[]
   }
@@ -37,7 +36,7 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function Maint_detail(
+export async function Maint_detail_action(
   _prevState: StateSetup,
   formData: FormData
 ): Promise<StateSetup> {
@@ -49,6 +48,7 @@ export async function Maint_detail(
     qq_owner: formData.get('qq_owner'),
     qq_subject: formData.get('qq_subject'),
     qq_detail: formData.get('qq_detail'),
+    qq_rfid: formData.get('qq_rfid'),
     qq_help: formData.get('qq_help')
   })
   //
@@ -63,6 +63,7 @@ export async function Maint_detail(
   //
   // Unpack form data
   //
+
   const { qq_owner, qq_subject, qq_detail, qq_help } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
@@ -85,7 +86,7 @@ export async function Maint_detail(
     qq_seq: qq_seq,
     qq_rfid: qq_rfid
   }
-  const errorMessages = await validate(Table)
+  const errorMessages = await maint_detail_validate(Table)
   if (errorMessages.message) {
     return {
       errors: errorMessages.errors,
