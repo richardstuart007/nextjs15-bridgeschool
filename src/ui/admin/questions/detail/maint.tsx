@@ -3,7 +3,7 @@ import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { useFormStatus } from 'react-dom'
-import { Maint_detail } from '@/src/ui/admin/questions/detail/maint-action'
+import { Maint_detail_action } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -26,7 +26,7 @@ export default function Form({
   shouldCloseOnUpdate = true
 }: FormProps) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useActionState(Maint_detail, initialState)
+  const [formState, formAction] = useActionState(Maint_detail_action, initialState)
   //
   //  State and Initial values
   //
@@ -38,6 +38,9 @@ export default function Form({
   const [qq_subject, setqq_subject] = useState<string | number>(
     questionRecord?.qq_subject || selected_subject || ''
   )
+  //
+  //  Entered Values
+  //
   const [qq_sbid, setqq_sbid] = useState(questionRecord?.qq_sbid || 0)
   const [qq_detail, setqq_detail] = useState(questionRecord?.qq_detail || '')
   const [qq_help, setqq_help] = useState(questionRecord?.qq_help || '')
@@ -256,14 +259,16 @@ export default function Form({
             overrideClass_Dropdown='w-96'
             includeBlank={false}
           />
-          <div id='error-qq_rfid' aria-live='polite' aria-atomic='true'>
-            {formState.errors?.qq_rfid &&
-              formState.errors.qq_rfid.map((error: string) => (
-                <p className='pt-2 text-xs  text-red-500' key={error}>
-                  {error}
-                </p>
-              ))}
-          </div>
+          <MyInput id='qq_rfid' type='hidden' name='qq_rfid' value={qq_rfid} />
+        </div>
+
+        <div id='error-qq_rfid' aria-live='polite' aria-atomic='true'>
+          {formState.errors?.qq_rfid &&
+            formState.errors.qq_rfid.map((error: string) => (
+              <p className='pt-2 text-xs  text-red-500' key={error}>
+                {error}
+              </p>
+            ))}
         </div>
         {/*  ...................................................................................*/}
         {/*  Help  */}

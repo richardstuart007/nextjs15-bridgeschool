@@ -8,15 +8,14 @@ const config: Config = {
         '13': 'repeat(13, minmax(0, 1fr))'
       },
       colors: {
-        // blue: {
-        //   400: '#2589FE',
-        //   500: '#0070F3',
-        //   600: '#2F6FEB',
-        // },
+        'sand-light': '#FBBF24',
+        'sand-dark': '#F59E0B',
+        'glass-light': '#E5E7EB',
+        'glass-dark': '#9CA3AF'
       },
       fontSize: {
-        xxs: '0.625rem', // Custom extra-extra-small size (10px)
-        xxx: '0.5rem' // Custom xxx-small size (8px)
+        xxs: '0.625rem',
+        xxx: '0.5rem'
       }
     },
     keyframes: {
@@ -24,7 +23,15 @@ const config: Config = {
         '100%': {
           transform: 'translateX(100%)'
         }
+      },
+      flip: {
+        '0%, 100%': { transform: 'rotateY(0deg)' },
+        '50%': { transform: 'rotateY(180deg)' }
       }
+    },
+    animation: {
+      flip: 'flip 2s ease-in-out infinite',
+      pulse: 'pulse 1.5s ease-in-out infinite'
     }
   },
   plugins: [require('@tailwindcss/forms')]

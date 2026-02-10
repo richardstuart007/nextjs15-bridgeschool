@@ -21,7 +21,7 @@ type Table = {
   qq_seq: number
   qq_rfid: number
 }
-export default async function validate(record: Table): Promise<StateSetup> {
+export default async function maint_detail_validate(record: Table): Promise<StateSetup> {
   const { qq_qqid, qq_owner, qq_subject, qq_seq, qq_rfid } = record
   //
   // Initialise errors return

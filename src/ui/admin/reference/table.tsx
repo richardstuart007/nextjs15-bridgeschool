@@ -267,7 +267,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
                 Subject
               </th>
               <th scope='col' className='text-xs   px-2'>
-                Lid
+                rfid
               </th>
               <th scope='col' className='text-xs   px-2'>
                 Ref

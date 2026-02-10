@@ -5,20 +5,28 @@ import { FaGithub } from 'react-icons/fa'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { Routes_AfterLogin_redirect } from '@/src/root/constants_validroutes'
 
-export default function Socials() {
+interface SocialsProps {
+  setSubmitting: (submitting: boolean) => void
+}
+
+export default function Socials({ setSubmitting }: SocialsProps) {
   const NEXT_PUBLIC_APPENV_ISDEV = process.env.NEXT_PUBLIC_APPENV_ISDEV === 'true'
-  //
-  //  Signin using provider
-  //
+
   const signInProvider = (
     provider: 'google' | 'github',
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault()
+
+    // Update parent state directly
+    setSubmitting(true)
+
+    // Proceed with OAuth
     signIn(provider, {
       callbackUrl: Routes_AfterLogin_redirect
     })
   }
+
   return (
     <>
       <label className='mb-0 mt-9 block text-xs font-medium text-gray-900' htmlFor='email'>
