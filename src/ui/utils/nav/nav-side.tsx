@@ -64,14 +64,12 @@ export default function NavSide(props: Props) {
     //
     if (au_ssid) {
       const SessionInfo = await fetchSessionInfo({ caller: functionName })
-      const structure_ContextInfo = {
+      setSessionContext(prev => ({
+        ...prev,
         cx_usid: SessionInfo.si_usid,
         cx_ssid: SessionInfo.si_ssid,
-        cx_dbName: dbName,
-        cx_shrink: false,
-        cx_detail: false
-      }
-      setSessionContext(structure_ContextInfo)
+        cx_dbName: dbName
+      }))
       setSessionInfo(SessionInfo)
     }
   }

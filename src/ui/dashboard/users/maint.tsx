@@ -59,7 +59,7 @@ export default function Form_User({ admin_uid }: Props) {
   const [us_maxquestions, setus_maxquestions] = useState<number>(0)
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
   const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
-  const [us_admin, setus_admin] = useState<boolean>(!!admin_uid)
+  const [us_admin, setus_admin] = useState<boolean>(false)
   const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
     []
   )
@@ -96,7 +96,7 @@ export default function Form_User({ admin_uid }: Props) {
         setShouldFetchData(true)
       }
     }
-  }, [sessionContext, us_usid])
+  }, [sessionContext, admin_uid])
   //......................................................................................
   //  Get user info
   //......................................................................................
@@ -348,7 +348,7 @@ export default function Form_User({ admin_uid }: Props) {
         {/*  ...................................................................................*/}
         {/*   Toggle - Admin */}
         {/*  ...................................................................................*/}
-        {admin_uid && (
+        {admin_uid ? (
           <div className='mt-4 flex items-center justify-end w-72'>
             <div className='mr-auto block text-xs font-medium text-gray-900'>Admin</div>
             <MyCheckbox
@@ -358,6 +358,8 @@ export default function Form_User({ admin_uid }: Props) {
               onChange={() => setus_admin(prev => !prev)}
             />
           </div>
+        ) : (
+          <MyInput type='hidden' name='us_admin' value={us_admin ? 'true' : 'false'} />
         )}
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}

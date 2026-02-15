@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyLink } from '@/src/ui/utils/myLink'
+import { usePathname } from 'next/navigation'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import {
   links_dashboard,
@@ -20,6 +21,10 @@ export default function NavLinks(props: Props) {
   //
   const { baseURL, sessionInfo, shrink } = props
   const { si_admin } = sessionInfo
+  //
+  //  Current path
+  //
+  const pathname = usePathname()
   //
   // Define the Link type
   //
@@ -41,8 +46,12 @@ export default function NavLinks(props: Props) {
     baseURL === 'admin'
       ? (linksupdate = links_admin)
       : (linksupdate = si_admin ? links_dashboard.concat(links_dashboard_admin) : links_dashboard)
-    setLinks(linksupdate)
-  }, [])
+    //
+    //  Remove current page link
+    //
+    const filtered = linksupdate.filter(link => link.href !== pathname)
+    setLinks(filtered)
+  }, [baseURL, si_admin, pathname])
   //--------------------------------------------------------------------------------
   //
   //  Button

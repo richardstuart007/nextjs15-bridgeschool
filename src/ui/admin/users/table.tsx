@@ -27,6 +27,7 @@ export default function Table() {
   const [email, setemail] = useState('')
   const [fedid, setfedid] = useState('')
   const [provider, setprovider] = useState('')
+  const [admin, setadmin] = useState('')
   const [country, setcountry] = useState<number | string>('')
   const [currentPage, setcurrentPage] = useState(1)
 
@@ -67,7 +68,7 @@ export default function Table() {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-  }, [currentPage, shouldFetchData, name, email, fedid, provider, country])
+  }, [currentPage, shouldFetchData, name, email, fedid, admin, provider, country])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -79,6 +80,7 @@ export default function Table() {
       { column: 'us_name', value: name, operator: 'LIKE' },
       { column: 'us_email', value: email, operator: 'LIKE' },
       { column: 'us_fedid', value: fedid, operator: 'LIKE' },
+      { column: 'us_admin', value: admin, operator: '=' },
       { column: 'us_provider', value: provider, operator: 'LIKE' },
       { column: 'us_fedcountry', value: country, operator: 'LIKE' }
     ]
@@ -327,7 +329,28 @@ export default function Table() {
                   }}
                 />
               </th>
-              <th scope='col' className='text-xs  px-2'></th>
+              {/* ................................................... */}
+              {/* admin                                         */}
+              {/* ................................................... */}
+              <th scope='col' className='text-xs  px-2 text-center'>
+                <label htmlFor='ref' className='sr-only'>
+                  Admin
+                </label>
+                <MyInput
+                  id='admin'
+                  name='admin'
+                  overrideClass={`w-8   py-2  `}
+                  maxLength={1}
+                  type='text'
+                  value={admin}
+                  onChange={e => {
+                    const value = e.target.value.toUpperCase()
+                    if (value === '' || value === 'Y') {
+                      setadmin(value)
+                    }
+                  }}
+                />
+              </th>
               {/* ................................................... */}
               {/* country                                                 */}
               {/* ................................................... */}
