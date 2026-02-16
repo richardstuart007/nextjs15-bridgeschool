@@ -2,6 +2,7 @@
 import Table from '@/src/ui/admin/backup/table'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 const title = 'Backuptable'
 export const metadata: Metadata = {
@@ -13,8 +14,10 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
-      <Table />
+      <Suspense>
+        <Breadcrumbs />
+        <Table />
+      </Suspense>
     </div>
   )
 }
