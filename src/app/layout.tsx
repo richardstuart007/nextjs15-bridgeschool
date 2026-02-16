@@ -1,5 +1,5 @@
 import '@/src/root/global.css'
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 import { inter } from '@/src/root/constants_fonts'
 import { Metadata } from 'next'

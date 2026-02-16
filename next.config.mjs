@@ -32,6 +32,7 @@ const redirectsConfig = {
 }
 
 const config = {
+  cacheComponents: true,
   env: {
     CUSTOM_ENV: process.env.CUSTOM_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL

@@ -21,6 +21,8 @@ interface fetch_TopResultsProps {
 }
 
 export async function fetch_TopResults({ caller }: fetch_TopResultsProps) {
+  'use cache'
+  console.log(`[CACHE] fetch_TopResults called by ${caller}`)
   const functionName = 'fetch_TopResults'
 
   try {
@@ -103,6 +105,8 @@ interface fetch_RecentResults1Props {
 }
 
 export async function fetch_RecentResults1({ caller }: fetch_RecentResults1Props) {
+  'use cache'
+  console.log(`[CACHE] fetch_RecentResults1 called by ${caller}`)
   const functionName = 'fetch_RecentResults1'
 
   try {
@@ -168,6 +172,8 @@ interface AveragesProps {
 }
 
 export async function fetch_RecentResultsAverages({ userIds, caller }: AveragesProps) {
+  'use cache'
+  console.log(`[CACHE] fetch_RecentResultsAverages called by ${caller}`)
   const functionName = 'fetch_RecentResultsAverages'
 
   try {
@@ -238,6 +244,8 @@ interface UserAverageProps {
 }
 
 export async function fetch_UserAverage({ userId, caller }: UserAverageProps) {
+  'use cache'
+  console.log(`[CACHE] fetch_UserAverage called by ${caller}`)
   const functionName = 'fetch_UserAverage'
 
   try {
@@ -287,6 +295,8 @@ interface RecentUserResultsProps {
   caller: string
 }
 export async function fetch_UserResults({ userId, caller }: RecentUserResultsProps) {
+  'use cache'
+  console.log(`[CACHE] fetch_UserResults called by ${caller}`)
   const functionName = 'fetch_UserResults'
 
   try {

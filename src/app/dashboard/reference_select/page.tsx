@@ -1,6 +1,4 @@
 import Table from '@/src/ui/dashboard/reference/table'
-import { Suspense } from 'react'
-import { TableSkeleton } from '@/src/ui/dashboard/reference/skeleton'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
 
@@ -29,9 +27,7 @@ export default async function Page({
   return (
     <div className='w-full md:p-6'>
       <Breadcrumbs />
-      <Suspense fallback={<TableSkeleton />}>
-        <Table selected_sbsbid={selected_sbsbid} />
-      </Suspense>
+      <Table selected_sbsbid={selected_sbsbid} />
     </div>
   )
 }

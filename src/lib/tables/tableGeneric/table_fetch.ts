@@ -3,7 +3,10 @@
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
-import { TABLES } from '@/src/root/constants_tables'
+import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants_tables'
+//----------------------------------------------------------------------------------
+//  Main function
+//----------------------------------------------------------------------------------
 //
 // Props
 //
@@ -25,10 +28,57 @@ export async function table_fetch({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
+  //
+  // Decide whether this call should use caching (based on table)
+  //
+  if (CACHED_TABLES.has(table as TableName)) {
+    return _cachedFetch({
+      caller,
+      table,
+      whereColumnValuePairs,
+      orderBy,
+      distinct,
+      columns,
+      limit
+    })
+  }
+  //
+  // Non-cached path
+  //
+  return _runQuery({
+    caller,
+    table,
+    whereColumnValuePairs,
+    orderBy,
+    distinct,
+    columns,
+    limit
+  })
+}
+//----------------------------------------------------------------------------------
+// Cached execution path – used only for tables in CACHED_TABLES
+//----------------------------------------------------------------------------------
+async function _cachedFetch(props: table_fetch_Props): Promise<any[]> {
+  'use cache'
+  console.log(`[CACHED] table_fetch → ${props.table}  (caller: ${props.caller})`)
+  return _runQuery(props)
+}
+//----------------------------------------------------------------------------------
+// Run the query
+//----------------------------------------------------------------------------------
+async function _runQuery({
+  caller,
+  table,
+  whereColumnValuePairs,
+  orderBy,
+  distinct = false,
+  columns,
+  limit
+}: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
-  // -------------------------------
+  //
   // Runtime check: table must be in TABLES
-  // -------------------------------
+  //
   if (!Object.values(TABLES).includes(table as any)) {
     const errorMessage = `Invalid table name: ${table}`
     console.error(`${functionName}: ${errorMessage}`)

@@ -12,6 +12,7 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 // ----------------------------------------------------------------------
 export async function providerSignIn({ provider, email, name }: structure_ProviderSignInParams) {
   const functionName = 'providerSignIn'
+  let lg_ssid = 0
   try {
     //
     //  Get user from database
@@ -36,6 +37,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
     //
     const ss_usid = userRecord.us_usid
     const ss_ssid = await newSession(ss_usid)
+    lg_ssid = ss_ssid
     //
     //  Return Session ID
     //
@@ -49,7 +51,8 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
-      lg_severity: 'E'
+      lg_severity: 'E',
+      lg_ssid: lg_ssid
     })
 
     console.error('Error:', errorMessage)
@@ -149,8 +152,10 @@ async function newSession(ss_usid: number) {
 // ----------------------------------------------------------------------
 export async function getAuthSession() {
   const functionName = 'getAuthSession'
+  let lg_ssid = 0
   try {
     const session = await auth()
+    lg_ssid = Number(session)
     return session
     //
     //  Errors
@@ -161,7 +166,8 @@ export async function getAuthSession() {
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
-      lg_severity: 'E'
+      lg_severity: 'E',
+      lg_ssid: lg_ssid
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
