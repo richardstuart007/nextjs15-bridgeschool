@@ -16,7 +16,7 @@ import {
   TopResults_limitMonths,
   CurrentUser_limitMonths_Average
 } from '@/src/ui/dashboard/graph/graph_constants'
-import { getAuthSession } from '@/src/lib/data-auth'
+import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 //

@@ -1,4 +1,4 @@
-// export const dynamic = 'force-dynamic' // Force dynamic rendering
+// export const dynamic = 'force-dynamic'
 import Table from '@/src/ui/admin/backup/table'
 import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'

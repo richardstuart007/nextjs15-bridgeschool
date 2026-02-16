@@ -1,9 +1,6 @@
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 export async function getDatabaseName(): Promise<string> {
-  //
-  //  cache the result
-  //
   'use cache'
   const functionName = 'getDatabaseName'
   //

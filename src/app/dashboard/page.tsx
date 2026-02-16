@@ -1,4 +1,4 @@
-// export const dynamic = 'force-dynamic' // Force dynamic rendering
+// export const dynamic = 'force-dynamic'
 import SummaryGraphs from '@/src/ui/dashboard/graph/graph_summary'
 import { Suspense } from 'react'
 //

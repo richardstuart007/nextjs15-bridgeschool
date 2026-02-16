@@ -3,7 +3,7 @@
 //
 let cached_au_ssid: number | null = null
 
-import { getAuthSession } from '@/src/lib/data-auth'
+import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 //
 //  Return Auth Session
 //
