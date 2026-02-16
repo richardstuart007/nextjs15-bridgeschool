@@ -1,9 +1,11 @@
 'use server'
 
+import { cache } from 'react'
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants_tables'
+
 //----------------------------------------------------------------------------------
 //  Main function
 //----------------------------------------------------------------------------------
@@ -19,6 +21,7 @@ export type table_fetch_Props = {
   columns?: string[]
   limit?: number
 }
+
 export async function table_fetch({
   caller,
   table,
@@ -32,7 +35,8 @@ export async function table_fetch({
   // Decide whether this call should use caching (based on table)
   //
   if (CACHED_TABLES.has(table as TableName)) {
-    return _cachedFetch({
+    // 👇 Call the cached version
+    return cachedFetch({
       caller,
       table,
       whereColumnValuePairs,
@@ -55,14 +59,15 @@ export async function table_fetch({
     limit
   })
 }
+
 //----------------------------------------------------------------------------------
-// Cached execution path – used only for tables in CACHED_TABLES
+// Cached execution path – using React cache() instead of 'use cache'
 //----------------------------------------------------------------------------------
-async function _cachedFetch(props: table_fetch_Props): Promise<any[]> {
-  'use cache'
+const cachedFetch = cache(async (props: table_fetch_Props): Promise<any[]> => {
   console.log(`[CACHED] table_fetch → ${props.table}  (caller: ${props.caller})`)
   return _runQuery(props)
-}
+})
+
 //----------------------------------------------------------------------------------
 // Run the query
 //----------------------------------------------------------------------------------

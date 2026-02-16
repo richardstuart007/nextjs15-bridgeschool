@@ -1,5 +1,6 @@
 'use server'
 
+import { cache } from 'react'
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
@@ -44,8 +45,9 @@ export async function fetchFiltered({
 }): Promise<any[]> {
   // Decide caching based on table (same as table_fetch)
   if (CACHED_TABLES.has(table as TableName)) {
-    console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`) // ← optional log
-    return _cachedFetchFiltered({
+    console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
+    // 👇 Call the cached version
+    return cachedFetchFiltered({
       table,
       joins,
       filters,
@@ -71,43 +73,43 @@ export async function fetchFiltered({
 }
 
 //---------------------------------------------------------------------
-// Cached execution path – only used for static/reference tables
+// Cached execution path – using React cache() instead of 'use cache'
 //---------------------------------------------------------------------
-async function _cachedFetchFiltered({
-  table,
-  joins = [],
-  filters = [],
-  orderBy,
-  limit,
-  offset,
-  distinctColumns = [],
-  caller
-}: {
-  table: string
-  joins?: JoinParams[]
-  filters?: Filter[]
-  orderBy?: string
-  limit?: number
-  offset?: number
-  distinctColumns?: string[]
-  caller: string
-}): Promise<any[]> {
-  'use cache'
-
-  // Optional: log cache hit (you can remove later)
-  console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
-
-  return _runFilteredQuery({
+const cachedFetchFiltered = cache(
+  async ({
     table,
-    joins,
-    filters,
+    joins = [],
+    filters = [],
     orderBy,
     limit,
     offset,
-    distinctColumns,
+    distinctColumns = [],
     caller
-  })
-}
+  }: {
+    table: string
+    joins?: JoinParams[]
+    filters?: Filter[]
+    orderBy?: string
+    limit?: number
+    offset?: number
+    distinctColumns?: string[]
+    caller: string
+  }): Promise<any[]> => {
+    // Optional: log cache hit (you can remove later)
+    console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
+
+    return _runFilteredQuery({
+      table,
+      joins,
+      filters,
+      orderBy,
+      limit,
+      offset,
+      distinctColumns,
+      caller
+    })
+  }
+)
 
 //---------------------------------------------------------------------
 // Shared private function – builds and executes the query
@@ -202,7 +204,8 @@ export async function fetchTotalPages({
   // Same caching decision as fetchFiltered
   if (CACHED_TABLES.has(table as TableName)) {
     console.log(`[CACHE HIT] fetchTotalPages → ${table}  (caller: ${caller})`)
-    return _cachedFetchTotalPages({
+    // 👇 Call the cached version
+    return cachedFetchTotalPages({
       table,
       joins,
       filters,
@@ -215,25 +218,26 @@ export async function fetchTotalPages({
   return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
 }
 
-// Cached variant for total pages
-async function _cachedFetchTotalPages({
-  table,
-  joins = [],
-  filters = [],
-  items_per_page = ITEMS_PER_PAGE,
-  distinctColumns = [],
-  caller = ''
-}: {
-  table: string
-  joins?: JoinParams[]
-  filters?: Filter[]
-  items_per_page?: number
-  distinctColumns?: string[]
-  caller: string
-}): Promise<number> {
-  'use cache'
-  return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
-}
+// Cached variant for total pages using React cache()
+const cachedFetchTotalPages = cache(
+  async ({
+    table,
+    joins = [],
+    filters = [],
+    items_per_page = ITEMS_PER_PAGE,
+    distinctColumns = [],
+    caller = ''
+  }: {
+    table: string
+    joins?: JoinParams[]
+    filters?: Filter[]
+    items_per_page?: number
+    distinctColumns?: string[]
+    caller: string
+  }): Promise<number> => {
+    return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
+  }
+)
 
 // Shared logic for total pages
 async function _runTotalPagesQuery({

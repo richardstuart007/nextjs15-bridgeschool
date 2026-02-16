@@ -1,10 +1,9 @@
-import {
-  fetch_TopResults,
-  fetch_RecentResults1,
-  fetch_RecentResultsAverages,
-  fetch_UserResults,
-  fetch_UserAverage
-} from '@/src/ui/dashboard/graph/graph_data'
+import { fetch_TopResults } from '@/src/ui/dashboard/graph/fetch_TopResults'
+import { fetch_RecentResults1 } from '@/src/ui/dashboard/graph/fetch_RecentResults1'
+import { fetch_RecentResultsAverages } from '@/src/ui/dashboard/graph/fetch_RecentResultsAverages'
+import { fetch_RecentUserResults } from '@/src/ui/dashboard/graph/fetch_RecentUserResults'
+import { fetch_UserAverage } from '@/src/ui/dashboard/graph/fetch_UserAverage'
+
 import { MyBarChart, MyLineChart } from '@/src/ui/dashboard/graph/graph_charts'
 import {
   structure_UsershistoryTopResults,
@@ -68,7 +67,7 @@ export default async function SummaryGraphs() {
   ] = await Promise.all([
     fetch_TopResults({ caller: functionName }),
     fetch_RecentResults1({ caller: functionName }),
-    fetch_UserResults({ caller: functionName, userId: au_usid }),
+    fetch_RecentUserResults({ caller: functionName, userId: au_usid }),
     fetch_UserAverage({ caller: functionName, userId: au_usid })
   ])
   //
