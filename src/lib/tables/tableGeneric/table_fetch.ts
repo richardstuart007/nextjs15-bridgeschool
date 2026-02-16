@@ -3,6 +3,7 @@
 import { sql } from '@/src/lib/db'
 import { errorLogging } from '@/src/lib/errorLogging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
+import { TABLES } from '@/src/root/constants_tables'
 //
 // Props
 //
@@ -25,6 +26,20 @@ export async function table_fetch({
   limit
 }: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
+  // -------------------------------
+  // Runtime check: table must be in TABLES
+  // -------------------------------
+  if (!Object.values(TABLES).includes(table as any)) {
+    const errorMessage = `Invalid table name: ${table}`
+    console.error(`${functionName}: ${errorMessage}`)
+    errorLogging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
+    })
+    return []
+  }
   //
   // Start building the query
   //

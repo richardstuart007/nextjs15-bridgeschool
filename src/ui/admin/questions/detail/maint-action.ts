@@ -8,7 +8,7 @@ import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
 import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
+import { row_fetch_subject } from '@/src/lib/tables/tableSpecific/row_fetch_subject'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------

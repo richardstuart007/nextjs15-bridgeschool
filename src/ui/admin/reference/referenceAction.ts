@@ -5,7 +5,7 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
+import { row_fetch_subject } from '@/src/lib/tables/tableSpecific/row_fetch_subject'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import type { table_Reference } from '@/src/lib/tables/definitions'
 //

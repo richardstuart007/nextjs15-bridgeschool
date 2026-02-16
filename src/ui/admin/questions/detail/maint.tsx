@@ -8,7 +8,7 @@ import type { table_Questions } from '@/src/lib/tables/definitions'
 import MyDropdown from '@/src/ui/utils/myDropdown'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { MyTextarea } from '@/src/ui/utils/myTextarea'
-import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
+import { row_fetch_subject } from '@/src/lib/tables/tableSpecific/row_fetch_subject'
 
 interface FormProps {
   questionRecord: table_Questions | undefined

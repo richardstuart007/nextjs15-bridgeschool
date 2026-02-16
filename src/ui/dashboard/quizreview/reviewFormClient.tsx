@@ -10,42 +10,42 @@ import { MyButton } from '@/src/ui/utils/myButton'
 import MyLinkBack from '@/src/ui/utils/myLinkBack'
 import { MyLink } from '@/src/ui/utils/myLink'
 
-interface QuestionsFormProps {
+interface ReviewFormClientProps {
   history: table_Usershistory
   questions: table_Questions[]
   ps_route?: string
 }
-//...................................................................................
-//.  Main Line
-//...................................................................................
-export default function Form_QuizReview(props: QuestionsFormProps) {
+
+export default function ReviewFormClient(props: ReviewFormClientProps) {
   const { questions, history } = props
-  const hs_hsid = history.hs_hsid
-  const hs_ans = history.hs_ans
-  const hs_qqid = history.hs_qqid
-  const hs_correctpercent = history.hs_correctpercent
-  const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qqid[0])
+  const { hs_hsid, hs_ans, hs_qqid, hs_correctpercent } = history
+
   //
-  // Define the State variables
+  //  Guard: no questions to review
   //
+  if (!questions || questions.length === 0 || !hs_qqid || hs_qqid.length === 0) {
+    return <div className='p-2 text-xs text-red-600'>All correct. No bad answers to review.</div>
+  }
+
+  // Start with the first question index
+  const initialQuestionIndex = questions.findIndex(q => q.qq_qqid === hs_qqid[0])
+  const safeInitialIndex = initialQuestionIndex >= 0 ? initialQuestionIndex : 0
+
+  // State variables
   const [currentPage, setCurrentPage] = useState(1)
-  const [question, setQuestion] = useState(questions[questionIndex])
-  const [ans, setAns] = useState(hs_ans[currentPage - 1])
+  const [question, setQuestion] = useState<table_Questions | undefined>(questions[safeInitialIndex])
+  const [ans, setAns] = useState<number>(hs_ans[0] ?? 0)
   const [isHelpVisible, setIsHelpVisible] = useState(true)
+
   //...................................................................................
-  //.  Navigation
+  //. Navigation
   //...................................................................................
   function render_nav() {
     return (
       <div className='mt-1 mb-2 p-1 rounded-md bg-yellow-50 border border-yellow-300 flex items-center justify-between text-xxs md:text-xs min-w-[300px] max-w-[400px]'>
-        {/* Back */}
-        <MyLinkBack overrideClass={`text-white h-5`}>Back</MyLinkBack>
-        {/* History */}
+        <MyLinkBack overrideClass='text-white h-5'>Back</MyLinkBack>
         <MyLink
-          href={{
-            pathname: '/dashboard/history',
-            reference: 'history'
-          }}
+          href={{ pathname: '/dashboard/history', reference: 'history' }}
           overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
         >
           History
@@ -53,23 +53,35 @@ export default function Form_QuizReview(props: QuestionsFormProps) {
       </div>
     )
   }
+
   //...................................................................................
-  //.  Question
+  //. Question display
   //...................................................................................
   function render_question() {
     if (!question) return null
-
     return (
       <div className='p-2 flex items-center rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
         <p className='text-xs font-bold'>{hs_correctpercent}%</p>
-        <p className='ml-2 text-xs  font-medium'>{`${question.qq_subject}`}</p>
+        <p className='ml-2 text-xs font-medium'>{`${question.qq_subject}`}</p>
         <p className='ml-2 text-xs font-normal text-gray-500'>{`History/Question(${hs_hsid}/${question.qq_qqid})`}</p>
       </div>
     )
   }
+
   //...................................................................................
-  //.  Pagination
+  //. Pagination
   //...................................................................................
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= hs_qqid.length) {
+      setCurrentPage(newPage)
+      const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qqid[newPage - 1])
+      if (questionIndex >= 0) {
+        setQuestion(questions[questionIndex])
+      }
+      setAns(hs_ans[newPage - 1] ?? 0)
+    }
+  }
+
   function render_pagination() {
     return (
       <div className='flex bg-gray-50 py-2 px-2 h-10 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
@@ -81,68 +93,42 @@ export default function Form_QuizReview(props: QuestionsFormProps) {
       </div>
     )
   }
+
   //...................................................................................
-  //.  Help Text
+  //. Help Text
   //...................................................................................
   function renderHelpText() {
-    //
-    //  Help text
-    //
-    const text = question.qq_help
-    //
-    // Return null if no help text is available
-    //
+    const text = question?.qq_help
     if (!text) return null
-    //
-    // Split the text into lines based on newline characters
-    //
     const lines = text.split(/\r?\n/)
-    //
-    // Map over the lines, ensuring blank lines are represented
-    //
-    const formattedText = lines
-      .map(line => (line ? line : '\u00A0')) // Replace empty lines with a non-breaking space
-      .join('<br />')
-    //
-    // Wrapper for the formatted lines with a border
-    //
+    const formattedText = lines.map(line => (line ? line : '\u00A0')).join('<br />')
     return (
       <div className='relative'>
         <MyButton
           onClick={() => setIsHelpVisible(prev => !prev)}
-          overrideClass='text-white mt-2  h-5'
+          overrideClass='text-white mt-2 h-5'
         >
           {isHelpVisible ? 'Hide Help' : 'Show Help'}
         </MyButton>
         {isHelpVisible && (
-          <div className='flex flex-col  text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
+          <div className='flex flex-col text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
             <div dangerouslySetInnerHTML={{ __html: formattedText }} />
           </div>
         )}
       </div>
     )
   }
+
   //...................................................................................
-  //.  Pagination
-  //...................................................................................
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= hs_qqid.length) {
-      setCurrentPage(newPage)
-      const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qqid[newPage - 1]) // Adjust for 1-based index
-      setQuestion(questions[questionIndex])
-      setAns(hs_ans[newPage - 1]) // Adjust for 1-based index
-    }
-  }
-  //...................................................................................
-  //.  Render the form
+  //. Render everything
   //...................................................................................
   return (
     <>
       {render_nav()}
       {render_question()}
-      <QuizBidding question={question} />
-      <QuizHands question={question} />
-      <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />
+      {question && <QuizBidding question={question} />}
+      {question && <QuizHands question={question} />}
+      {question && <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />}
       {render_pagination()}
       {renderHelpText()}
     </>
