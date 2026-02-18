@@ -1,5 +1,5 @@
 import Table from '@/src/ui/dashboard/reference/table'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -26,7 +26,6 @@ export default async function Page({
   //
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
       <Table selected_sbsbid={selected_sbsbid} />
     </div>
   )

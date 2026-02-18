@@ -58,6 +58,7 @@ export const fetch_RecentUserResults = cache(async ({ userId, caller }: RecentUs
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error('Error:', errorMessage)
+    console.error(`${functionName}: ${errorMessage}`, error)
+    throw error
   }
 })

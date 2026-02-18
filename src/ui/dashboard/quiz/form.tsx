@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useEffect } from 'react'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
@@ -10,7 +11,7 @@ import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyLink } from '@/src/ui/utils/myLink'
-import MyLinkBack from '@/src/ui/utils/myLinkBack'
+// import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 interface QuestionsFormProps {
   questions: table_Questions[]
@@ -203,16 +204,13 @@ export default function Form_Quiz(props: QuestionsFormProps) {
     setShowSubmit(false)
     seths_hsid(historyRecord.hs_hsid)
   }
-  //...................................................................................
-  //.  Navigation
-  //...................................................................................
-  function render_nav() {
+  //----------------------------------------------------------------------------------------------
+  // Render selection
+  //----------------------------------------------------------------------------------------------
+  function render_banner() {
     return (
-      <div className='mt-1 mb-2 p-1 rounded-md bg-yellow-50 border border-yellow-300 flex items-center justify-between text-xxs md:text-xs min-w-[300px] max-w-[400px]'>
-        {/* Back */}
-        <MyLinkBack overrideClass={`text-white h-5`} onClick={handleQuizCompleted}>
-          Back
-        </MyLinkBack>
+      <div className='px-3 py-1 flex items-center bg-blue-200 border-b rounded-t-lg min-w-[300px] max-w-[400px]'>
+        <div className='font-semibold text-red-600 leading-none'>Quiz</div>
       </div>
     )
   }
@@ -266,10 +264,50 @@ export default function Form_Quiz(props: QuestionsFormProps) {
             </MyLink>
           </div>
         )}
-        {/* ................................................... */}
       </div>
     )
   }
+  //...................................................................................
+  //.  Navigation – BACK BUTTON NOW CONTEXT-AWARE USING ps_route
+  //...................................................................................
+  // function render_nav() {
+  // HISTORY
+  // QUIZ URL   : http:localhost:3000/dashboard/quiz?ps_Route=history&ps_Column=qq_sbid&ps_sbid=4
+  // return URL : http://localhost:3000/dashboard/history
+
+  // SUBJECT
+  // QUIZ URL   : http://localhost:3000/dashboard/quiz?ps_Route=subject&ps_Column=qq_sbid&ps_sbid=4
+  // return URL : http://localhost:3000/dashboard/subject
+
+  // REFERENCE
+  // QUIZ URL   : http://localhost:3000/dashboard/quiz?ps_Route=reference_select&ps_Column=qq_sbid&ps_sbid=4
+  // QUIZ URL   : http://localhost:3000/dashboard/quiz?ps_Route=reference_select&ps_Column=qq_rfid&ps_rfid=1042
+  // return URL : localhost:3000/dashboard/reference_select?ps_Route=subject&selected_sbsbid=4
+
+  //   let linklabel
+  //   switch (ps_route) {
+  //     case 'history':
+  //       linklabel = 'Back to History'
+  //     case 'subject':
+  //       linklabel = 'Back to Subject'
+  //     case 'reference_select':
+  //       linklabel = 'Back to Reference'
+  //     default:
+  //   }
+
+  //   return (
+  //     <div className='mt-5 flex text-xxs md:text-xs'>
+  //       <div className='flex justify-start'>
+  //         <MyLinkBack
+  //           overrideClass={'bg-yellow-600 hover:bg-yellow-700 text-white h-5'}
+  //           onClick={handleQuizCompleted}
+  //         >
+  //           {linklabel}
+  //         </MyLinkBack>
+  //       </div>
+  //     </div>
+  //   )
+  // }
   //...................................................................................
   //.  no questions
   //...................................................................................
@@ -279,12 +317,13 @@ export default function Form_Quiz(props: QuestionsFormProps) {
   //...................................................................................
   return (
     <>
-      {render_nav()}
+      {render_banner()}
       {render_question()}
       <QuizBidding question={question} />
       <QuizHands question={question} />
       <QuizChoice question={question} setAnswer={setAnswer} setShowSubmit={setShowSubmit} />
       {render_submitreview()}
+      {/* {render_nav()} */}
     </>
   )
 }

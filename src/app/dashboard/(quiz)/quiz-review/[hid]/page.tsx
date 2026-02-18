@@ -1,7 +1,6 @@
 import ReviewFormServer from '@/src/ui/dashboard/quizreview/reviewFormServer'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Quiz Review'
@@ -28,7 +27,6 @@ export default async function Page({
   //
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
       <ReviewFormServer hs_hsid={hid} />
     </div>
   )

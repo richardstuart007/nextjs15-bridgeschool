@@ -87,6 +87,7 @@ export const fetch_TopResults = cache(async ({ caller }: fetch_TopResultsProps) 
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error('Error:', errorMessage)
+    console.error(`${functionName}: ${errorMessage}`, error)
+    throw error
   }
 })

@@ -46,7 +46,6 @@ export async function fetchFiltered({
   // Decide caching based on table (same as table_fetch)
   if (CACHED_TABLES.has(table as TableName)) {
     console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
-    // 👇 Call the cached version
     return cachedFetchFiltered({
       table,
       joins,
@@ -73,7 +72,7 @@ export async function fetchFiltered({
 }
 
 //---------------------------------------------------------------------
-// Cached execution path – using React cache() instead of 'use cache'
+// Cached execution path – using React cache()
 //---------------------------------------------------------------------
 const cachedFetchFiltered = cache(
   async ({
@@ -95,9 +94,7 @@ const cachedFetchFiltered = cache(
     distinctColumns?: string[]
     caller: string
   }): Promise<any[]> => {
-    // Optional: log cache hit (you can remove later)
     console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
-
     return _runFilteredQuery({
       table,
       joins,
@@ -204,7 +201,6 @@ export async function fetchTotalPages({
   // Same caching decision as fetchFiltered
   if (CACHED_TABLES.has(table as TableName)) {
     console.log(`[CACHE HIT] fetchTotalPages → ${table}  (caller: ${caller})`)
-    // 👇 Call the cached version
     return cachedFetchTotalPages({
       table,
       joins,

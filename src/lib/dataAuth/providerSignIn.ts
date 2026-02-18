@@ -9,7 +9,7 @@ import { errorLogging } from '@/src/lib/errorLogging'
 
 export async function providerSignIn({ provider, email, name }: structure_ProviderSignInParams) {
   const functionName = 'providerSignIn'
-  let lg_ssid = 0
+  let lg_ssid: number = 0
   try {
     const rows = await table_fetch({
       caller: functionName,

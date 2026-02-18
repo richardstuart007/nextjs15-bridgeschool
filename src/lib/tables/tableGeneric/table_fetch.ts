@@ -61,10 +61,10 @@ export async function table_fetch({
 }
 
 //----------------------------------------------------------------------------------
-// Cached execution path – using React cache() instead of 'use cache'
+// Cached execution path – using React cache()
 //----------------------------------------------------------------------------------
 const cachedFetch = cache(async (props: table_fetch_Props): Promise<any[]> => {
-  console.log(`[CACHED] table_fetch → ${props.table}  (caller: ${props.caller})`)
+  console.log(`[CACHE HIT] table_fetch → ${props.table}  (caller: ${props.caller})`)
   return _runQuery(props)
 })
 

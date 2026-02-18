@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
+
 export const metadata: Metadata = {
   title: 'Quiz'
 }
@@ -54,7 +54,6 @@ export default async function Form_Quiz({
   //---------------------------------------------------
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
       <Form questions={questions} rfid={ps_rfid} />
     </div>
   )

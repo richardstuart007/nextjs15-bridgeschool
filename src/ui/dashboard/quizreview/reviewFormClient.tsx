@@ -7,7 +7,6 @@ import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import Pagination from '@/src/ui/utils/paginationState'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
 import { MyButton } from '@/src/ui/utils/myButton'
-import MyLinkBack from '@/src/ui/utils/myLinkBack'
 import { MyLink } from '@/src/ui/utils/myLink'
 
 interface ReviewFormClientProps {
@@ -36,24 +35,6 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   const [question, setQuestion] = useState<table_Questions | undefined>(questions[safeInitialIndex])
   const [ans, setAns] = useState<number>(hs_ans[0] ?? 0)
   const [isHelpVisible, setIsHelpVisible] = useState(true)
-
-  //...................................................................................
-  //. Navigation
-  //...................................................................................
-  function render_nav() {
-    return (
-      <div className='mt-1 mb-2 p-1 rounded-md bg-yellow-50 border border-yellow-300 flex items-center justify-between text-xxs md:text-xs min-w-[300px] max-w-[400px]'>
-        <MyLinkBack overrideClass='text-white h-5'>Back</MyLinkBack>
-        <MyLink
-          href={{ pathname: '/dashboard/history', reference: 'history' }}
-          overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
-        >
-          History
-        </MyLink>
-      </div>
-    )
-  }
-
   //...................................................................................
   //. Question display
   //...................................................................................
@@ -118,19 +99,33 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
       </div>
     )
   }
-
+  //...................................................................................
+  //. Navigation
+  //...................................................................................
+  function render_nav() {
+    return (
+      <div className='mt-2 flex justify-start'>
+        <MyLink
+          href={{ pathname: '/dashboard/history', reference: 'history' }}
+          overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
+        >
+          History
+        </MyLink>
+      </div>
+    )
+  }
   //...................................................................................
   //. Render everything
   //...................................................................................
   return (
     <>
-      {render_nav()}
       {render_question()}
       {question && <QuizBidding question={question} />}
       {question && <QuizHands question={question} />}
       {question && <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />}
       {render_pagination()}
       {renderHelpText()}
+      {render_nav()}
     </>
   )
 }

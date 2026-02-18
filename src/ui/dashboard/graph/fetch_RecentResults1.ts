@@ -67,6 +67,7 @@ export const fetch_RecentResults1 = cache(async ({ caller }: fetch_RecentResults
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error('Error:', errorMessage)
+    console.error(`${functionName}: ${errorMessage}`, error)
+    throw error
   }
 })

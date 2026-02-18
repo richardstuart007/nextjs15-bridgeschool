@@ -72,6 +72,7 @@ export const fetch_RecentResultsAverages = cache(async ({ userIds, caller }: Ave
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error('Error:', errorMessage)
+    console.error(`${functionName}: ${errorMessage}`, error)
+    throw error
   }
 })

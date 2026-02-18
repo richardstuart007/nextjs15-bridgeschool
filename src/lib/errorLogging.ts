@@ -22,7 +22,7 @@ export async function errorLogging({
   const functionName = 'errorLogging'
   try {
     //
-    // Skip logging for 'I' severity in production mode
+    // Skip logging for 'I' severity in non-Dev mode
     //
     if (lg_severity === 'I' && process.env.NEXT_PUBLIC_APPENV_ISDEV === 'false') {
       return false
