@@ -17,10 +17,10 @@ import { MyLink } from '@/src/ui/utils/myLink'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 
 interface FormProps {
-  selected_sbsbid?: string | undefined
+  uq_sbid?: string | undefined
 }
 
-export default function Table_Reference({ selected_sbsbid }: FormProps) {
+export default function Table_Reference({ uq_sbid }: FormProps) {
   const functionName = 'Table_Reference'
   //
   //  User context
@@ -107,7 +107,7 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
       //
       //  Set the selected values
       //
-      if (selected_sbsbid) await selectedOwnerSubject()
+      if (uq_sbid) await selectedOwnerSubject()
       //
       //  Update Columns and rows
       //
@@ -249,8 +249,8 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
     //
     setshow_quiz(true)
     if (widthNumber >= 2) {
-      if (!selected_sbsbid) setshow_owner(true)
-      if (!selected_sbsbid) setshow_subject(true)
+      if (!uq_sbid) setshow_owner(true)
+      if (!uq_sbid) setshow_subject(true)
       setshow_questions(true)
       setshow_type(true)
     }
@@ -293,7 +293,7 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
       //
       //  Get the subject id
       //
-      const sb_sbid = Number(selected_sbsbid)
+      const sb_sbid = Number(uq_sbid)
       const rows = await table_fetch({
         caller: functionName,
         table: 'tsb_subject',
@@ -319,7 +319,7 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    //  Message selected_sbsbid
+    //  Message uq_sbid
     //
     setMessage('Applying filters...')
     //
@@ -336,11 +336,11 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
     //
     //  Passed values
     //
-    if (selected_sbsbid) {
+    if (uq_sbid) {
       const additions: Filter[] = [
         {
           column: 'rf_sbid',
-          value: selected_sbsbid,
+          value: uq_sbid,
           operator: '='
         }
       ]
@@ -436,7 +436,7 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
       >
         <div className='font-semibold text-red-600 tracking-wide'>Subject References</div>
 
-        {selected_sbsbid && (
+        {uq_sbid && (
           <div className={`flex items-center gap-2 ${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{ref_sb_owner.current}</span>
@@ -453,11 +453,12 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
                     href={{
                       pathname: `/dashboard/quiz`,
                       query: {
-                        ps_Column: 'qq_sbid',
-                        ps_sbid: String(selected_sbsbid)
+                        uq_route: 'reference-select',
+                        uq_column: 'qq_sbid',
+                        uq_sbid: String(uq_sbid)
                       },
                       reference: 'quiz',
-                      segment: String(selected_sbsbid)
+                      segment: String(uq_sbid)
                     }}
                     overrideClass={`bg-blue-500 text-white hover:bg-blue-600 ${
                       shrink ? 'h-5' : 'h-6'
@@ -761,8 +762,9 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
                       href={{
                         pathname: `/dashboard/quiz`,
                         query: {
-                          ps_Column: 'qq_rfid',
-                          ps_rfid: String(tabledata.rf_rfid)
+                          uq_route: 'reference-select',
+                          uq_column: 'qq_rfid',
+                          uq_rfid: String(tabledata.rf_rfid)
                         },
                         reference: 'quiz',
                         segment: String(tabledata.rf_rfid)
@@ -793,7 +795,10 @@ export default function Table_Reference({ selected_sbsbid }: FormProps) {
             overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
             href={{
               pathname: '/dashboard/subject',
-              reference: 'subject'
+              reference: 'subject',
+              query: {
+                uq_route: 'reference-select'
+              }
             }}
           >
             Back to Subject

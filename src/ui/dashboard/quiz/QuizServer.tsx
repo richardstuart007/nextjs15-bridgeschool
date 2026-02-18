@@ -6,15 +6,15 @@ import { table_Questions } from '@/src/lib/tables/definitions'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
 
 export interface QuizServerProps {
-  ps_rfid: number
-  ps_Column: string
-  ps_sbid: number
+  uq_rfid: number
+  uq_column: string
+  uq_sbid: number
 }
 
 //--------------------------------------------------------------------------------------------------
 //.  Server component: prepares quiz data and passes to QuizClient
 //--------------------------------------------------------------------------------------------------
-export default async function QuizServer({ ps_rfid, ps_Column, ps_sbid }: QuizServerProps) {
+export default async function QuizServer({ uq_rfid, uq_column, uq_sbid }: QuizServerProps) {
   const functionName = 'QuizServer'
 
   //----------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ export default async function QuizServer({ ps_rfid, ps_Column, ps_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   //.  Determine column value for filtering
   //----------------------------------------------------------------------------------------------
-  const Column_value = ps_Column === 'qq_rfid' ? ps_rfid : ps_Column === 'qq_sbid' ? ps_sbid : 0
+  const Column_value = uq_column === 'qq_rfid' ? uq_rfid : uq_column === 'qq_sbid' ? uq_sbid : 0
 
   //----------------------------------------------------------------------------------------------
   //.  Fetch questions from DB based on column/value
@@ -36,7 +36,7 @@ export default async function QuizServer({ ps_rfid, ps_Column, ps_sbid }: QuizSe
     (await table_fetch({
       caller: functionName,
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: ps_Column, value: Column_value }]
+      whereColumnValuePairs: [{ column: uq_column, value: Column_value }]
     })) ?? []
 
   //----------------------------------------------------------------------------------------------
@@ -63,5 +63,5 @@ export default async function QuizServer({ ps_rfid, ps_Column, ps_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   //.  Return the client component with the props it actually expects
   //----------------------------------------------------------------------------------------------
-  return <QuizClient questions={questions} rfid={ps_rfid} />
+  return <QuizClient questions={questions} rfid={uq_rfid} />
 }

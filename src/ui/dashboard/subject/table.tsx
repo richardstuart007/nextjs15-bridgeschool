@@ -546,11 +546,12 @@ export default function Table_Subject() {
                   <MyLink
                     href={{
                       pathname: `/dashboard/reference_select`,
-                      query: {
-                        selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
-                      },
                       reference: 'reference_select',
-                      segment: String(tabledata.sb_sbid)
+                      segment: String(tabledata.sb_sbid),
+                      query: {
+                        uq_sbid: JSON.stringify(tabledata.sb_sbid),
+                        uq_route: 'subject'
+                      }
                     }}
                     overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                   >
@@ -577,8 +578,9 @@ export default function Table_Subject() {
                     href={{
                       pathname: `/dashboard/quiz/`,
                       query: {
-                        ps_Column: 'qq_sbid',
-                        ps_sbid: String(tabledata.sb_sbid)
+                        uq_route: 'subject',
+                        uq_column: 'qq_sbid',
+                        uq_sbid: String(tabledata.sb_sbid)
                       },
                       reference: 'quiz',
                       segment: String(tabledata.sb_sbid)
@@ -607,7 +609,10 @@ export default function Table_Subject() {
             overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
             href={{
               pathname: '/dashboard',
-              reference: 'dashboard'
+              reference: 'dashboard',
+              query: {
+                uq_route: 'subject'
+              }
             }}
           >
             Back to Dashboard

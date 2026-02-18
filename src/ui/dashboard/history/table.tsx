@@ -812,7 +812,10 @@ export default function Table_History() {
                     href={{
                       pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                       reference: 'quiz-review',
-                      segment: String(tabledata.hs_hsid)
+                      segment: String(tabledata.hs_hsid),
+                      query: {
+                        uq_route: 'history'
+                      }
                     }}
                     overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
                   >
@@ -831,8 +834,9 @@ export default function Table_History() {
                         ? {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              ps_Column: 'qq_rfid',
-                              ps_rfid: String(tabledata.hs_rfid)
+                              uq_route: 'history',
+                              uq_column: 'qq_rfid',
+                              uq_rfid: String(tabledata.hs_rfid)
                             },
                             reference: 'quiz',
                             segment: String(tabledata.hs_rfid)
@@ -840,8 +844,9 @@ export default function Table_History() {
                         : {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              ps_Column: 'qq_sbid',
-                              ps_sbid: String(tabledata.hs_sbid)
+                              uq_route: 'history',
+                              uq_column: 'qq_sbid',
+                              uq_sbid: String(tabledata.hs_sbid)
                             },
                             reference: 'quiz',
                             segment: String(tabledata.hs_sbid)
@@ -875,7 +880,10 @@ export default function Table_History() {
             overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
             href={{
               pathname: '/dashboard',
-              reference: 'dashboard'
+              reference: 'dashboard',
+              query: {
+                uq_route: 'history'
+              }
             }}
           >
             Back to Dashboard

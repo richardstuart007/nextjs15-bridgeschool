@@ -12,8 +12,8 @@ interface Props {
   ml_segment: string
   ml_query: string
 }
-export default async function menuLinks(Props: Props) {
-  const functionName = 'menuLinks'
+export default async function write_menuLinks(Props: Props) {
+  const functionName = 'write_menuLinks'
   //
   //  Unpack Props
   //
@@ -26,15 +26,12 @@ export default async function menuLinks(Props: Props) {
     if (!co_ssid) return null
     const ml_ssid = Number(co_ssid)
     //
-    //  Initialise work variables
-    //
-    let wk_route = ''
-    //
     //  Route from query
     //
+    let ml_route = ''
     if (ml_query.trim() !== '') {
       const jsonObject = JSON.parse(ml_query)
-      wk_route = jsonObject.ps_Route || ''
+      ml_route = jsonObject.uq_route || ''
     }
     //
     //  Write the data
@@ -49,7 +46,7 @@ export default async function menuLinks(Props: Props) {
         { column: 'ml_path', value: ml_path },
         { column: 'ml_query', value: ml_query },
         { column: 'ml_segment', value: ml_segment },
-        { column: 'ml_route', value: wk_route }
+        { column: 'ml_route', value: ml_route }
       ]
     })
     //

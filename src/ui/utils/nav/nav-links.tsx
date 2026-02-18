@@ -80,7 +80,10 @@ export default function NavLinks(props: Props) {
             key={link.name}
             href={{
               pathname: String(link.href),
-              reference: String(link.reference)
+              reference: String(link.reference),
+              query: {
+                uq_route: 'dashboard'
+              }
             }}
             overrideClass={overrideClass_mylinkButton}
           >

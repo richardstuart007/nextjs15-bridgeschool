@@ -13,16 +13,16 @@ export default async function Page({
   //----------------------------------------------------------------------------------------------
   //.  Quiz column and Value
   //----------------------------------------------------------------------------------------------
-  const ps_Column = String(urlSearch?.ps_Column ?? 'qq_rfid')
+  const uq_column = String(urlSearch?.uq_column ?? 'qq_rfid')
 
-  const ps_sbidRaw = Number(urlSearch?.ps_sbid)
-  const ps_sbid = isNaN(ps_sbidRaw) ? 0 : ps_sbidRaw
+  const uq_sbidRaw = Number(urlSearch?.uq_sbid)
+  const uq_sbid = isNaN(uq_sbidRaw) ? 0 : uq_sbidRaw
 
-  const ps_rfidRaw = Number(urlSearch?.ps_rfid)
-  const ps_rfid = isNaN(ps_rfidRaw) ? 0 : ps_rfidRaw
+  const uq_rfidRaw = Number(urlSearch?.uq_rfid)
+  const uq_rfid = isNaN(uq_rfidRaw) ? 0 : uq_rfidRaw
 
   //----------------------------------------------------------------------------------------------
   //.  Call QuizServer only once parameters are verified
   //----------------------------------------------------------------------------------------------
-  return <QuizServer ps_rfid={ps_rfid} ps_Column={ps_Column} ps_sbid={ps_sbid} />
+  return <QuizServer uq_rfid={uq_rfid} uq_column={uq_column} uq_sbid={uq_sbid} />
 }

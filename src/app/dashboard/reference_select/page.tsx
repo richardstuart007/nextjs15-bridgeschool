@@ -20,13 +20,13 @@ export default async function Page({
   //
   //  Subject
   //
-  const selected_sbsbid = String(urlSearch?.selected_sbsbid) || 'unknown'
+  const uq_sbid = String(urlSearch?.uq_sbid) || 'unknown'
   //
   //  user interface
   //
   return (
     <div className='w-full md:p-6'>
-      <Table selected_sbsbid={selected_sbsbid} />
+      <Table uq_sbid={uq_sbid} />
     </div>
   )
 }

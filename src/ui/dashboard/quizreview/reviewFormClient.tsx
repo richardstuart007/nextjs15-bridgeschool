@@ -115,7 +115,13 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
     return (
       <div className='mt-2 flex justify-start'>
         <MyLink
-          href={{ pathname: '/dashboard/history', reference: 'history' }}
+          href={{
+            pathname: '/dashboard/history',
+            reference: 'history',
+            query: {
+              uq_route: 'quiz-review'
+            }
+          }}
           overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
         >
           History

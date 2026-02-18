@@ -77,8 +77,12 @@ export default function QuizClient({ questions: initialQuestions, rfid }: QuizCl
           <div className='whitespace-nowrap px-1 flex gap-2'>
             <MyLink
               href={{
-                reference: 'quiz',
-                pathname: `/dashboard/quiz-review/${hs_hsid}`
+                reference: 'quiz-review',
+                pathname: `/dashboard/quiz-review/${hs_hsid}`,
+                segment: String(hs_hsid),
+                query: {
+                  uq_route: 'quiz'
+                }
               }}
               overrideClass='h-5 bg-green-500 hover:bg-green-600 text-white justify-center px-2 rounded-md'
             >

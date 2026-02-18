@@ -57,7 +57,10 @@ export default function Page() {
           overrideClass='flex items-center gap-5 self-center rounded-lg bg-blue-500 px-3 py-3 text-sm text-white transition-colors hover:bg-blue-400'
           href={{
             pathname: '/login',
-            reference: 'login'
+            reference: 'login',
+            query: {
+              uq_route: 'home'
+            }
           }}
         >
           <span>Log in</span> <ArrowRightIcon className='w-5' />
