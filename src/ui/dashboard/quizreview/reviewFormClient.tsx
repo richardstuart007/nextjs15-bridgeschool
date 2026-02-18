@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/utils/myPagination'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyLink } from '@/src/ui/utils/myLink'
@@ -59,7 +59,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   }
 
   //...................................................................................
-  //. Pagination
+  //. MyPagination
   //...................................................................................
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= hs_qqid.length) {
@@ -75,7 +75,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   function render_pagination() {
     return (
       <div className='flex bg-gray-50 py-2 px-2 h-10 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
-        <Pagination
+        <MyPagination
           totalPages={hs_ans.length}
           statecurrentPage={currentPage}
           setStateCurrentPage={handlePageChange}

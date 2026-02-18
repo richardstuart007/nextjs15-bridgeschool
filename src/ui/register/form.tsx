@@ -7,7 +7,7 @@ import { action } from '@/src/ui/register/action'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/utils/myInput'
-import { LoadingMessage } from '@/src/ui/utils/loadingMessage'
+import { MyLoadingMessage } from '@/src/ui/utils/myLoadingMessage'
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -82,10 +82,10 @@ export default function RegisterForm() {
   function renderContent() {
     if (submitting) {
       return (
-        <LoadingMessage
+        <MyLoadingMessage
           message1='Please wait..'
           message2='Registration in progress'
-        ></LoadingMessage>
+        ></MyLoadingMessage>
       )
     }
 

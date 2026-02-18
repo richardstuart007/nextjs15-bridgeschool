@@ -1,17 +1,17 @@
-import { HourGlass } from '@/src/ui/utils/hourGlass'
-interface LoadingMessageProps {
+import { MyHourGlass } from '@/src/ui/utils/myHourGlass'
+interface MyLoadingMessageProps {
   message1?: string
   message2?: string
 }
 
-export function LoadingMessage({
+export function MyLoadingMessage({
   message1 = 'Please wait...',
   message2 = ''
-}: LoadingMessageProps) {
+}: MyLoadingMessageProps) {
   return (
     <div className='py-8 text-center'>
       <p className='text-xl font-bold text-red-600'>{message1}</p>
-      <HourGlass />
+      <MyHourGlass />
       <p className='text-xl font-bold text-red-600'>{message2}</p>
     </div>
   )

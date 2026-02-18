@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react'
 import MaintPopup_Subject from '@/src/ui/admin/subject/maintPopup'
 import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
-import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
 import { table_Subject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
   Filter
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/utils/myPagination'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { MyButton } from '@/src/ui/utils/myButton'
@@ -385,10 +385,10 @@ export default function Table() {
         </table>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* MyPagination                */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
@@ -434,7 +434,7 @@ export default function Table() {
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <MyConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* Error message */}
       <div className='mt-2'>{message && <div className='text-red-600 mb-4'>{message}</div>}</div>

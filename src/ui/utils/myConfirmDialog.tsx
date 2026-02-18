@@ -1,5 +1,5 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/utils/myPopup'
 import { MyButton } from '@/src/ui/utils/myButton'
 
 export interface ConfirmDialogInt {
@@ -20,7 +20,7 @@ interface ConfirmDialogProps {
   setConfirmDialog: React.Dispatch<React.SetStateAction<ConfirmDialogInt>>
 }
 
-export function ConfirmDialog({ confirmDialog, setConfirmDialog }: ConfirmDialogProps) {
+export function MyConfirmDialog({ confirmDialog, setConfirmDialog }: ConfirmDialogProps) {
   //
   //  Ignore the dialog if not open
   //
@@ -38,7 +38,7 @@ export function ConfirmDialog({ confirmDialog, setConfirmDialog }: ConfirmDialog
   ].filter((line): line is string => line !== null) // remove nulls, assert type
 
   return (
-    <Popup
+    <MyPopup
       isOpen={confirmDialog.isOpen}
       onClose={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
     >
@@ -71,6 +71,6 @@ export function ConfirmDialog({ confirmDialog, setConfirmDialog }: ConfirmDialog
           Yes
         </MyButton>
       </div>
-    </Popup>
+    </MyPopup>
   )
 }

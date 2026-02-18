@@ -8,7 +8,7 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/utils/myPagination'
 import MyDropdown from '@/src/ui/utils/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from '@/src/ui/utils/myInput'
@@ -619,7 +619,7 @@ export default function Table_Subject() {
           </MyLink>
         </div>
         <div className='flex grow justify-center'>
-          <Pagination
+          <MyPagination
             totalPages={totalPages}
             statecurrentPage={currentPage}
             setStateCurrentPage={setcurrentPage}

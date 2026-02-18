@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import UserEditPopup from '@/src/ui/dashboard/users/maintPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
-import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -13,7 +13,7 @@ import {
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { MyButton } from '@/src/ui/utils/myButton'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/utils/myPagination'
 import { MyInput } from '@/src/ui/utils/myInput'
 
 export default function Table() {
@@ -464,10 +464,10 @@ export default function Table() {
       </div>
 
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* MyPagination                */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
@@ -497,7 +497,7 @@ export default function Table() {
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <MyConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

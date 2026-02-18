@@ -9,7 +9,7 @@ interface PopupProps {
   maxWidth?: string
 }
 
-export default function Popup({ isOpen, onClose, children, maxWidth = 'max-w-md' }: PopupProps) {
+export default function MyPopup({ isOpen, onClose, children, maxWidth = 'max-w-md' }: PopupProps) {
   if (!isOpen) return null
 
   return (

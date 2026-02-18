@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
 import {
   fetchFiltered,
   fetchTotalPages,
@@ -12,7 +12,7 @@ import { table_copy_data } from '@/src/lib/tables/tableGeneric/table_copy_data'
 import { table_truncate } from '@/src/lib/tables/tableGeneric/table_truncate'
 import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/utils/myPagination'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { MyInput } from '@/src/ui/utils/myInput'
 import { basetables } from '@/src/ui/admin/backup/basetables'
@@ -1425,7 +1425,7 @@ export default function Table() {
   function render_pagination() {
     return (
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
@@ -1460,7 +1460,7 @@ export default function Table() {
         </div>
       )}
 
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <MyConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

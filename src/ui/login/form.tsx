@@ -9,7 +9,7 @@ import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/utils/myInput'
-import { LoadingMessage } from '@/src/ui/utils/loadingMessage'
+import { MyLoadingMessage } from '@/src/ui/utils/myLoadingMessage'
 
 export default function LoginForm() {
   const router = useRouter()
@@ -91,7 +91,7 @@ export default function LoginForm() {
   function renderContent() {
     if (submitting) {
       return (
-        <LoadingMessage message1='Please wait..' message2='Signin in progress'></LoadingMessage>
+        <MyLoadingMessage message1='Please wait..' message2='Signin in progress'></MyLoadingMessage>
       )
     }
 

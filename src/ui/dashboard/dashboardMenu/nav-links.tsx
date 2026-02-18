@@ -8,7 +8,7 @@ import {
   links_dashboard,
   links_dashboard_admin,
   links_admin
-} from '@/src/ui/utils/nav/nav_link_constants'
+} from '@/src/ui/dashboard/dashboardMenu/nav_link_constants'
 
 interface Props {
   sessionInfo: structure_SessionsInfo

@@ -8,7 +8,7 @@ interface PaginationProps {
   setStateCurrentPage: (value: number) => void
 }
 
-export default function Pagination({
+export default function MyPagination({
   totalPages,
   statecurrentPage,
   setStateCurrentPage
@@ -34,9 +34,7 @@ export default function Pagination({
       position === 'first' || position === 'single' ? 'rounded-l-md' : '',
       position === 'last' || position === 'single' ? 'rounded-r-md' : '',
       isActive ? 'z-10 bg-blue-600 border-blue-600 text-white' : '',
-      !isActive && position !== 'middle'
-        ? 'hover:bg-gray-100 cursor-pointer'
-        : '',
+      !isActive && position !== 'middle' ? 'hover:bg-gray-100 cursor-pointer' : '',
       position === 'middle' ? 'text-gray-300' : ''
     ].join(' ')
 
@@ -72,17 +70,11 @@ export default function Pagination({
     ].join(' ')
 
     const icon =
-      direction === 'left' ? (
-        <ArrowLeftIcon className='w-4' />
-      ) : (
-        <ArrowRightIcon className='w-4' />
-      )
+      direction === 'left' ? <ArrowLeftIcon className='w-4' /> : <ArrowRightIcon className='w-4' />
 
     const handleClick = () => {
       if (!isDisabled) {
-        setStateCurrentPage(
-          direction === 'left' ? statecurrentPage - 1 : statecurrentPage + 1
-        )
+        setStateCurrentPage(direction === 'left' ? statecurrentPage - 1 : statecurrentPage + 1)
       }
     }
 
@@ -93,25 +85,13 @@ export default function Pagination({
     )
   }
   //--------------------------------------------------------------------------------------------
-  // Generate Pagination Logic
+  // Generate MyPagination Logic
   //--------------------------------------------------------------------------------------------
-  function generatePagination(
-    statecurrentPage: number,
-    totalPages: number
-  ): (number | string)[] {
-    if (totalPages <= 7)
-      return Array.from({ length: totalPages }, (_, i) => i + 1)
+  function generatePagination(statecurrentPage: number, totalPages: number): (number | string)[] {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
     if (statecurrentPage <= 4) return [1, 2, 3, 4, 5, '...', totalPages]
     if (statecurrentPage >= totalPages - 3)
-      return [
-        1,
-        '...',
-        totalPages - 4,
-        totalPages - 3,
-        totalPages - 2,
-        totalPages - 1,
-        totalPages
-      ]
+      return [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
     return [
       1,
       '...',
@@ -123,7 +103,7 @@ export default function Pagination({
     ]
   }
   //--------------------------------------------------------------------------------------------
-  // Render Pagination
+  // Render MyPagination
   //--------------------------------------------------------------------------------------------
   return (
     <div className='inline-flex'>
@@ -170,10 +150,7 @@ export default function Pagination({
       {/* --------------------------------------------------------------------- */}
       {/* Right Arrow                                                          */}
       {/* --------------------------------------------------------------------- */}
-      <PaginationArrow
-        direction='right'
-        isDisabled={statecurrentPage >= totalPages}
-      />
+      <PaginationArrow direction='right' isDisabled={statecurrentPage >= totalPages} />
     </div>
   )
 }

@@ -1,8 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
-import NavLinks from '@/src/ui/utils/nav/nav-links'
-import NavSession from '@/src/ui/utils/nav/nav-session'
-import SchoolLogo from '@/src/ui/utils/school-logo'
+import NavLinks from '@/src/ui/dashboard/dashboardMenu/nav-links'
+import NavSession from '@/src/ui/dashboard/dashboardMenu/nav-session'
+import MySchoolLogo from '@/src/ui/utils/mySchool-logo'
 import { useUserContext } from '@/src/context/UserContext'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
@@ -10,8 +10,8 @@ import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/lib/user-logout'
 import { MyButton } from '@/src/ui/utils/myButton'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import NavShrink from '@/src/ui/utils/nav/nav-shrink'
-import NavDetail from '@/src/ui/utils/nav/nav-detail'
+import NavShrink from '@/src/ui/dashboard/dashboardMenu/nav-shrink'
+import NavDetail from '@/src/ui/dashboard/dashboardMenu/nav-detail'
 
 interface Props {
   baseURL: string
@@ -92,7 +92,7 @@ export default function NavSide(props: Props) {
   return (
     <div className='py-3 flex h-full flex-row md:flex-col md:items-center md:px-0 md:w-28'>
       <div className='hidden md:block'>
-        <SchoolLogo />
+        <MySchoolLogo />
       </div>
       {sessionInfo && (
         <>

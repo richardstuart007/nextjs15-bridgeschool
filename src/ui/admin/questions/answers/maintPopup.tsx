@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/utils/myPopup'
 import Form from '@/src/ui/admin/questions/answers/maint'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -17,8 +17,8 @@ export default function MaintPopup({ record, isOpen, onClose }: Props) {
     onClose()
   }
   return (
-    <Popup isOpen={isOpen} onClose={onClose} maxWidth='max-w-2xl'>
+    <MyPopup isOpen={isOpen} onClose={onClose} maxWidth='max-w-2xl'>
       <Form record={record} onSuccess={handleSuccess} shouldCloseOnUpdate={true} />
-    </Popup>
+    </MyPopup>
   )
 }

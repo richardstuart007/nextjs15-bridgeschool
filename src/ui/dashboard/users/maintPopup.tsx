@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/utils/myPopup'
 import Form from '@/src/ui/dashboard/users/maint'
 
 interface Props {
@@ -10,8 +10,8 @@ interface Props {
 
 export default function EditPopup({ uid, isOpen, onClose }: Props) {
   return (
-    <Popup isOpen={isOpen} onClose={onClose}>
+    <MyPopup isOpen={isOpen} onClose={onClose}>
       <Form admin_uid={uid} />
-    </Popup>
+    </MyPopup>
   )
 }
