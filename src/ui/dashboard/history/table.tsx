@@ -811,7 +811,6 @@ export default function Table_History() {
                   <MyLink
                     href={{
                       pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
-                      query: { ps_Route: 'history' },
                       reference: 'quiz-review',
                       segment: String(tabledata.hs_hsid)
                     }}
@@ -832,7 +831,6 @@ export default function Table_History() {
                         ? {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              ps_Route: 'history',
                               ps_Column: 'qq_rfid',
                               ps_rfid: String(tabledata.hs_rfid)
                             },
@@ -842,7 +840,6 @@ export default function Table_History() {
                         : {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              ps_Route: 'history',
                               ps_Column: 'qq_sbid',
                               ps_sbid: String(tabledata.hs_sbid)
                             },

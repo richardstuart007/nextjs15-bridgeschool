@@ -15,7 +15,7 @@ export default function Page() {
   //
   return (
     <div className='w-full md:p-6'>
-      <Table ps_route='reference' />
+      <Table />
     </div>
   )
 }

@@ -18,13 +18,9 @@ import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/ta
 
 interface FormProps {
   selected_sbsbid?: string | undefined
-  ps_route?: string
 }
 
-export default function Table_Reference({
-  selected_sbsbid,
-  ps_route = 'reference_select'
-}: FormProps) {
+export default function Table_Reference({ selected_sbsbid }: FormProps) {
   const functionName = 'Table_Reference'
   //
   //  User context
@@ -457,7 +453,6 @@ export default function Table_Reference({
                     href={{
                       pathname: `/dashboard/quiz`,
                       query: {
-                        ps_Route: ps_route,
                         ps_Column: 'qq_sbid',
                         ps_sbid: String(selected_sbsbid)
                       },
@@ -766,7 +761,6 @@ export default function Table_Reference({
                       href={{
                         pathname: `/dashboard/quiz`,
                         query: {
-                          ps_Route: ps_route,
                           ps_Column: 'qq_rfid',
                           ps_rfid: String(tabledata.rf_rfid)
                         },

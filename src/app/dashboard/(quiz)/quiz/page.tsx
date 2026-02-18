@@ -1,60 +1,28 @@
-import Form from '@/src/ui/dashboard/quiz/form'
-import { notFound } from 'next/navigation'
-import { Metadata } from 'next'
-import { table_Questions } from '@/src/lib/tables/definitions'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import QuizServer from '@/src/ui/dashboard/quiz/QuizServer'
 
-export const metadata: Metadata = {
-  title: 'Quiz'
-}
-//
-//  App route
-//
-export default async function Form_Quiz({
+export default async function Page({
   searchParams
 }: {
   searchParams: Promise<Record<string, string | string[]>>
 }) {
-  const functionName = 'Form_Quiz'
-  //
-  // Await the promise
-  //
+  //----------------------------------------------------------------------------------------------
+  //.  Await the promise
+  //----------------------------------------------------------------------------------------------
   const urlSearch = await searchParams
-  //
-  //  Quiz column and Value
-  //
-  const ps_Column = urlSearch?.ps_Column ?? 'qq_rfid'
-  const ps_sbid = Number(urlSearch?.ps_sbid) ?? 0
-  const ps_rfid = Number(urlSearch?.ps_rfid) ?? 0
-  const Column_value = ps_Column === 'qq_rfid' ? ps_rfid : ps_Column === 'qq_sbid' ? ps_sbid : 0
-  //
-  //  Get the data
-  //
-  let questions: table_Questions[] = []
-  try {
-    //
-    //  Get Questions
-    //
-    const questionsData = await table_fetch({
-      caller: functionName,
-      table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: ps_Column, value: Column_value }]
-    } as table_fetch_Props)
-    if (!questionsData) notFound()
-    //
-    //  Filter out questions with no answers
-    //
-    questions = questionsData.filter(q => Array.isArray(q.qq_ans) && q.qq_ans.length > 0)
-    //
-    //  Errors
-    //
-  } catch (error) {
-    console.error('An error occurred while fetching data:', error)
-  }
-  //---------------------------------------------------
-  return (
-    <div className='w-full md:p-6'>
-      <Form questions={questions} rfid={ps_rfid} />
-    </div>
-  )
+
+  //----------------------------------------------------------------------------------------------
+  //.  Quiz column and Value
+  //----------------------------------------------------------------------------------------------
+  const ps_Column = String(urlSearch?.ps_Column ?? 'qq_rfid')
+
+  const ps_sbidRaw = Number(urlSearch?.ps_sbid)
+  const ps_sbid = isNaN(ps_sbidRaw) ? 0 : ps_sbidRaw
+
+  const ps_rfidRaw = Number(urlSearch?.ps_rfid)
+  const ps_rfid = isNaN(ps_rfidRaw) ? 0 : ps_rfidRaw
+
+  //----------------------------------------------------------------------------------------------
+  //.  Call QuizServer only once parameters are verified
+  //----------------------------------------------------------------------------------------------
+  return <QuizServer ps_rfid={ps_rfid} ps_Column={ps_Column} ps_sbid={ps_sbid} />
 }

@@ -547,7 +547,6 @@ export default function Table_Subject() {
                     href={{
                       pathname: `/dashboard/reference_select`,
                       query: {
-                        ps_Route: 'subject',
                         selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
                       },
                       reference: 'reference_select',
@@ -578,7 +577,6 @@ export default function Table_Subject() {
                     href={{
                       pathname: `/dashboard/quiz/`,
                       query: {
-                        ps_Route: 'subject',
                         ps_Column: 'qq_sbid',
                         ps_sbid: String(tabledata.sb_sbid)
                       },

@@ -12,7 +12,6 @@ import { MyLink } from '@/src/ui/utils/myLink'
 interface ReviewFormClientProps {
   history: table_Usershistory
   questions: table_Questions[]
-  ps_route?: string
 }
 
 export default function ReviewFormClient(props: ReviewFormClientProps) {
@@ -35,6 +34,16 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   const [question, setQuestion] = useState<table_Questions | undefined>(questions[safeInitialIndex])
   const [ans, setAns] = useState<number>(hs_ans[0] ?? 0)
   const [isHelpVisible, setIsHelpVisible] = useState(true)
+  //----------------------------------------------------------------------------------------------
+  // Render selection
+  //----------------------------------------------------------------------------------------------
+  function render_banner() {
+    return (
+      <div className='px-3 py-1 flex items-center bg-blue-200 border-b rounded-t-lg min-w-[300px] max-w-[400px]'>
+        <div className='font-semibold text-red-600 leading-none'>Quiz Review</div>
+      </div>
+    )
+  }
   //...................................................................................
   //. Question display
   //...................................................................................
@@ -119,6 +128,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   //...................................................................................
   return (
     <>
+      {render_banner()}
       {render_question()}
       {question && <QuizBidding question={question} />}
       {question && <QuizHands question={question} />}
