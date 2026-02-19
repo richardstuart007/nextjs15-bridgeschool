@@ -4,11 +4,11 @@ import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import maint_detail_validate from '@/src/ui/admin/questions/detail/maint-validate'
-import { getNextSeq } from '@/src/lib/tables/tableSpecific/questions_nextseq'
-import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
-import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
-import { errorLogging } from '@/src/lib/errorLogging'
-import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
+import { fetch_NextSeq } from '@/src/lib/tables/tableSpecific/fetch_NextSeq'
+import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
+import { update_rf_cntquestions } from '@/src/lib/tables/tableSpecific/update_rf_cntquestions'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -124,11 +124,11 @@ export async function Maint_detail_action(
       //
       //  Get next sequence if Add
       //
-      qq_seq = await getNextSeq(qq_owner, qq_subject)
+      qq_seq = await fetch_NextSeq(qq_owner, qq_subject)
       //
       //  Get the subject id
       //
-      const row = await row_fetch_subject(qq_owner, qq_subject)
+      const row = await fetch_OwnerSubject(qq_owner, qq_subject)
       const { sb_sbid } = row
       const qq_sbid = sb_sbid
       //
@@ -151,11 +151,11 @@ export async function Maint_detail_action(
       //
       //  update Questions counts in Subject
       //
-      await update_sbcntquestions(qq_sbid)
+      await update_sb_cntquestions(qq_sbid)
       //
       //  update Questions counts in Reference
       //
-      await update_rfcntquestions(qq_rfid)
+      await update_rf_cntquestions(qq_rfid)
     }
     return {
       message: `Database updated successfully.`,
@@ -164,7 +164,7 @@ export async function Maint_detail_action(
     }
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

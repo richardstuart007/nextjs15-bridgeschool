@@ -5,7 +5,7 @@ import path from 'path'
 import csv from 'csv-parser'
 import readline from 'readline'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //--------------------------------------------------------------------------
 //  Checks if a directory exists on the system
 //--------------------------------------------------------------------------
@@ -23,7 +23,7 @@ export async function directory_Exists(dirPath: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -54,7 +54,7 @@ export async function directory_create(dirPath: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -84,7 +84,7 @@ export async function directory_delete(dirPath: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -107,7 +107,7 @@ export async function directory_list(dirPath: string): Promise<string[]> {
     // Check if the directory exists
     if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
       const errorMessage = `The provided path (${dirPath}) is not a valid directory`
-      errorLogging({
+      write_Logging({
         lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage,
@@ -127,7 +127,7 @@ export async function directory_list(dirPath: string): Promise<string[]> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -154,7 +154,7 @@ export async function file_exists(filePath: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -184,7 +184,7 @@ export async function file_delete(filePath: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -218,7 +218,7 @@ export async function convertCsvToJson(
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -256,7 +256,7 @@ async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -297,7 +297,7 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -335,7 +335,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     // Log the query
     //
     const errorMessage = `${query} dirPath: ${dirPath} file_out: ${file_out}`
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -356,7 +356,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     //
     if (!result || !result.rows || result.rows.length === 0 || !result.rows[0].json_agg) {
       const errorMessage = `No data found in the table ${table}`
-      errorLogging({
+      write_Logging({
         lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage,
@@ -391,7 +391,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     //  Logging
     //
     const errorMessage1 = `Data saved as JSON to ${outputPath}`
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage1,
@@ -406,7 +406,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -441,7 +441,7 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -466,7 +466,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     // Log the parameters
     //
     const errorMessage = `filePath: ${filePath}, tableName: ${tableName}`
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -477,7 +477,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     //
     if (!fs.existsSync(filePath)) {
       const errorMessage1 = `File not found: ${filePath}`
-      errorLogging({
+      write_Logging({
         lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage1,
@@ -495,7 +495,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     //
     if (!Array.isArray(jsonData)) {
       const errorMessage = `JSON data is not an array. Expected an array of objects file ${filePath}`
-      errorLogging({
+      write_Logging({
         lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage,
@@ -508,7 +508,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     //
     if (jsonData.length === 0) {
       const errorMessage = `No data found in the JSON file ${filePath}`
-      errorLogging({
+      write_Logging({
         lg_caller: '',
         lg_functionname: functionName,
         lg_msg: errorMessage,
@@ -577,7 +577,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

@@ -1,14 +1,14 @@
 'use client'
 import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint_detail_action } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { MyInput } from '@/src/ui/utils/myInput'
-import { MyTextarea } from '@/src/ui/utils/myTextarea'
-import { row_fetch_subject } from '@/src/lib/tables/tableGeneric/row_fetch_subject'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { MyInput } from '@/src/ui/components/myInput'
+import { MyTextarea } from '@/src/ui/components/myTextarea'
+import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 
 interface FormProps {
   questionRecord: table_Questions | undefined
@@ -54,7 +54,7 @@ export default function Form({
     if (qq_owner === '' || qq_subject === '') return
 
     try {
-      const row = await row_fetch_subject(String(qq_owner), String(qq_subject))
+      const row = await fetch_OwnerSubject(String(qq_owner), String(qq_subject))
       if (row) {
         const { sb_sbid } = row
         setqq_sbid(sb_sbid)

@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
-import { COUNTRIES } from '@/src/lib/countries'
+import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { structure_Country } from '@/src/lib/tables/structures'
 //--------------------------------------------------------------------------------
 //  Convert GMT date/time to local
@@ -19,9 +19,8 @@ export function convertUTCtoLocal({
   //  Get the users time zone
   //
   const userTimeZone =
-    COUNTRIES.find(
-      (country: structure_Country) => country.code === to_localcountryCode
-    )?.timezone || 'UTC'
+    COUNTRIES.find((country: structure_Country) => country.code === to_localcountryCode)
+      ?.timezone || 'UTC'
   //
   // Convert the stored GMT datetime string to a Date object in UTC
   //

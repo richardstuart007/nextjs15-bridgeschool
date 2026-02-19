@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Form from '@/src/ui/admin/users/pwdedit/maint'
 import { table_Users } from '@/src/lib/tables/definitions'
 
@@ -11,8 +11,8 @@ interface Props {
 
 export default function EditPopup({ userRecord, isOpen, onClose }: Props) {
   return (
-    <Popup isOpen={isOpen} onClose={onClose}>
+    <MyPopup isOpen={isOpen} onClose={onClose}>
       {userRecord && <Form UserRecord={userRecord} />}
-    </Popup>
+    </MyPopup>
   )
 }

@@ -1,13 +1,13 @@
 'use client'
 
-import { lusitana } from '@/src/root/constants_fonts'
+import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { action } from '@/src/ui/register/action'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useActionState } from 'react'
-import { MyInput } from '@/src/ui/utils/myInput'
-import { LoadingMessage } from '@/src/ui/utils/loadingMessage'
+import { MyInput } from '@/src/ui/components/myInput'
+import { MyLoadingMessage } from '@/src/ui/components/myLoadingMessage'
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -82,10 +82,10 @@ export default function RegisterForm() {
   function renderContent() {
     if (submitting) {
       return (
-        <LoadingMessage
+        <MyLoadingMessage
           message1='Please wait..'
           message2='Registration in progress'
-        ></LoadingMessage>
+        ></MyLoadingMessage>
       )
     }
 

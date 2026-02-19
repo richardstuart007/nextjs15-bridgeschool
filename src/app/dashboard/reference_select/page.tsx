@@ -1,7 +1,5 @@
 import Table from '@/src/ui/dashboard/reference/table'
-import { Suspense } from 'react'
-import { TableSkeleton } from '@/src/ui/dashboard/reference/skeleton'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -22,16 +20,13 @@ export default async function Page({
   //
   //  Subject
   //
-  const selected_sbsbid = String(urlSearch?.selected_sbsbid) || 'unknown'
+  const uq_sbid = String(urlSearch?.uq_sbid) || 'unknown'
   //
   //  user interface
   //
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
-      <Suspense fallback={<TableSkeleton />}>
-        <Table selected_sbsbid={selected_sbsbid} />
-      </Suspense>
+      <Table uq_sbid={uq_sbid} />
     </div>
   )
 }

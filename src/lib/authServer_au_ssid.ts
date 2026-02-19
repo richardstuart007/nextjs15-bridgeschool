@@ -1,18 +1,18 @@
 //
-//  Cashed au_ssid
+//  cached au_ssid
 //
-let cashed_au_ssid: number | null = null
+let cached_au_ssid: number | null = null
 
-import { getAuthSession } from '@/src/lib/data-auth'
+import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 //
 //  Return Auth Session
 //
 export async function getAuthServer_au_ssid() {
   //
-  //  If cashed value exists, return it
+  //  If cached value exists, return it
   //
-  if (cashed_au_ssid !== null) {
-    return cashed_au_ssid
+  if (cached_au_ssid !== null) {
+    return cached_au_ssid
   }
   //
   //  Get session from Auth

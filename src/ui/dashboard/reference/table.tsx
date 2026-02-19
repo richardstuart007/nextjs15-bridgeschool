@@ -8,24 +8,19 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
-import MyDropdown from '@/src/ui/utils/myDropdown'
+import MyPagination from '@/src/ui/components/myPagination'
+import MyDropdown from '@/src/ui/components/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyInput } from '@/src/ui/utils/myInput'
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyInput } from '@/src/ui/components/myInput'
+import { MyLink } from '@/src/ui/components/myLink'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 interface FormProps {
-  selected_sbsbid?: string | undefined
-  ps_route?: string
+  uq_sbid?: string | undefined
 }
 
-export default function Table_Reference({
-  selected_sbsbid,
-  ps_route = 'reference_select'
-}: FormProps) {
+export default function Table_Reference({ uq_sbid }: FormProps) {
   const functionName = 'Table_Reference'
   //
   //  User context
@@ -112,7 +107,7 @@ export default function Table_Reference({
       //
       //  Set the selected values
       //
-      if (selected_sbsbid) await selectedOwnerSubject()
+      if (uq_sbid) await selectedOwnerSubject()
       //
       //  Update Columns and rows
       //
@@ -254,8 +249,8 @@ export default function Table_Reference({
     //
     setshow_quiz(true)
     if (widthNumber >= 2) {
-      if (!selected_sbsbid) setshow_owner(true)
-      if (!selected_sbsbid) setshow_subject(true)
+      if (!uq_sbid) setshow_owner(true)
+      if (!uq_sbid) setshow_subject(true)
       setshow_questions(true)
       setshow_type(true)
     }
@@ -298,7 +293,7 @@ export default function Table_Reference({
       //
       //  Get the subject id
       //
-      const sb_sbid = Number(selected_sbsbid)
+      const sb_sbid = Number(uq_sbid)
       const rows = await table_fetch({
         caller: functionName,
         table: 'tsb_subject',
@@ -324,7 +319,7 @@ export default function Table_Reference({
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
     //
-    //  Message selected_sbsbid
+    //  Message uq_sbid
     //
     setMessage('Applying filters...')
     //
@@ -341,11 +336,11 @@ export default function Table_Reference({
     //
     //  Passed values
     //
-    if (selected_sbsbid) {
+    if (uq_sbid) {
       const additions: Filter[] = [
         {
           column: 'rf_sbid',
-          value: selected_sbsbid,
+          value: uq_sbid,
           operator: '='
         }
       ]
@@ -431,20 +426,18 @@ export default function Table_Reference({
     }
   }
   //----------------------------------------------------------------------------------------------
-  // Loading ?
+  // Render selection
   //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
-  //----------------------------------------------------------------------------------------------
-  // Data loaded
-  //----------------------------------------------------------------------------------------------
-  return (
-    <>
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
-        {/** -------------------------------------------------------------------- */}
-        {/** Selected Values                                                      */}
-        {/** -------------------------------------------------------------------- */}
-        {selected_sbsbid && (
-          <div className={`pl-2 py-2 ${shrink_Text}`}>
+  function render_selection() {
+    return (
+      <div
+        className={`px-3 py-1 flex items-center justify-between bg-blue-200 border-b
+              rounded-t-lg ${shrink_Text}`}
+      >
+        <div className='font-semibold text-red-600 tracking-wide'>Subject References</div>
+
+        {uq_sbid && (
+          <div className={`flex items-center gap-2 ${shrink_Text}`}>
             <span className='font-bold'>Owner: </span>
             <span className='text-green-500'>{ref_sb_owner.current}</span>
             <span className='pl-2 font-bold'> Subject: </span>
@@ -460,12 +453,12 @@ export default function Table_Reference({
                     href={{
                       pathname: `/dashboard/quiz`,
                       query: {
-                        ps_Route: ps_route,
-                        ps_Column: 'qq_sbid',
-                        ps_sbid: String(selected_sbsbid)
+                        uq_route: 'reference-select',
+                        uq_column: 'qq_sbid',
+                        uq_sbid: String(uq_sbid)
                       },
                       reference: 'quiz',
-                      segment: String(selected_sbsbid)
+                      segment: String(uq_sbid)
                     }}
                     overrideClass={`bg-blue-500 text-white hover:bg-blue-600 ${
                       shrink ? 'h-5' : 'h-6'
@@ -478,335 +471,370 @@ export default function Table_Reference({
             )}
           </div>
         )}
-        {/** -------------------------------------------------------------------- */}
-        {/** TABLE                                                                */}
-        {/** -------------------------------------------------------------------- */}
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
-            {/* --------------------------------------------------------------------- */}
-            {/** HEADINGS                                                                */}
-            {/** -------------------------------------------------------------------- */}
-            <tr className={`${shrink_Text}`}>
-              {show_owner && (
-                <th scope='col' className=' font-bold px-2'>
-                  Owner
-                </th>
-              )}
-              {show_subject && (
-                <th scope='col' className=' font-bold px-2'>
-                  Subject-name
-                </th>
-              )}
-
-              {show_ref && (
-                <th scope='col' className=' font-bold px-2'>
-                  Ref
-                </th>
-              )}
-              <th scope='col' className=' font-bold px-2 '>
-                Description
-              </th>
-              {show_who && (
-                <th scope='col' className=' font-bold px-2'>
-                  Who
-                </th>
-              )}
-              <th scope='col' className=' font-bold px-2'>
-                Type
-              </th>
-              {show_questions && (
-                <th scope='col' className=' font-bold px-2 text-center'>
-                  Questions
-                </th>
-              )}
-              {show_quiz && (
-                <th scope='col' className=' font-bold px-2 text-center'>
-                  Quiz
-                </th>
-              )}
-            </tr>
-            {/* ---------------------------------------------------------------------------------- */}
-            {/* DROPDOWN & SEARCHES             */}
-            {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
-              {/* ................................................... */}
-              {/* OWNER                                                 */}
-              {/* ................................................... */}
-              {show_owner && (
-                <th scope='col' className='px-2'>
-                  <MyDropdown
-                    selectedOption={owner}
-                    setSelectedOption={setowner}
-                    searchEnabled={false}
-                    name='owner'
-                    table='tuo_usersowner'
-                    tableColumn='uo_usid'
-                    tableColumnValue={ref_selected_cx_usid.current}
-                    optionLabel='uo_owner'
-                    optionValue='uo_owner'
-                    overrideClass_Dropdown={
-                      shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
-                    }
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* SUBJECT                                                 */}
-              {/* ................................................... */}
-              {show_subject && (
-                <th scope='col' className=' px-2'>
-                  {owner === undefined || owner === '' ? null : (
-                    <MyDropdown
-                      selectedOption={subject}
-                      setSelectedOption={setsubject}
-                      name='subject'
-                      table='tsb_subject'
-                      tableColumn='sb_owner'
-                      tableColumnValue={owner}
-                      optionLabel='sb_title'
-                      optionValue='sb_subject'
-                      overrideClass_Dropdown={
-                        shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
-                      }
-                      includeBlank={true}
-                    />
-                  )}
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* REF                                                 */}
-              {/* ................................................... */}
-              {show_ref && (
-                <th scope='col' className=' px-2 '>
-                  <label htmlFor='ref' className='sr-only'>
-                    Reference
-                  </label>
-                  <MyInput
-                    id='ref'
-                    name='ref'
-                    overrideClass={shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`}
-                    type='text'
-                    value={ref}
-                    onChange={e => {
-                      const value = e.target.value
-                      setref(value)
-                    }}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* DESC                                                 */}
-              {/* ................................................... */}
-              <th scope='col' className='px-2'>
-                <label htmlFor='desc' className='sr-only'>
-                  Description
-                </label>
-                <MyInput
-                  id='desc'
-                  name='desc'
-                  overrideClass={shrink ? `h-5 w-40 ${shrink_Text}` : `h-6 w-48 ${shrink_Text}`}
-                  type='text'
-                  value={desc}
-                  onChange={e => {
-                    const value = e.target.value
-                    setdesc(value)
-                  }}
-                />
-              </th>
-              {/* ................................................... */}
-              {/* WHO                                                 */}
-              {/* ................................................... */}
-              {show_who && (
-                <th scope='col' className=' px-2'>
-                  <MyDropdown
-                    selectedOption={who}
-                    setSelectedOption={setwho}
-                    name='who'
-                    table='twh_who'
-                    optionLabel='wh_title'
-                    optionValue='wh_who'
-                    overrideClass_Dropdown={
-                      shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
-                    }
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-
-              {/* ................................................... */}
-              {/* type                                                 */}
-              {/* ................................................... */}
-              {show_type && (
-                <th scope='col' className=' px-2'>
-                  <MyDropdown
-                    selectedOption={type}
-                    setSelectedOption={settype}
-                    name='type'
-                    table='trt_reftype'
-                    optionLabel='rt_title'
-                    optionValue='rt_type'
-                    overrideClass_Dropdown={
-                      shrink ? `h-5 w-20 ${shrink_Text}` : `h-6 w-24 ${shrink_Text}`
-                    }
-                    includeBlank={true}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* Questions                                           */}
-              {/* ................................................... */}
-              {show_questions && (
-                <th scope='col' className='px-2 text-center'>
-                  <MyInput
-                    id='questions'
-                    name='questions'
-                    overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
-                    type='text'
-                    value={questions}
-                    onChange={e => {
-                      const value = e.target.value
-                      const numValue = Number(value)
-                      const parsedValue = isNaN(numValue) ? '' : numValue
-                      setquestions(parsedValue)
-                    }}
-                  />
-                </th>
-              )}
-              {/* ................................................... */}
-              {/* Quiz                                       */}
-              {/* ................................................... */}
-              <th scope='col' className=' px-2'></th>
-              {/* ................................................... */}
-            </tr>
-          </thead>
-          {/* ---------------------------------------------------------------------------------- */}
-          {/* BODY                                 */}
-          {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
-            {tabledata?.map(tabledata => (
-              <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                {/* ................................................... */}
-                {/* Owner                                          */}
-                {/* ................................................... */}
-                {show_owner && (
-                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                    {tabledata.rf_owner}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Subject                                          */}
-                {/* ................................................... */}
-                {show_subject && (
-                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                    {tabledata.rf_subject}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Ref                                          */}
-                {/* ................................................... */}
-                {show_ref && (
-                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                    {tabledata.rf_ref}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* desc                                          */}
-                {/* ................................................... */}
-                <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                  {tabledata.rf_desc.length > widthDesc
-                    ? `${tabledata.rf_desc.slice(0, widthDesc - 3)}...`
-                    : tabledata.rf_desc}
-                </td>
-                {/* ................................................... */}
-                {/* who                                          */}
-                {/* ................................................... */}
-                {show_who && (
-                  <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                    {tabledata.rf_who}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Read/video                                                */}
-                {/* ................................................... */}
-                <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                  <div className='inline-flex justify-center items-center'>
-                    <MyButton
-                      onClick={() => window.open(`${tabledata.rf_link}`, '_blank')}
-                      overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text} ${
-                        tabledata.rf_type === 'youtube'
-                          ? 'bg-orange-500 hover:bg-orange-600'
-                          : 'bg-green-500 hover:bg-green-600'
-                      }`}
-                    >
-                      {tabledata.rf_type === 'youtube' ? 'Video' : 'Read'}
-                    </MyButton>
-                  </div>
-                </td>
-                {/* ................................................... */}
-                {/* Questions                                            */}
-                {/* ................................................... */}
-                {show_questions && 'rf_cntquestions' in tabledata && (
-                  <td className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
-                    {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
-                  </td>
-                )}
-                {/* ................................................... */}
-                {/* Quiz                                                */}
-                {/* ................................................... */}
-                {show_quiz && (
-                  <td className='px-2 text-center'>
-                    <div className='inline-flex justify-center items-center'>
-                      {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
-                        <MyLink
-                          href={{
-                            pathname: `/dashboard/quiz`,
-                            query: {
-                              ps_Route: ps_route,
-                              ps_Column: 'qq_rfid',
-                              ps_rfid: String(tabledata.rf_rfid)
-                            },
-                            reference: 'quiz',
-                            segment: String(tabledata.rf_rfid)
-                          }}
-                          overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
-                        >
-                          Quiz
-                        </MyLink>
-                      ) : (
-                        ' '
-                      )}
-                    </div>
-                  </td>
-                )}
-                {/* ---------------------------------------------------------------------------------- */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Message               */}
-      {/* ---------------------------------------------------------------------------------- */}
-      <p className='text-red-600 text-xs'>{message}</p>
-      {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination & Back button               */}
-      {/* ---------------------------------------------------------------------------------- */}
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table header row 1
+  //----------------------------------------------------------------------------------------------
+  function render_tr1() {
+    return (
+      <tr className={`${shrink_Text}`}>
+        {show_owner && (
+          <th scope='col' className=' font-bold px-2'>
+            Owner
+          </th>
+        )}
+        {show_subject && (
+          <th scope='col' className=' font-bold px-2'>
+            Subject-name
+          </th>
+        )}
+
+        {show_ref && (
+          <th scope='col' className=' font-bold px-2'>
+            Ref
+          </th>
+        )}
+        <th scope='col' className=' font-bold px-2 '>
+          Description
+        </th>
+        {show_who && (
+          <th scope='col' className=' font-bold px-2'>
+            Who
+          </th>
+        )}
+        <th scope='col' className=' font-bold px-2'>
+          Type
+        </th>
+        {show_questions && (
+          <th scope='col' className=' font-bold px-2 text-center'>
+            Questions
+          </th>
+        )}
+        {show_quiz && (
+          <th scope='col' className=' font-bold px-2 text-center'>
+            Quiz
+          </th>
+        )}
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table header row 2
+  //----------------------------------------------------------------------------------------------
+  function render_tr2() {
+    return (
+      <tr className='text-xs align-bottom'>
+        {/* ................................................... */}
+        {/* OWNER                                                 */}
+        {/* ................................................... */}
+        {show_owner && (
+          <th scope='col' className='px-2'>
+            <MyDropdown
+              selectedOption={owner}
+              setSelectedOption={setowner}
+              searchEnabled={false}
+              name='owner'
+              table='tuo_usersowner'
+              tableColumn='uo_usid'
+              tableColumnValue={ref_selected_cx_usid.current}
+              optionLabel='uo_owner'
+              optionValue='uo_owner'
+              overrideClass_Dropdown={
+                shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
+              }
+              includeBlank={true}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* SUBJECT                                                 */}
+        {/* ................................................... */}
+        {show_subject && (
+          <th scope='col' className=' px-2'>
+            {owner === undefined || owner === '' ? null : (
+              <MyDropdown
+                selectedOption={subject}
+                setSelectedOption={setsubject}
+                name='subject'
+                table='tsb_subject'
+                tableColumn='sb_owner'
+                tableColumnValue={owner}
+                optionLabel='sb_title'
+                optionValue='sb_subject'
+                overrideClass_Dropdown={
+                  shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
+                }
+                includeBlank={true}
+              />
+            )}
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* REF                                                 */}
+        {/* ................................................... */}
+        {show_ref && (
+          <th scope='col' className=' px-2 '>
+            <label htmlFor='ref' className='sr-only'>
+              Reference
+            </label>
+            <MyInput
+              id='ref'
+              name='ref'
+              overrideClass={shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`}
+              type='text'
+              value={ref}
+              onChange={e => {
+                const value = e.target.value
+                setref(value)
+              }}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* DESC                                                 */}
+        {/* ................................................... */}
+        <th scope='col' className='px-2'>
+          <label htmlFor='desc' className='sr-only'>
+            Description
+          </label>
+          <MyInput
+            id='desc'
+            name='desc'
+            overrideClass={shrink ? `h-5 w-40 ${shrink_Text}` : `h-6 w-48 ${shrink_Text}`}
+            type='text'
+            value={desc}
+            onChange={e => {
+              const value = e.target.value
+              setdesc(value)
+            }}
+          />
+        </th>
+        {/* ................................................... */}
+        {/* WHO                                                 */}
+        {/* ................................................... */}
+        {show_who && (
+          <th scope='col' className=' px-2'>
+            <MyDropdown
+              selectedOption={who}
+              setSelectedOption={setwho}
+              name='who'
+              table='twh_who'
+              optionLabel='wh_title'
+              optionValue='wh_who'
+              overrideClass_Dropdown={
+                shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
+              }
+              includeBlank={true}
+            />
+          </th>
+        )}
+
+        {/* ................................................... */}
+        {/* type                                                 */}
+        {/* ................................................... */}
+        {show_type && (
+          <th scope='col' className=' px-2'>
+            <MyDropdown
+              selectedOption={type}
+              setSelectedOption={settype}
+              name='type'
+              table='trt_reftype'
+              optionLabel='rt_title'
+              optionValue='rt_type'
+              overrideClass_Dropdown={
+                shrink ? `h-5 w-20 ${shrink_Text}` : `h-6 w-24 ${shrink_Text}`
+              }
+              includeBlank={true}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* Questions                                           */}
+        {/* ................................................... */}
+        {show_questions && (
+          <th scope='col' className='px-2 text-center'>
+            <MyInput
+              id='questions'
+              name='questions'
+              overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
+              type='text'
+              value={questions}
+              onChange={e => {
+                const value = e.target.value
+                const numValue = Number(value)
+                const parsedValue = isNaN(numValue) ? '' : numValue
+                setquestions(parsedValue)
+              }}
+            />
+          </th>
+        )}
+        {/* ................................................... */}
+        {/* Quiz                                       */}
+        {/* ................................................... */}
+        <th scope='col' className=' px-2'></th>
+        {/* ................................................... */}
+      </tr>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render table body
+  //----------------------------------------------------------------------------------------------
+  function render_body() {
+    return (
+      <tbody className='bg-white text-xs'>
+        {tabledata?.map(tabledata => (
+          <tr key={tabledata.rf_rfid} className='w-full border-b'>
+            {/* ................................................... */}
+            {/* Owner                                          */}
+            {/* ................................................... */}
+            {show_owner && (
+              <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                {tabledata.rf_owner}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Subject                                          */}
+            {/* ................................................... */}
+            {show_subject && (
+              <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                {tabledata.rf_subject}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Ref                                          */}
+            {/* ................................................... */}
+            {show_ref && (
+              <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                {tabledata.rf_ref}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* desc                                          */}
+            {/* ................................................... */}
+            <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+              {tabledata.rf_desc.length > widthDesc
+                ? `${tabledata.rf_desc.slice(0, widthDesc - 3)}...`
+                : tabledata.rf_desc}
+            </td>
+            {/* ................................................... */}
+            {/* who                                          */}
+            {/* ................................................... */}
+            {show_who && (
+              <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                {tabledata.rf_who}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Read/video                                                */}
+            {/* ................................................... */}
+            <td className={`px-2 ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+              <div className='inline-flex justify-center items-center'>
+                <MyButton
+                  onClick={() => window.open(`${tabledata.rf_link}`, '_blank')}
+                  overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text} ${
+                    tabledata.rf_type === 'youtube'
+                      ? 'bg-orange-500 hover:bg-orange-600'
+                      : 'bg-green-500 hover:bg-green-600'
+                  }`}
+                >
+                  {tabledata.rf_type === 'youtube' ? 'Video' : 'Read'}
+                </MyButton>
+              </div>
+            </td>
+            {/* ................................................... */}
+            {/* Questions                                            */}
+            {/* ................................................... */}
+            {show_questions && 'rf_cntquestions' in tabledata && (
+              <td className={`px-2 text-center ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}>
+                {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
+              </td>
+            )}
+            {/* ................................................... */}
+            {/* Quiz                                                */}
+            {/* ................................................... */}
+            {show_quiz && (
+              <td className='px-2 text-center'>
+                <div className='inline-flex justify-center items-center'>
+                  {'rf_cntquestions' in tabledata && tabledata.rf_cntquestions > 0 ? (
+                    <MyLink
+                      href={{
+                        pathname: `/dashboard/quiz`,
+                        query: {
+                          uq_route: 'reference-select',
+                          uq_column: 'qq_rfid',
+                          uq_rfid: String(tabledata.rf_rfid)
+                        },
+                        reference: 'quiz',
+                        segment: String(tabledata.rf_rfid)
+                      }}
+                      overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                    >
+                      Quiz
+                    </MyLink>
+                  ) : (
+                    ' '
+                  )}
+                </div>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Render pagination
+  //----------------------------------------------------------------------------------------------
+  function render_pagination() {
+    return (
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
         <div className='flex justify-start'>
-          <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
-            Back
-          </MyLinkBack>
+          <MyLink
+            overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
+            href={{
+              pathname: '/dashboard/subject',
+              reference: 'subject',
+              query: {
+                uq_route: 'reference-select'
+              }
+            }}
+          >
+            Back to Subject
+          </MyLink>
         </div>
         <div className='flex grow justify-center'>
-          <Pagination
+          <MyPagination
             totalPages={totalPages}
             statecurrentPage={currentPage}
             setStateCurrentPage={setcurrentPage}
           />
         </div>
       </div>
-      {/* ---------------------------------------------------------------------------------- */}
+    )
+  }
+  //----------------------------------------------------------------------------------------------
+  // Loading ?
+  //----------------------------------------------------------------------------------------------
+  if (loading) return <p className='text-xs'>Loading....</p>
+  //----------------------------------------------------------------------------------------------
+  // Data loaded
+  //----------------------------------------------------------------------------------------------
+  return (
+    <>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+        {render_selection()}
+        <table className='min-w-full text-gray-900 table-auto'>
+          <thead className='rounded-lg text-left'>
+            {render_tr1()}
+            {render_tr2()}
+          </thead>
+          {render_body()}
+        </table>
+      </div>
+      {render_pagination()}
+      <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
     </>
   )
 }

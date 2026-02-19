@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reference/maintPopup'
-import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
@@ -10,12 +10,12 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/components/myPagination'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb_cntreference'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyInput } from '@/src/ui/components/myInput'
 
 interface FormProps {
   selected_sbid?: number | undefined
@@ -212,7 +212,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       //
       //  update counts in Subject
       //
-      await update_sbcntreference(tabledata.rf_sbid)
+      await update_sb_cntreference(tabledata.rf_sbid)
       //
       //  Reload the page
       //
@@ -500,10 +500,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         </table>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* MyPagination                */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
@@ -533,7 +533,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <MyConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
 
       {/* ---------------------------------------------------------------------------------- */}
     </>

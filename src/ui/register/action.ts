@@ -5,7 +5,7 @@ import { signIn } from '@/auth'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import bcrypt from 'bcryptjs'
-import { Default_owner, Default_fedcountry } from '@/src/root/constants_other'
+import { Default_owner, Default_fedcountry } from '@/src/root/constants/constants_other'
 // ----------------------------------------------------------------------
 //  Register
 // ----------------------------------------------------------------------

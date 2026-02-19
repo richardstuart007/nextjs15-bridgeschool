@@ -4,7 +4,7 @@ import { z } from 'zod'
 import validateSubject from '@/src/ui/admin/subject/maint-validate'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Update Owner Setup
 // ----------------------------------------------------------------------
@@ -108,7 +108,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Subject.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

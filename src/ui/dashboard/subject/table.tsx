@@ -8,13 +8,12 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
-import MyDropdown from '@/src/ui/utils/myDropdown'
+import MyPagination from '@/src/ui/components/myPagination'
+import MyDropdown from '@/src/ui/components/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyInput } from '@/src/ui/utils/myInput'
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyInput } from '@/src/ui/components/myInput'
+import { MyLink } from '@/src/ui/components/myLink'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import MyLinkBack from '@/src/ui/utils/myLinkBack'
 
 export default function Table_Subject() {
   const functionName = 'Table_Subject'
@@ -361,12 +360,19 @@ export default function Table_Subject() {
   //----------------------------------------------------------------------------------------------
   function render_selection() {
     return (
-      show_h_owner && (
-        <div className={`px-2 ${shrink_Text}`}>
-          <span className='font-medium'>Owner: </span>
-          <span className='text-green-500'>{owner}</span>
-        </div>
-      )
+      <div
+        className={`px-4 py-2 flex items-center justify-between bg-blue-200 border-b
+              rounded-t-lg ${shrink_Text}`}
+      >
+        <div className='font-semibold text-red-600 tracking-wide'>Subjects</div>
+
+        {show_h_owner && (
+          <div>
+            <span className='font-semibold'>Owner: </span>
+            <span className='font-medium'>{owner}</span>
+          </div>
+        )}
+      </div>
     )
   }
   //----------------------------------------------------------------------------------------------
@@ -540,12 +546,12 @@ export default function Table_Subject() {
                   <MyLink
                     href={{
                       pathname: `/dashboard/reference_select`,
-                      query: {
-                        ps_Route: 'subject',
-                        selected_sbsbid: JSON.stringify(tabledata.sb_sbid)
-                      },
                       reference: 'reference_select',
-                      segment: String(tabledata.sb_sbid)
+                      segment: String(tabledata.sb_sbid),
+                      query: {
+                        uq_sbid: JSON.stringify(tabledata.sb_sbid),
+                        uq_route: 'subject'
+                      }
                     }}
                     overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
                   >
@@ -572,9 +578,9 @@ export default function Table_Subject() {
                     href={{
                       pathname: `/dashboard/quiz/`,
                       query: {
-                        ps_Route: 'subject',
-                        ps_Column: 'qq_sbid',
-                        ps_sbid: String(tabledata.sb_sbid)
+                        uq_route: 'subject',
+                        uq_column: 'qq_sbid',
+                        uq_sbid: String(tabledata.sb_sbid)
                       },
                       reference: 'quiz',
                       segment: String(tabledata.sb_sbid)
@@ -599,12 +605,21 @@ export default function Table_Subject() {
     return (
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
         <div className='flex justify-start'>
-          <MyLinkBack overrideClass={`text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}>
-            Back
-          </MyLinkBack>
+          <MyLink
+            overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
+            href={{
+              pathname: '/dashboard',
+              reference: 'dashboard',
+              query: {
+                uq_route: 'subject'
+              }
+            }}
+          >
+            Back to Dashboard
+          </MyLink>
         </div>
         <div className='flex grow justify-center'>
-          <Pagination
+          <MyPagination
             totalPages={totalPages}
             statecurrentPage={currentPage}
             setStateCurrentPage={setcurrentPage}

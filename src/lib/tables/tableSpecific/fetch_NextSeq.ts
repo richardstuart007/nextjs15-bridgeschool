@@ -1,0 +1,50 @@
+'use server'
+
+import { sql } from '@/src/lib/db'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+//---------------------------------------------------------------------
+//  Get next qq_seq
+//---------------------------------------------------------------------
+export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
+  const functionName = 'fetch_NextSeq'
+  try {
+    const sqlQuery = `
+      SELECT COALESCE(MAX(qq_seq) + 1, 1) AS next_qq_seq
+      FROM tqq_questions
+      WHERE qq_owner = $1
+        AND qq_subject = $2
+    `
+    //
+    //  Logging
+    //
+    const values = [qq_owner, qq_subject]
+    //
+    //  Run sql Query
+    //
+    const db = await sql()
+    const data = await db.query({
+      caller: '',
+      query: sqlQuery,
+      params: values,
+      functionName: functionName
+    })
+    //
+    //  Return results
+    //
+    const next_qq_seq = data.rows[0]?.next_qq_seq ?? null
+    return next_qq_seq
+    //
+    //  Errors
+    //
+  } catch (error) {
+    const errorMessage = (error as Error).message
+    write_Logging({
+      lg_caller: '',
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
+    })
+    console.error('Error:', errorMessage)
+    throw new Error(`${functionName}: Failed`)
+  }
+}

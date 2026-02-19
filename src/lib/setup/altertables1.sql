@@ -1,1 +1,0 @@
-ALTER TABLE ths_history RENAME COLUMN hs_qid TO hs_qqid;

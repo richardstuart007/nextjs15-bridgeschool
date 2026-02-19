@@ -1,6 +1,5 @@
 import { table_Questions } from '@/src/lib/tables/definitions'
 import Image from 'next/image'
-
 import type { JSX } from 'react'
 
 interface QuizHandsProps {
@@ -11,13 +10,19 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
   //
   //  No Hands
   //
-  if (!question.qq_north && !question.qq_east && !question.qq_south && !question.qq_west)
+  if (
+    !Array.isArray(question.qq_north) &&
+    !Array.isArray(question.qq_east) &&
+    !Array.isArray(question.qq_south) &&
+    !Array.isArray(question.qq_west)
+  )
     return null
   //
   // Helper function to check if all values in the hand are 'n' or 'N'
   //
   type Hand = string[]
-  const isEmptyHand = (hand: Hand) => hand.every(card => card === 'n' || card === 'N')
+  const isEmptyHand = (hand: Hand) =>
+    !Array.isArray(hand) || hand.length === 0 || hand.every(card => card === 'n' || card === 'N')
   //
   //  Build Hand Data for Positions
   //
@@ -27,11 +32,18 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
     { position: 'South', hand: question.qq_south },
     { position: 'West', hand: question.qq_west }
   ]
-    .filter(handObj => handObj.hand && !isEmptyHand(handObj.hand as Hand))
+    .filter(handObj => Array.isArray(handObj.hand) && !isEmptyHand(handObj.hand))
     .map(handObj => ({
       ...handObj,
-      hand: handObj.hand?.map(card => (card === 'n' || card === 'N' ? '' : card)) || []
+      hand:
+        handObj.hand?.map(card =>
+          typeof card === 'string' && (card === 'n' || card === 'N') ? '' : (card ?? '')
+        ) || []
     }))
+  //
+  // If after filtering nothing valid remains
+  //
+  if (handData.length === 0) return null
   //------------------------------------------------------------------------------------
   return (
     <div className='my-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>

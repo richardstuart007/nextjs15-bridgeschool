@@ -2,7 +2,7 @@
 
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -130,7 +130,7 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Questions.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

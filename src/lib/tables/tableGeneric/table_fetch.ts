@@ -1,8 +1,14 @@
 'use server'
 
+import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
+import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
+
+//----------------------------------------------------------------------------------
+//  Main function
+//----------------------------------------------------------------------------------
 //
 // Props
 //
@@ -15,6 +21,7 @@ export type table_fetch_Props = {
   columns?: string[]
   limit?: number
 }
+
 export async function table_fetch({
   caller,
   table,
@@ -24,7 +31,70 @@ export async function table_fetch({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
+  //
+  // Decide whether this call should use caching (based on table)
+  //
+  if (CACHED_TABLES.has(table as TableName)) {
+    // 👇 Call the cached version
+    return cachedFetch({
+      caller,
+      table,
+      whereColumnValuePairs,
+      orderBy,
+      distinct,
+      columns,
+      limit
+    })
+  }
+  //
+  // Non-cached path
+  //
+  return _runQuery({
+    caller,
+    table,
+    whereColumnValuePairs,
+    orderBy,
+    distinct,
+    columns,
+    limit
+  })
+}
+
+//----------------------------------------------------------------------------------
+// Cached execution path – using React cache()
+//----------------------------------------------------------------------------------
+const cachedFetch = cache(async (props: table_fetch_Props): Promise<any[]> => {
+  console.log(`[CACHE] table_fetch → ${props.table}  (caller: ${props.caller})`)
+  return _runQuery(props)
+})
+
+//----------------------------------------------------------------------------------
+// Run the query
+//----------------------------------------------------------------------------------
+async function _runQuery({
+  caller,
+  table,
+  whereColumnValuePairs,
+  orderBy,
+  distinct = false,
+  columns,
+  limit
+}: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch'
+  //
+  // Runtime check: table must be in TABLES
+  //
+  if (!Object.values(TABLES).includes(table as any)) {
+    const errorMessage = `Invalid table name: ${table}`
+    console.error(`${functionName}: ${errorMessage}`)
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: errorMessage,
+      lg_severity: 'E'
+    })
+    return []
+  }
   //
   // Start building the query
   //
@@ -80,7 +150,7 @@ export async function table_fetch({
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

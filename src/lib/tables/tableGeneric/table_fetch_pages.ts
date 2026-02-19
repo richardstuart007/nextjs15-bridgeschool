@@ -1,8 +1,10 @@
 'use server'
 
+import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
 
 // Define types for joins and filters
 export type JoinParams = {
@@ -20,9 +22,96 @@ export type Filter = {
 //
 const ITEMS_PER_PAGE = 10
 //---------------------------------------------------------------------
-// Fetch Filtered Function
+// Fetch Filtered Function – decides internally whether to cache
 //---------------------------------------------------------------------
 export async function fetchFiltered({
+  table,
+  joins = [],
+  filters = [],
+  orderBy,
+  limit,
+  offset,
+  distinctColumns = [],
+  caller
+}: {
+  table: string
+  joins?: JoinParams[]
+  filters?: Filter[]
+  orderBy?: string
+  limit?: number
+  offset?: number
+  distinctColumns?: string[]
+  caller: string
+}): Promise<any[]> {
+  // Decide caching based on table (same as table_fetch)
+  if (CACHED_TABLES.has(table as TableName)) {
+    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
+    return cachedFetchFiltered({
+      table,
+      joins,
+      filters,
+      orderBy,
+      limit,
+      offset,
+      distinctColumns,
+      caller
+    })
+  }
+
+  // Non-cached path
+  return _runFilteredQuery({
+    table,
+    joins,
+    filters,
+    orderBy,
+    limit,
+    offset,
+    distinctColumns,
+    caller
+  })
+}
+
+//---------------------------------------------------------------------
+// Cached execution path – using React cache()
+//---------------------------------------------------------------------
+const cachedFetchFiltered = cache(
+  async ({
+    table,
+    joins = [],
+    filters = [],
+    orderBy,
+    limit,
+    offset,
+    distinctColumns = [],
+    caller
+  }: {
+    table: string
+    joins?: JoinParams[]
+    filters?: Filter[]
+    orderBy?: string
+    limit?: number
+    offset?: number
+    distinctColumns?: string[]
+    caller: string
+  }): Promise<any[]> => {
+    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
+    return _runFilteredQuery({
+      table,
+      joins,
+      filters,
+      orderBy,
+      limit,
+      offset,
+      distinctColumns,
+      caller
+    })
+  }
+)
+
+//---------------------------------------------------------------------
+// Shared private function – builds and executes the query
+//---------------------------------------------------------------------
+async function _runFilteredQuery({
   table,
   joins = [],
   filters = [],
@@ -44,8 +133,10 @@ export async function fetchFiltered({
   const functionName = 'fetchFiltered'
   const db = await sql()
   const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
+
   try {
     let finalQuery = sqlQuery
+
     //
     // Apply DISTINCT ON if distinctColumns are provided
     //
@@ -55,13 +146,16 @@ export async function fetchFiltered({
         `SELECT DISTINCT ON (${distinctColumns.join(', ')}) *`
       )
     }
+
     //
     // Add ORDER BY
     //
     if (orderBy) finalQuery += ` ORDER BY ${orderBy}`
+
     // Add LIMIT and OFFSET
     if (limit !== undefined) finalQuery += ` LIMIT ${limit}`
     if (offset !== undefined) finalQuery += ` OFFSET ${offset}`
+
     //
     // Execute Query
     //
@@ -76,7 +170,7 @@ export async function fetchFiltered({
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -85,8 +179,9 @@ export async function fetchFiltered({
     throw new Error(`${functionName}, ${errorMessage}`)
   }
 }
+
 //---------------------------------------------------------------------
-// Fetch Total Pages Function
+// Fetch Total Pages Function – also supports caching internally
 //---------------------------------------------------------------------
 export async function fetchTotalPages({
   table,
@@ -103,20 +198,77 @@ export async function fetchTotalPages({
   distinctColumns?: string[]
   caller: string
 }): Promise<number> {
+  // Same caching decision as fetchFiltered
+  if (CACHED_TABLES.has(table as TableName)) {
+    console.log(`[CACHE] fetchTotalPages → ${table}  (caller: ${caller})`)
+    return cachedFetchTotalPages({
+      table,
+      joins,
+      filters,
+      items_per_page,
+      distinctColumns,
+      caller
+    })
+  }
+
+  return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
+}
+
+// Cached variant for total pages using React cache()
+const cachedFetchTotalPages = cache(
+  async ({
+    table,
+    joins = [],
+    filters = [],
+    items_per_page = ITEMS_PER_PAGE,
+    distinctColumns = [],
+    caller = ''
+  }: {
+    table: string
+    joins?: JoinParams[]
+    filters?: Filter[]
+    items_per_page?: number
+    distinctColumns?: string[]
+    caller: string
+  }): Promise<number> => {
+    return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
+  }
+)
+
+// Shared logic for total pages
+async function _runTotalPagesQuery({
+  table,
+  joins = [],
+  filters = [],
+  items_per_page = ITEMS_PER_PAGE,
+  distinctColumns = [],
+  caller = ''
+}: {
+  table: string
+  joins?: JoinParams[]
+  filters?: Filter[]
+  items_per_page?: number
+  distinctColumns?: string[]
+  caller: string
+}): Promise<number> {
   const functionName = 'fetchTotalPages'
   const db = await sql()
+
   try {
     const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
+
     //
     // Modify query for COUNT
     //
     let countQuery = sqlQuery.replace('SELECT *', 'SELECT COUNT(*)')
+
     //
-    // If distinctColumns are provided, wrap the query in a subquery for counting
+    // If distinctColumns are provided, wrap in subquery for accurate count
     //
     if (distinctColumns.length > 0) {
       countQuery = `SELECT COUNT(*) FROM (${sqlQuery.replace('SELECT *', `SELECT DISTINCT ON (${distinctColumns.join(', ')}) *`)}) AS distinct_records`
     }
+
     //
     // Execute Query
     //
@@ -135,7 +287,7 @@ export async function fetchTotalPages({
     return totalPages
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -145,8 +297,9 @@ export async function fetchTotalPages({
     throw new Error(`${functionName}: Failed`)
   }
 }
+
 //---------------------------------------------------------------------
-// Helper to build SQL query and WHERE clause
+// Helper to build SQL query and WHERE clause (unchanged)
 //---------------------------------------------------------------------
 function buildSqlQuery({
   table,
@@ -157,24 +310,15 @@ function buildSqlQuery({
   joins?: JoinParams[]
   filters?: Filter[]
 }) {
-  //
-  //  Default a select query
-  //
   let sqlQuery = `SELECT * FROM ${table}`
   const queryValues: (string | number)[] = []
 
-  //
-  // Handle JOINs
-  //
   if (joins.length) {
     joins.forEach(({ table: joinTable, on }) => {
       sqlQuery += ` LEFT JOIN ${joinTable} ON ${on}`
     })
   }
 
-  //
-  // Handle WHERE conditions
-  //
   if (filters.length) {
     const whereConditions = filters.map(({ column, operator, value }) => {
       if (operator === 'IN' || operator === 'NOT IN') {
@@ -182,23 +326,19 @@ function buildSqlQuery({
           throw new Error(`Value for operator ${operator} must be an array.`)
         }
 
-        // Push individual values into queryValues
         const placeholders = value
           .map(v => {
             if (typeof v !== 'string' && typeof v !== 'number') {
               throw new Error(`Invalid value type for IN/NOT IN: ${typeof v}`)
             }
             queryValues.push(v)
-            return `$${queryValues.length}` // Generate placeholder
+            return `$${queryValues.length}`
           })
           .join(', ')
 
         return `${column} ${operator} (${placeholders})`
       }
 
-      //
-      // Handle LIKE, NOT LIKE, and other standard operators
-      //
       const adjustedColumn =
         operator === 'LIKE' || operator === 'NOT LIKE' ? `LOWER(${column})` : column
       const adjustedValue =
@@ -214,14 +354,8 @@ function buildSqlQuery({
       return `${adjustedColumn} ${operator} $${queryValues.length}`
     })
 
-    //
-    // Add WHERE clause with all conditions joined by AND
-    //
     sqlQuery += ` WHERE ${whereConditions.join(' AND ')}`
   }
 
-  //
-  // Return the constructed SQL query and query values
-  //
   return { sqlQuery, queryValues }
 }

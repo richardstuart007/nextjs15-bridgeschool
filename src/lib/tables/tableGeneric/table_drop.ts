@@ -1,6 +1,6 @@
 'use server'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 
 export async function table_drop(table: string): Promise<boolean> {
   const functionName = 'table_drop'
@@ -21,7 +21,7 @@ export async function table_drop(table: string): Promise<boolean> {
     //
     const errorMessage = `Table(${table}) DROP FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

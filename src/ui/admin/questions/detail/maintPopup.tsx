@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Form from '@/src/ui/admin/questions/detail/maint'
 import { table_Questions } from '@/src/lib/tables/definitions'
 
@@ -25,7 +25,7 @@ export default function MaintPopup({
     onClose()
   }
   return (
-    <Popup isOpen={isOpen} onClose={onClose}>
+    <MyPopup isOpen={isOpen} onClose={onClose}>
       <Form
         questionRecord={questionRecord}
         selected_owner={selected_owner}
@@ -33,6 +33,6 @@ export default function MaintPopup({
         onSuccess={handleSuccess}
         shouldCloseOnUpdate={true}
       />
-    </Popup>
+    </MyPopup>
   )
 }

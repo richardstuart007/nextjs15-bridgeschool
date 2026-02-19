@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '../../utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/dashboard/users/action'
 import { notFound } from 'next/navigation'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { COUNTRIES } from '@/src/lib/countries'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { MyInput } from '@/src/ui/utils/myInput'
-import { MyCheckbox } from '@/src/ui/utils/myCheckbox'
+import { MyInput } from '@/src/ui/components/myInput'
+import { MyCheckbox } from '@/src/ui/components/myCheckbox'
 
 interface Props {
   admin_uid?: number

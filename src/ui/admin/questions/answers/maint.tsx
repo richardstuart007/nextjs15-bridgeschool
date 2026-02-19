@@ -1,11 +1,11 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/questions/answers/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyInput } from '@/src/ui/components/myInput'
 
 interface FormProps {
   record: table_Questions | null

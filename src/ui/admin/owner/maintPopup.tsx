@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Form from '@/src/ui/admin/owner/maint'
 
 interface Props {
@@ -15,8 +15,8 @@ export default function MaintPopup({ isOpen, onClose }: Props) {
     onClose()
   }
   return (
-    <Popup isOpen={isOpen} onClose={onClose}>
+    <MyPopup isOpen={isOpen} onClose={onClose}>
       <Form onSuccess={handleSuccess} shouldCloseOnUpdate={true} />
-    </Popup>
+    </MyPopup>
   )
 }

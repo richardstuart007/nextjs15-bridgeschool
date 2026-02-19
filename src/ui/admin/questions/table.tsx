@@ -5,20 +5,20 @@ import MaintPopup_detail from '@/src/ui/admin/questions/detail/maintPopup'
 import MaintPopup_answers from '@/src/ui/admin/questions/answers/maintPopup'
 import MaintPopup_hands from '@/src/ui/admin/questions/hands/maintPopup'
 import MaintPopup_bidding from '@/src/ui/admin/questions/bidding/maintPopup'
-import { ConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/confirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
   Filter
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
+import MyPagination from '@/src/ui/components/myPagination'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { update_sbcntquestions } from '@/src/lib/tables/tableSpecific/subject_counts'
-import { update_rfcntquestions } from '@/src/lib/tables/tableSpecific/reference_counts'
-import { MyButton } from '@/src/ui/utils/myButton'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
+import { update_rf_cntquestions } from '@/src/lib/tables/tableSpecific/update_rf_cntquestions'
+import { MyButton } from '@/src/ui/components/myButton'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { MyInput } from '@/src/ui/components/myInput'
 import {
   Comparison_operator,
   Comparison_values
@@ -228,11 +228,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         //
         //  update Questions counts in Subject
         //
-        await update_sbcntquestions(questions.qq_sbid)
+        await update_sb_cntquestions(questions.qq_sbid)
         //
         //  update Questions counts in Reference
         //
-        await update_rfcntquestions(questions.qq_rfid)
+        await update_rf_cntquestions(questions.qq_rfid)
         //
         //  Reload the page
         //
@@ -536,10 +536,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         </table>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* MyPagination                */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
@@ -590,7 +590,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       )}
 
       {/* Confirmation Dialog */}
-      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
+      <MyConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </>
   )
 }

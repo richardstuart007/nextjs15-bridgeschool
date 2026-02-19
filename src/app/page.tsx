@@ -2,15 +2,15 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import { lusitana } from '@/src/root/constants_fonts'
-import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
-import { MyLink } from '../ui/utils/myLink'
+import { lusitana } from '@/src/root/constants/constants_fonts'
+import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
+import { MyLink } from '@/src/ui/components/myLink'
 
 export default function Page() {
   const [logoSize, setLogoSize] = useState(90)
 
   useEffect(() => {
-    deleteCookieServer_co_ssid()
+    cookie_delete()
   }, [])
 
   useEffect(() => {
@@ -57,7 +57,10 @@ export default function Page() {
           overrideClass='flex items-center gap-5 self-center rounded-lg bg-blue-500 px-3 py-3 text-sm text-white transition-colors hover:bg-blue-400'
           href={{
             pathname: '/login',
-            reference: 'login'
+            reference: 'login',
+            query: {
+              uq_route: 'home'
+            }
           }}
         >
           <span>Log in</span> <ArrowRightIcon className='w-5' />

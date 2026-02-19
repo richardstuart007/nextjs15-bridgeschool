@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { table_seqGet } from '@/src/lib/tables/tableGeneric/table_seq_get'
 
 interface Props {
@@ -37,7 +37,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     //  Completion message
     //
     const message = `Sequence ${sequenceName} for ${tableName}.${columnName} updated with maxValue ${maxValue} `
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: message,
@@ -50,7 +50,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
   } catch (error) {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

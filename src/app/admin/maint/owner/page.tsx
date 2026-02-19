@@ -1,7 +1,7 @@
-export const dynamic = 'force-dynamic' // Force dynamic rendering
+export const dynamic = 'force-dynamic'
 import Table from '@/src/ui/admin/owner/table'
-import Breadcrumbs from '@/src/ui/utils/breadcrumbs'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'owner'
@@ -12,8 +12,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className='w-full md:p-6'>
-      <Breadcrumbs />
-      <Table />
+      <Suspense>
+        <Table />
+      </Suspense>
     </div>
   )
 }

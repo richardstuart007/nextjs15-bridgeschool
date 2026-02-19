@@ -7,7 +7,7 @@ import type {
   structure_ProviderSignInParams
 } from '@/src/lib/tables/structures'
 import bcrypt from 'bcryptjs'
-import { providerSignIn } from '@/src/lib/data-auth'
+import { providerSignIn } from '@/src/lib/dataAuth/providerSignIn'
 import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'

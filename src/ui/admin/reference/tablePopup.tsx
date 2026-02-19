@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Table from '@/src/ui/admin/reference/table'
 
 interface Props {
@@ -12,8 +12,8 @@ interface Props {
 
 export default function MaintPopup({ sbid, owner, subject, isOpen, onClose }: Props) {
   return (
-    <Popup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
+    <MyPopup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
       <Table selected_sbid={sbid} selected_owner={owner} selected_subject={subject} />
-    </Popup>
+    </MyPopup>
   )
 }

@@ -11,60 +11,79 @@ export default function QuizBidding({ question }: QuizBiddingProps): JSX.Element
   const [suitData, setSuitData] = useState<(string | null)[][]>([])
 
   useEffect(() => {
-    if (question?.qq_rounds) {
-      const bids: (string | null)[][] = []
-      const suits: (string | null)[][] = []
+    if (
+      !question?.qq_rounds ||
+      !Array.isArray(question.qq_rounds) ||
+      question.qq_rounds.length === 0
+    ) {
+      setBiddingData([])
+      setSuitData([])
+      return
+    }
 
-      question.qq_rounds.forEach(round => {
-        const roundBids: (string | null)[] = []
-        const roundSuits: (string | null)[] = []
+    const bids: (string | null)[][] = []
+    const suits: (string | null)[][] = []
 
-        round.forEach(bidsuit => {
-          if (typeof bidsuit !== 'string') {
-            roundBids.push(null)
-            roundSuits.push(null)
-          } else {
-            let bid: string | null = bidsuit.substring(0, 1)
-            let suit: string | null = bidsuit.substring(1, 2)
+    question.qq_rounds.forEach(round => {
+      if (!Array.isArray(round)) return
 
-            switch (bid) {
-              case 'P':
-                bid = 'Pass'
+      const roundBids: (string | null)[] = []
+      const roundSuits: (string | null)[] = []
+
+      round.forEach(bidsuit => {
+        if (typeof bidsuit !== 'string') {
+          roundBids.push(null)
+          roundSuits.push(null)
+        } else {
+          let bid: string | null = bidsuit.substring(0, 1)
+          let suit: string | null = bidsuit.substring(1, 2)
+
+          switch (bid) {
+            case 'P':
+              bid = 'Pass'
+              suit = null
+              break
+            case '?':
+            case 'X':
+              suit = null
+              break
+            case ' ':
+            case 'n':
+            case 'N':
+              bid = null
+              suit = null
+              break
+            default:
+              if (suit === 'N') {
+                bid = bidsuit
                 suit = null
-                break
-              case '?':
-              case 'X':
-                suit = null
-                break
-              case ' ':
-              case 'n':
-              case 'N':
-                bid = null
-                suit = null
-                break
-              default:
-                if (suit === 'N') {
-                  bid = bidsuit
-                  suit = null
-                }
-                break
-            }
-
-            roundBids.push(bid)
-            roundSuits.push(suit)
+              }
+              break
           }
-        })
 
-        bids.push(roundBids)
-        suits.push(roundSuits)
+          roundBids.push(bid)
+          roundSuits.push(suit)
+        }
       })
 
-      setBiddingData(bids)
-      setSuitData(suits)
-    }
+      bids.push(roundBids)
+      suits.push(roundSuits)
+    })
+
+    setBiddingData(bids)
+    setSuitData(suits)
   }, [question])
 
-  if (!question?.qq_rounds) return null
+  // 🔐 Safe exit if no valid bidding exists
+  if (
+    !question?.qq_rounds ||
+    !Array.isArray(question.qq_rounds) ||
+    question.qq_rounds.length === 0
+  ) {
+    return null
+  }
+
+  if (biddingData.length === 0) return null
 
   return (
     <div className='my-1 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px]'>
@@ -91,11 +110,8 @@ export default function QuizBidding({ question }: QuizBiddingProps): JSX.Element
               {roundBids.map((bid, colIdx) => (
                 <td key={colIdx} className='whitespace-nowrap'>
                   <div className='flex items-center justify-center'>
-                    {/* Bid */}
                     {bid}
-
-                    {/* Suit Symbol */}
-                    {suitData[idx][colIdx] !== null && (
+                    {suitData[idx]?.[colIdx] !== null && suitData[idx]?.[colIdx] !== undefined && (
                       <div>
                         {suitData[idx][colIdx] === 'S' && (
                           <Image src='/suits/spade.svg' width={10} height={10} alt='spade' />

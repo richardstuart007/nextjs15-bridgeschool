@@ -1,5 +1,5 @@
 'use client'
-import Popup from '@/src/ui/utils/popup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Form from '@/src/ui/admin/subject/maint'
 import { table_Subject } from '@/src/lib/tables/definitions'
 
@@ -17,8 +17,8 @@ export default function MaintPopup({ record, isOpen, onClose }: Props) {
     onClose()
   }
   return (
-    <Popup isOpen={isOpen} onClose={onClose}>
+    <MyPopup isOpen={isOpen} onClose={onClose}>
       <Form record={record} onSuccess={handleSuccess} shouldCloseOnUpdate={true} />
-    </Popup>
+    </MyPopup>
   )
 }

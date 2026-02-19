@@ -8,8 +8,8 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import Pagination from '@/src/ui/utils/paginationState'
-import { MyInput } from '@/src/ui/utils/myInput'
+import MyPagination from '@/src/ui/components/myPagination'
+import { MyInput } from '@/src/ui/components/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 export default function Table() {
@@ -287,10 +287,10 @@ export default function Table() {
         </table>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
-      {/* Pagination                */}
+      {/* MyPagination                */}
       {/* ---------------------------------------------------------------------------------- */}
       <div className='mt-5 flex w-full justify-center'>
-        <Pagination
+        <MyPagination
           totalPages={totalPages}
           statecurrentPage={currentPage}
           setStateCurrentPage={setcurrentPage}
