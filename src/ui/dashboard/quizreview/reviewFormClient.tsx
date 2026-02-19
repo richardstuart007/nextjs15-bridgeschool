@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
-import MyPagination from '@/src/ui/utils/myPagination'
+import MyPagination from '@/src/ui/components/myPagination'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyLink } from '@/src/ui/components/myLink'
 
 interface ReviewFormClientProps {
   history: table_Usershistory

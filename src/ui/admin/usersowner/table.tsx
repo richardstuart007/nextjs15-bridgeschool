@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Usersowner } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
   Filter
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import MyPagination from '@/src/ui/utils/myPagination'
+import MyPagination from '@/src/ui/components/myPagination'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { MyButton } from '@/src/ui/utils/myButton'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { MyButton } from '@/src/ui/components/myButton'
 
 interface FormProps {
   selected_uid?: number | null

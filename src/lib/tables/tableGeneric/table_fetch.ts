@@ -64,7 +64,7 @@ export async function table_fetch({
 // Cached execution path – using React cache()
 //----------------------------------------------------------------------------------
 const cachedFetch = cache(async (props: table_fetch_Props): Promise<any[]> => {
-  console.log(`[CACHE HIT] table_fetch → ${props.table}  (caller: ${props.caller})`)
+  console.log(`[CACHE] table_fetch → ${props.table}  (caller: ${props.caller})`)
   return _runQuery(props)
 })
 

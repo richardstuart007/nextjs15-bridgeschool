@@ -3,7 +3,7 @@
 import ReviewFormClient from '@/src/ui/dashboard/quizreview/reviewFormClient'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
-import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
+import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 
 interface ReviewFormServerProps {
   hs_hsid: number
@@ -18,7 +18,7 @@ export default async function ReviewFormServer({ hs_hsid }: ReviewFormServerProp
   //
   //  Get Session Info
   //
-  const SessionInfo = await fetchSessionInfo({ caller: functionName })
+  const SessionInfo = await fetch_SessionInfo({ caller: functionName })
   const si_skipcorrect = SessionInfo.si_skipcorrect
 
   //

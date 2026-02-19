@@ -45,7 +45,7 @@ export async function fetchFiltered({
 }): Promise<any[]> {
   // Decide caching based on table (same as table_fetch)
   if (CACHED_TABLES.has(table as TableName)) {
-    console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
+    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
     return cachedFetchFiltered({
       table,
       joins,
@@ -94,7 +94,7 @@ const cachedFetchFiltered = cache(
     distinctColumns?: string[]
     caller: string
   }): Promise<any[]> => {
-    console.log(`[CACHE HIT] fetchFiltered → ${table}  (caller: ${caller})`)
+    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
     return _runFilteredQuery({
       table,
       joins,
@@ -200,7 +200,7 @@ export async function fetchTotalPages({
 }): Promise<number> {
   // Same caching decision as fetchFiltered
   if (CACHED_TABLES.has(table as TableName)) {
-    console.log(`[CACHE HIT] fetchTotalPages → ${table}  (caller: ${caller})`)
+    console.log(`[CACHE] fetchTotalPages → ${table}  (caller: ${caller})`)
     return cachedFetchTotalPages({
       table,
       joins,

@@ -12,8 +12,8 @@ interface Props {
   ml_segment: string
   ml_query: string
 }
-export default async function write_menuLinks(Props: Props) {
-  const functionName = 'write_menuLinks'
+export default async function write_ml_menuLinks(Props: Props) {
+  const functionName = 'write_ml_menuLinks'
   //
   //  Unpack Props
   //

@@ -1,4 +1,4 @@
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyLink } from '@/src/ui/components/myLink'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 
 export default function NotFound() {

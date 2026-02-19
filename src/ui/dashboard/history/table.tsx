@@ -8,11 +8,11 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import MyPagination from '@/src/ui/utils/myPagination'
-import MyDropdown from '@/src/ui/utils/myDropdown'
+import MyPagination from '@/src/ui/components/myPagination'
+import MyDropdown from '@/src/ui/components/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyLink } from '@/src/ui/utils/myLink'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyLink } from '@/src/ui/components/myLink'
+import { MyInput } from '@/src/ui/components/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 export default function Table_History() {

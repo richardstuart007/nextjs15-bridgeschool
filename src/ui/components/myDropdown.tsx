@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
+import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyInput } from '@/src/ui/components/myInput'
 //
 //  Define the options
 //

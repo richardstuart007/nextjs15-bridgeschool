@@ -1,8 +1,8 @@
 import { cache } from 'react'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 
-export const getDatabaseName = cache(async (): Promise<string> => {
-  const functionName = 'getDatabaseName'
+export const fetch_DatabaseName = cache(async (): Promise<string> => {
+  const functionName = 'fetch_DatabaseName'
   //
   // Fetch database name
   //

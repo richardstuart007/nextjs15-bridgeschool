@@ -1,8 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyLink } from '@/src/ui/components/myLink'
 import getBreadcrumb from '@/src/lib/getBreadcrumb'
-import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
+import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 
 interface Props {
   children?: React.ReactNode

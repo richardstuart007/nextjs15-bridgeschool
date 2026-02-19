@@ -1,6 +1,6 @@
 'use client'
-import { MyLink } from '@/src/ui/utils/myLink'
-import { isAdmin } from '@/src/lib/tables/tableSpecific/sessions'
+import { MyLink } from '@/src/ui/components/myLink'
+import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
 import { logout } from '@/src/lib/user-logout'
 import { useEffect, useState } from 'react'
 
@@ -11,7 +11,7 @@ export default function Page() {
   //
   useEffect(() => {
     const checkAdmin = async () => {
-      const admin = await isAdmin()
+      const admin = await fetch_IsAdmin()
       if (!admin) {
         await logout()
       } else {

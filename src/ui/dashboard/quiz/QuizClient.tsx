@@ -7,8 +7,8 @@ import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import QuizChoice from '@/src/ui/dashboard/quiz/choices'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyLink } from '@/src/ui/utils/myLink'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyLink } from '@/src/ui/components/myLink'
 import { useUserContext } from '@/src/context/UserContext'
 
 interface QuizClientProps {

@@ -1,4 +1,4 @@
-import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
+import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode

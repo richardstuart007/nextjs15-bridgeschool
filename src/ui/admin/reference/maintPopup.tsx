@@ -1,5 +1,5 @@
 'use client'
-import MyPopup from '@/src/ui/utils/myPopup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Form from '@/src/ui/admin/reference/maint'
 import { table_Reference } from '@/src/lib/tables/definitions'
 

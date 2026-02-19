@@ -3,9 +3,9 @@
 import { z } from 'zod'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { update_sbcntreference } from '@/src/lib/tables/tableSpecific/subject_counts'
+import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb_cntreference'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { row_fetch_subject } from '@/src/lib/tables/tableSpecific/row_fetch_subject'
+import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import type { table_Reference } from '@/src/lib/tables/definitions'
 //
@@ -105,7 +105,7 @@ export async function referenceAction(
     //
     //  Get the subject id
     //
-    const row = await row_fetch_subject(rf_owner, rf_subject)
+    const row = await fetch_OwnerSubject(rf_owner, rf_subject)
     const { sb_sbid } = row
     const rf_sbid = sb_sbid
     //
@@ -130,7 +130,7 @@ export async function referenceAction(
       //
       //  update counts in Subject
       //
-      await update_sbcntreference(rf_sbid)
+      await update_sb_cntreference(rf_sbid)
     }
     //
     //  Update

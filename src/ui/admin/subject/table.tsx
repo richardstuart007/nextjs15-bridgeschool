@@ -4,19 +4,19 @@ import { useState, useEffect } from 'react'
 import MaintPopup_Subject from '@/src/ui/admin/subject/maintPopup'
 import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Subject } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
   Filter
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import MyPagination from '@/src/ui/utils/myPagination'
+import MyPagination from '@/src/ui/components/myPagination'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { MyButton } from '@/src/ui/utils/myButton'
-import MyDropdown from '@/src/ui/utils/myDropdown'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyButton } from '@/src/ui/components/myButton'
+import MyDropdown from '@/src/ui/components/myDropdown'
+import { MyInput } from '@/src/ui/components/myInput'
 
 export default function Table() {
   const functionName = 'Table_Subject'

@@ -1,5 +1,5 @@
 'use client'
-import MyPopup from '@/src/ui/utils/myPopup'
+import MyPopup from '@/src/ui/components/myPopup'
 import Table from '@/src/ui/admin/usersowner/table'
 
 interface Props {

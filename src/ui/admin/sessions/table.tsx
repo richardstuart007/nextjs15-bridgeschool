@@ -8,8 +8,8 @@ import {
   Filter,
   JoinParams
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import MyPagination from '@/src/ui/utils/myPagination'
-import { MyInput } from '@/src/ui/utils/myInput'
+import MyPagination from '@/src/ui/components/myPagination'
+import { MyInput } from '@/src/ui/components/myInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 export default function Table() {

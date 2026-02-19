@@ -3,7 +3,7 @@
 import QuizClient from '@/src/ui/dashboard/quiz/QuizClient'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
+import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 
 export interface QuizServerProps {
   uq_rfid: number
@@ -20,7 +20,7 @@ export default async function QuizServer({ uq_rfid, uq_column, uq_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   //.  Fetch session info to get quiz settings
   //----------------------------------------------------------------------------------------------
-  const SessionInfo = await fetchSessionInfo({ caller: functionName })
+  const SessionInfo = await fetch_SessionInfo({ caller: functionName })
   if (!SessionInfo) throw new Error('SessionInfo not found')
   const { si_maxquestions, si_sortquestions } = SessionInfo
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyInput } from '@/src/ui/components/myInput'
 
 interface RadioOption {
   id: string
@@ -36,10 +36,7 @@ export default function RadioSubject(props: RadioSubjectProps) {
     <>
       {options.map(option => (
         <div key={option.id} className='flex items-center ml-2'>
-          <label
-            htmlFor={option.id}
-            className='flex items-center cursor-pointer'
-          >
+          <label htmlFor={option.id} className='flex items-center cursor-pointer'>
             <div className='w-6 h-6 relative'>
               <MyInput
                 type='radio'

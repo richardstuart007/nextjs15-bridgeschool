@@ -3,19 +3,15 @@
 import { sql } from '@/src/lib/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { errorLogging } from '@/src/lib/errorLogging'
-import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
-//
-// Props
-//
 export type Props = {
   caller?: string
 }
-export async function fetchSessionInfo({ caller = '' }: Props) {
-  const functionName = 'fetchSessionInfo'
+export async function fetch_SessionInfo({ caller = '' }: Props) {
+  const functionName = 'fetch_SessionInfo'
   //
   //  Get the session id
   //
@@ -63,43 +59,6 @@ export async function fetchSessionInfo({ caller = '' }: Props) {
       si_maxquestions: row.us_maxquestions
     }
     return structure_SessionsInfo
-    //
-    //  Errors
-    //
-  } catch (error) {
-    const errorMessage = (error as Error).message
-    errorLogging({
-      lg_caller: '',
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
-    console.error('Error:', errorMessage)
-    throw new Error(`${functionName}: Failed`)
-  }
-}
-// ----------------------------------------------------------------------
-//  Determine if Admin User
-// ----------------------------------------------------------------------
-export async function isAdmin() {
-  const functionName = 'isAdmin'
-  try {
-    //
-    //  Get session id
-    //
-    const co_ssid = await getCookieServer_co_ssid()
-    //
-    //  No session then not logged in
-    //
-    if (!co_ssid) return false
-    //
-    //  Session info
-    //
-    const sessionInfo = await fetchSessionInfo({ caller: functionName })
-    //
-    //  Return admin flag
-    //
-    return sessionInfo.si_admin
     //
     //  Errors
     //

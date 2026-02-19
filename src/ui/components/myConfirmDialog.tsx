@@ -1,6 +1,6 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import MyPopup from '@/src/ui/utils/myPopup'
-import { MyButton } from '@/src/ui/utils/myButton'
+import MyPopup from '@/src/ui/components/myPopup'
+import { MyButton } from '@/src/ui/components/myButton'
 
 export interface ConfirmDialogInt {
   isOpen: boolean

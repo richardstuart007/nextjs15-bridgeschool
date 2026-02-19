@@ -5,8 +5,8 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //---------------------------------------------------------------------
 //  Get next qq_seq
 //---------------------------------------------------------------------
-export async function getNextSeq(qq_owner: string, qq_subject: string) {
-  const functionName = 'getNextSeq'
+export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
+  const functionName = 'fetch_NextSeq'
   try {
     const sqlQuery = `
       SELECT COALESCE(MAX(qq_seq) + 1, 1) AS next_qq_seq

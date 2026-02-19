@@ -2,13 +2,13 @@
 import { useEffect, useState } from 'react'
 import NavLinks from '@/src/ui/dashboard/dashboardMenu/nav-links'
 import NavSession from '@/src/ui/dashboard/dashboardMenu/nav-session'
-import MySchoolLogo from '@/src/ui/utils/mySchool-logo'
+import MySchoolLogo from '@/src/ui/components/mySchool-logo'
 import { useUserContext } from '@/src/context/UserContext'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
-import { fetchSessionInfo } from '@/src/lib/tables/tableSpecific/sessions'
+import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { logout } from '@/src/lib/user-logout'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import NavShrink from '@/src/ui/dashboard/dashboardMenu/nav-shrink'
 import NavDetail from '@/src/ui/dashboard/dashboardMenu/nav-detail'
@@ -63,7 +63,7 @@ export default function NavSide(props: Props) {
     //  Get Session info from database & update Context
     //
     if (au_ssid) {
-      const SessionInfo = await fetchSessionInfo({ caller: functionName })
+      const SessionInfo = await fetch_SessionInfo({ caller: functionName })
       setSessionContext(prev => ({
         ...prev,
         cx_usid: SessionInfo.si_usid,

@@ -2,7 +2,7 @@
 import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { Routes_AfterLogin_redirect } from '@/src/root/constants_validroutes'
 
 interface SocialsProps {

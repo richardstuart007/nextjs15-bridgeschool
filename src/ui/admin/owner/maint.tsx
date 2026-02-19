@@ -1,10 +1,10 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 import { useFormStatus } from 'react-dom'
 import { OwnerMaint } from '@/src/ui/admin/owner/maint-action'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyInput } from '@/src/ui/components/myInput'
 
 interface FormProps {
   onSuccess: () => void

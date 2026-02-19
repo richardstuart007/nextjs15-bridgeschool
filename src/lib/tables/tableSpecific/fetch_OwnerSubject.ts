@@ -3,8 +3,8 @@ import { errorLogging } from '@/src/lib/errorLogging'
 //
 //  Fetch unique owner/subject
 //
-export const row_fetch_subject = async (owner: string, subject: string) => {
-  const functionName = 'row_fetch_subject'
+export const fetch_OwnerSubject = async (owner: string, subject: string) => {
+  const functionName = 'fetch_OwnerSubject'
   //
   // Early return if owner or subject is not selected
   //

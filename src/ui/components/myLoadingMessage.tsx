@@ -1,4 +1,4 @@
-import { MyHourGlass } from '@/src/ui/utils/myHourGlass'
+import { MyHourGlass } from '@/src/ui/components/myHourGlass'
 interface MyLoadingMessageProps {
   message1?: string
   message2?: string

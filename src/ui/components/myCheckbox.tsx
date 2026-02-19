@@ -1,4 +1,4 @@
-import { myMergeClasses } from '@/src/ui/utils/myMergeClasses'
+import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   overrideClass?: string
@@ -39,12 +39,7 @@ export function MyCheckbox({
   const checkbox_name = `checkbox_${inputName}`
   return (
     <>
-      <input
-        id={inputName}
-        type='hidden'
-        name={inputName}
-        value={inputValue_string}
-      />
+      <input id={inputName} type='hidden' name={inputName} value={inputValue_string} />
       <label className='inline-flex items-center cursor-pointer'>
         <input
           type='checkbox'

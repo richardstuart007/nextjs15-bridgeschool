@@ -2,18 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reftype/maintPopup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Reftype } from '@/src/lib/tables/definitions'
 import {
   fetchFiltered,
   fetchTotalPages,
   Filter
 } from '@/src/lib/tables/tableGeneric/table_fetch_pages'
-import MyPagination from '@/src/ui/utils/myPagination'
+import MyPagination from '@/src/ui/components/myPagination'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyInput } from '@/src/ui/utils/myInput'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyInput } from '@/src/ui/components/myInput'
 
 export default function Table() {
   const functionName = 'Table_Reftype'

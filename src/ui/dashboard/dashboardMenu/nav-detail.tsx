@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyButton } from '@/src/ui/utils/myButton'
+import { MyButton } from '@/src/ui/components/myButton'
 
 export default function NavDev() {
   //

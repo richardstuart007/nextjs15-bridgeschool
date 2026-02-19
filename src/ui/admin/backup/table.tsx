@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/utils/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import {
   fetchFiltered,
   fetchTotalPages,
@@ -12,9 +12,9 @@ import { table_copy_data } from '@/src/lib/tables/tableGeneric/table_copy_data'
 import { table_truncate } from '@/src/lib/tables/tableGeneric/table_truncate'
 import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
 import { table_drop } from '@/src/lib/tables/tableGeneric/table_drop'
-import MyPagination from '@/src/ui/utils/myPagination'
-import { MyButton } from '@/src/ui/utils/myButton'
-import { MyInput } from '@/src/ui/utils/myInput'
+import MyPagination from '@/src/ui/components/myPagination'
+import { MyButton } from '@/src/ui/components/myButton'
+import { MyInput } from '@/src/ui/components/myInput'
 import { basetables } from '@/src/ui/admin/backup/basetables'
 import { table_seqReset } from '@/src/lib/tables/tableGeneric/table_seq_reset'
 import {

@@ -1,4 +1,4 @@
-import MySchoolLogo from '@/src/ui/utils/mySchool-logo'
+import MySchoolLogo from '@/src/ui/components/mySchool-logo'
 import LoginForm from '@/src/ui/login/form'
 import { Metadata } from 'next'
 
