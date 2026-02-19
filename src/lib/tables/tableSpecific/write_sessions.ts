@@ -1,10 +1,10 @@
 'use server'
 
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { updateCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+import { cookie_update } from '@/src/lib/cookie/cookie_update'
 
-export async function newSession(ss_usid: number) {
-  const functionName = 'newSession'
+export async function write_sessions(ss_usid: number) {
+  const functionName = 'write_sessions'
   //
   //  Get date in UTC
   //
@@ -30,7 +30,7 @@ export async function newSession(ss_usid: number) {
   //
   // Write cookie ss_ssid
   //
-  await updateCookieServer_co_ssid(ss_ssid)
+  await cookie_update(ss_ssid)
   //
   //  Return Session ID
   //

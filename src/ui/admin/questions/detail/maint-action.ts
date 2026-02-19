@@ -7,7 +7,7 @@ import maint_detail_validate from '@/src/ui/admin/questions/detail/maint-validat
 import { fetch_NextSeq } from '@/src/lib/tables/tableSpecific/fetch_NextSeq'
 import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
 import { update_rf_cntquestions } from '@/src/lib/tables/tableSpecific/update_rf_cntquestions'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 // ----------------------------------------------------------------------
 //  Update Setup
@@ -164,7 +164,7 @@ export async function Maint_detail_action(
     }
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

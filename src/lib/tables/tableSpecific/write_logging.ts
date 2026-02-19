@@ -12,14 +12,14 @@ type Props = {
   lg_ssid?: number | string | null
 }
 
-export async function errorLogging({
+export async function write_Logging({
   lg_functionname,
   lg_msg,
   lg_severity = 'E',
   lg_caller = '',
   lg_ssid = 0
 }: Props): Promise<boolean> {
-  const functionName = 'errorLogging'
+  const functionName = 'write_Logging'
   try {
     //
     // Skip logging for 'I' severity in non-Dev mode

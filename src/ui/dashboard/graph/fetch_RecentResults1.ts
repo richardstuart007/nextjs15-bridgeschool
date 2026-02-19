@@ -2,7 +2,7 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { RecentResults_usersReturned } from '@/src/ui/dashboard/graph/graph_constants'
 
 //---------------------------------------------------------------------
@@ -61,7 +61,7 @@ export const fetch_RecentResults1 = cache(async ({ caller }: fetch_RecentResults
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

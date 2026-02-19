@@ -2,7 +2,7 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import {
   CurrentUser_limitMonths,
   CurrentUser_limitCount
@@ -52,7 +52,7 @@ export const fetch_RecentUserResults = cache(async ({ userId, caller }: RecentUs
     return rows
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

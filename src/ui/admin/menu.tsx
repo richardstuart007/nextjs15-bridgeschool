@@ -1,7 +1,7 @@
 'use client'
 import { MyLink } from '@/src/ui/components/myLink'
 import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
-import { logout } from '@/src/lib/user-logout'
+import { user_Logout } from '@/src/lib/user_logout'
 import { useEffect, useState } from 'react'
 
 export default function Page() {
@@ -13,7 +13,7 @@ export default function Page() {
     const checkAdmin = async () => {
       const admin = await fetch_IsAdmin()
       if (!admin) {
-        await logout()
+        await user_Logout()
       } else {
         setLoading(false)
       }

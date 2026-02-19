@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //
 // Column-value pairs
 //
@@ -73,7 +73,7 @@ export async function table_update({
   } catch (error) {
     const errorMessage = `Table(${table}) WHERE(${whereClause}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

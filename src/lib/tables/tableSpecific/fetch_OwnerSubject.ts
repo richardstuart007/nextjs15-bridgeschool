@@ -1,5 +1,5 @@
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //
 //  Fetch unique owner/subject
 //
@@ -36,7 +36,7 @@ export const fetch_OwnerSubject = async (owner: string, subject: string) => {
   } catch (error) {
     const errorMessage = `Error fetching subject: owner=(${owner}), subject=(${subject})`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

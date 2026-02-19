@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 import bcrypt from 'bcryptjs'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Update User Setup
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ export async function PwdEdit(_prevState: StateSetup, formData: FormData): Promi
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update userspwd.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

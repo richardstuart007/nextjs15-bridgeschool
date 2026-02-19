@@ -7,7 +7,7 @@ import { useUserContext } from '@/src/context/UserContext'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { logout } from '@/src/lib/user-logout'
+import { user_Logout } from '@/src/lib/user_logout'
 import { MyButton } from '@/src/ui/components/myButton'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import NavShrink from '@/src/ui/dashboard/dashboardMenu/nav-shrink'
@@ -108,7 +108,7 @@ export default function NavSide(props: Props) {
             <div className='hidden md:block justify-center flex-none p-1 px-2'>
               <NavDetail />
             </div>
-            <MyButton onClick={logout} overrideClass={overrideClass_logoff}>
+            <MyButton onClick={user_Logout} overrideClass={overrideClass_logoff}>
               Logoff
             </MyButton>
           </div>

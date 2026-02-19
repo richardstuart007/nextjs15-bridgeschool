@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Get Auth Session information
 // ----------------------------------------------------------------------
@@ -17,7 +17,7 @@ export async function getAuthSession() {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

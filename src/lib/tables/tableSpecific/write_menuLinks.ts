@@ -1,7 +1,7 @@
 'use server'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //----------------------------------------------------------------------------------------------
 // Write the menu links
 //----------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ export default async function write_ml_menuLinks(Props: Props) {
     //
     //  Get the ssid
     //
-    const co_ssid = await getCookieServer_co_ssid()
+    const co_ssid = await cookie_fetch()
     if (!co_ssid) return null
     const ml_ssid = Number(co_ssid)
     //
@@ -65,7 +65,7 @@ export default async function write_ml_menuLinks(Props: Props) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

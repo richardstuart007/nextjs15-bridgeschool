@@ -1,7 +1,7 @@
 'use client'
 import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 import Link from 'next/link'
-import write_ml_menuLinks from '@/src/lib/tables/tableSpecific/write_ml_menuLinks'
+import write_menuLinks from '@/src/lib/tables/tableSpecific/write_menuLinks'
 
 interface LinkHref {
   reference: string
@@ -84,7 +84,7 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
     //
     // Write to database
     //
-    const dbRecord = await write_ml_menuLinks({
+    const dbRecord = await write_menuLinks({
       ml_reference,
       ml_url,
       ml_path,

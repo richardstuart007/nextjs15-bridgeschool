@@ -1,9 +1,9 @@
 import '@/src/root/global.css'
 
-import { inter } from '@/src/root/constants_fonts'
+import { inter } from '@/src/root/constants/constants_fonts'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
-import { URL_current } from '@/src/root/constants_URL'
+import { URL_current } from '@/src/root/constants/constants_URL'
 
 //
 //  Metadata

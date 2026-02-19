@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { MyLink } from '@/src/ui/components/myLink'
-import getBreadcrumb from '@/src/lib/getBreadcrumb'
+import getBreadcrumb from '@/src/lib/tables/tableSpecific/getBreadcrumb'
 import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 
 interface Props {

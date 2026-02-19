@@ -2,7 +2,7 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { CurrentUser_limitMonths_Average } from '@/src/ui/dashboard/graph/graph_constants'
 //---------------------------------------------------------------------
 //  Fetch average percentage for all results of a user within the last 'CurrentUser_limitMonths_Average' months
@@ -46,7 +46,7 @@ export const fetch_UserAverage = cache(async ({ userId, caller }: UserAveragePro
     return avgPercentage
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

@@ -2,9 +2,9 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
-import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants_tables'
+import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
 
 //----------------------------------------------------------------------------------
 //  Main function
@@ -87,7 +87,7 @@ async function _runQuery({
   if (!Object.values(TABLES).includes(table as any)) {
     const errorMessage = `Invalid table name: ${table}`
     console.error(`${functionName}: ${errorMessage}`)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -150,7 +150,7 @@ async function _runQuery({
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

@@ -1,6 +1,6 @@
 import { Client } from 'pg'
 import { sql as vercelSql } from '@vercel/postgres'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //
 // Placeholder for the `query` method
 //
@@ -50,8 +50,8 @@ async function createDbQueryHandler(): Promise<void> {
         return result
       } catch (error) {
         const errorMessage = (error as Error).message
-        if (functionName !== 'errorLogging') {
-          errorLogging({
+        if (functionName !== 'write_Logging') {
+          write_Logging({
             lg_caller: caller,
             lg_functionname: functionName,
             lg_msg: errorMessage,
@@ -94,8 +94,8 @@ async function createDbQueryHandler(): Promise<void> {
         return result
       } catch (error) {
         const errorMessage = (error as Error).message
-        if (functionName !== 'errorLogging') {
-          errorLogging({
+        if (functionName !== 'write_Logging') {
+          write_Logging({
             lg_caller: caller,
             lg_functionname: functionName,
             lg_msg: errorMessage,
@@ -122,7 +122,7 @@ async function log_query(
   //
   //  Do not recursive for logging
   //
-  if (functionName === 'errorLogging') return
+  if (functionName === 'write_Logging') return
   //
   //  Values (if any)
   //
@@ -130,7 +130,7 @@ async function log_query(
   //
   //  Logging
   //
-  errorLogging({
+  write_Logging({
     lg_functionname: functionName,
     lg_msg: `${query}${valuesJson}`,
     lg_severity: 'I',

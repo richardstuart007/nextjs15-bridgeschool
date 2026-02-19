@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //---------------------------------------------------------------------
 //  Get next qq_seq
 //---------------------------------------------------------------------
@@ -38,7 +38,7 @@ export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

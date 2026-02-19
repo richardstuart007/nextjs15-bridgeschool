@@ -1,7 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 //
 // Props
@@ -72,7 +72,7 @@ export async function table_delete({
     // Logging
     const errorMessage = `Table(${table}) DELETE FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

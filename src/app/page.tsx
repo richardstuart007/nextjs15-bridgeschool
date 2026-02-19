@@ -2,15 +2,15 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
-import { lusitana } from '@/src/root/constants_fonts'
-import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+import { lusitana } from '@/src/root/constants/constants_fonts'
+import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
 import { MyLink } from '@/src/ui/components/myLink'
 
 export default function Page() {
   const [logoSize, setLogoSize] = useState(90)
 
   useEffect(() => {
-    deleteCookieServer_co_ssid()
+    cookie_delete()
   }, [])
 
   useEffect(() => {

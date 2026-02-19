@@ -1,11 +1,11 @@
 'use client'
 
-import { lusitana } from '@/src/root/constants_fonts'
+import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/components/myButton'
 import { action } from '@/src/ui/login/action'
 import { useRouter } from 'next/navigation'
-import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/components/myInput'
@@ -61,7 +61,7 @@ export default function LoginForm() {
   }, [errorMessage])
 
   useEffect(() => {
-    deleteCookieServer_co_ssid()
+    cookie_delete()
   }, [])
 
   // -------------------------------------------------------------------------

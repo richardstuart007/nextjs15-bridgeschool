@@ -7,8 +7,8 @@ import {
   Routes_Prefix_admin,
   Routes_Login,
   Routes_Register
-} from '@/src/root/constants_validroutes'
-import { getCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+} from '@/src/root/constants/constants_validroutes'
+import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 
 export default async function proxy(req: any): Promise<any> {
   const functionName = 'middleware'
@@ -29,7 +29,7 @@ export default async function proxy(req: any): Promise<any> {
   //
   //  Login status
   //
-  const co_ssid = await getCookieServer_co_ssid()
+  const co_ssid = await cookie_fetch()
   const isLoggedInCookie = !!co_ssid
   //-------------------------------------------------------------------------------------------------
   //  Allow all API routes

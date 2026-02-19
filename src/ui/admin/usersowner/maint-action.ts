@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import validateUsersowner from '@/src/ui/admin/usersowner/maint-validate'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -98,7 +98,7 @@ export async function ActionUsersowner(
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Usersowner.'
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

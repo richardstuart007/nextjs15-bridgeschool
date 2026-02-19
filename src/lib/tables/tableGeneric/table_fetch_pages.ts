@@ -2,9 +2,9 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
-import { CACHED_TABLES, TableName } from '@/src/root/constants_tables'
+import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
 
 // Define types for joins and filters
 export type JoinParams = {
@@ -170,7 +170,7 @@ async function _runFilteredQuery({
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
-    errorLogging({
+    write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
@@ -287,7 +287,7 @@ async function _runTotalPagesQuery({
     return totalPages
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

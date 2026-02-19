@@ -2,7 +2,7 @@
 
 import { cache } from 'react'
 import { sql } from '@/src/lib/db'
-import { errorLogging } from '@/src/lib/errorLogging'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { RecentResults_usersAverage } from '@/src/ui/dashboard/graph/graph_constants'
 //---------------------------------------------------------------------
 //  Recent results data
@@ -66,7 +66,7 @@ export const fetch_RecentResultsAverages = cache(async ({ userIds, caller }: Ave
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    errorLogging({
+    write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,

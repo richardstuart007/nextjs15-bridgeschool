@@ -1,11 +1,11 @@
 'use server'
 
 import { signOut } from '@/auth'
-import { deleteCookieServer_co_ssid } from '@/src/lib/cookieServer_co_ssid'
+import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
 // ----------------------------------------------------------------------
 //  Sign out
 // ----------------------------------------------------------------------
-export async function logout() {
-  await deleteCookieServer_co_ssid('BridgeCookie')
+export async function user_Logout() {
+  await cookie_delete('BridgeCookie')
   await signOut({ redirectTo: '/login' })
 }

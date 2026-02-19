@@ -1,6 +1,6 @@
 'use client'
 
-import { lusitana } from '@/src/root/constants_fonts'
+import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/components/myButton'
 import { action } from '@/src/ui/register/action'

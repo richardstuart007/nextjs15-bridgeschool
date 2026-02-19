@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { lusitana } from '@/src/root/constants_fonts'
+import { lusitana } from '@/src/root/constants/constants_fonts'
 
 export default function MySchoolLogo() {
   return (
