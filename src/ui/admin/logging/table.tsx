@@ -18,7 +18,6 @@ export default function Table() {
   const [msg, setmsg] = useState('')
   const [functionname, setfunctionname] = useState('')
   const [severity, setseverity] = useState('')
-  const [session, setsession] = useState(0)
   //
   //  Show flags
   //
@@ -37,7 +36,6 @@ export default function Table() {
   const [debouncedState, setDebouncedState] = useState({
     functionname: '',
     severity: '',
-    session: 0,
     msg: ''
   })
   //
@@ -53,7 +51,6 @@ export default function Table() {
       setDebouncedState({
         functionname,
         severity,
-        session,
         msg
       })
     }, 2000)
@@ -66,7 +63,7 @@ export default function Table() {
     //
     //  Values to debounce
     //
-  }, [functionname, severity, session, msg])
+  }, [functionname, severity, msg])
   //......................................................................................
   // Fetch Data event
   //......................................................................................
@@ -102,8 +99,7 @@ export default function Table() {
     const filtersToUpdate: Filter[] = [
       { column: 'lg_msg', value: msg, operator: 'LIKE' },
       { column: 'lg_functionname', value: functionname, operator: 'LIKE' },
-      { column: 'lg_severity', value: severity, operator: '=' },
-      { column: 'lg_ssid', value: session, operator: '=' }
+      { column: 'lg_severity', value: severity, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -174,9 +170,6 @@ export default function Table() {
               <th scope='col' className=' font-medium px-2'>
                 ID
               </th>
-              <th scope='col' className=' font-medium px-2 text-center'>
-                Session
-              </th>
               <th scope='col' className=' font-medium px-2'>
                 Function Name
               </th>
@@ -192,24 +185,6 @@ export default function Table() {
             {/* ---------------------------------------------------------------------------------- */}
             <tr className='text-xs align-bottom'>
               <th scope='col' className='px-2'></th>
-              {/* ................................................... */}
-              {/* session                                                 */}
-              {/* ................................................... */}
-              <th scope='col' className='px-2'>
-                <div className='text-center'>
-                  <MyInput
-                    id='session'
-                    name='session'
-                    overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
-                    type='number'
-                    value={session || ''}
-                    onChange={e => {
-                      const value = e.target.value
-                      setsession(Number(value) || 0)
-                    }}
-                  />
-                </div>
-              </th>
               {/* ................................................... */}
               {/* functionname                                                 */}
               {/* ................................................... */}
@@ -271,7 +246,6 @@ export default function Table() {
               tabledata?.map(tabledata => (
                 <tr key={tabledata.lg_lgid} className='w-full border-b'>
                   <td className='px-2 text-xxs '>{tabledata.lg_lgid}</td>
-                  <td className='px-2 text-center text-xxs  '>{tabledata.lg_ssid}</td>
                   <td className='px-2 text-xxs '>{tabledata.lg_functionname}</td>
                   <td className='px-2 text-center text-xxs  '>{tabledata.lg_severity}</td>
                   <td className='px-2 text-xxs '>{tabledata.lg_msg}</td>

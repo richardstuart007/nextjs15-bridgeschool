@@ -9,7 +9,6 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 
 export async function providerSignIn({ provider, email, name }: structure_ProviderSignInParams) {
   const functionName = 'providerSignIn'
-  let lg_ssid: number = 0
   try {
     const rows = await table_fetch({
       caller: functionName,
@@ -24,7 +23,6 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
 
     const ss_usid = userRecord.us_usid
     const ss_ssid = await write_sessions(ss_usid)
-    lg_ssid = ss_ssid
 
     return ss_ssid
   } catch (error) {
@@ -33,8 +31,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
-      lg_severity: 'E',
-      lg_ssid: lg_ssid
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
