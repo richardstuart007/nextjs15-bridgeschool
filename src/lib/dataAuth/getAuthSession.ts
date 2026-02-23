@@ -7,10 +7,8 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 export async function getAuthSession() {
   const functionName = 'getAuthSession'
-  let lg_ssid = 0
   try {
     const session = await auth()
-    lg_ssid = Number(session)
     return session
     //
     //  Errors
@@ -21,8 +19,7 @@ export async function getAuthSession() {
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: errorMessage,
-      lg_severity: 'E',
-      lg_ssid: lg_ssid
+      lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)

@@ -9,15 +9,13 @@ type Props = {
   lg_msg: string
   lg_severity?: string
   lg_caller: string
-  lg_ssid?: number | string | null
 }
 
 export async function write_Logging({
   lg_functionname,
   lg_msg,
   lg_severity = 'E',
-  lg_caller = '',
-  lg_ssid = 0
+  lg_caller = ''
 }: Props): Promise<boolean> {
   const functionName = 'write_Logging'
   try {
@@ -45,12 +43,11 @@ export async function write_Logging({
       lg_msg,
       lg_functionname,
       lg_caller,
-      lg_ssid,
       lg_severity
       )
-    VALUES ($1,$2,$3,$4,$5,$6)
+    VALUES ($1,$2,$3,$4,$5)
   `
-    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_caller, lg_ssid, lg_severity]
+    const queryValues = [lg_datetime, lg_msgTrim, lg_functionname, lg_caller, lg_severity]
     //
     // Remove redundant spaces
     //
