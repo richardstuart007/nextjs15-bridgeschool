@@ -18,11 +18,11 @@ export type structure_ContextInfo = {
   cx_detail: boolean
 }
 
-export type structure_UserAuth = {
+export type au_UserData = {
   id: string
   name: string
   email: string
-  password: string
+  emailVerified: Date | null
   au_ssid: string
   au_usid: string
   au_name: string
