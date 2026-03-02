@@ -42,7 +42,7 @@ export default async function SummaryGraphs() {
   //
   const authSession = await getAuthSession()
   const user = authSession?.user
-  const au_usid = Number(user.au_usid ?? 0)
+  const au_usid = Number(user?.au_usid ?? 0)
   //
   //  Get users country code
   //
