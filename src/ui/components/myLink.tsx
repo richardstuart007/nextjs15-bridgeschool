@@ -2,6 +2,7 @@
 import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
 import Link from 'next/link'
 import write_menuLinks from '@/src/lib/tables/tableSpecific/write_menuLinks'
+import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 
 interface LinkHref {
   reference: string
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
+  const functionName = 'MyLink'
+
   //
   // Default Class
   //
@@ -91,7 +94,16 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
       ml_segment,
       ml_query
     })
-    if (!dbRecord) console.log('No menuLink')
+
+    if (!dbRecord) {
+      const msg = `No menuLink record created for reference: ${ml_reference}, url: ${ml_url}`
+      write_Logging({
+        lg_caller: functionName,
+        lg_functionname: functionName,
+        lg_msg: msg,
+        lg_severity: 'I'
+      })
+    }
   }
   //----------------------------------------------------------------------------------------------
   //

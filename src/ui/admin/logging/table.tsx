@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { table_Logging } from '@/src/lib/tables/definitions'
-import {
-  Filter,
-  fetchFiltered,
-  fetchTotalPages
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import MyPagination from '@/src/ui/components/myPagination'
 import { MyInput } from '@/src/ui/components/myInput'
 

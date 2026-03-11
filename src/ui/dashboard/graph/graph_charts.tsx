@@ -1,44 +1,50 @@
 'use client'
-import { Bar, Line } from 'react-chartjs-2' // Import Line for the line chart
+import { Bar, Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   BarElement,
-  LineElement, // Import LineElement for the line chart
-  PointElement, // Import PointElement for the line chart (to render points on the line)
-  CategoryScale, // Import CategoryScale for the x-axis
-  LinearScale, // Import LinearScale for the y-axis
-  Title, // Import Title for chart titles
-  Tooltip, // Import Tooltip for hover tooltips
-  Legend, // Import Legend for chart legends
-  LegendItem // Import LegendItem type
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  LegendItem
 } from 'chart.js'
+
 //
 //  Register the components
 //
 ChartJS.register(
   BarElement,
-  LineElement, // Register LineElement for line charts
-  PointElement, // Register PointElement for points on line charts
-  CategoryScale, // Register CategoryScale for x-axis labels
+  LineElement,
+  PointElement,
+  CategoryScale,
   LinearScale,
   Title,
   Tooltip,
   Legend
 )
+
 //
 //  Graph Interfaces
 //
 interface Datasets {
   label: string
   data: number[]
+  keys: number[] // Added keys property
+  keyType: string // Added keyType property
   backgroundColor?: string
-  borderColor?: string // Add borderColor for line chart
-  tension?: number // Add tension for line chart (curvature)
+  borderColor?: string
+  tension?: number
 }
+
 interface StackDataStructure {
   labels: string[]
   datasets: Datasets[]
 }
+
 //-------------------------------------------------------------------------------
 //  Bar Chart component
 //-------------------------------------------------------------------------------
@@ -63,13 +69,23 @@ export function MyBarChart({
     'rgba(54, 162, 235, 0.6)',
     'rgba(153, 102, 255, 0.6)'
   ]
+
+  //
+  // Safety check - ensure data exists
+  //
+  if (!StackedGraphData || !StackedGraphData.datasets) {
+    return <div>No data available</div>
+  }
+
   //
   // Set the background color to default if not provided in the dataset
   //
   const datasetsWithDefaultColors = StackedGraphData.datasets.map((dataset, index) => ({
     ...dataset,
-    backgroundColor: dataset.backgroundColor || defaultBackgroundColors[index]
+    backgroundColor:
+      dataset.backgroundColor || defaultBackgroundColors[index % defaultBackgroundColors.length]
   }))
+
   //
   //  Modify the graph data with the default colors
   //
@@ -77,31 +93,36 @@ export function MyBarChart({
     ...StackedGraphData,
     datasets: datasetsWithDefaultColors
   }
+
   //
   //  Options
   //
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         stacked: Stacked,
         grid: {
-          display: GridDisplayX // Remove x-axis gridlines
+          display: GridDisplayX
         }
       },
       y: {
         stacked: Stacked,
         grid: {
-          display: GridDisplayY // Remove y-axis gridlines
+          display: GridDisplayY
         }
       }
     },
-    onClick: (event: any, elements: any[]) => handle_Click(elements, event.chart)
+    onClick: (event: any, elements: any[]) => handle_Click(elements, (event as any).chart)
   }
+
   //
   //  Return the Bar component
   //
   return <Bar data={modifiedGraphData} options={options} />
 }
+
 //-------------------------------------------------------------------------------
 //  Line Chart component
 //-------------------------------------------------------------------------------
@@ -124,15 +145,24 @@ export function MyLineChart({
     'rgba(54, 162, 235, 1)',
     'rgba(153, 102, 255, 1)'
   ]
+
+  //
+  // Safety check - ensure data exists
+  //
+  if (!LineGraphData || !LineGraphData.datasets) {
+    return <div>No data available</div>
+  }
+
   //
   // Set the border color to default if not provided in the dataset
   //
   const datasetsWithDefaultColors = LineGraphData.datasets.map((dataset, index) => ({
     ...dataset,
-    borderColor: dataset.borderColor || defaultBorderColors[index],
-    backgroundColor: 'transparent', // Line charts typically have transparent background
-    tension: dataset.tension || 0.4 // Add tension for smooth curves (default: 0.4)
+    borderColor: dataset.borderColor || defaultBorderColors[index % defaultBorderColors.length],
+    backgroundColor: 'transparent',
+    tension: dataset.tension || 0.4
   }))
+
   //
   //  Modify the graph data with the default colors
   //
@@ -140,58 +170,78 @@ export function MyLineChart({
     ...LineGraphData,
     datasets: datasetsWithDefaultColors
   }
+
   //
   //  Options
   //
   const options = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         grid: {
-          display: GridDisplayX // Whether to display x-axis gridlines
+          display: GridDisplayX
         }
       },
       y: {
         grid: {
-          display: GridDisplayY // Whether to display y-axis gridlines
+          display: GridDisplayY
         }
       }
     },
     plugins: {
       legend: {
         labels: {
-          usePointStyle: false, // Disable point style
+          usePointStyle: false,
           generateLabels: (chart: ChartJS): LegendItem[] => {
             const datasets = chart.data.datasets
             return datasets.map((dataset, i) => ({
-              text: dataset.label || `Dataset ${i + 1}`, // Legend label text
+              text: dataset.label || `Dataset ${i + 1}`,
               fillStyle: dataset.borderColor as string,
-              strokeStyle: dataset.borderColor as string, // Line color for the legend
-              hidden: !chart.isDatasetVisible(i) // Hide if dataset is hidden
+              strokeStyle: dataset.borderColor as string,
+              hidden: !chart.isDatasetVisible(i),
+              lineWidth: 2,
+              pointStyle: 'line' as const
             }))
           }
         }
       }
     },
-    onClick: (event: any, elements: any[]) => handle_Click(elements, event.chart)
+    onClick: (event: any, elements: any[]) => handle_Click(elements, (event as any).chart)
   }
+
   //
   //  Return the Line component
   //
   return <Line data={modifiedGraphData} options={options} />
 }
+
 //--------------------------------------------------------------------------------
-//  Clicked on the Line Chart
+//  Clicked on the Chart
 //--------------------------------------------------------------------------------
 function handle_Click(elements: any[], chart: any) {
-  if (elements.length > 0) {
-    const clickedElement = elements[0]
-    const datasetIndex = clickedElement.datasetIndex
-    const index = clickedElement.index
-    const data = chart.data.datasets[datasetIndex].data[index]
-    const key = chart.data.datasets[datasetIndex].keys[index]
-    const keyType = chart.data.datasets[datasetIndex].keyType
-    console.log('data', data)
-    console.log('key', key)
-    console.log('keyType', keyType)
+  if (elements && elements.length > 0) {
+    try {
+      const clickedElement = elements[0]
+      const datasetIndex = clickedElement.datasetIndex
+      const index = clickedElement.index
+
+      // Safety checks
+      if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[datasetIndex]) {
+        console.log('Invalid chart data')
+        return
+      }
+
+      const dataset = chart.data.datasets[datasetIndex]
+      const data = dataset.data[index]
+      const key = dataset.keys ? dataset.keys[index] : 'No key'
+      const keyType = dataset.keyType || 'Unknown'
+
+      console.log('data:', data)
+      console.log('key:', key)
+      console.log('keyType:', keyType)
+    } catch (error) {
+      console.error('Error handling chart click:', error)
+    }
   }
 }

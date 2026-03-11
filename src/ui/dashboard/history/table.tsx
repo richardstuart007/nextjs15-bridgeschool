@@ -2,12 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
-import {
-  fetchFiltered,
-  fetchTotalPages,
-  Filter,
-  JoinParams
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter, JoinParams } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import MyPagination from '@/src/ui/components/myPagination'
 import MyDropdown from '@/src/ui/components/myDropdown'
 import { useUserContext } from '@/src/context/UserContext'

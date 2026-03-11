@@ -1,10 +1,10 @@
 'use server'
 
-import { cache } from 'react'
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
+import { userCache_store } from '@/src/lib/cache/userCache_store'
 
 //----------------------------------------------------------------------------------
 //  Main function
@@ -31,12 +31,65 @@ export async function table_fetch({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
+  const functionName = 'table_fetch'
+
   //
   // Decide whether this call should use caching (based on table)
   //
   if (CACHED_TABLES.has(table as TableName)) {
-    // 👇 Call the cached version
-    return cachedFetch({
+    const cacheMsg = `[CACHE] ${functionName} → ${table} (caller: ${caller})`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: cacheMsg,
+      lg_severity: 'I'
+    })
+
+    // Get cache instance
+    const store = userCache_store()
+
+    // Create stable cache keys from all parameters that affect the query
+    const cacheKeys = {
+      table,
+      where: whereColumnValuePairs ? JSON.stringify(whereColumnValuePairs) : null,
+      orderBy: orderBy || null,
+      distinct,
+      columns: columns ? columns.join(',') : null,
+      limit: limit || null
+    }
+
+    // Log the cache check
+    const getMsg = `GET | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: getMsg,
+      lg_severity: 'I'
+    })
+
+    // Check cache first
+    const cachedData = store.get<any>(table, cacheKeys)
+    if (cachedData) {
+      const hitMsg = `HIT | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
+      write_Logging({
+        lg_caller: caller,
+        lg_functionname: functionName,
+        lg_msg: hitMsg,
+        lg_severity: 'I'
+      })
+      return cachedData
+    }
+
+    const missMsg = `MISS | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: missMsg,
+      lg_severity: 'I'
+    })
+
+    // Execute query
+    const data = await table_fetch_query({
       caller,
       table,
       whereColumnValuePairs,
@@ -45,11 +98,25 @@ export async function table_fetch({
       columns,
       limit
     })
+
+    // Store in cache
+    store.set(table, cacheKeys, data)
+
+    const storedMsg = `STORED | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${data.length}`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: storedMsg,
+      lg_severity: 'I'
+    })
+
+    return data
   }
+
   //
   // Non-cached path
   //
-  return _runQuery({
+  return table_fetch_query({
     caller,
     table,
     whereColumnValuePairs,
@@ -61,17 +128,9 @@ export async function table_fetch({
 }
 
 //----------------------------------------------------------------------------------
-// Cached execution path – using React cache()
-//----------------------------------------------------------------------------------
-const cachedFetch = cache(async (props: table_fetch_Props): Promise<any[]> => {
-  console.log(`[CACHE] table_fetch → ${props.table}  (caller: ${props.caller})`)
-  return _runQuery(props)
-})
-
-//----------------------------------------------------------------------------------
 // Run the query
 //----------------------------------------------------------------------------------
-async function _runQuery({
+async function table_fetch_query({
   caller,
   table,
   whereColumnValuePairs,
@@ -80,13 +139,12 @@ async function _runQuery({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
-  const functionName = 'table_fetch'
+  const functionName = 'table_fetch_query'
   //
   // Runtime check: table must be in TABLES
   //
   if (!Object.values(TABLES).includes(table as any)) {
     const errorMessage = `Invalid table name: ${table}`
-    console.error(`${functionName}: ${errorMessage}`)
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
@@ -98,7 +156,7 @@ async function _runQuery({
   //
   // Start building the query
   //
-  const selectedColumns = columns?.join(', ') || '*' // Use provided columns or default to '*'
+  const selectedColumns = columns?.join(', ') || '*'
   let sqlQuery = `SELECT ${distinct ? 'DISTINCT' : ''} ${selectedColumns} FROM ${table}`
   try {
     const values: (string | number)[] = []
@@ -149,7 +207,6 @@ async function _runQuery({
     //
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,

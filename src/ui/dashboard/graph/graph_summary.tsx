@@ -1,8 +1,8 @@
-import { fetch_TopResults } from '@/src/ui/dashboard/graph/fetch_TopResults'
-import { fetch_RecentResults1 } from '@/src/ui/dashboard/graph/fetch_RecentResults1'
-import { fetch_RecentResultsAverages } from '@/src/ui/dashboard/graph/fetch_RecentResultsAverages'
-import { fetch_RecentUserResults } from '@/src/ui/dashboard/graph/fetch_RecentUserResults'
-import { fetch_UserAverage } from '@/src/ui/dashboard/graph/fetch_UserAverage'
+import { Top_fetch } from '@/src/ui/dashboard/graph/Top/Top_fetch'
+import { Recent_fetch_1 } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_1'
+import { Recent_fetch_Averages } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_Averages'
+import { User_fetch } from '@/src/ui/dashboard/graph/User/User_fetch'
+import { User_fetch_Average } from '@/src/ui/dashboard/graph/User/User_fetch_Average'
 
 import { MyBarChart, MyLineChart } from '@/src/ui/dashboard/graph/graph_charts'
 import {
@@ -11,13 +11,18 @@ import {
 } from '@/src/lib/tables/structures'
 import { table_Usershistory } from '@/src/lib/tables/definitions'
 import {
-  RecentResults_usersAverage,
-  TopResults_limitMonths,
-  CurrentUser_limitMonths_Average
-} from '@/src/ui/dashboard/graph/graph_constants'
+  Recent_usersAverage_Default,
+  Recent_usersReturned_Default
+} from '@/src/ui/dashboard/graph/Recent/Recent_constants'
+import { Current_limitCount } from '@/src/ui/dashboard/graph/User/User_constants'
+import { Top_limitMonths_Default } from '@/src/ui/dashboard/graph/Top/Top_constants'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
+import { User_Header } from '@/src/ui/dashboard/graph/User/User_Header'
+import { Top_Header } from './Top/Top_Header'
+import { Recent_Header } from './Recent/Recent_Header'
+
 //
 //  Graph Interfaces
 //
@@ -34,9 +39,37 @@ interface GraphStructure {
   labels: string[]
   datasets: Datasets[]
 }
+
+// Empty graph structure for when no data is available
+const emptyGraphStructure: GraphStructure = {
+  labels: ['No Data'],
+  datasets: [
+    {
+      label: 'No Data',
+      data: [0],
+      keys: [0],
+      keyType: 'none',
+      backgroundColor: 'rgba(200, 200, 200, 0.6)'
+    }
+  ]
+}
+
 //--------------------------------------------------------------------------------
-export default async function SummaryGraphs() {
-  const functionName = 'SummaryGraphs'
+interface Graph_SummaryProps {
+  User_limitMonths_Average: number
+  TopResults_limitMonths?: number
+  RecentResults_usersReturned?: number
+  RecentResults_usersAverage?: number
+}
+
+export default async function Graph_Summary({
+  User_limitMonths_Average,
+  TopResults_limitMonths = Top_limitMonths_Default,
+  RecentResults_usersReturned = Recent_usersReturned_Default,
+  RecentResults_usersAverage = Recent_usersAverage_Default
+}: Graph_SummaryProps) {
+  const functionName = 'Graph_Summary'
+
   //
   //  Auth Session
   //
@@ -53,50 +86,105 @@ export default async function SummaryGraphs() {
       table: 'tus_users',
       whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
     } as table_fetch_Props)
-    const userRecord = rows[0]
-    countryCode = userRecord.us_fedcountry
+    const userRecord = rows?.[0]
+    countryCode = userRecord?.us_fedcountry ?? 'ZZ'
   }
+
   //
-  //  Fetch the data
+  //  Fetch the data with safe defaults
   //
-  const [dataTop, dataRecent, dataUserResults, dataUserAverage]: [
-    structure_UsershistoryTopResults[],
-    structure_UsershistoryRecentResults[],
-    table_Usershistory[],
-    number
-  ] = await Promise.all([
-    fetch_TopResults({ caller: functionName }),
-    fetch_RecentResults1({ caller: functionName }),
-    fetch_RecentUserResults({ caller: functionName, userId: au_usid }),
-    fetch_UserAverage({ caller: functionName, userId: au_usid })
-  ])
-  //
-  //  No data
-  //
-  if (!dataTop || dataTop.length === 0) {
-    return null
+  let dataTop: structure_UsershistoryTopResults[] = []
+  let dataRecent: structure_UsershistoryRecentResults[] = []
+  let dataUserResults: table_Usershistory[] = []
+  let dataUserAverage: number = 0
+
+  try {
+    const results = await Promise.allSettled([
+      Top_fetch({
+        caller: functionName,
+        TopResults_limitMonths: TopResults_limitMonths
+      }),
+      Recent_fetch_1({
+        caller: functionName,
+        uq_graph_recent_usersReturned: RecentResults_usersReturned
+      }),
+      User_fetch({
+        caller: functionName,
+        userId: au_usid,
+        months: User_limitMonths_Average,
+        count: Current_limitCount
+      }),
+      User_fetch_Average({
+        caller: functionName,
+        userId: au_usid,
+        User_limitMonths_Average: User_limitMonths_Average
+      })
+    ])
+
+    // Safely extract data from results
+    if (results[0].status === 'fulfilled') dataTop = results[0].value || []
+    if (results[1].status === 'fulfilled') dataRecent = results[1].value || []
+    if (results[2].status === 'fulfilled') dataUserResults = results[2].value || []
+    if (results[3].status === 'fulfilled') dataUserAverage = results[3].value || 0
+  } catch (error) {
+    console.error('Error fetching graph data:', error)
   }
+
   //
-  //  Extract the user IDs and get the data for the last 5 results for each user
+  //  Ensure arrays exist even if empty
   //
-  const userIds: number[] = dataRecent.map(item => item.hs_usid)
-  const dataForAverages: structure_UsershistoryRecentResults[] = await fetch_RecentResultsAverages({
-    userIds: userIds,
-    caller: functionName
-  })
+  const safeDataTop = dataTop || []
+  const safeDataRecent = dataRecent || []
+  const safeDataUserResults = dataUserResults || []
+  const safeDataUserAverage = dataUserAverage || 0
+
   //
-  // TOP graph
+  //  Extract the user IDs and get the data for the average results for each user
+  //  Only proceed if we have recent data
   //
-  const TopGraphData: GraphStructure = topGraph(dataTop)
+  let dataForAverages: structure_UsershistoryRecentResults[] = []
+  if (safeDataRecent.length > 0) {
+    const userIds: number[] = safeDataRecent.map(item => item?.hs_usid).filter(Boolean)
+    if (userIds.length > 0) {
+      try {
+        dataForAverages =
+          (await Recent_fetch_Averages({
+            userIds: userIds,
+            caller: functionName,
+            uq_graph_recent_usersAverage: RecentResults_usersAverage
+          })) || []
+      } catch (error) {
+        console.error('Error fetching averages:', error)
+      }
+    }
+  }
+
+  const safeDataForAverages = dataForAverages || []
+
   //
-  // Line graph for Top Results
+  // TOP graph - with null check
   //
-  const sortedDataUserResults = dataUserResults.sort((a, b) => a.hs_hsid - b.hs_hsid)
-  const UserLineGraph: GraphStructure = lineGraph(sortedDataUserResults)
+  const TopGraphData: GraphStructure =
+    safeDataTop.length > 0 ? topGraph(safeDataTop) : emptyGraphStructure
+
   //
-  // Recent graph
+  // Line graph for User Results - with null check
   //
-  const RecentGraphData: GraphStructure = recentGraph(dataRecent, dataForAverages)
+  const sortedDataUserResults = [...safeDataUserResults].sort(
+    (a, b) => (a?.hs_hsid || 0) - (b?.hs_hsid || 0)
+  )
+  const UserLineGraph: GraphStructure =
+    sortedDataUserResults.length > 0 ? lineGraph(sortedDataUserResults) : emptyGraphStructure
+
+  //
+  // Recent graph - with null check
+  //
+  const userIdsForRecent = safeDataRecent.map(item => item?.hs_usid).filter(Boolean)
+  const RecentGraphData: GraphStructure =
+    safeDataRecent.length > 0 && userIdsForRecent.length > 0
+      ? recentGraph(safeDataRecent, safeDataForAverages, userIdsForRecent)
+      : emptyGraphStructure
+
   //--------------------------------------------------------------------------------
   //  Generate the data for the TOP results graph
   //--------------------------------------------------------------------------------
@@ -106,9 +194,15 @@ export default async function SummaryGraphs() {
     //
     //  Derive the names and percentages from the data
     //
-    const names: string[] = dataTop.map(item => item.us_name)
-    const data: number[] = dataTop.map(item => item.percentage)
-    const keys: number[] = dataTop.map(item => item.hs_usid)
+    const names: string[] = dataTop.map(item => item?.us_name || 'Unknown').filter(Boolean)
+    const data: number[] = dataTop.map(item => item?.percentage || 0)
+    const keys: number[] = dataTop.map(item => item?.hs_usid || 0)
+
+    // If still no data after mapping, return empty
+    if (names.length === 0) {
+      return emptyGraphStructure
+    }
+
     //
     //  Datasets
     //
@@ -116,7 +210,7 @@ export default async function SummaryGraphs() {
       labels: names,
       datasets: [
         {
-          label: `Top % over ${TopResults_limitMonths} months`,
+          label: `Top %`,
           data: data,
           keys: keys,
           keyType: 'usid',
@@ -126,6 +220,7 @@ export default async function SummaryGraphs() {
     }
     return GraphData
   }
+
   //--------------------------------------------------------------------------------
   //  Generate the data for the Users results graph
   //--------------------------------------------------------------------------------
@@ -135,15 +230,25 @@ export default async function SummaryGraphs() {
     //
     //  Derive the names and percentages from the data
     //
-    const labels: string[] = dataUserResults.map(item => {
-      return convertUTCtoLocal({
-        datetimeUTC: item.hs_datetime,
-        to_localcountryCode: countryCode,
-        to_dateFormat: 'MMMdd'
+    const labels: string[] = dataUserResults
+      .map(item => {
+        if (!item?.hs_datetime) return 'Unknown'
+        return convertUTCtoLocal({
+          datetimeUTC: item.hs_datetime,
+          to_localcountryCode: countryCode,
+          to_dateFormat: 'MMMdd'
+        })
       })
-    })
-    const data: number[] = dataUserResults.map(item => item.hs_correctpercent)
-    const keys: number[] = dataUserResults.map(item => item.hs_hsid)
+      .filter(Boolean)
+
+    const data: number[] = dataUserResults.map(item => item?.hs_correctpercent || 0)
+    const keys: number[] = dataUserResults.map(item => item?.hs_hsid || 0)
+
+    // If no data, return empty
+    if (labels.length === 0) {
+      return emptyGraphStructure
+    }
+
     //
     //  Datasets
     //
@@ -151,38 +256,50 @@ export default async function SummaryGraphs() {
       labels: labels,
       datasets: [
         {
-          label: `Score % `,
+          label: `Score %`,
           data: data,
           keys: keys,
           keyType: 'hsid',
-          borderColor: 'rgba(75, 192, 192, 1)', // Line color
-          backgroundColor: 'rgba(75, 192, 192, 0.6)', // Solid color for the legend box
-          tension: 0.4 // Smooth curve
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          tension: 0.4
         }
       ]
     }
     return GraphData
   }
+
   //--------------------------------------------------------------------------------
   //  Generate the data for the RECENT results graph
   //--------------------------------------------------------------------------------
   function recentGraph(
     dataRecent: structure_UsershistoryRecentResults[],
-    dataForAverages: structure_UsershistoryRecentResults[]
+    dataForAverages: structure_UsershistoryRecentResults[],
+    userIds: number[]
   ): GraphStructure {
     //
     //  Derive the names
     //
-    const names: string[] = dataRecent.map(item => item.us_name)
-    const data_individualPercentages: number[] = dataRecent.map(item => item.hs_correctpercent)
+    const names: string[] = dataRecent.map(item => item?.us_name || 'Unknown').filter(Boolean)
+    const data_individualPercentages: number[] = dataRecent.map(
+      item => item?.hs_correctpercent || 0
+    )
+
     //
     //  Derive percentages from the data
     //
     const data_averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
+
     //
     //  Keys
     //
-    const keys: number[] = [...userIds]
+    const keys: number[] = userIds.length > 0 ? userIds : [0]
+
+    // If no names, return empty
+    if (names.length === 0) {
+      return emptyGraphStructure
+    }
+
     //
     //  Datasets
     //
@@ -193,18 +310,21 @@ export default async function SummaryGraphs() {
           label: 'Latest %',
           data: data_individualPercentages,
           keys: keys,
-          keyType: 'usid'
+          keyType: 'usid',
+          backgroundColor: 'rgba(54, 162, 235, 0.6)'
         },
         {
-          label: `${RecentResults_usersAverage}-Average %`,
+          label: `${RecentResults_usersAverage}-Result Average %`,
           data: data_averagePercentages,
           keys: keys,
-          keyType: 'usid'
+          keyType: 'usid',
+          backgroundColor: 'rgba(255, 159, 64, 0.6)'
         }
       ]
     }
     return GraphData
   }
+
   //--------------------------------------------------------------------------------
   //  Calculate the average and individual percentages for each user
   //--------------------------------------------------------------------------------
@@ -213,97 +333,73 @@ export default async function SummaryGraphs() {
     userIds: number[]
   ): number[] {
     //
+    //  Safety checks
+    //
+    if (!dataForAverages?.length || !userIds?.length) {
+      return []
+    }
+
+    //
     //  Calculate average percentages for each user
     //
-    const averagePercentages: number[] = []
-    //
-    //  Process each record
-    //
-    let currentUid = 0
-    let sumTotalPoints = 0
-    let sumMaxPoints = 0
+    const averagePercentages: number[] = new Array(userIds.length).fill(0)
+    const userSumMap = new Map<number, { total: number; max: number }>()
+
+    // Aggregate data by user
     for (const record of dataForAverages) {
+      if (!record) continue
       const { hs_usid, hs_totalpoints, hs_maxpoints } = record
-      //
-      //  CHANGE of user ID          OR
-      //  LAST record in the data
-      //
-      if (
-        currentUid !== hs_usid ||
-        dataForAverages.indexOf(record) === dataForAverages.length - 1
-      ) {
-        //
-        //  If not first record
-        //
-        if (currentUid !== 0) {
-          //
-          //  Update the average percentage for the user
-          //
-          const averagePercentage = Math.round((100 * sumTotalPoints) / sumMaxPoints)
-          const index = userIds.indexOf(currentUid)
-          averagePercentages[index] = averagePercentage
-          //
-          //  Reset the sum and count for the next user
-          //
-          sumTotalPoints = 0
-          sumMaxPoints = 0
-        }
-        //
-        //  Current user
-        //
-        currentUid = hs_usid
-      }
-      //
-      //  Increment the sum and count
-      //
-      sumTotalPoints += hs_totalpoints
-      sumMaxPoints += hs_maxpoints
+      if (!hs_usid) continue
+
+      const current = userSumMap.get(hs_usid) || { total: 0, max: 0 }
+      userSumMap.set(hs_usid, {
+        total: current.total + (hs_totalpoints || 0),
+        max: current.max + (hs_maxpoints || 0)
+      })
     }
-    //
-    //  End of data
-    //
-    const averagePercentage = Math.round((100 * sumTotalPoints) / sumMaxPoints)
-    const index = userIds.indexOf(currentUid)
-    //
-    //  Place in the array
-    //
-    averagePercentages[index] = averagePercentage
-    //
-    //  Return the average percentages
-    //
+
+    // Calculate percentages
+    for (const [userId, sums] of userSumMap.entries()) {
+      const index = userIds.indexOf(userId)
+      if (index !== -1 && sums.max > 0) {
+        averagePercentages[index] = Math.round((100 * sums.total) / sums.max)
+      }
+    }
+
     return averagePercentages
   }
+
   //--------------------------------------------------------------------------------
   return (
     <div className='h-screen flex flex-col gap-4'>
       {/* --------------------------------------------------------------- */}
-      {/* Top Results Section - UserLineGraph (Line Chart) */}
+      {/* First Graph - User Results Line Chart */}
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-sm'>{`Your Results: ${CurrentUser_limitMonths_Average} month average ${dataUserAverage}%`}</h2>
+          <User_Header averagePercentage={safeDataUserAverage} />
           <div className='flex-grow overflow-hidden'>
             <MyLineChart LineGraphData={UserLineGraph} />
           </div>
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
-      {/* Top Results Section - TopGraphData  */}
+      {/* Top Results Graph - Bar Chart */}
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-sm'>Top Results</h2>
+          <Top_Header defaultMonths={TopResults_limitMonths} />
           <div className='flex-grow overflow-hidden'>
             <MyBarChart StackedGraphData={TopGraphData} />
           </div>
         </div>
       </div>
       {/* --------------------------------------------------------------- */}
-      {/* Recent Results Section - RecentGraphData   */}
+      {/* Recent Results Graph - Bar Chart */}
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <h2 className='text-sm'>Recent Results</h2>
+          <Recent_Header />
           <div className='flex-grow overflow-hidden'>
             <MyBarChart StackedGraphData={RecentGraphData} />
           </div>

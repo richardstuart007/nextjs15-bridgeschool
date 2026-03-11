@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
-import {
-  fetchFiltered,
-  fetchTotalPages,
-  Filter
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import { table_duplicate } from '@/src/lib/tables/tableGeneric/table_duplicate'
 import { table_copy_data } from '@/src/lib/tables/tableGeneric/table_copy_data'
 import { table_truncate } from '@/src/lib/tables/tableGeneric/table_truncate'

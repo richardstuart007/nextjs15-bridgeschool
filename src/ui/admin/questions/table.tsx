@@ -7,11 +7,9 @@ import MaintPopup_hands from '@/src/ui/admin/questions/hands/maintPopup'
 import MaintPopup_bidding from '@/src/ui/admin/questions/bidding/maintPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import {
-  fetchFiltered,
-  fetchTotalPages,
-  Filter
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import MyPagination from '@/src/ui/components/myPagination'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
