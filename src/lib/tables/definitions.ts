@@ -110,6 +110,10 @@ export type table_Users = {
   us_sortquestions: boolean
   us_skipcorrect: boolean
   us_maxquestions: number
+  us_graph_user_months: number
+  us_graph_top_months: number
+  us_graph_recent_users: number
+  us_graph_recent_avg: number
 }
 
 export type table_Usershistory = {

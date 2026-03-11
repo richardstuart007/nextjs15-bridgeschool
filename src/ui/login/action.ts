@@ -22,6 +22,8 @@ export type StateLogin = {
     password?: string[]
   }
   message?: string | null
+  errorType?: string
+  email?: string
 }
 
 const Login = FormSchemaLogin

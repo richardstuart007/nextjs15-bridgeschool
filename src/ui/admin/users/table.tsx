@@ -6,11 +6,9 @@ import PwdEditPopup from '@/src/ui/admin/users/pwdedit/maintPopup'
 import UserownertablePopup from '@/src/ui/admin/usersowner/table-popup'
 import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Users } from '@/src/lib/tables/definitions'
-import {
-  fetchFiltered,
-  fetchTotalPages,
-  Filter
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
 import { MyButton } from '@/src/ui/components/myButton'
 import MyPagination from '@/src/ui/components/myPagination'

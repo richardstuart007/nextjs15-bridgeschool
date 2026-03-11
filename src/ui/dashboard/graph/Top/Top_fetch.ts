@@ -1,22 +1,35 @@
-import { cache } from 'react'
+'use server'
+
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { sql } from '@/src/lib/db'
 import {
-  TopResults_count_min,
-  TopResults_count_max,
-  TopResults_usersReturned,
-  TopResults_limitMonths
-} from '@/src/ui/dashboard/graph/graph_constants'
-//---------------------------------------------------------------------
-//  Top results data
-//---------------------------------------------------------------------
-interface fetch_TopResultsProps {
+  Top_count_min,
+  Top_count_max,
+  Top_usersReturned
+} from '@/src/ui/dashboard/graph/Top/Top_constants'
+import { userCache_store } from '@/src/lib/cache/userCache_store'
+
+interface Top_fetchProps {
   caller: string
+  TopResults_limitMonths: number // This now comes from user preferences
 }
 
-export const fetch_TopResults = cache(async ({ caller }: fetch_TopResultsProps) => {
-  console.log(`[CACHE] fetch_TopResults called by ${caller}`)
-  const functionName = 'fetch_TopResults'
+export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchProps) {
+  const functionName = 'Top_fetch'
+
+  const store = userCache_store()
+  const cacheKeys = {
+    months: TopResults_limitMonths,
+    min: Top_count_min,
+    max: Top_count_max,
+    usersReturned: Top_usersReturned
+  }
+
+  // Check cache
+  const cachedData = store.get<any>(functionName, cacheKeys)
+  if (cachedData) {
+    return cachedData
+  }
 
   try {
     const sqlQuery = `
@@ -46,7 +59,6 @@ export const fetch_TopResults = cache(async ({ caller }: fetch_TopResultsProps) 
         tus_users ON hs_usid = us_usid
       WHERE
         rn <= $2
-        AND us_admin = false
       GROUP BY
         hs_usid, us_name
       HAVING
@@ -54,16 +66,9 @@ export const fetch_TopResults = cache(async ({ caller }: fetch_TopResultsProps) 
       ORDER BY
         percentage DESC
       LIMIT $3
-  `
-    //
-    //  Run sql Query
-    //
-    const values = [
-      TopResults_count_min,
-      TopResults_count_max,
-      TopResults_usersReturned,
-      TopResults_limitMonths
-    ]
+    `
+
+    const values = [Top_count_min, Top_count_max, Top_usersReturned, TopResults_limitMonths]
     const db = await sql()
     const data = await db.query({
       query: sqlQuery,
@@ -71,23 +76,19 @@ export const fetch_TopResults = cache(async ({ caller }: fetch_TopResultsProps) 
       functionName: functionName,
       caller: caller
     })
-    //
-    //  Return rows
-    //
-    const rows = data.rows
+
+    const rows = data.rows || []
+    store.set(functionName, cacheKeys, rows)
+
     return rows
-    //
-    //  Errors
-    //
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error(`${functionName}: ${errorMessage}`, error)
-    throw error
+    return []
   }
-})
+}

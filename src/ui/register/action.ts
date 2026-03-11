@@ -4,8 +4,8 @@ import { z } from 'zod'
 import { signIn } from '@/auth'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { write_users } from '@/src/lib/tables/tableSpecific/write_Users'
 import bcrypt from 'bcryptjs'
-import { Default_owner, Default_fedcountry } from '@/src/root/constants/constants_other'
 // ----------------------------------------------------------------------
 //  Register
 // ----------------------------------------------------------------------
@@ -65,43 +65,16 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
     }
   }
   //
-  // Insert data into the database
+  // Use write_users function to create the user with all defaults
   //
   const provider = 'email'
-  //
-  //  Get date in UTC
-  //
-  const currentDate = new Date()
-  const UTC_datetime = currentDate.toISOString()
-  //
-  //  Write User
-  //
-  const us_email = email
-  const us_name = name
-  const us_joined = UTC_datetime
-  const us_fedid = ''
-  const us_admin = false
-  const us_fedcountry = Default_fedcountry
-  const us_provider = provider
-  const userRecords = await table_write({
-    caller: functionName,
-    table: 'tus_users',
-    columnValuePairs: [
-      { column: 'us_email', value: us_email },
-      { column: 'us_name', value: us_name },
-      { column: 'us_joined', value: us_joined },
-      { column: 'us_fedid', value: us_fedid },
-      { column: 'us_admin', value: us_admin },
-      { column: 'us_fedcountry', value: us_fedcountry },
-      { column: 'us_provider', value: us_provider }
-    ]
-  })
-  const userRecord = userRecords[0]
+  const userRecord = await write_users(provider, email, name)
+
   if (!userRecord) {
     throw Error('registerUser: Write Users Error')
   }
   //
-  //  Write the userspwd data
+  //  Write the userspwd data only (write_users doesn't do this)
   //
   const up_usid = userRecord.us_usid
   const up_hash = await bcrypt.hash(password, 10)
@@ -114,19 +87,6 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
       { column: 'up_usid', value: up_usid },
       { column: 'up_hash', value: up_hash },
       { column: 'up_email', value: up_email }
-    ]
-  })
-  //
-  //  Write the usersowner data
-  //
-  const uo_usid = userRecord.us_usid
-  const uo_owner = Default_owner
-  await table_write({
-    caller: functionName,
-    table: 'tuo_usersowner',
-    columnValuePairs: [
-      { column: 'uo_usid', value: uo_usid },
-      { column: 'uo_owner', value: uo_owner }
     ]
   })
   //

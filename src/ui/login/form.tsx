@@ -3,29 +3,23 @@
 import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/components/myButton'
-import { action } from '@/src/ui/login/action'
+import { action, StateLogin } from '@/src/ui/login/action' // CHANGED: Import StateLogin
 import { useRouter } from 'next/navigation'
 import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
 import Socials from '@/src/ui/login/socials'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/components/myInput'
 import { MyLoadingMessage } from '@/src/ui/components/myLoadingMessage'
+import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_Users } from '@/src/lib/tables/definitions'
 
 export default function LoginForm() {
   const router = useRouter()
-
+  const functionName = 'Login_Form'
   // -------------------------------------------------------------------------
   //  STATE DECLARATIONS
   // -------------------------------------------------------------------------
-  type actionState = {
-    errors?: {
-      email?: string[]
-      password?: string[]
-    }
-    message?: string | null
-  }
-
-  const initialState: actionState = {
+  const initialState: StateLogin = {
     errors: {},
     message: null
   }
@@ -34,12 +28,65 @@ export default function LoginForm() {
   const errorMessage = formState?.message || null
   const [submitting, setSubmitting] = useState(false)
 
+  // New state for email check
+  const [email, setEmail] = useState('')
+  const [checkingEmail, setCheckingEmail] = useState(false)
+  const [oauthInfo, setOauthInfo] = useState<{ exists: boolean; provider?: string }>({
+    exists: false
+  })
+
   // -------------------------------------------------------------------------
   //  EVENT HANDLERS
   // -------------------------------------------------------------------------
   const onSubmit_login = () => {
     setSubmitting(true)
     if (formState) formState.message = null
+  }
+
+  // Handle email change and check if it's an OAuth account
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value
+    setEmail(newEmail)
+
+    // Clear OAuth info if email is empty
+    if (!newEmail || !newEmail.includes('@')) {
+      setOauthInfo({ exists: false })
+      return
+    }
+
+    // Debounce the API call
+    setCheckingEmail(true)
+
+    try {
+      //
+      //  Get User
+      //
+      const rows = await table_fetch({
+        caller: functionName,
+        table: 'tus_users',
+        whereColumnValuePairs: [{ column: 'us_email', value: newEmail }]
+      } as table_fetch_Props)
+
+      let userRecord: table_Users | undefined = rows[0]
+
+      if (!userRecord) {
+        setOauthInfo({ exists: false })
+      } else if (userRecord.us_provider && userRecord.us_provider !== 'credentials') {
+        // OAuth account
+        setOauthInfo({
+          exists: true,
+          provider: userRecord.us_provider
+        })
+      } else {
+        // Credentials account
+        setOauthInfo({ exists: false })
+      }
+    } catch (error) {
+      console.error('Error checking email:', error)
+      setOauthInfo({ exists: false })
+    } finally {
+      setCheckingEmail(false)
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -121,8 +168,25 @@ export default function LoginForm() {
               name='email'
               placeholder='Enter your email address'
               autoComplete='email'
+              value={email}
+              onChange={handleEmailChange}
             />
+            {checkingEmail && (
+              <div className='absolute right-3 top-3'>
+                <div className='h-4 w-4 animate-spin rounded-full border-2 border-orange-500 border-t-transparent'></div>
+              </div>
+            )}
           </div>
+
+          {oauthInfo.exists && (
+            <div className='mt-2 rounded-md bg-amber-50 p-3'>
+              <p className='text-sm text-amber-800'>
+                This email is registered with{' '}
+                <strong>{oauthInfo.provider || 'social login'}</strong>. Please use that method to
+                sign in.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className='mt-4'>
@@ -137,6 +201,7 @@ export default function LoginForm() {
               name='password'
               placeholder='Enter password'
               autoComplete='current-password'
+              disabled={oauthInfo.exists}
             />
           </div>
         </div>
@@ -150,7 +215,11 @@ export default function LoginForm() {
           )}
         </div>
 
-        <MyButton overrideClass='mt-4 w-full flex justify-center' type='submit'>
+        <MyButton
+          overrideClass='mt-4 w-full flex justify-center'
+          type='submit'
+          disabled={oauthInfo.exists}
+        >
           Login
         </MyButton>
       </>

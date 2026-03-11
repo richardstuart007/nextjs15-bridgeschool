@@ -1,10 +1,7 @@
-'use server'
-
-import { cache } from 'react'
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
-import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
+import { ITEMS_PER_PAGE } from './page_constants'
 
 // Define types for joins and filters
 export type JoinParams = {
@@ -17,101 +14,11 @@ export type Filter = {
   operator: Comparison_operator
   value: string | number | (string | number)[]
 }
-//
-// Default items per page
-//
-const ITEMS_PER_PAGE = 10
-//---------------------------------------------------------------------
-// Fetch Filtered Function – decides internally whether to cache
-//---------------------------------------------------------------------
-export async function fetchFiltered({
-  table,
-  joins = [],
-  filters = [],
-  orderBy,
-  limit,
-  offset,
-  distinctColumns = [],
-  caller
-}: {
-  table: string
-  joins?: JoinParams[]
-  filters?: Filter[]
-  orderBy?: string
-  limit?: number
-  offset?: number
-  distinctColumns?: string[]
-  caller: string
-}): Promise<any[]> {
-  // Decide caching based on table (same as table_fetch)
-  if (CACHED_TABLES.has(table as TableName)) {
-    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
-    return cachedFetchFiltered({
-      table,
-      joins,
-      filters,
-      orderBy,
-      limit,
-      offset,
-      distinctColumns,
-      caller
-    })
-  }
-
-  // Non-cached path
-  return _runFilteredQuery({
-    table,
-    joins,
-    filters,
-    orderBy,
-    limit,
-    offset,
-    distinctColumns,
-    caller
-  })
-}
-
-//---------------------------------------------------------------------
-// Cached execution path – using React cache()
-//---------------------------------------------------------------------
-const cachedFetchFiltered = cache(
-  async ({
-    table,
-    joins = [],
-    filters = [],
-    orderBy,
-    limit,
-    offset,
-    distinctColumns = [],
-    caller
-  }: {
-    table: string
-    joins?: JoinParams[]
-    filters?: Filter[]
-    orderBy?: string
-    limit?: number
-    offset?: number
-    distinctColumns?: string[]
-    caller: string
-  }): Promise<any[]> => {
-    console.log(`[CACHE] fetchFiltered → ${table}  (caller: ${caller})`)
-    return _runFilteredQuery({
-      table,
-      joins,
-      filters,
-      orderBy,
-      limit,
-      offset,
-      distinctColumns,
-      caller
-    })
-  }
-)
 
 //---------------------------------------------------------------------
 // Shared private function – builds and executes the query
 //---------------------------------------------------------------------
-async function _runFilteredQuery({
+export async function table_fetch_pages_filtered({
   table,
   joins = [],
   filters = [],
@@ -130,7 +37,7 @@ async function _runFilteredQuery({
   distinctColumns?: string[]
   caller: string
 }): Promise<any[]> {
-  const functionName = 'fetchFiltered'
+  const functionName = 'table_fetch_pages_filtered'
   const db = await sql()
   const { sqlQuery, queryValues } = buildSqlQuery({ table, joins, filters })
 
@@ -169,7 +76,6 @@ async function _runFilteredQuery({
     return data.rows.length > 0 ? data.rows : []
   } catch (error) {
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
-    console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
@@ -181,62 +87,9 @@ async function _runFilteredQuery({
 }
 
 //---------------------------------------------------------------------
-// Fetch Total Pages Function – also supports caching internally
-//---------------------------------------------------------------------
-export async function fetchTotalPages({
-  table,
-  joins = [],
-  filters = [],
-  items_per_page = ITEMS_PER_PAGE,
-  distinctColumns = [],
-  caller = ''
-}: {
-  table: string
-  joins?: JoinParams[]
-  filters?: Filter[]
-  items_per_page?: number
-  distinctColumns?: string[]
-  caller: string
-}): Promise<number> {
-  // Same caching decision as fetchFiltered
-  if (CACHED_TABLES.has(table as TableName)) {
-    console.log(`[CACHE] fetchTotalPages → ${table}  (caller: ${caller})`)
-    return cachedFetchTotalPages({
-      table,
-      joins,
-      filters,
-      items_per_page,
-      distinctColumns,
-      caller
-    })
-  }
-
-  return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
-}
-
-// Cached variant for total pages using React cache()
-const cachedFetchTotalPages = cache(
-  async ({
-    table,
-    joins = [],
-    filters = [],
-    items_per_page = ITEMS_PER_PAGE,
-    distinctColumns = [],
-    caller = ''
-  }: {
-    table: string
-    joins?: JoinParams[]
-    filters?: Filter[]
-    items_per_page?: number
-    distinctColumns?: string[]
-    caller: string
-  }): Promise<number> => {
-    return _runTotalPagesQuery({ table, joins, filters, items_per_page, distinctColumns, caller })
-  }
-)
-
 // Shared logic for total pages
-async function _runTotalPagesQuery({
+//---------------------------------------------------------------------
+export async function table_fetch_pages_total({
   table,
   joins = [],
   filters = [],
@@ -251,7 +104,7 @@ async function _runTotalPagesQuery({
   distinctColumns?: string[]
   caller: string
 }): Promise<number> {
-  const functionName = 'fetchTotalPages'
+  const functionName = 'table_fetch_pages_total'
   const db = await sql()
 
   try {
@@ -288,18 +141,17 @@ async function _runTotalPagesQuery({
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    console.error('Error:', errorMessage)
     throw new Error(`${functionName}: Failed`)
   }
 }
 
 //---------------------------------------------------------------------
-// Helper to build SQL query and WHERE clause (unchanged)
+// Helper to build SQL query and WHERE clause
 //---------------------------------------------------------------------
 function buildSqlQuery({
   table,

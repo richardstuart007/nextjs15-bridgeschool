@@ -6,11 +6,9 @@ import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
 import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
 import { table_Subject } from '@/src/lib/tables/definitions'
-import {
-  fetchFiltered,
-  fetchTotalPages,
-  Filter
-} from '@/src/lib/tables/tableGeneric/table_fetch_pages'
+import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
+import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
+import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import MyPagination from '@/src/ui/components/myPagination'
 import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
