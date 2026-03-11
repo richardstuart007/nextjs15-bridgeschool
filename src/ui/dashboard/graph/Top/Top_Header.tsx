@@ -1,34 +1,43 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import MyDropdown from '@/src/ui/components/myDropdown'
-import { Top_limitMonths_Options } from '@/src/ui/dashboard/graph/Top/Top_constants'
+import {
+  Top_limitMonths_Options,
+  Top_limitMonths_Default
+} from '@/src/ui/dashboard/graph/Top/Top_constants'
+import { update_tus_GraphPrefs } from '@/src/lib/tables/tableSpecific/update_tus_GraphPrefs'
 
 interface Top_HeaderProps {
-  defaultMonths: number
+  initialMonths?: number
 }
 
-export function Top_Header({ defaultMonths }: Top_HeaderProps) {
+export function Top_Header({ initialMonths = Top_limitMonths_Default }: Top_HeaderProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const [months, setMonths] = useState(initialMonths)
 
-  // Get months from URL or use default
-  const currentMonths = searchParams.get('uq_graph_top_months')
-    ? Number(searchParams.get('uq_graph_top_months'))
-    : defaultMonths
+  useEffect(() => {
+    setMonths(initialMonths)
+  }, [initialMonths])
 
-  const handleMonthsChange = (uq_graph_top_months: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('uq_graph_top_months', uq_graph_top_months.toString())
-    router.push(`?${params.toString()}`)
+  const handleMonthsChange = async (value: string | number) => {
+    const numericValue = Number(value)
+    setMonths(numericValue)
+
+    await update_tus_GraphPrefs({
+      us_graph_top_months: numericValue
+    })
+
+    router.refresh()
   }
 
   return (
     <div className='flex items-center flex-wrap gap-2'>
       <h2 className='text-sm whitespace-nowrap'>Top Results over</h2>
       <MyDropdown
-        selectedOption={currentMonths}
-        setSelectedOption={value => handleMonthsChange(Number(value))}
+        selectedOption={months}
+        setSelectedOption={handleMonthsChange}
         name='top-months-selector'
         tableData={Top_limitMonths_Options.map(opt => ({
           value: opt.value,

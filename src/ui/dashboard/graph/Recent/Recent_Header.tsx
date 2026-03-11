@@ -1,6 +1,7 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import MyDropdown from '@/src/ui/components/myDropdown'
 import {
   Recent_usersReturned_Options,
@@ -8,46 +9,57 @@ import {
   Recent_usersAverage_Options,
   Recent_usersAverage_Default
 } from '@/src/ui/dashboard/graph/Recent/Recent_constants'
+import { update_tus_GraphPrefs } from '@/src/lib/tables/tableSpecific/update_tus_GraphPrefs'
 
 interface Recent_HeaderProps {
-  defaultUsersReturned?: number
-  defaultUsersAverage?: number
+  initialUsersReturned?: number
+  initialUsersAverage?: number
 }
 
 export function Recent_Header({
-  defaultUsersReturned = Recent_usersReturned_Default,
-  defaultUsersAverage = Recent_usersAverage_Default
+  initialUsersReturned = Recent_usersReturned_Default,
+  initialUsersAverage = Recent_usersAverage_Default
 }: Recent_HeaderProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const [usersReturned, setUsersReturned] = useState(initialUsersReturned)
+  const [usersAverage, setUsersAverage] = useState(initialUsersAverage)
 
-  // Get values from URL or use props/defaults
-  const uq_graph_recent_usersReturned = searchParams.get('uq_graph_recent_usersReturned')
-    ? Number(searchParams.get('uq_graph_recent_usersReturned'))
-    : defaultUsersReturned
+  useEffect(() => {
+    setUsersReturned(initialUsersReturned)
+  }, [initialUsersReturned])
 
-  const uq_graph_recent_usersAverage = searchParams.get('uq_graph_recent_usersAverage')
-    ? Number(searchParams.get('uq_graph_recent_usersAverage'))
-    : defaultUsersAverage
+  useEffect(() => {
+    setUsersAverage(initialUsersAverage)
+  }, [initialUsersAverage])
 
-  const handleUsersReturnedChange = (value: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('uq_graph_recent_usersReturned', value.toString())
-    router.push(`?${params.toString()}`)
+  const handleUsersReturnedChange = async (value: string | number) => {
+    const numericValue = Number(value)
+    setUsersReturned(numericValue)
+
+    await update_tus_GraphPrefs({
+      us_graph_recent_users: numericValue
+    })
+
+    router.refresh()
   }
 
-  const handleUsersAverageChange = (value: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('uq_graph_recent_usersAverage', value.toString())
-    router.push(`?${params.toString()}`)
+  const handleUsersAverageChange = async (value: string | number) => {
+    const numericValue = Number(value)
+    setUsersAverage(numericValue)
+
+    await update_tus_GraphPrefs({
+      us_graph_recent_avg: numericValue
+    })
+
+    router.refresh()
   }
 
   return (
     <div className='flex items-center flex-wrap gap-2'>
       <h2 className='text-sm whitespace-nowrap'>Recent Averages</h2>
       <MyDropdown
-        selectedOption={uq_graph_recent_usersReturned}
-        setSelectedOption={value => handleUsersReturnedChange(Number(value))}
+        selectedOption={usersReturned}
+        setSelectedOption={handleUsersReturnedChange}
         name='users-returned'
         tableData={Recent_usersReturned_Options.map(opt => ({
           value: opt.value,
@@ -60,8 +72,8 @@ export function Recent_Header({
       />
       <span className='text-sm font-medium mr-2'>Users</span>
       <MyDropdown
-        selectedOption={uq_graph_recent_usersAverage}
-        setSelectedOption={value => handleUsersAverageChange(Number(value))}
+        selectedOption={usersAverage}
+        setSelectedOption={handleUsersAverageChange}
         name='users-average'
         tableData={Recent_usersAverage_Options.map(opt => ({
           value: opt.value,

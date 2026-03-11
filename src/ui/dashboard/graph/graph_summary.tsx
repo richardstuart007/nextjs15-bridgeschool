@@ -14,7 +14,10 @@ import {
   Recent_usersAverage_Default,
   Recent_usersReturned_Default
 } from '@/src/ui/dashboard/graph/Recent/Recent_constants'
-import { Current_limitCount } from '@/src/ui/dashboard/graph/User/User_constants'
+import {
+  User_limitMonths_Average_Default,
+  Current_limitCount
+} from '@/src/ui/dashboard/graph/User/User_constants'
 import { Top_limitMonths_Default } from '@/src/ui/dashboard/graph/Top/Top_constants'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
@@ -55,19 +58,7 @@ const emptyGraphStructure: GraphStructure = {
 }
 
 //--------------------------------------------------------------------------------
-interface Graph_SummaryProps {
-  User_limitMonths_Average: number
-  TopResults_limitMonths?: number
-  RecentResults_usersReturned?: number
-  RecentResults_usersAverage?: number
-}
-
-export default async function Graph_Summary({
-  User_limitMonths_Average,
-  TopResults_limitMonths = Top_limitMonths_Default,
-  RecentResults_usersReturned = Recent_usersReturned_Default,
-  RecentResults_usersAverage = Recent_usersAverage_Default
-}: Graph_SummaryProps) {
+export default async function Graph_Summary() {
   const functionName = 'Graph_Summary'
 
   //
@@ -76,22 +67,31 @@ export default async function Graph_Summary({
   const authSession = await getAuthSession()
   const user = authSession?.user
   const au_usid = Number(user?.au_usid ?? 0)
+
   //
-  //  Get users country code
+  //  Get full user record with graph preferences
   //
+  let userRecord = null
   let countryCode = 'ZZ'
+
   if (au_usid > 0) {
     const rows = await table_fetch({
       caller: functionName,
       table: 'tus_users',
       whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
     } as table_fetch_Props)
-    const userRecord = rows?.[0]
+    userRecord = rows?.[0]
     countryCode = userRecord?.us_fedcountry ?? 'ZZ'
   }
 
+  // Get graph preferences from user record with defaults
+  const userMonths = userRecord?.us_graph_user_months ?? User_limitMonths_Average_Default
+  const topMonths = userRecord?.us_graph_top_months ?? Top_limitMonths_Default
+  const recentUsers = userRecord?.us_graph_recent_users ?? Recent_usersReturned_Default
+  const recentAvg = userRecord?.us_graph_recent_avg ?? Recent_usersAverage_Default
+
   //
-  //  Fetch the data with safe defaults
+  //  Fetch the data with safe defaults using user preferences
   //
   let dataTop: structure_UsershistoryTopResults[] = []
   let dataRecent: structure_UsershistoryRecentResults[] = []
@@ -102,22 +102,22 @@ export default async function Graph_Summary({
     const results = await Promise.allSettled([
       Top_fetch({
         caller: functionName,
-        TopResults_limitMonths: TopResults_limitMonths
+        TopResults_limitMonths: topMonths // Use from database
       }),
       Recent_fetch_1({
         caller: functionName,
-        uq_graph_recent_usersReturned: RecentResults_usersReturned
+        uq_graph_recent_usersReturned: recentUsers // Use from database
       }),
       User_fetch({
         caller: functionName,
         userId: au_usid,
-        months: User_limitMonths_Average,
+        months: userMonths, // Use from database
         count: Current_limitCount
       }),
       User_fetch_Average({
         caller: functionName,
         userId: au_usid,
-        User_limitMonths_Average: User_limitMonths_Average
+        User_limitMonths_Average: userMonths // Use from database
       })
     ])
 
@@ -151,7 +151,7 @@ export default async function Graph_Summary({
           (await Recent_fetch_Averages({
             userIds: userIds,
             caller: functionName,
-            uq_graph_recent_usersAverage: RecentResults_usersAverage
+            uq_graph_recent_usersAverage: recentAvg // Use from database
           })) || []
       } catch (error) {
         console.error('Error fetching averages:', error)
@@ -301,7 +301,7 @@ export default async function Graph_Summary({
     }
 
     //
-    //  Datasets
+    //  Datasets - Use the dynamic recentAvg value in the label
     //
     const GraphData: GraphStructure = {
       labels: names,
@@ -314,7 +314,7 @@ export default async function Graph_Summary({
           backgroundColor: 'rgba(54, 162, 235, 0.6)'
         },
         {
-          label: `${RecentResults_usersAverage}-Result Average %`,
+          label: `${recentAvg}-Result Average %`, // Use from database
           data: data_averagePercentages,
           keys: keys,
           keyType: 'usid',
@@ -377,7 +377,7 @@ export default async function Graph_Summary({
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <User_Header averagePercentage={safeDataUserAverage} />
+          <User_Header averagePercentage={safeDataUserAverage} initialMonths={userMonths} />
           <div className='flex-grow overflow-hidden'>
             <MyLineChart LineGraphData={UserLineGraph} />
           </div>
@@ -388,7 +388,7 @@ export default async function Graph_Summary({
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <Top_Header defaultMonths={TopResults_limitMonths} />
+          <Top_Header initialMonths={topMonths} />
           <div className='flex-grow overflow-hidden'>
             <MyBarChart StackedGraphData={TopGraphData} />
           </div>
@@ -399,7 +399,7 @@ export default async function Graph_Summary({
       {/* --------------------------------------------------------------- */}
       <div className='flex-none h-[30vh]'>
         <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <Recent_Header />
+          <Recent_Header initialUsersReturned={recentUsers} initialUsersAverage={recentAvg} />
           <div className='flex-grow overflow-hidden'>
             <MyBarChart StackedGraphData={RecentGraphData} />
           </div>

@@ -9,9 +9,8 @@ import { userCache_store } from '@/src/lib/cache/userCache_store'
 interface User_fetchProps {
   userId: number
   caller: string
-  // Add dynamic parameters that affect the query
-  months: number // From dropdown
-  count: number // From dropdown or constant
+  months: number
+  count: number
 }
 
 export async function User_fetch({ userId, caller, months, count }: User_fetchProps) {

@@ -3,7 +3,7 @@
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { newUser } from '@/src/lib/dataAuth/newUser'
+import { write_users } from '@/src/lib/tables/tableSpecific/write_Users'
 import { write_sessions } from '@/src/lib/tables/tableSpecific/write_sessions'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 
@@ -18,7 +18,7 @@ export async function providerSignIn({ provider, email, name }: structure_Provid
 
     let userRecord: table_Users | undefined = rows[0]
 
-    if (!userRecord) userRecord = await newUser(provider, email, name)
+    if (!userRecord) userRecord = await write_users(provider, email, name)
     if (!userRecord) throw Error('providerSignIn: Write Users Error')
 
     const ss_usid = userRecord.us_usid

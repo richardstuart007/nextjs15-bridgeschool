@@ -8,12 +8,10 @@ import {
   Top_usersReturned
 } from '@/src/ui/dashboard/graph/Top/Top_constants'
 import { userCache_store } from '@/src/lib/cache/userCache_store'
-//---------------------------------------------------------------------
-//  Top results data
-//---------------------------------------------------------------------
+
 interface Top_fetchProps {
   caller: string
-  TopResults_limitMonths: number
+  TopResults_limitMonths: number // This now comes from user preferences
 }
 
 export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchProps) {
@@ -27,34 +25,11 @@ export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchPro
     usersReturned: Top_usersReturned
   }
 
-  // Log GET attempt
-  const getMsg = `GET | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: getMsg,
-    lg_severity: 'I'
-  })
-
+  // Check cache
   const cachedData = store.get<any>(functionName, cacheKeys)
   if (cachedData) {
-    const hitMsg = `HIT | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: hitMsg,
-      lg_severity: 'I'
-    })
     return cachedData
   }
-
-  const missMsg = `MISS | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: missMsg,
-    lg_severity: 'I'
-  })
 
   try {
     const sqlQuery = `
@@ -91,10 +66,8 @@ export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchPro
       ORDER BY
         percentage DESC
       LIMIT $3
-  `
-    //
-    //  Run sql Query - USE THE PASSED PARAMETER INSTEAD OF CONSTANT
-    //
+    `
+
     const values = [Top_count_min, Top_count_max, Top_usersReturned, TopResults_limitMonths]
     const db = await sql()
     const data = await db.query({
@@ -103,26 +76,11 @@ export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchPro
       functionName: functionName,
       caller: caller
     })
-    //
-    //  Return rows
-    //
-    const rows = data.rows || []
 
-    // Store in cache
+    const rows = data.rows || []
     store.set(functionName, cacheKeys, rows)
 
-    const storedMsg = `STORED | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${rows.length} for ${TopResults_limitMonths} months`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
-
     return rows
-    //
-    //  Errors
-    //
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({

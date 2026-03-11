@@ -1,27 +1,38 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import MyDropdown from '@/src/ui/components/myDropdown'
 import {
   User_limitMonths_Average_Options,
   User_limitMonths_Average_Default
 } from '@/src/ui/dashboard/graph/User/User_constants'
+import { update_tus_GraphPrefs } from '@/src/lib/tables/tableSpecific/update_tus_GraphPrefs'
 
 interface User_HeaderProps {
   averagePercentage: number
+  initialMonths?: number
 }
 
-export function User_Header({ averagePercentage }: User_HeaderProps) {
+export function User_Header({ averagePercentage, initialMonths }: User_HeaderProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const currentMonths = searchParams.get('uq_graph_user_months')
-    ? Number(searchParams.get('uq_graph_user_months'))
-    : User_limitMonths_Average_Default
+  const [months, setMonths] = useState(initialMonths ?? User_limitMonths_Average_Default)
 
-  const handleMonthsChange = (uq_graph_user_months: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('uq_graph_user_months', uq_graph_user_months.toString())
-    router.push(`?${params.toString()}`)
+  useEffect(() => {
+    if (initialMonths !== undefined) {
+      setMonths(initialMonths)
+    }
+  }, [initialMonths])
+
+  const handleMonthsChange = async (value: string | number) => {
+    const numericValue = Number(value)
+    setMonths(numericValue)
+
+    await update_tus_GraphPrefs({
+      us_graph_user_months: numericValue
+    })
+
+    router.refresh()
   }
 
   return (
@@ -30,8 +41,8 @@ export function User_Header({ averagePercentage }: User_HeaderProps) {
         {`Your Results: ${averagePercentage}% average over`}
       </h2>
       <MyDropdown
-        selectedOption={currentMonths}
-        setSelectedOption={value => handleMonthsChange(Number(value))}
+        selectedOption={months}
+        setSelectedOption={handleMonthsChange}
         name='user-months-selector'
         tableData={User_limitMonths_Average_Options.map(opt => ({
           value: opt.value,
