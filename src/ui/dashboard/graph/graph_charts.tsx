@@ -12,6 +12,7 @@ import {
   Legend,
   LegendItem
 } from 'chart.js'
+import { Datasets } from './graph_types'
 
 //
 //  Register the components
@@ -30,19 +31,17 @@ ChartJS.register(
 //
 //  Graph Interfaces
 //
-interface Datasets {
-  label: string
-  data: number[]
-  keys: number[] // Added keys property
-  keyType: string // Added keyType property
-  backgroundColor?: string
-  borderColor?: string
-  tension?: number
-}
-
 interface StackDataStructure {
   labels: string[]
   datasets: Datasets[]
+}
+
+interface ClickData {
+  key: number
+  keyType: string
+  value: number
+  datasetIndex: number
+  pointIndex: number
 }
 
 //-------------------------------------------------------------------------------
@@ -52,12 +51,14 @@ export function MyBarChart({
   StackedGraphData,
   Stacked = false,
   GridDisplayX = false,
-  GridDisplayY = false
+  GridDisplayY = false,
+  onPointClick
 }: {
   StackedGraphData: StackDataStructure
   Stacked?: boolean
   GridDisplayX?: boolean
   GridDisplayY?: boolean
+  onPointClick?: (clickData: ClickData) => void
 }) {
   //
   // Default background colors for each dataset
@@ -78,28 +79,47 @@ export function MyBarChart({
   }
 
   //
-  // Set the background color to default if not provided in the dataset
+  // Create display data - replace zeros with 5% for visibility
   //
-  const datasetsWithDefaultColors = StackedGraphData.datasets.map((dataset, index) => ({
+  const displayDatasets = StackedGraphData.datasets.map(dataset => ({
     ...dataset,
-    backgroundColor:
-      dataset.backgroundColor || defaultBackgroundColors[index % defaultBackgroundColors.length]
+    // Keep original data for tooltips, but display 5% for zeros
+    data: dataset.data.map(value => (value === 0 ? 5 : value)),
+    originalData: dataset.data, // Store original for tooltips
+    backgroundColor: dataset.data.map((value: number, index: number) => {
+      if (value === 0) {
+        // Use striped pattern for zero bars
+        return 'repeating-linear-gradient(45deg, rgba(200,200,200,0.3), rgba(200,200,200,0.3) 10px, rgba(150,150,150,0.3) 10px, rgba(150,150,150,0.3) 20px)'
+      }
+      return (
+        dataset.backgroundColor || defaultBackgroundColors[index % defaultBackgroundColors.length]
+      )
+    }),
+    borderColor: dataset.data.map((value: number) =>
+      value === 0 ? 'rgba(100,100,100,0.8)' : 'rgba(0,0,0,0.2)'
+    ),
+    borderWidth: dataset.data.map((value: number) => (value === 0 ? 2 : 1))
   }))
 
   //
-  //  Modify the graph data with the default colors
+  //  Modify the graph data for display
   //
   const modifiedGraphData = {
     ...StackedGraphData,
-    datasets: datasetsWithDefaultColors
+    datasets: displayDatasets
   }
 
   //
-  //  Options
+  //  Options with custom tooltip and hover effects
   //
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    hover: {
+      mode: 'index' as const,
+      intersect: true,
+      animationDuration: 200
+    },
     scales: {
       x: {
         stacked: Stacked,
@@ -111,16 +131,72 @@ export function MyBarChart({
         stacked: Stacked,
         grid: {
           display: GridDisplayY
+        },
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 10,
+          callback: function (value: any) {
+            return value + '%'
+          }
         }
       }
     },
-    onClick: (event: any, elements: any[]) => handle_Click(elements, (event as any).chart)
+    elements: {
+      bar: {
+        hoverBackgroundColor: 'rgba(255, 165, 0, 0.8)',
+        hoverBorderColor: 'orange',
+        hoverBorderWidth: 2
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            const label = context.dataset.label || ''
+            // Get the original data value
+            const dataset = context.dataset
+            const index = context.dataIndex
+
+            // Try to get original data if it exists, otherwise use the displayed value
+            let value = context.raw
+            if (dataset.originalData && dataset.originalData[index] !== undefined) {
+              value = dataset.originalData[index]
+            }
+
+            const tooltipData = dataset.tooltipData
+
+            // Special handling for zero values
+            if (value === 0) {
+              return [
+                `${label}: 0% (Actual)`,
+                `⚠️ No correct answers`,
+                tooltipData && index !== undefined ? tooltipData[index] : ''
+              ].filter(Boolean)
+            }
+
+            if (tooltipData && index !== undefined) {
+              const extraInfo = tooltipData[index]
+              return [`${label}: ${value}%`, `${extraInfo}`]
+            }
+
+            return `${label}: ${value}%`
+          }
+        }
+      }
+    },
+    onClick: (event: any, elements: any[]) =>
+      chartClickHandler(event, elements, onPointClick, modifiedGraphData)
   }
 
   //
   //  Return the Bar component
   //
-  return <Bar data={modifiedGraphData} options={options} />
+  return (
+    <div className='relative h-full'>
+      <Bar data={modifiedGraphData} options={options} />
+    </div>
+  )
 }
 
 //-------------------------------------------------------------------------------
@@ -129,11 +205,13 @@ export function MyBarChart({
 export function MyLineChart({
   LineGraphData,
   GridDisplayX = false,
-  GridDisplayY = false
+  GridDisplayY = false,
+  onPointClick
 }: {
   LineGraphData: StackDataStructure
   GridDisplayX?: boolean
   GridDisplayY?: boolean
+  onPointClick?: (clickData: ClickData) => void
 }) {
   //
   // Default border colors for each dataset
@@ -172,11 +250,16 @@ export function MyLineChart({
   }
 
   //
-  //  Options
+  //  Options with custom tooltip and hover effects
   //
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    hover: {
+      mode: 'index' as const,
+      intersect: true,
+      animationDuration: 200
+    },
     scales: {
       x: {
         grid: {
@@ -186,7 +269,23 @@ export function MyLineChart({
       y: {
         grid: {
           display: GridDisplayY
+        },
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          stepSize: 10,
+          callback: function (value: any) {
+            return value + '%'
+          }
         }
+      }
+    },
+    elements: {
+      point: {
+        hoverBackgroundColor: 'rgba(255, 165, 0, 0.8)',
+        hoverBorderColor: 'orange',
+        hoverBorderWidth: 3,
+        hoverRadius: 8
       }
     },
     plugins: {
@@ -205,43 +304,80 @@ export function MyLineChart({
             }))
           }
         }
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            const label = context.dataset.label || ''
+            const value = context.raw
+            const tooltipData = context.dataset.tooltipData
+
+            // Special handling for zero values
+            if (value === 0) {
+              return [
+                `${label}: 0%`,
+                `⚠️ No correct answers`,
+                tooltipData && context.dataIndex !== undefined ? tooltipData[context.dataIndex] : ''
+              ].filter(Boolean)
+            }
+
+            if (tooltipData && context.dataIndex !== undefined) {
+              const extraInfo = tooltipData[context.dataIndex]
+              return [`${label}: ${value}%`, `${extraInfo}`]
+            }
+
+            return `${label}: ${value}%`
+          }
+        }
       }
     },
-    onClick: (event: any, elements: any[]) => handle_Click(elements, (event as any).chart)
+    onClick: (event: any, elements: any[]) =>
+      chartClickHandler(event, elements, onPointClick, modifiedGraphData)
   }
 
   //
   //  Return the Line component
   //
-  return <Line data={modifiedGraphData} options={options} />
+  return (
+    <div className='relative h-full'>
+      <Line data={modifiedGraphData} options={options} />
+    </div>
+  )
 }
 
 //--------------------------------------------------------------------------------
-//  Clicked on the Chart
+//  Shared Chart Click Handler
 //--------------------------------------------------------------------------------
-function handle_Click(elements: any[], chart: any) {
-  if (elements && elements.length > 0) {
-    try {
-      const clickedElement = elements[0]
-      const datasetIndex = clickedElement.datasetIndex
-      const index = clickedElement.index
+function chartClickHandler(
+  _event: any,
+  elements: any[],
+  onPointClick?: (clickData: ClickData) => void,
+  chartData?: any
+) {
+  if (!onPointClick || !elements || elements.length === 0) return
 
-      // Safety checks
-      if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[datasetIndex]) {
-        console.log('Invalid chart data')
-        return
-      }
+  try {
+    const clickedElement = elements[0]
+    const datasetIndex = clickedElement.datasetIndex
+    const index = clickedElement.index
 
-      const dataset = chart.data.datasets[datasetIndex]
-      const data = dataset.data[index]
-      const key = dataset.keys ? dataset.keys[index] : 'No key'
-      const keyType = dataset.keyType || 'Unknown'
+    if (!chartData?.datasets[datasetIndex]) return
 
-      console.log('data:', data)
-      console.log('key:', key)
-      console.log('keyType:', keyType)
-    } catch (error) {
-      console.error('Error handling chart click:', error)
+    const dataset = chartData.datasets[datasetIndex]
+    const originalData = dataset.originalData
+    const value = originalData ? originalData[index] : dataset.data[index]
+    const key = dataset.keys ? dataset.keys[index] : null
+    const keyType = dataset.keyType || null
+    if (key && keyType) {
+      onPointClick({
+        key,
+        keyType,
+        value,
+        datasetIndex,
+        pointIndex: index
+      })
     }
+  } catch (error) {
+    console.error('Error handling chart click:', error)
   }
 }

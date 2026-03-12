@@ -52,7 +52,7 @@ export async function Recent_fetch_1({
   try {
     const sqlQuery = `
     SELECT
-      hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
+      hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent, hs_datetime
       FROM (
           SELECT
             hs_hsid,
@@ -61,6 +61,7 @@ export async function Recent_fetch_1({
             hs_totalpoints,
             hs_maxpoints,
             hs_correctpercent,
+            hs_datetime,
             ROW_NUMBER()
             OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
           FROM ths_history

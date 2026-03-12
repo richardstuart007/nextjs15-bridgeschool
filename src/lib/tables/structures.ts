@@ -45,6 +45,7 @@ export type structure_UsershistoryRecentResults = {
   hs_totalpoints: number
   hs_maxpoints: number
   hs_correctpercent: number
+  hs_datetime: Date
 }
 
 export type structure_ProviderSignInParams = {

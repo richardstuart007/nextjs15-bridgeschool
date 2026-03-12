@@ -3,8 +3,6 @@ import { Recent_fetch_1 } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_1'
 import { Recent_fetch_Averages } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_Averages'
 import { User_fetch } from '@/src/ui/dashboard/graph/User/User_fetch'
 import { User_fetch_Average } from '@/src/ui/dashboard/graph/User/User_fetch_Average'
-
-import { MyBarChart, MyLineChart } from '@/src/ui/dashboard/graph/graph_charts'
 import {
   structure_UsershistoryTopResults,
   structure_UsershistoryRecentResults
@@ -22,26 +20,8 @@ import { Top_limitMonths_Default } from '@/src/ui/dashboard/graph/Top/Top_consta
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
-import { User_Header } from '@/src/ui/dashboard/graph/User/User_Header'
-import { Top_Header } from './Top/Top_Header'
-import { Recent_Header } from './Recent/Recent_Header'
-
-//
-//  Graph Interfaces
-//
-interface Datasets {
-  label: string
-  data: number[]
-  keys: number[]
-  keyType: string
-  backgroundColor?: string
-  borderColor?: string
-  tension?: number
-}
-interface GraphStructure {
-  labels: string[]
-  datasets: Datasets[]
-}
+import { GraphSummaryWrapper } from './graph_summaryWrapper'
+import { GraphStructure } from './graph_types'
 
 // Empty graph structure for when no data is available
 const emptyGraphStructure: GraphStructure = {
@@ -182,7 +162,7 @@ export default async function Graph_Summary() {
   const userIdsForRecent = safeDataRecent.map(item => item?.hs_usid).filter(Boolean)
   const RecentGraphData: GraphStructure =
     safeDataRecent.length > 0 && userIdsForRecent.length > 0
-      ? recentGraph(safeDataRecent, safeDataForAverages, userIdsForRecent)
+      ? recentGraph(safeDataRecent, safeDataForAverages, userIdsForRecent, countryCode)
       : emptyGraphStructure
 
   //--------------------------------------------------------------------------------
@@ -275,33 +255,80 @@ export default async function Graph_Summary() {
   function recentGraph(
     dataRecent: structure_UsershistoryRecentResults[],
     dataForAverages: structure_UsershistoryRecentResults[],
-    userIds: number[]
+    userIds: number[],
+    countryCode: string
   ): GraphStructure {
     //
-    //  Derive the names
+    // Create a map of user data for easy lookup
     //
-    const names: string[] = dataRecent.map(item => item?.us_name || 'Unknown').filter(Boolean)
-    const data_individualPercentages: number[] = dataRecent.map(
-      item => item?.hs_correctpercent || 0
-    )
+    const recentMap = new Map<number, structure_UsershistoryRecentResults>()
+    dataRecent.forEach(item => {
+      if (item?.hs_usid) {
+        recentMap.set(item.hs_usid, item)
+      }
+    })
+
+    const averagesMap = new Map<number, structure_UsershistoryRecentResults>()
+    dataForAverages.forEach(item => {
+      if (item?.hs_usid) {
+        averagesMap.set(item.hs_usid, item)
+      }
+    })
 
     //
-    //  Derive percentages from the data
+    // Build arrays in the same order as userIds
+    //
+    const names: string[] = []
+    const data_individualPercentages: number[] = []
+    const tooltipDates: string[] = []
+
+    userIds.forEach(userId => {
+      const recentItem = recentMap.get(userId)
+      if (recentItem) {
+        names.push(recentItem.us_name || 'Unknown')
+        data_individualPercentages.push(recentItem.hs_correctpercent || 0)
+
+        // Format date for tooltip
+        if (recentItem?.hs_datetime) {
+          try {
+            const date = convertUTCtoLocal({
+              datetimeUTC: recentItem.hs_datetime,
+              to_localcountryCode: countryCode,
+              to_dateFormat: 'MMM dd, yyyy'
+            })
+            tooltipDates.push(date)
+          } catch (error) {
+            tooltipDates.push('Invalid date')
+          }
+        } else {
+          tooltipDates.push('No date')
+        }
+      } else {
+        // This user exists in userIds but not in dataRecent
+        // This shouldn't happen, but handle it gracefully
+        names.push('Unknown')
+        data_individualPercentages.push(0)
+        tooltipDates.push('No data')
+      }
+    })
+
+    //
+    // Calculate average percentages (already in userIds order)
     //
     const data_averagePercentages: number[] = calculatePercentages(dataForAverages, userIds)
 
     //
     //  Keys
     //
-    const keys: number[] = userIds.length > 0 ? userIds : [0]
+    const keys: number[] = [...userIds]
 
     // If no names, return empty
-    if (names.length === 0) {
+    if (names.length === 0 || names.every(name => name === 'Unknown')) {
       return emptyGraphStructure
     }
 
     //
-    //  Datasets - Use the dynamic recentAvg value in the label
+    //  Datasets
     //
     const GraphData: GraphStructure = {
       labels: names,
@@ -311,10 +338,11 @@ export default async function Graph_Summary() {
           data: data_individualPercentages,
           keys: keys,
           keyType: 'usid',
-          backgroundColor: 'rgba(54, 162, 235, 0.6)'
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          tooltipData: tooltipDates
         },
         {
-          label: `${recentAvg}-Result Average %`, // Use from database
+          label: `${recentAvg}-Result Average %`,
           data: data_averagePercentages,
           keys: keys,
           keyType: 'usid',
@@ -324,7 +352,6 @@ export default async function Graph_Summary() {
     }
     return GraphData
   }
-
   //--------------------------------------------------------------------------------
   //  Calculate the average and individual percentages for each user
   //--------------------------------------------------------------------------------
@@ -372,40 +399,16 @@ export default async function Graph_Summary() {
   //--------------------------------------------------------------------------------
   return (
     <div className='h-screen flex flex-col gap-4'>
-      {/* --------------------------------------------------------------- */}
-      {/* First Graph - User Results Line Chart */}
-      {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <User_Header averagePercentage={safeDataUserAverage} initialMonths={userMonths} />
-          <div className='flex-grow overflow-hidden'>
-            <MyLineChart LineGraphData={UserLineGraph} />
-          </div>
-        </div>
-      </div>
-      {/* --------------------------------------------------------------- */}
-      {/* Top Results Graph - Bar Chart */}
-      {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <Top_Header initialMonths={topMonths} />
-          <div className='flex-grow overflow-hidden'>
-            <MyBarChart StackedGraphData={TopGraphData} />
-          </div>
-        </div>
-      </div>
-      {/* --------------------------------------------------------------- */}
-      {/* Recent Results Graph - Bar Chart */}
-      {/* --------------------------------------------------------------- */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
-          <Recent_Header initialUsersReturned={recentUsers} initialUsersAverage={recentAvg} />
-          <div className='flex-grow overflow-hidden'>
-            <MyBarChart StackedGraphData={RecentGraphData} />
-          </div>
-        </div>
-      </div>
-      {/* --------------------------------------------------------------- */}
+      <GraphSummaryWrapper
+        UserLineGraph={UserLineGraph}
+        TopGraphData={TopGraphData}
+        RecentGraphData={RecentGraphData}
+        safeDataUserAverage={safeDataUserAverage}
+        userMonths={userMonths}
+        topMonths={topMonths}
+        recentUsers={recentUsers}
+        recentAvg={recentAvg}
+      />
     </div>
   )
 }

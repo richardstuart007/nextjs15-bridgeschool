@@ -1,7 +1,6 @@
 export const dynamic = 'force-dynamic'
 import Graph_Summary from '@/src/ui/dashboard/graph/graph_summary'
 import { Suspense } from 'react'
-
 //
 //  App route
 //

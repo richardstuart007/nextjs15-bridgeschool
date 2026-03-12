@@ -54,6 +54,17 @@ export function User_Header({ averagePercentage, initialMonths }: User_HeaderPro
         includeBlank={false}
       />
       <span className='text-sm'>months</span>
+      <div className='ml-auto text-xs text-orange-500 flex items-center gap-1'>
+        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth={2}
+            d='M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3'
+          />
+        </svg>
+        <span>Click any point to review</span>
+      </div>
     </div>
   )
 }
