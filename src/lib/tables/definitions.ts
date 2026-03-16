@@ -93,7 +93,6 @@ export type table_SessionsUser = {
   us_admin: boolean
   us_fedcountry: string
   us_provider: string
-  us_sortquestions: boolean
   us_skipcorrect: boolean
   us_maxquestions: number
 }
@@ -107,7 +106,6 @@ export type table_Users = {
   us_admin: boolean
   us_fedcountry: string
   us_provider: string
-  us_sortquestions: boolean
   us_skipcorrect: boolean
   us_maxquestions: number
   us_graph_user_months: number

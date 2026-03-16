@@ -5,7 +5,6 @@ export type structure_SessionsInfo = {
   si_email: string
   si_admin: boolean
   si_ssid: number
-  si_sortquestions: boolean
   si_skipcorrect: boolean
   si_maxquestions: number
 }

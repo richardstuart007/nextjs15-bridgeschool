@@ -33,7 +33,6 @@ export default function Form_User({ admin_uid }: Props) {
       us_fedcountry?: string[]
       us_maxquestions?: string[]
       us_skipcorrect?: string[]
-      us_sortquestions?: string[]
       us_admin?: string[]
     }
     message?: string | null
@@ -58,7 +57,6 @@ export default function Form_User({ admin_uid }: Props) {
   const [us_email, setus_email] = useState('')
   const [us_maxquestions, setus_maxquestions] = useState<number>(0)
   const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
-  const [us_sortquestions, setus_sortquestions] = useState<boolean>(false)
   const [us_admin, setus_admin] = useState<boolean>(false)
   const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
     []
@@ -135,7 +133,6 @@ export default function Form_User({ admin_uid }: Props) {
       setus_email(data.us_email)
       setus_maxquestions(data.us_maxquestions)
       setus_skipcorrect(data.us_skipcorrect)
-      setus_sortquestions(data.us_sortquestions)
       setus_admin(data.us_admin)
       //
       //  Format countries
@@ -315,21 +312,7 @@ export default function Form_User({ admin_uid }: Props) {
           />
         </div>
         {/*  ...................................................................................*/}
-        {/*   Toggle - Random Sort questions */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4 flex items-center justify-end w-72'>
-          <div className='mr-auto block text-xs font-medium text-gray-900'>
-            Random Sort Questions
-          </div>
-          <MyCheckbox
-            overrideClass=''
-            inputName='us_sortquestions'
-            inputValue={us_sortquestions}
-            onChange={() => setus_sortquestions(prev => !prev)}
-          />
-        </div>
-        {/*  ...................................................................................*/}
-        {/*   Toggle - Random Sort questions */}
+        {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           <MyDropdown

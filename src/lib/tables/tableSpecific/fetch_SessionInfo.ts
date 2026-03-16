@@ -25,7 +25,6 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
         us_name,
         us_email,
         us_admin,
-        us_sortquestions,
         us_skipcorrect,
         us_maxquestions
       FROM tss_sessions
@@ -54,7 +53,6 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
       si_name: row.us_name,
       si_email: row.us_email,
       si_admin: row.us_admin,
-      si_sortquestions: row.us_sortquestions,
       si_skipcorrect: row.us_skipcorrect,
       si_maxquestions: row.us_maxquestions
     }

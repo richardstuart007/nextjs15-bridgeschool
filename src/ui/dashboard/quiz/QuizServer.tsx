@@ -22,7 +22,7 @@ export default async function QuizServer({ uq_rfid, uq_column, uq_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   const SessionInfo = await fetch_SessionInfo({ caller: functionName })
   if (!SessionInfo) throw new Error('SessionInfo not found')
-  const { si_maxquestions, si_sortquestions } = SessionInfo
+  const { si_maxquestions } = SessionInfo
 
   //----------------------------------------------------------------------------------------------
   //.  Determine column value for filtering
@@ -47,12 +47,7 @@ export default async function QuizServer({ uq_rfid, uq_column, uq_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   //.  Shuffle questions if session says so
   //----------------------------------------------------------------------------------------------
-  if (si_sortquestions) {
-    for (let i = questions.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[questions[i], questions[j]] = [questions[j], questions[i]]
-    }
-  }
+  questions.sort((a, b) => a.qq_qqid - b.qq_qqid)
 
   //----------------------------------------------------------------------------------------------
   //.  Limit to max number of questions

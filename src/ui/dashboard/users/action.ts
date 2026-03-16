@@ -16,7 +16,6 @@ const FormSchemaSetup = z.object({
   us_fedcountry: z.string(),
   us_maxquestions: z.number().min(3).max(50),
   us_skipcorrect: z.boolean(),
-  us_sortquestions: z.boolean(),
   ow_owner: z.string(),
   us_admin: z.boolean()
 })
@@ -31,7 +30,6 @@ export type StateSetup = {
     us_fedcountry?: string[]
     us_maxquestions?: string[]
     us_skipcorrect?: string[]
-    us_sortquestions?: string[]
     ow_owner?: string[]
     us_admin?: string[]
   }
@@ -52,7 +50,6 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     us_fedid: formData.get('us_fedid'),
     us_fedcountry: formData.get('us_fedcountry'),
     us_maxquestions: Number(formData.get('us_maxquestions')),
-    us_sortquestions: formData.get('us_sortquestions') === 'true',
     us_skipcorrect: formData.get('us_skipcorrect') === 'true',
     ow_owner: formData.get('ow_owner'),
     us_admin: formData.get('us_admin') === 'true'
@@ -76,7 +73,6 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     us_fedid,
     us_fedcountry,
     us_maxquestions,
-    us_sortquestions,
     ow_owner,
     us_skipcorrect,
     us_admin
@@ -96,7 +92,6 @@ export async function action(_prevState: StateSetup, formData: FormData) {
         { column: 'us_fedid', value: us_fedid },
         { column: 'us_fedcountry', value: us_fedcountry },
         { column: 'us_maxquestions', value: us_maxquestions },
-        { column: 'us_sortquestions', value: us_sortquestions },
         { column: 'us_skipcorrect', value: us_skipcorrect },
         { column: 'us_admin', value: us_admin }
       ],
