@@ -3,7 +3,7 @@
 import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from '@/src/ui/components/myButton'
-import { action } from '@/src/ui/register/action'
+import { action, StateRegister } from '@/src/ui/register/action'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useActionState } from 'react'
 import { MyInput } from '@/src/ui/components/myInput'
@@ -15,33 +15,25 @@ export default function RegisterForm() {
   // -------------------------------------------------------------------------
   //  STATE DECLARATIONS
   // -------------------------------------------------------------------------
-  type actionState = {
-    errors?: {
-      name?: string[]
-      email?: string[]
-      password?: string[]
-    }
-    message?: string | null
-  }
-
-  const initialState: actionState = {
+  const initialState: StateRegister = {
     errors: {},
-    message: null
+    message: null,
+    success: false
   }
   const [formState, formAction] = useActionState(action, initialState)
 
   const errorMessage = formState?.message || null
-  const [submitting, setSubmitting] = useState(false)
+  const [registering, setRegistering] = useState(false)
 
   // -------------------------------------------------------------------------
   //  EVENT HANDLERS
   // -------------------------------------------------------------------------
-  const onSubmit_register = () => {
-    setSubmitting(true)
+  function onSubmit_register() {
+    // Clear any existing error message
     if (formState) formState.message = null
   }
 
-  const onClick_login = (event: React.MouseEvent<HTMLButtonElement>) => {
+  function onClick_login(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
     router.push('/login')
   }
@@ -49,11 +41,29 @@ export default function RegisterForm() {
   // -------------------------------------------------------------------------
   //  EFFECTS
   // -------------------------------------------------------------------------
-  useEffect(() => {
-    if (errorMessage) {
-      setSubmitting(false)
-    }
-  }, [errorMessage])
+  //
+  // Handle successful registration - show loading message then redirect
+  //
+  useEffect(
+    function () {
+      if (formState?.success === true) {
+        setRegistering(true)
+        router.push('/login')
+      }
+    },
+    [formState, router]
+  )
+  //
+  // Handle error message - ensure registering is false
+  //
+  useEffect(
+    function () {
+      if (errorMessage) {
+        setRegistering(false)
+      }
+    },
+    [errorMessage]
+  )
 
   // -------------------------------------------------------------------------
   //  FINAL RETURN
@@ -68,7 +78,7 @@ export default function RegisterForm() {
       <form action={formAction} className='space-y-3' onSubmit={onSubmit_register}>
         <div className='flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8'>
           <h1 className={`${lusitana.className} mb-3 text-2xl text-orange-500`}>
-            {submitting ? 'Registering...' : 'Register'}
+            {registering ? 'Registering...' : 'Register'}
           </h1>
 
           {renderContent()}
@@ -76,26 +86,26 @@ export default function RegisterForm() {
       </form>
     )
   }
+
   // -------------------------------------------------------------------------
-  //  renderContent - Returns the main content based on submitting state
+  //  renderContent - Returns the main content based on registering state
   // -------------------------------------------------------------------------
   function renderContent() {
-    if (submitting) {
-      return (
-        <MyLoadingMessage
-          message1='Please wait..'
-          message2='Registration in progress'
-        ></MyLoadingMessage>
-      )
-    }
-
     return (
       <>
-        {renderFormFields()}
-        {renderButtons()}
+        {registering && (
+          <MyLoadingMessage message1='Please wait..' message2='Registration in progress' />
+        )}
+        {!registering && (
+          <>
+            {renderFormFields()}
+            {renderButtons()}
+          </>
+        )}
       </>
     )
   }
+
   // -------------------------------------------------------------------------
   //  renderFormFields - Returns all form fields JSX
   // -------------------------------------------------------------------------
@@ -114,7 +124,11 @@ export default function RegisterForm() {
               type='text'
               name='name'
               placeholder='Enter your name'
+              disabled={registering}
             />
+            {formState?.errors?.name && (
+              <p className='mt-2 text-sm text-red-500'>{formState.errors.name[0]}</p>
+            )}
           </div>
         </div>
 
@@ -130,7 +144,11 @@ export default function RegisterForm() {
               type='email'
               name='email'
               placeholder='Enter your email address'
+              disabled={registering}
             />
+            {formState?.errors?.email && (
+              <p className='mt-2 text-sm text-red-500'>{formState.errors.email[0]}</p>
+            )}
           </div>
         </div>
 
@@ -146,13 +164,17 @@ export default function RegisterForm() {
               type='password'
               name='password'
               placeholder='Enter password'
+              disabled={registering}
             />
+            {formState?.errors?.password && (
+              <p className='mt-2 text-sm text-red-500'>{formState.errors.password[0]}</p>
+            )}
           </div>
         </div>
 
         {/* Error display */}
         <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
-          {errorMessage && (
+          {errorMessage && !registering && (
             <>
               <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
               <p className='text-sm text-red-500'>{errorMessage}</p>
@@ -162,6 +184,7 @@ export default function RegisterForm() {
       </>
     )
   }
+
   // -------------------------------------------------------------------------
   //  renderButtons - Returns all buttons JSX
   // -------------------------------------------------------------------------
@@ -169,7 +192,11 @@ export default function RegisterForm() {
     return (
       <>
         {/* Register button */}
-        <MyButton overrideClass='mt-4 w-full flex justify-center' type='submit'>
+        <MyButton
+          overrideClass='mt-4 w-full flex justify-center'
+          type='submit'
+          disabled={registering}
+        >
           Register
         </MyButton>
 
@@ -177,6 +204,7 @@ export default function RegisterForm() {
         <MyButton
           overrideClass='mt-4 w-full flex items-center justify-center bg-gray-700 text-white border-none shadow-none hover:bg-gray-900'
           onClick={onClick_login}
+          disabled={registering}
         >
           Back to Login
         </MyButton>

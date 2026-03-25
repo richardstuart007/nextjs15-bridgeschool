@@ -6,9 +6,7 @@ import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
 import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
 import { write_users } from '@/src/lib/tables/tableSpecific/write_Users'
 import bcrypt from 'bcryptjs'
-// ----------------------------------------------------------------------
-//  Register
-// ----------------------------------------------------------------------
+
 const FormSchemaRegister = z.object({
   name: z.string().min(1),
   email: z.string().email().toLowerCase().min(1),
@@ -22,6 +20,7 @@ export type StateRegister = {
     password?: string[]
   }
   message?: string | null
+  success?: boolean
 }
 
 const Register = FormSchemaRegister
@@ -42,7 +41,7 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Register.'
+      message: 'Missing Fields.'
     }
   }
   //
@@ -90,7 +89,18 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
     ]
   })
   //
-  //  SignIn
+  //  SignIn - use redirect: false to handle redirect manually
   //
-  await signIn('credentials', { email, password, redirectTo: '/dashboard' })
+  await signIn('credentials', {
+    email,
+    password,
+    redirect: false
+  })
+  //
+  // Return success flag for client to handle
+  //
+  return {
+    success: true,
+    message: ''
+  }
 }

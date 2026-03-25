@@ -10,7 +10,7 @@ import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { MyInput } from '@/src/ui/components/myInput'
-import { MyCheckbox } from '@/src/ui/components/myCheckbox'
+import { MyToggle } from '@/src/ui/components/myToggle'
 
 interface Props {
   admin_uid?: number
@@ -304,7 +304,7 @@ export default function Form_User({ admin_uid }: Props) {
           <div className='mr-auto block text-xs font-medium text-gray-900'>
             Skip correct questions
           </div>
-          <MyCheckbox
+          <MyToggle
             overrideClass=''
             inputName='us_skipcorrect'
             inputValue={us_skipcorrect}
@@ -334,7 +334,7 @@ export default function Form_User({ admin_uid }: Props) {
         {admin_uid ? (
           <div className='mt-4 flex items-center justify-end w-72'>
             <div className='mr-auto block text-xs font-medium text-gray-900'>Admin</div>
-            <MyCheckbox
+            <MyToggle
               overrideClass=''
               inputName='us_admin'
               inputValue={us_admin}

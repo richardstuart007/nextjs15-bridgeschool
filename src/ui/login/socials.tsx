@@ -1,31 +1,16 @@
+// src/ui/login/socials.tsx
 'use client'
-import { signIn } from 'next-auth/react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
 import { MyButton } from '@/src/ui/components/myButton'
-import { Routes_AfterLogin_redirect } from '@/src/root/constants/constants_validroutes'
+import { socials_signin } from './socials_signin'
 
 interface SocialsProps {
-  setSubmitting: (submitting: boolean) => void
+  setSigningIn: (signingIn: boolean) => void
 }
 
-export default function Socials({ setSubmitting }: SocialsProps) {
+export default function Socials({ setSigningIn }: SocialsProps) {
   const NEXT_PUBLIC_APPENV_ISDEV = process.env.NEXT_PUBLIC_APPENV_ISDEV === 'true'
-
-  const signInProvider = (
-    provider: 'google' | 'github',
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault()
-
-    // Update parent state directly
-    setSubmitting(true)
-
-    // Proceed with OAuth
-    signIn(provider, {
-      callbackUrl: Routes_AfterLogin_redirect
-    })
-  }
 
   return (
     <>
@@ -35,14 +20,20 @@ export default function Socials({ setSubmitting }: SocialsProps) {
       <div className='flex items-center w-full pt-4 gap-x-6'>
         <MyButton
           overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
-          onClick={event => signInProvider('google', event)}
+          onClick={function (event) {
+            event.preventDefault()
+            socials_signin('google', setSigningIn)
+          }}
         >
           <FcGoogle className='h-8 w-8' />
         </MyButton>
         {NEXT_PUBLIC_APPENV_ISDEV && (
           <MyButton
             overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
-            onClick={event => signInProvider('github', event)}
+            onClick={function (event) {
+              event.preventDefault()
+              socials_signin('github', setSigningIn)
+            }}
           >
             <FaGithub className='h-8 w-8' />
           </MyButton>
