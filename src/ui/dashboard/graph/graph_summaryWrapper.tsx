@@ -33,9 +33,6 @@ export function GraphSummaryWrapper({
   const handlePointClick = (clickData: { key: number; keyType: string }) => {
     if (clickData.keyType === 'hsid') {
       router.push(`/dashboard/quiz-review/${clickData.key}?uq_route=history`)
-    } else {
-      console.log('keyType:', clickData.keyType)
-      console.log('key:', clickData.key)
     }
   }
 

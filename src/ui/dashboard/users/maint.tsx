@@ -11,6 +11,7 @@ import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
 import { MyInput } from '@/src/ui/components/myInput'
 import { MyToggle } from '@/src/ui/components/myToggle'
+import MainWrapper from '@/src/ui/dashboard/friends/mainWrapper'
 
 interface Props {
   admin_uid?: number
@@ -64,6 +65,7 @@ export default function Form_User({ admin_uid }: Props) {
   const [ow_owner, setow_owner] = useState<string | number>('')
   const [shouldFetchData, setShouldFetchData] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [isFriendsPopupOpen, setIsFriendsPopupOpen] = useState(false)
 
   //-------------------------------------------------------------------------
   // Force refetch of data
@@ -155,6 +157,7 @@ export default function Form_User({ admin_uid }: Props) {
       // Set initial state with fetched data
       //
       setow_owner(data_usersowner.uo_owner)
+
       //---------------------------------
       //  Data can be displayed
       //---------------------------------
@@ -185,182 +188,205 @@ export default function Form_User({ admin_uid }: Props) {
   // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
-    <form action={formAction} className='space-y-3 '>
-      <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
-        {/*  ...................................................................................*/}
-        {/*  User ID  */}
-        {/*  ...................................................................................*/}
-        <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_usid'>
-            ID:{us_usid} Email:{us_email}
-          </label>
-          <div className='relative'>
-            <MyInput id='us_usid' type='hidden' name='us_usid' value={us_usid} />
+    <>
+      <form action={formAction} className='space-y-3 '>
+        <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
+          {/*  ...................................................................................*/}
+          {/*  User ID  */}
+          {/*  ...................................................................................*/}
+          <div>
+            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_usid'>
+              ID:{us_usid} Email:{us_email}
+            </label>
+            <div className='relative'>
+              <MyInput id='us_usid' type='hidden' name='us_usid' value={us_usid} />
+            </div>
           </div>
-        </div>
-        {/*  ...................................................................................*/}
-        {/*  Name */}
-        {/*  ...................................................................................*/}
-        <div>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_name'>
-            Name
-          </label>
-          <div className='relative'>
-            <MyInput
-              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='us_name'
-              type='text'
-              name='us_name'
-              autoComplete='name'
-              value={us_name}
-              onChange={e => setus_name(e.target.value)}
+          {/*  ...................................................................................*/}
+          {/*  Name */}
+          {/*  ...................................................................................*/}
+          <div>
+            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_name'>
+              Name
+            </label>
+            <div className='relative'>
+              <MyInput
+                overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+                id='us_name'
+                type='text'
+                name='us_name'
+                autoComplete='name'
+                value={us_name}
+                onChange={e => setus_name(e.target.value)}
+              />
+            </div>
+          </div>
+          <div id='name-error' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.us_name &&
+              formState.errors.us_name.map((error: string) => (
+                <p className='mt-2 text-sm text-red-500' key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+          {/*  ...................................................................................*/}
+          {/*  FEDCOUNTRY  */}
+          {/*  ...................................................................................*/}
+          <div className='mt-4'>
+            <MyDropdown
+              selectedOption={us_fedcountry}
+              setSelectedOption={setus_fedcountry}
+              searchEnabled={true}
+              name='us_fedcountry'
+              label={`Bridge Federation Country (${us_fedcountry})`}
+              tableData={formattedCountries}
+              optionLabel='label'
+              optionValue='value'
+              overrideClass_Dropdown='w-72'
+              includeBlank={false}
             />
           </div>
-        </div>
-        <div id='name-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.us_name &&
-            formState.errors.us_name.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
-                {error}
-              </p>
-            ))}
-        </div>
-        {/*  ...................................................................................*/}
-        {/*  FEDCOUNTRY  */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4'>
-          <MyDropdown
-            selectedOption={us_fedcountry}
-            setSelectedOption={setus_fedcountry}
-            searchEnabled={true}
-            name='us_fedcountry'
-            label={`Bridge Federation Country (${us_fedcountry})`}
-            tableData={formattedCountries}
-            optionLabel='label'
-            optionValue='value'
-            overrideClass_Dropdown='w-72'
-            includeBlank={false}
-          />
-        </div>
-        {/*  ...................................................................................*/}
-        {/*  FEDID  */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4'>
-          <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_fedid'>
-            Bridge Federation ID
-          </label>
-          <div className='relative'>
-            <MyInput
-              className='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='us_fedid'
-              type='text'
-              name='us_fedid'
-              value={us_fedid}
-              onChange={e => setus_fedid(e.target.value)}
-            />
+          {/*  ...................................................................................*/}
+          {/*  FEDID  */}
+          {/*  ...................................................................................*/}
+          <div className='mt-4'>
+            <label className='mb-3 mt-5 block text-xs font-medium text-gray-900' htmlFor='us_fedid'>
+              Bridge Federation ID
+            </label>
+            <div className='relative'>
+              <MyInput
+                className='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+                id='us_fedid'
+                type='text'
+                name='us_fedid'
+                value={us_fedid}
+                onChange={e => setus_fedid(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
-        <div id='fedid-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.us_fedid &&
-            formState.errors.us_fedid.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
-                {error}
-              </p>
-            ))}
-        </div>
-        {/*  ...................................................................................*/}
-        {/*  MAX QUESTIONS  */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4'>
-          <label
-            className='mb-3 mt-5 block text-xs font-medium text-gray-900'
-            htmlFor='us_maxquestions'
-          >
-            Maximum Number of Questions
-          </label>
-          <div className='relative'>
-            <MyInput
-              overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              id='us_maxquestions'
-              type='number'
-              name='us_maxquestions'
-              value={us_maxquestions || ''}
-              onChange={e => setus_maxquestions(Number(e.target.value) || 0)}
-            />
+          <div id='fedid-error' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.us_fedid &&
+              formState.errors.us_fedid.map((error: string) => (
+                <p className='mt-2 text-sm text-red-500' key={error}>
+                  {error}
+                </p>
+              ))}
           </div>
-        </div>
-        <div id='us_maxquestions-error' aria-live='polite' aria-atomic='true'>
-          {formState.errors?.us_maxquestions &&
-            formState.errors.us_maxquestions.map((error: string) => (
-              <p className='mt-2 text-sm text-red-500' key={error}>
-                {error}
-              </p>
-            ))}
-        </div>
-        {/*  ...................................................................................*/}
-        {/*   Toggle - SKIP Correct */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4 flex items-center justify-end w-72'>
-          <div className='mr-auto block text-xs font-medium text-gray-900'>
-            Skip correct questions
+          {/*  ...................................................................................*/}
+          {/*  MAX QUESTIONS  */}
+          {/*  ...................................................................................*/}
+          <div className='mt-4'>
+            <label
+              className='mb-3 mt-5 block text-xs font-medium text-gray-900'
+              htmlFor='us_maxquestions'
+            >
+              Maximum Number of Questions
+            </label>
+            <div className='relative'>
+              <MyInput
+                overrideClass='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+                id='us_maxquestions'
+                type='number'
+                name='us_maxquestions'
+                value={us_maxquestions || ''}
+                onChange={e => setus_maxquestions(Number(e.target.value) || 0)}
+              />
+            </div>
           </div>
-          <MyToggle
-            overrideClass=''
-            inputName='us_skipcorrect'
-            inputValue={us_skipcorrect}
-            onChange={() => setus_skipcorrect(prev => !prev)}
-          />
-        </div>
-        {/*  ...................................................................................*/}
-        {/*   Owner */}
-        {/*  ...................................................................................*/}
-        <div className='mt-4'>
-          <MyDropdown
-            label='Owner'
-            selectedOption={ow_owner}
-            setSelectedOption={setow_owner}
-            searchEnabled={false}
-            name='ow_owner'
-            table='tow_owner'
-            optionLabel='ow_owner'
-            optionValue='ow_owner'
-            overrideClass_Dropdown='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-            includeBlank={false}
-          />
-        </div>
-        {/*  ...................................................................................*/}
-        {/*   Toggle - Admin */}
-        {/*  ...................................................................................*/}
-        {admin_uid ? (
+          <div id='us_maxquestions-error' aria-live='polite' aria-atomic='true'>
+            {formState.errors?.us_maxquestions &&
+              formState.errors.us_maxquestions.map((error: string) => (
+                <p className='mt-2 text-sm text-red-500' key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+          {/*  ...................................................................................*/}
+          {/*   Toggle - SKIP Correct */}
+          {/*  ...................................................................................*/}
           <div className='mt-4 flex items-center justify-end w-72'>
-            <div className='mr-auto block text-xs font-medium text-gray-900'>Admin</div>
+            <div className='mr-auto block text-xs font-medium text-gray-900'>
+              Skip correct questions
+            </div>
             <MyToggle
               overrideClass=''
-              inputName='us_admin'
-              inputValue={us_admin}
-              onChange={() => setus_admin(prev => !prev)}
+              inputName='us_skipcorrect'
+              inputValue={us_skipcorrect}
+              onChange={() => setus_skipcorrect(prev => !prev)}
             />
           </div>
-        ) : (
-          <MyInput type='hidden' name='us_admin' value={us_admin ? 'true' : 'false'} />
-        )}
-        {/*  ...................................................................................*/}
-        {/*   Update MyButton */}
-        {/*  ...................................................................................*/}
-        <UpdateMyButton />
-        {/*  ...................................................................................*/}
-        {/*   Error Messages */}
-        {/*  ...................................................................................*/}
-        <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
-          {formState.message && (
-            <>
-              <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
-              <p className='text-sm text-red-500'>{formState.message}</p>
-            </>
+          {/*  ...................................................................................*/}
+          {/*   Owner */}
+          {/*  ...................................................................................*/}
+          <div className='mt-4'>
+            <MyDropdown
+              label='Owner'
+              selectedOption={ow_owner}
+              setSelectedOption={setow_owner}
+              searchEnabled={false}
+              name='ow_owner'
+              table='tow_owner'
+              optionLabel='ow_owner'
+              optionValue='ow_owner'
+              overrideClass_Dropdown='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+              includeBlank={false}
+            />
+          </div>
+          {/*  ...................................................................................*/}
+          {/*   Friends Button */}
+          {/*  ...................................................................................*/}
+          <div className='mt-4'>
+            <MyButton
+              overrideClass='w-40 px-4 py-2 rounded-md border border-green-500 bg-green-500 text-white hover:bg-green-600 text-xxs'
+              onClick={e => {
+                e.preventDefault()
+                setIsFriendsPopupOpen(true)
+              }}
+            >
+              Manage Friends
+            </MyButton>
+          </div>
+          {/*  ...................................................................................*/}
+          {/*   Toggle - Admin */}
+          {/*  ...................................................................................*/}
+          {admin_uid ? (
+            <div className='mt-4 flex items-center justify-end w-72'>
+              <div className='mr-auto block text-xs font-medium text-gray-900'>Admin</div>
+              <MyToggle
+                overrideClass=''
+                inputName='us_admin'
+                inputValue={us_admin}
+                onChange={() => setus_admin(prev => !prev)}
+              />
+            </div>
+          ) : (
+            <MyInput type='hidden' name='us_admin' value={us_admin ? 'true' : 'false'} />
           )}
+          {/*  ...................................................................................*/}
+          {/*   Update MyButton */}
+          {/*  ...................................................................................*/}
+          <UpdateMyButton />
+          {/*  ...................................................................................*/}
+          {/*   Error Messages */}
+          {/*  ...................................................................................*/}
+          <div className='flex h-8 items-end space-x-1' aria-live='polite' aria-atomic='true'>
+            {formState.message && (
+              <>
+                <ExclamationCircleIcon className='h-5 w-5 text-red-500' />
+                <p className='text-sm text-red-500'>{formState.message}</p>
+              </>
+            )}
+          </div>
+          {/*  ...................................................................................*/}
         </div>
-        {/*  ...................................................................................*/}
-      </div>
-    </form>
+      </form>
+
+      {/* Friends Popup */}
+      <MainWrapper
+        isOpen={isFriendsPopupOpen}
+        onClose={() => setIsFriendsPopupOpen(false)}
+        uid={admin_uid}
+      />
+    </>
   )
 }

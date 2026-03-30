@@ -141,17 +141,17 @@ async function table_fetch_query({
 }: table_fetch_Props): Promise<any[]> {
   const functionName = 'table_fetch_query'
   //
-  // Runtime check: table must be in TABLES
+  // Optional warning for tables not in TABLES - but still proceed with query
   //
   if (!Object.values(TABLES).includes(table as any)) {
-    const errorMessage = `Invalid table name: ${table}`
+    const warningMsg = `Warning: Table ${table} not in TABLES list, proceeding with query`
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
+      lg_msg: warningMsg,
+      lg_severity: 'W'
     })
-    return []
+    // Continue with query - do NOT return empty array
   }
   //
   // Start building the query

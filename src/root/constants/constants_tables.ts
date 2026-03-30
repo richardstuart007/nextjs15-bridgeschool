@@ -12,6 +12,7 @@ export const TABLES = {
   REFERENCETYPE: 'trt_reftype',
   SUBJECT: 'tsb_subject',
   SESSIONS: 'tdb_sessions',
+  USERSFRIENDS: 'tuf_friends',
   USERSOWNER: 'tuo_usersowner',
   USERSPWD: 'tup_userspwd',
   USERS: 'tus_users',
