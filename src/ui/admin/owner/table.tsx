@@ -159,6 +159,7 @@ export default function Table() {
         // Call the server function to delete
         //
         const Params = {
+          caller: functionName,
           table: 'tow_owner',
           whereColumnValuePairs: [{ column: 'ow_owid', value: owner.ow_owid }]
         }

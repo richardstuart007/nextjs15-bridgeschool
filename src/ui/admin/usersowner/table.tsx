@@ -148,6 +148,7 @@ export default function Table({ selected_uid }: FormProps) {
       // Call the server function to delete
       //
       const Params = {
+        caller: functionName,
         table: 'tuo_usersowner',
         whereColumnValuePairs: [
           { column: 'uo_usid', value: tabledata.uo_usid },

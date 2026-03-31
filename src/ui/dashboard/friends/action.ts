@@ -61,6 +61,7 @@ export async function action(_prevState: StateFriends, formData: FormData) {
     // Delete existing friendships for this user
     // -----------------
     await table_delete({
+      caller: functionName,
       table: 'tuf_friends',
       whereColumnValuePairs: [{ column: 'uf_usid', value: uf_usid }]
     })

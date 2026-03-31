@@ -202,6 +202,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       // Call the server function to delete
       //
       const Params = {
+        caller: functionName,
         table: 'trf_reference',
         whereColumnValuePairs: [{ column: 'rf_rfid', value: tabledata.rf_rfid }]
       }

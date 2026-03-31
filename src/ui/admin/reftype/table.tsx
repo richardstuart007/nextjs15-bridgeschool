@@ -162,6 +162,7 @@ export default function Table() {
         // Call the server function to delete
         //
         const Params = {
+          caller: functionName,
           table: 'trt_reftype',
           whereColumnValuePairs: [{ column: 'rt_rtid', value: reftype.rt_rtid }]
         }

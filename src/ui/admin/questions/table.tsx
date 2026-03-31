@@ -219,6 +219,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         // Call the server function to delete
         //
         const Params = {
+          caller: functionName,
           table: 'tqq_questions',
           whereColumnValuePairs: [{ column: 'qq_qqid', value: questions.qq_qqid }]
         }

@@ -179,24 +179,34 @@ export default function Table() {
         // Call the server function to delete
         //
         await table_delete({
+          caller: functionName,
           table: 'ths_history',
           whereColumnValuePairs: [{ column: 'hs_usid', value: uid }]
         })
         await table_delete({
+          caller: functionName,
           table: 'tss_sessions',
           whereColumnValuePairs: [{ column: 'ss_usid', value: uid }]
         })
         await table_delete({
+          caller: functionName,
           table: 'tuo_usersowner',
           whereColumnValuePairs: [{ column: 'uo_usid', value: uid }]
         })
         await table_delete({
+          caller: functionName,
           table: 'tup_userspwd',
           whereColumnValuePairs: [{ column: 'up_usid', value: uid }]
         })
         await table_delete({
+          caller: functionName,
           table: 'tus_users',
           whereColumnValuePairs: [{ column: 'us_usid', value: uid }]
+        })
+        await table_delete({
+          caller: functionName,
+          table: 'tuf_friends',
+          whereColumnValuePairs: [{ column: 'uf_usid', value: uid }]
         })
         //
         //  Reload the page

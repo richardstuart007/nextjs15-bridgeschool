@@ -10,12 +10,14 @@ interface Props {
   table: string
   whereColumnValuePairs?: ColumnValuePair[]
   returning?: boolean
+  caller?: string
 }
 
 export async function table_delete({
   table,
   whereColumnValuePairs = [],
-  returning = false
+  returning = false,
+  caller = ''
 }: Props): Promise<any[]> {
   const functionName = 'table_delete'
   //
@@ -73,7 +75,7 @@ export async function table_delete({
     const errorMessage = `Table(${table}) DELETE FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

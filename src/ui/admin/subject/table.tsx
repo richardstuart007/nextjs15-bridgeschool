@@ -193,6 +193,7 @@ export default function Table() {
         // Call the server function to delete
         //
         const Params = {
+          caller: functionName,
           table: 'tsb_subject',
           whereColumnValuePairs: [{ column: 'sb_sbid', value: row.sb_sbid }]
         }
