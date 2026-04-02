@@ -6,9 +6,14 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 interface Props {
   table_from: string
   table_to: string
+  caller?: string
 }
 const functionName = 'table_copy_data'
-export async function table_copy_data({ table_from, table_to }: Props): Promise<boolean> {
+export async function table_copy_data({
+  table_from,
+  table_to,
+  caller = ''
+}: Props): Promise<boolean> {
   try {
     //
     // Define the connection
@@ -51,7 +56,7 @@ export async function table_copy_data({ table_from, table_to }: Props): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

@@ -460,6 +460,7 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
                     overrideClass={`bg-blue-500 text-white hover:bg-blue-600 ${
                       shrink ? 'h-5' : 'h-6'
                     } ${shrink_Text}`}
+                    caller={functionName}
                   >
                     Quiz
                   </MyLink>
@@ -767,6 +768,7 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
                         segment: String(tabledata.rf_rfid)
                       }}
                       overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                      caller={functionName}
                     >
                       Quiz
                     </MyLink>

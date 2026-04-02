@@ -13,7 +13,7 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
  * @param dirPath - The path to the directory.
  * @returns True if the directory exists, false otherwise.
  */
-export async function directory_Exists(dirPath: string): Promise<boolean> {
+export async function directory_Exists(dirPath: string, caller: string = ''): Promise<boolean> {
   const functionName = 'directory_Exists'
   try {
     const exists = fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()
@@ -24,7 +24,7 @@ export async function directory_Exists(dirPath: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -40,7 +40,7 @@ export async function directory_Exists(dirPath: string): Promise<boolean> {
  * @param dirPath - The path to the directory to create.
  * @returns True if the directory was created successfully, false otherwise.
  */
-export async function directory_create(dirPath: string): Promise<boolean> {
+export async function directory_create(dirPath: string, caller: string = ''): Promise<boolean> {
   const functionName = 'directory_create'
   try {
     let createDirectory = false
@@ -55,7 +55,7 @@ export async function directory_create(dirPath: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -71,7 +71,7 @@ export async function directory_create(dirPath: string): Promise<boolean> {
  * @param dirPath - The path to the directory to delete.
  * @returns True if the directory was deleted successfully, false otherwise.
  */
-export async function directory_delete(dirPath: string): Promise<boolean> {
+export async function directory_delete(dirPath: string, caller: string = ''): Promise<boolean> {
   const functionName = 'directory_delete'
   try {
     if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
@@ -85,7 +85,7 @@ export async function directory_delete(dirPath: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -101,14 +101,14 @@ export async function directory_delete(dirPath: string): Promise<boolean> {
  * @param dirPath - The path to the directory.
  * @returns A list of files in the directory.
  */
-export async function directory_list(dirPath: string): Promise<string[]> {
+export async function directory_list(dirPath: string, caller: string = ''): Promise<string[]> {
   const functionName = 'directory_list'
   try {
     // Check if the directory exists
     if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
       const errorMessage = `The provided path (${dirPath}) is not a valid directory`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: errorMessage,
         lg_severity: 'E'
@@ -128,7 +128,7 @@ export async function directory_list(dirPath: string): Promise<string[]> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -144,7 +144,7 @@ export async function directory_list(dirPath: string): Promise<string[]> {
  * @param filePath - The path to the file.
  * @returns True if the file exists, false otherwise.
  */
-export async function file_exists(filePath: string): Promise<boolean> {
+export async function file_exists(filePath: string, caller: string = ''): Promise<boolean> {
   const functionName = 'file_exists'
   try {
     const exist = fs.existsSync(filePath) && fs.statSync(filePath).isFile()
@@ -155,7 +155,7 @@ export async function file_exists(filePath: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -171,7 +171,7 @@ export async function file_exists(filePath: string): Promise<boolean> {
  * @param filePath - The path to the file to delete.
  * @returns True if the file was deleted successfully, false otherwise.
  */
-export async function file_delete(filePath: string): Promise<boolean> {
+export async function file_delete(filePath: string, caller: string = ''): Promise<boolean> {
   const functionName = 'file_delete'
   try {
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
@@ -185,7 +185,7 @@ export async function file_delete(filePath: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -200,7 +200,8 @@ export async function file_delete(filePath: string): Promise<boolean> {
 export async function convertCsvToJson(
   dirPath: string,
   file_in: string,
-  file_out: string
+  file_out: string,
+  caller: string = ''
 ): Promise<void> {
   const functionName = 'convertCsvToJson'
   try {
@@ -219,7 +220,7 @@ export async function convertCsvToJson(
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -234,7 +235,7 @@ export async function convertCsvToJson(
  * @param {string} Path_file_in - The full path to the input CSV file.
  * @param {string} Path_file_out - The full path to the output JSON file.
  */
-async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
+async function confirmOverwrite(Path_file_out: string, caller: string = ''): Promise<boolean> {
   const functionName = 'confirmOverwrite'
   try {
     return new Promise(resolve => {
@@ -257,7 +258,7 @@ async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -273,7 +274,11 @@ async function confirmOverwrite(Path_file_out: string): Promise<boolean> {
  * @param {string} Path_file_in - The full path to the input CSV file.
  * @param {string} Path_file_out - The full path to the output JSON file.
  */
-async function processCsv(Path_file_in: string, Path_file_out: string): Promise<void> {
+async function processCsv(
+  Path_file_in: string,
+  Path_file_out: string,
+  caller: string = ''
+): Promise<void> {
   const functionName = 'processCsv'
   try {
     const results: Record<string, any>[] = []
@@ -298,7 +303,7 @@ async function processCsv(Path_file_in: string, Path_file_out: string): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -319,7 +324,7 @@ interface Props {
   dirPath: string
   file_out: string
 }
-export async function table_write_toJSON(Props: Props): Promise<boolean> {
+export async function table_write_toJSON(Props: Props, caller: string = ''): Promise<boolean> {
   const functionName = 'table_write_toJSON'
   //
   //  Unpack Props
@@ -336,7 +341,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     //
     const errorMessage = `${query} dirPath: ${dirPath} file_out: ${file_out}`
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -357,7 +362,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     if (!result || !result.rows || result.rows.length === 0 || !result.rows[0].json_agg) {
       const errorMessage = `No data found in the table ${table}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: errorMessage,
         lg_severity: 'E'
@@ -392,7 +397,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
     //
     const errorMessage1 = `Data saved as JSON to ${outputPath}`
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage1,
       lg_severity: 'E'
@@ -407,7 +412,7 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -424,7 +429,10 @@ export async function table_write_toJSON(Props: Props): Promise<boolean> {
  * @param jsonAggArray - The array extracted from json_agg.
  * @returns The processed data.
  */
-function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any>[] {
+function processJsonAgg(
+  jsonAggArray: Record<string, any>[],
+  caller: string = ''
+): Record<string, any>[] {
   const functionName = 'processJsonAgg'
   try {
     // Format the data (example: ensure fields have consistent casing, etc.)
@@ -442,7 +450,7 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'
@@ -458,7 +466,11 @@ function processJsonAgg(jsonAggArray: Record<string, any>[]): Record<string, any
  * @param filePath - The path to the JSON file to upload.
  * @param tableName - The name of the PostgreSQL table to insert data into.
  */
-export async function table_write_fromJSON(filePath: string, tableName: string): Promise<number> {
+export async function table_write_fromJSON(
+  filePath: string,
+  tableName: string,
+  caller: string = ''
+): Promise<number> {
   const functionName = 'table_write_fromJSON'
   const BATCH_SIZE = 100
   try {
@@ -467,7 +479,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     //
     const errorMessage = `filePath: ${filePath}, tableName: ${tableName}`
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'I'
@@ -478,7 +490,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     if (!fs.existsSync(filePath)) {
       const errorMessage1 = `File not found: ${filePath}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: errorMessage1,
         lg_severity: 'E'
@@ -496,7 +508,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     if (!Array.isArray(jsonData)) {
       const errorMessage = `JSON data is not an array. Expected an array of objects file ${filePath}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: errorMessage,
         lg_severity: 'E'
@@ -509,7 +521,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
     if (jsonData.length === 0) {
       const errorMessage = `No data found in the JSON file ${filePath}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: errorMessage,
         lg_severity: 'E'
@@ -578,7 +590,7 @@ export async function table_write_fromJSON(filePath: string, tableName: string):
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

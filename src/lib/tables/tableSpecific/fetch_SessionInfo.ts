@@ -63,7 +63,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

@@ -15,6 +15,7 @@ interface User_HeaderProps {
 }
 
 export function User_Header({ averagePercentage, initialMonths }: User_HeaderProps) {
+  const functionName = 'User_Header'
   const router = useRouter()
   const [months, setMonths] = useState(initialMonths ?? User_limitMonths_Average_Default)
 
@@ -27,10 +28,12 @@ export function User_Header({ averagePercentage, initialMonths }: User_HeaderPro
   const handleMonthsChange = async (value: string | number) => {
     const numericValue = Number(value)
     setMonths(numericValue)
-
-    await update_tus_GraphPrefs({
-      us_graph_user_months: numericValue
-    })
+    await update_tus_GraphPrefs(
+      {
+        us_graph_user_months: numericValue
+      },
+      functionName
+    )
 
     router.refresh()
   }

@@ -6,9 +6,14 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 interface Props {
   table_from: string
   table_to: string
+  caller?: string
 }
 
-export async function table_duplicate({ table_from, table_to }: Props): Promise<boolean> {
+export async function table_duplicate({
+  table_from,
+  table_to,
+  caller = ''
+}: Props): Promise<boolean> {
   const functionName = 'table_duplicate'
 
   try {
@@ -22,7 +27,7 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
     // Execute the query
     //
     const db = await sql()
-    await db.query({ caller: '', query: sqlQuery, functionName: functionName })
+    await db.query({ caller: caller, query: sqlQuery, functionName: functionName })
     //
     // All ok
     //
@@ -33,7 +38,7 @@ export async function table_duplicate({ table_from, table_to }: Props): Promise<
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

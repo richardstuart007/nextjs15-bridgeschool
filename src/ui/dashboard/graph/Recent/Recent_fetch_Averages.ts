@@ -1,8 +1,7 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 
 interface AveragesProps {
   userIds: number[]
@@ -17,41 +16,29 @@ export async function Recent_fetch_Averages({
 }: AveragesProps) {
   const functionName = 'Recent_fetch_Averages'
 
-  const store = userCache_store()
-  const cacheKeys = {
-    userIdsHash: userIds.sort().join(','),
-    userIdsCount: userIds.length,
-    averageCount: uq_graph_recent_usersAverage
-  }
+  // Sort userIds for consistent cache key
+  const sortedUserIds = [...userIds].sort((a, b) => a - b)
+  const userIdsList = sortedUserIds.join(', ')
 
-  // Log GET attempt
-  const getMsg = `GET | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: getMsg,
-    lg_severity: 'I'
-  })
+  // Build readable SQL for cache key with actual values
+  const cacheKey = `
+    SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
+    FROM (
+      SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent,
+        ROW_NUMBER() OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
+      FROM ths_history
+      JOIN tus_users ON hs_usid = us_usid
+      WHERE hs_usid IN (${userIdsList})
+    ) AS ranked
+    WHERE rn <= ${uq_graph_recent_usersAverage}
+    ORDER BY hs_usid
+  `
 
-  const cachedData = store.get<any>(functionName, cacheKeys)
+  // Check cache
+  const cachedData = cache_get<any>(cacheKey, functionName)
   if (cachedData) {
-    const hitMsg = `HIT | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: hitMsg,
-      lg_severity: 'I'
-    })
     return cachedData
   }
-
-  const missMsg = `MISS | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: missMsg,
-    lg_severity: 'I'
-  })
 
   try {
     //
@@ -99,15 +86,7 @@ export async function Recent_fetch_Averages({
     const rows = data.rows || []
 
     // Store in cache
-    store.set(functionName, cacheKeys, rows)
-
-    const storedMsg = `STORED | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${rows.length} for ${userIds.length} users`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    cache_set(cacheKey, rows, functionName)
 
     return rows
     //
@@ -115,12 +94,7 @@ export async function Recent_fetch_Averages({
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
+    console.error(`${functionName}: ${errorMessage}`)
     return []
   }
 }

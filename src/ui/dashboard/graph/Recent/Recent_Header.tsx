@@ -20,6 +20,7 @@ export function Recent_Header({
   initialUsersReturned = Recent_usersReturned_Default,
   initialUsersAverage = Recent_usersAverage_Default
 }: Recent_HeaderProps) {
+  const functionName = 'Recent_Header'
   const router = useRouter()
   const [usersReturned, setUsersReturned] = useState(initialUsersReturned)
   const [usersAverage, setUsersAverage] = useState(initialUsersAverage)
@@ -36,9 +37,12 @@ export function Recent_Header({
     const numericValue = Number(value)
     setUsersReturned(numericValue)
 
-    await update_tus_GraphPrefs({
-      us_graph_recent_users: numericValue
-    })
+    await update_tus_GraphPrefs(
+      {
+        us_graph_recent_users: numericValue
+      },
+      functionName
+    )
 
     router.refresh()
   }
@@ -47,9 +51,12 @@ export function Recent_Header({
     const numericValue = Number(value)
     setUsersAverage(numericValue)
 
-    await update_tus_GraphPrefs({
-      us_graph_recent_avg: numericValue
-    })
+    await update_tus_GraphPrefs(
+      {
+        us_graph_recent_avg: numericValue
+      },
+      functionName
+    )
 
     router.refresh()
   }

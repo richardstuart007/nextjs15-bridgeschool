@@ -9,9 +9,14 @@ import { ColumnValuePair } from '@/src/lib/tables/structures'
 interface Props {
   table: string
   whereColumnValuePairs?: ColumnValuePair[]
+  caller?: string
 }
 
-export async function table_count({ table, whereColumnValuePairs }: Props): Promise<number> {
+export async function table_count({
+  table,
+  whereColumnValuePairs,
+  caller = ''
+}: Props): Promise<number> {
   const functionName = 'table_count'
   //
   // Build the base SQL query
@@ -45,7 +50,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     //
     const db = await sql()
     const data = await db.query({
-      caller: '',
+      caller: caller, // FIXED: Changed from '' to caller
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -62,7 +67,7 @@ export async function table_count({ table, whereColumnValuePairs }: Props): Prom
     const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

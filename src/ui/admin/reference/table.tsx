@@ -210,7 +210,7 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       //
       //  update counts in Subject
       //
-      await update_sb_cntreference(tabledata.rf_sbid)
+      await update_sb_cntreference(tabledata.rf_sbid, functionName)
       //
       //  Reload the page
       //

@@ -6,13 +6,14 @@ import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 //---------------------------------------------------------------------
 //  subject - Questions Count
 //---------------------------------------------------------------------
-export async function update_rf_cntquestions(rfid: number) {
+export async function update_rf_cntquestions(rfid: number, caller: string = '') {
   const functionName = 'update_rf_cntquestions'
 
   try {
     const rowCount = await table_count({
       table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: 'qq_rfid', value: rfid }]
+      whereColumnValuePairs: [{ column: 'qq_rfid', value: rfid }],
+      caller: functionName
     })
     //
     //  update Subject
@@ -34,7 +35,7 @@ export async function update_rf_cntquestions(rfid: number) {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

@@ -1,13 +1,28 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 import {
   JoinParams,
   Filter,
   table_fetch_pages_filtered
 } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+
+//---------------------------------------------------------------------
+//  Helper function to convert filters to whereColumnValuePairs
+//---------------------------------------------------------------------
+function filtersToWhereColumnValuePairs(
+  filters: Filter[]
+): { column: string; value: any; operator?: Comparison_operator }[] {
+  return filters.map(filter => ({
+    column: filter.column,
+    value: filter.value,
+    operator: filter.operator as Comparison_operator
+  }))
+}
 
 //---------------------------------------------------------------------
 // Fetch Filtered Function – decides internally whether to cache
@@ -35,57 +50,30 @@ export async function fetchFiltered({
 
   // Decide caching based on table (same as table_fetch)
   if (CACHED_TABLES.has(table as TableName)) {
-    const cacheMsg = `[CACHE] ${functionName} → ${table} (caller: ${caller})`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: cacheMsg,
-      lg_severity: 'I'
-    })
+    // Convert filters to whereColumnValuePairs for SQL building
+    const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
 
-    // Get cache instance
-    const store = userCache_store()
-
-    // Create stable cache keys from all parameters that affect the query
-    const cacheKeys = {
+    // Build SQL with placeholders for cache key
+    const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
       table,
-      joins: JSON.stringify(joins),
-      filters: JSON.stringify(filters),
-      orderBy: orderBy || null,
-      limit: limit || null,
-      offset: offset || null,
-      distinctColumns: distinctColumns.length ? distinctColumns.join(',') : null
-    }
-
-    // Log the cache check
-    const getMsg = `GET | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: getMsg,
-      lg_severity: 'I'
+      whereColumnValuePairs,
+      orderBy,
+      distinct: distinctColumns.length > 0,
+      columns: distinctColumns.length > 0 ? distinctColumns : undefined,
+      limit
     })
+
+    // Build readable SQL for cache key
+    const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+
+    // Add offset to SQL for cache key (since it's not in buildSql_Placeholders)
+    const cacheKey = offset ? `${readableSql} OFFSET ${offset}` : readableSql
 
     // Check cache first
-    const cachedData = store.get<any>(table, cacheKeys)
+    const cachedData = cache_get<any>(cacheKey, functionName)
     if (cachedData) {
-      const hitMsg = `HIT | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
-      write_Logging({
-        lg_caller: caller,
-        lg_functionname: functionName,
-        lg_msg: hitMsg,
-        lg_severity: 'I'
-      })
       return cachedData
     }
-
-    const missMsg = `MISS | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: missMsg,
-      lg_severity: 'I'
-    })
 
     // Execute query
     const data = await table_fetch_pages_filtered({
@@ -100,15 +88,7 @@ export async function fetchFiltered({
     })
 
     // Store in cache
-    store.set(table, cacheKeys, data)
-
-    const storedMsg = `STORED | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${data.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    cache_set(cacheKey, data, functionName)
 
     return data
   }

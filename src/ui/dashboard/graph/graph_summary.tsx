@@ -44,7 +44,7 @@ export default async function Graph_Summary() {
   //
   //  Auth Session
   //
-  const authSession = await getAuthSession()
+  const authSession = await getAuthSession(functionName)
   const user = authSession?.user
   const au_usid = Number(user?.au_usid ?? 0)
 

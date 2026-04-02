@@ -1,13 +1,12 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { sql } from '@/src/lib/db'
 import {
   Top_count_min,
   Top_count_max,
   Top_usersReturned
 } from '@/src/ui/dashboard/graph/Top/Top_constants'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 
 interface Top_fetchProps {
   caller: string
@@ -17,22 +16,54 @@ interface Top_fetchProps {
 export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchProps) {
   const functionName = 'Top_fetch'
 
-  const store = userCache_store()
-  const cacheKeys = {
-    months: TopResults_limitMonths,
-    min: Top_count_min,
-    max: Top_count_max,
-    usersReturned: Top_usersReturned
-  }
+  // Build readable SQL for cache key
+  const sqlQuery = `
+    SELECT
+        hs_usid,
+        us_name,
+        COUNT(*) AS record_count,
+        SUM(hs_totalpoints) AS total_points,
+        SUM(hs_maxpoints) AS total_maxpoints,
+        CASE
+          WHEN SUM(hs_maxpoints) > 0
+          THEN ROUND((SUM(hs_totalpoints) / CAST(SUM(hs_maxpoints) AS NUMERIC)) * 100)::INTEGER
+          ELSE 0
+        END AS percentage
+        FROM (
+            SELECT
+                hs_usid,
+                hs_totalpoints,
+                hs_maxpoints,
+                ROW_NUMBER() OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
+            FROM
+                ths_history
+            WHERE
+                hs_datetime >= NOW() - (${TopResults_limitMonths} || ' months')::interval
+        ) AS ranked
+      JOIN
+        tus_users ON hs_usid = us_usid
+      WHERE
+        rn <= ${Top_count_max}
+      GROUP BY
+        hs_usid, us_name
+      HAVING
+        COUNT(*) >= ${Top_count_min}
+      ORDER BY
+        percentage DESC
+      LIMIT ${Top_usersReturned}
+    `
 
   // Check cache
-  const cachedData = store.get<any>(functionName, cacheKeys)
+  const cachedData = cache_get<any>(sqlQuery, functionName)
   if (cachedData) {
     return cachedData
   }
 
   try {
-    const sqlQuery = `
+    const values = [Top_count_min, Top_count_max, Top_usersReturned, TopResults_limitMonths]
+    const db = await sql()
+    const data = await db.query({
+      query: `
     SELECT
         hs_usid,
         us_name,
@@ -66,29 +97,19 @@ export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchPro
       ORDER BY
         percentage DESC
       LIMIT $3
-    `
-
-    const values = [Top_count_min, Top_count_max, Top_usersReturned, TopResults_limitMonths]
-    const db = await sql()
-    const data = await db.query({
-      query: sqlQuery,
+    `,
       params: values,
       functionName: functionName,
       caller: caller
     })
 
     const rows = data.rows || []
-    store.set(functionName, cacheKeys, rows)
+    cache_set(sqlQuery, rows, functionName)
 
     return rows
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
+    console.error(`${functionName}: ${errorMessage}`)
     return []
   }
 }

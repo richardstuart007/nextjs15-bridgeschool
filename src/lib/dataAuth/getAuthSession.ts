@@ -5,7 +5,7 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 // ----------------------------------------------------------------------
 //  Get Auth Session information
 // ----------------------------------------------------------------------
-export async function getAuthSession() {
+export async function getAuthSession(caller: string = '') {
   const functionName = 'getAuthSession'
   try {
     const session = await auth()
@@ -16,7 +16,7 @@ export async function getAuthSession() {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

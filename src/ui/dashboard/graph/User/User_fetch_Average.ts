@@ -1,8 +1,11 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { ColumnValuePair } from '@/src/lib/tables/structures'
+
 //---------------------------------------------------------------------
 //  Fetch average percentage for all results of a user within the last 'User_limitMonths_Average_Default' months
 //---------------------------------------------------------------------
@@ -19,40 +22,32 @@ export async function User_fetch_Average({
 }: UserAverageProps) {
   const functionName = 'User_fetch_Average'
 
-  const store = userCache_store()
-  const cacheKeys = {
-    userId,
-    months: User_limitMonths_Average
-  }
+  // Build SQL with placeholders
+  const whereColumnValuePairs: ColumnValuePair[] = [
+    { column: 'hs_usid', value: userId, operator: '=' },
+    {
+      column: 'hs_datetime',
+      value: `NOW() - (${User_limitMonths_Average} || ' months')::interval`,
+      operator: '>='
+    }
+  ]
 
-  // Log GET attempt
-  const getMsg = `GET | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: getMsg,
-    lg_severity: 'I'
+  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
+    table: 'ths_history',
+    whereColumnValuePairs,
+    columns: [
+      'ROUND((SUM(hs_totalpoints)::NUMERIC / NULLIF(SUM(hs_maxpoints), 0)) * 100) AS avg_percentage'
+    ]
   })
 
-  const cachedData = store.get<number>(functionName, cacheKeys)
+  // Build readable SQL for cache key
+  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+
+  // Check cache first
+  const cachedData = cache_get<number>(readableSql, functionName)
   if (cachedData !== null) {
-    const hitMsg = `HIT | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | value: ${cachedData}%`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: hitMsg,
-      lg_severity: 'I'
-    })
     return cachedData
   }
-
-  const missMsg = `MISS | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: missMsg,
-    lg_severity: 'I'
-  })
 
   try {
     const sqlQuery = `
@@ -82,26 +77,13 @@ export async function User_fetch_Average({
     //
     const avgPercentage = data.rows[0]?.avg_percentage || 0
 
-    // Store in cache - using functionName as identifier
-    store.set(functionName, cacheKeys, avgPercentage)
-
-    const storedMsg = `STORED | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | value: ${avgPercentage}%`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    // Store in cache
+    cache_set(readableSql, avgPercentage, functionName)
 
     return avgPercentage
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
-    return 0
+    // Re-throw without logging - let caller handle
+    throw new Error(`${functionName}: ${errorMessage}`)
   }
 }

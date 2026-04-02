@@ -105,7 +105,7 @@ export async function referenceAction(
     //
     //  Get the subject id
     //
-    const row = await fetch_OwnerSubject(rf_owner, rf_subject)
+    const row = await fetch_OwnerSubject(functionName, rf_owner, rf_subject)
     const { sb_sbid } = row
     const rf_sbid = sb_sbid
     //
@@ -130,7 +130,7 @@ export async function referenceAction(
       //
       //  update counts in Subject
       //
-      await update_sb_cntreference(rf_sbid)
+      await update_sb_cntreference(rf_sbid, functionName)
     }
     //
     //  Update

@@ -15,10 +15,11 @@ interface Props {
   children: React.ReactNode
   overrideClass?: string
   href: LinkHref
+  caller?: string
   [rest: string]: any
 }
 
-export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
+export function MyLink({ children, overrideClass = '', href, caller = '', ...rest }: Props) {
   const functionName = 'MyLink'
 
   //
@@ -102,7 +103,7 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
           if (!dbRecord) {
             const msg = `No menuLink record created for reference: ${ml_reference}, url: ${ml_url}`
             write_Logging({
-              lg_caller: functionName,
+              lg_caller: caller,
               lg_functionname: functionName,
               lg_msg: msg,
               lg_severity: 'I'
@@ -111,7 +112,7 @@ export function MyLink({ children, overrideClass = '', href, ...rest }: Props) {
         } catch (error) {
           const msg = `Error in menu link tracking: ${error instanceof Error ? error.message : 'Unknown error'}`
           write_Logging({
-            lg_caller: functionName,
+            lg_caller: caller,
             lg_functionname: functionName,
             lg_msg: msg,
             lg_severity: 'E'

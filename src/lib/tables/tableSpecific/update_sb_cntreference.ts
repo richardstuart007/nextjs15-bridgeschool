@@ -6,13 +6,14 @@ import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
 //---------------------------------------------------------------------
 //  subject -  Count
 //---------------------------------------------------------------------
-export async function update_sb_cntreference(sbid: number) {
+export async function update_sb_cntreference(sbid: number, caller: string = '') {
   const functionName = 'update_sb_cntreference'
 
   try {
     const rowCount = await table_count({
       table: 'trf_reference',
-      whereColumnValuePairs: [{ column: 'rf_sbid', value: sbid }]
+      whereColumnValuePairs: [{ column: 'rf_sbid', value: sbid }],
+      caller: functionName
     })
     //
     //  update Subject
@@ -34,7 +35,7 @@ export async function update_sb_cntreference(sbid: number) {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

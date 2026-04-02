@@ -132,7 +132,7 @@ async function log_query(
   //
   write_Logging({
     lg_functionname: functionName,
-    lg_msg: `${query}${valuesJson}`,
+    lg_msg: `DB_SQL | ${query}${valuesJson}`,
     lg_severity: 'I',
     lg_caller: caller
   })

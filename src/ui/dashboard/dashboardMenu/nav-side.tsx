@@ -17,6 +17,7 @@ interface Props {
   baseURL: string
 }
 export default function NavSide(props: Props) {
+  const functionName = 'NavSide'
   const { baseURL } = props
   //
   //  User context
@@ -41,7 +42,6 @@ export default function NavSide(props: Props) {
   //  Session Info
   //--------------------------------------------------------------------------------
   async function getSessionInfo() {
-    const functionName = 'getSessionInfo'
     //
     //  Fetch database name
     //

@@ -60,7 +60,7 @@ export async function table_delete({
     //
     const db = await sql()
     const data = await db.query({
-      caller: '',
+      caller: caller,
       query: sqlQueryStatement,
       params: values,
       functionName: functionName

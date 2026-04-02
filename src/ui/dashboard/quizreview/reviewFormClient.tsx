@@ -15,6 +15,7 @@ interface ReviewFormClientProps {
 }
 
 export default function ReviewFormClient(props: ReviewFormClientProps) {
+  const functionName = 'ReviewFormClient'
   const { questions, history } = props
   const { hs_hsid, hs_ans, hs_qqid, hs_correctpercent } = history
 
@@ -123,6 +124,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
             }
           }}
           overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
+          caller={functionName}
         >
           History
         </MyLink>

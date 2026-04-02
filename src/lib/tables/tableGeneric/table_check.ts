@@ -5,7 +5,8 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { TableColumnValuePairs } from '@/src/lib/tables/structures'
 
 export async function table_check(
-  tableColumnValuePairs: TableColumnValuePairs[]
+  tableColumnValuePairs: TableColumnValuePairs[],
+  caller: string = ''
 ): Promise<{ found: boolean; message: string }> {
   const functionName = 'table_check'
 
@@ -37,7 +38,7 @@ export async function table_check(
       //
       const db = await sql()
       const data = await db.query({
-        caller: '',
+        caller: caller,
         query: sqlQuery,
         params: values,
         functionName: functionName
@@ -48,7 +49,7 @@ export async function table_check(
       if (data.rows.length > 0) {
         const errorMessage = `Keys exist in ${table} with conditions: ${JSON.stringify(whereColumnValuePairs)}`
         write_Logging({
-          lg_caller: '',
+          lg_caller: caller,
           lg_functionname: functionName,
           lg_msg: errorMessage,
           lg_severity: 'I'
@@ -66,7 +67,7 @@ export async function table_check(
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

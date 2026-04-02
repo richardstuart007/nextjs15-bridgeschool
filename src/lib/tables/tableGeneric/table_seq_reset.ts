@@ -6,11 +6,12 @@ import { table_seqGet } from '@/src/lib/tables/tableGeneric/table_seq_get'
 
 interface Props {
   tableName: string
+  caller?: string
 }
 //
 // Function to update the sequence for a given table and column
 //
-export async function table_seqReset({ tableName }: Props): Promise<boolean> {
+export async function table_seqReset({ tableName, caller = '' }: Props): Promise<boolean> {
   const functionName = 'table_seqReset'
 
   try {
@@ -21,7 +22,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     //
     // Step 1: Get the sequence/column/maxvalue for the table
     //
-    const returnValues = await table_seqGet({ tableName: tableName })
+    const returnValues = await table_seqGet({ tableName: tableName, caller: functionName })
     if (!returnValues.ok) return false
     //
     // Step 2: Update the sequence value based on the MAX value of the column
@@ -38,7 +39,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     //
     const message = `Sequence ${sequenceName} for ${tableName}.${columnName} updated with maxValue ${maxValue} `
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: message,
       lg_severity: 'I'
@@ -51,7 +52,7 @@ export async function table_seqReset({ tableName }: Props): Promise<boolean> {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

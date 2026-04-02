@@ -227,11 +227,11 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         //
         //  update Questions counts in Subject
         //
-        await update_sb_cntquestions(questions.qq_sbid)
+        await update_sb_cntquestions(questions.qq_sbid, functionName)
         //
         //  update Questions counts in Reference
         //
-        await update_rf_cntquestions(questions.qq_rfid)
+        await update_rf_cntquestions(questions.qq_rfid, functionName)
         //
         //  Reload the page
         //

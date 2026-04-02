@@ -1,15 +1,15 @@
 'use server'
 
-import { userCache_store } from './userCache_store'
+import { cache_clearUser } from '@/src/lib/tables/cache/userCache_store'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 
 const functionName = 'userCache_purge'
 
-export async function userCache_purge(userId: number) {
+export async function userCache_purge(userId: number, caller: string = '') {
   if (!userId || userId === 0) {
     const msg = `No valid userId provided: ${userId}`
     write_Logging({
-      lg_caller: functionName,
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: msg,
       lg_severity: 'I'
@@ -17,12 +17,11 @@ export async function userCache_purge(userId: number) {
     return { userId, clearedCount: 0 }
   }
 
-  const store = userCache_store()
-  const clearedCount = store.clearUser(userId)
+  const clearedCount = cache_clearUser(userId, functionName)
 
-  const msg = `Cleared ${clearedCount} entries for user ${userId}`
+  const msg = `CACHE CLR | ${clearedCount} entries for user ${userId}`
   write_Logging({
-    lg_caller: functionName,
+    lg_caller: caller,
     lg_functionname: functionName,
     lg_msg: msg,
     lg_severity: 'I'

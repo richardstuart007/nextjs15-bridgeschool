@@ -12,7 +12,7 @@ interface Props {
   ml_segment: string
   ml_query: string
 }
-export default async function write_ml_menuLinks(Props: Props) {
+export default async function write_ml_menuLinks(Props: Props, caller: string = '') {
   const functionName = 'write_ml_menuLinks'
   //
   //  Unpack Props
@@ -66,7 +66,7 @@ export default async function write_ml_menuLinks(Props: Props) {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

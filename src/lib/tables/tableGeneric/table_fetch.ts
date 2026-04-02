@@ -4,7 +4,9 @@ import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric//buildSql_Placeholders'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
 
 //----------------------------------------------------------------------------------
 //  Main function
@@ -21,7 +23,7 @@ export type table_fetch_Props = {
   columns?: string[]
   limit?: number
 }
-
+const functionName = 'table_fetch'
 export async function table_fetch({
   caller,
   table,
@@ -31,62 +33,28 @@ export async function table_fetch({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
-  const functionName = 'table_fetch'
+  // Build the SQL with placeholders
+  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
+    table,
+    whereColumnValuePairs,
+    orderBy,
+    distinct,
+    columns,
+    limit
+  })
+
+  // Build readable SQL for cache key
+  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
 
   //
   // Decide whether this call should use caching (based on table)
   //
   if (CACHED_TABLES.has(table as TableName)) {
-    const cacheMsg = `[CACHE] ${functionName} → ${table} (caller: ${caller})`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: cacheMsg,
-      lg_severity: 'I'
-    })
-
-    // Get cache instance
-    const store = userCache_store()
-
-    // Create stable cache keys from all parameters that affect the query
-    const cacheKeys = {
-      table,
-      where: whereColumnValuePairs ? JSON.stringify(whereColumnValuePairs) : null,
-      orderBy: orderBy || null,
-      distinct,
-      columns: columns ? columns.join(',') : null,
-      limit: limit || null
-    }
-
-    // Log the cache check
-    const getMsg = `GET | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: getMsg,
-      lg_severity: 'I'
-    })
-
-    // Check cache first
-    const cachedData = store.get<any>(table, cacheKeys)
+    // Check cache first using readable SQL as key
+    const cachedData = cache_get<any>(readableSql, functionName)
     if (cachedData) {
-      const hitMsg = `HIT | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
-      write_Logging({
-        lg_caller: caller,
-        lg_functionname: functionName,
-        lg_msg: hitMsg,
-        lg_severity: 'I'
-      })
       return cachedData
     }
-
-    const missMsg = `MISS | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: missMsg,
-      lg_severity: 'I'
-    })
 
     // Execute query
     const data = await table_fetch_query({
@@ -99,16 +67,8 @@ export async function table_fetch({
       limit
     })
 
-    // Store in cache
-    store.set(table, cacheKeys, data)
-
-    const storedMsg = `STORED | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${data.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    // Store in cache using readable SQL as key
+    cache_set(readableSql, data, functionName)
 
     return data
   }
@@ -139,7 +99,6 @@ async function table_fetch_query({
   columns,
   limit
 }: table_fetch_Props): Promise<any[]> {
-  const functionName = 'table_fetch_query'
   //
   // Optional warning for tables not in TABLES - but still proceed with query
   //
@@ -153,44 +112,31 @@ async function table_fetch_query({
     })
     // Continue with query - do NOT return empty array
   }
-  //
-  // Start building the query
-  //
-  const selectedColumns = columns?.join(', ') || '*'
-  let sqlQuery = `SELECT ${distinct ? 'DISTINCT' : ''} ${selectedColumns} FROM ${table}`
+
   try {
-    const values: (string | number)[] = []
-    //
-    // Add WHERE clause
-    //
-    if (whereColumnValuePairs) {
-      const conditions = whereColumnValuePairs.map(({ column, value, operator = '=' }, index) => {
-        if (operator === 'IN' || operator === 'NOT IN') {
-          if (!Array.isArray(value)) throw new Error(`Value for ${operator} must be an array`)
-          const placeholders = value.map((_, i) => `$${index + i + 1}`).join(', ')
-          values.push(...value)
-          return `${column} ${operator} (${placeholders})`
-        }
-        if (operator === 'IS NULL' || operator === 'IS NOT NULL') {
-          return `${column} ${operator}`
-        }
-        values.push(value as string | number)
-        return `${column} ${operator} $${index + 1}`
-      })
-      const whereClause = conditions.join(' AND ')
-      sqlQuery += ` WHERE ${whereClause}`
-    }
-    //
-    // Add ORDER BY clause
-    //
-    if (orderBy) sqlQuery += ` ORDER BY ${orderBy}`
-    //
-    // Add LIMIT
-    //
-    if (limit) sqlQuery += ` LIMIT ${limit}`
-    //
+    // Build the SQL with placeholders
+    const { sqlQuery, values } = buildSql_Placeholders({
+      table,
+      whereColumnValuePairs,
+      orderBy,
+      distinct,
+      columns,
+      limit
+    })
+
+    // Create readable SQL for logging
+    const readableSql = buildSql_Readable(sqlQuery, values)
+
+    // Log the SQL
+    const sqlMsg = `STRING_SQL | ${readableSql}`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: sqlMsg,
+      lg_severity: 'I'
+    })
+
     // Execute the query
-    //
     const db = await sql()
     const data = await db.query({
       query: sqlQuery,
@@ -198,15 +144,14 @@ async function table_fetch_query({
       functionName: functionName,
       caller: caller
     })
-    //
+
     // Return rows
-    //
     return data.rows.length > 0 ? data.rows : []
     //
     // Errors
     //
   } catch (error) {
-    const errorMessage = `Table(${table}) SQL(${sqlQuery}) FAILED`
+    const errorMessage = `Table(${table}) SQL FAILED`
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,

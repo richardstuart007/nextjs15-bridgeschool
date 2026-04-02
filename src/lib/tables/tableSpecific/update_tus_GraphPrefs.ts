@@ -11,12 +11,12 @@ interface GraphPrefs {
   us_graph_recent_avg?: number
 }
 
-export async function update_tus_GraphPrefs(prefs: GraphPrefs) {
+export async function update_tus_GraphPrefs(prefs: GraphPrefs, caller: string = '') {
   const functionName = 'update_tus_GraphPrefs'
 
   try {
     // Get current user
-    const authSession = await getAuthSession()
+    const authSession = await getAuthSession(functionName)
     const us_usid = authSession?.user?.au_usid
 
     if (!us_usid) {
@@ -69,7 +69,7 @@ export async function update_tus_GraphPrefs(prefs: GraphPrefs) {
 
     // Log the update
     write_Logging({
-      lg_caller: functionName,
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: `Updated graph preferences for user ${us_usid}: ${JSON.stringify(prefs)}`,
       lg_severity: 'I'
@@ -79,7 +79,7 @@ export async function update_tus_GraphPrefs(prefs: GraphPrefs) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

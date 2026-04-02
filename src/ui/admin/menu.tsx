@@ -5,13 +5,14 @@ import { user_Logout } from '@/src/lib/user_logout'
 import { useEffect, useState } from 'react'
 
 export default function Page() {
+  const functionName = 'Menu_Page'
   const [loading, setLoading] = useState(true)
   //
   //  Logoff if not admin
   //
   useEffect(() => {
     const checkAdmin = async () => {
-      const admin = await fetch_IsAdmin()
+      const admin = await fetch_IsAdmin(functionName)
       if (!admin) {
         await user_Logout()
       } else {
@@ -39,6 +40,7 @@ export default function Page() {
               reference: 'owner'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Owner
           </MyLink>
@@ -50,6 +52,7 @@ export default function Page() {
               reference: 'subject'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Owner Subject
           </MyLink>
@@ -66,6 +69,7 @@ export default function Page() {
               reference: 'reference'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Reference
           </MyLink>
@@ -77,6 +81,7 @@ export default function Page() {
               reference: 'who'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Who
           </MyLink>
@@ -88,6 +93,7 @@ export default function Page() {
               reference: 'reftype'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Reftype
           </MyLink>
@@ -103,6 +109,7 @@ export default function Page() {
               reference: 'Questions'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Questions
           </MyLink>
@@ -118,6 +125,7 @@ export default function Page() {
               reference: 'users'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Users
           </MyLink>
@@ -129,6 +137,7 @@ export default function Page() {
               reference: 'UsersOwner'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Users Owner
           </MyLink>
@@ -149,6 +158,7 @@ export default function Page() {
               reference: 'backuptable'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Backup table
           </MyLink>
@@ -160,6 +170,7 @@ export default function Page() {
               reference: 'Logging'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Logging
           </MyLink>
@@ -171,6 +182,7 @@ export default function Page() {
               reference: 'Sessions'
             }}
             overrideClass='w-36 justify-center'
+            caller={functionName}
           >
             Sessions
           </MyLink>

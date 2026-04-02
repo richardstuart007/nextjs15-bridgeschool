@@ -16,6 +16,7 @@ interface Props {
   shrink: boolean
 }
 export default function NavLinks(props: Props) {
+  const functionName = 'NavLinks'
   //
   //  Deconstruct props
   //
@@ -86,6 +87,7 @@ export default function NavLinks(props: Props) {
               }
             }}
             overrideClass={overrideClass_mylinkButton}
+            caller={functionName}
           >
             {link.name === 'User' ? (
               <Cog6ToothIcon className='text-black h-5 w-5' />

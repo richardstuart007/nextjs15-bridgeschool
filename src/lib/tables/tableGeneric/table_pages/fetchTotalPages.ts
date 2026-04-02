@@ -1,14 +1,30 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 import {
   JoinParams,
   Filter,
   table_fetch_pages_total
 } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
 import { ITEMS_PER_PAGE } from './page_constants'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+
+//---------------------------------------------------------------------
+//  Helper function to convert filters to whereColumnValuePairs
+//---------------------------------------------------------------------
+function filtersToWhereColumnValuePairs(
+  filters: Filter[]
+): { column: string; value: any; operator?: Comparison_operator }[] {
+  return filters.map(filter => ({
+    column: filter.column,
+    value: filter.value,
+    operator: filter.operator as Comparison_operator
+  }))
+}
+
 //---------------------------------------------------------------------
 // Fetch Total Pages Function – also supports caching internally
 //---------------------------------------------------------------------
@@ -31,56 +47,28 @@ export async function fetchTotalPages({
 
   // Same caching decision as fetchFiltered
   if (CACHED_TABLES.has(table as TableName)) {
-    const cacheMsg = `[CACHE] ${functionName} → ${table} (caller: ${caller})`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: cacheMsg,
-      lg_severity: 'I'
-    })
+    // Convert filters to whereColumnValuePairs for SQL building
+    const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
 
-    // Get cache instance
-    const store = userCache_store()
-
-    // Create stable cache keys
-    const cacheKeys = {
+    // Build SQL with placeholders for cache key
+    const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
       table,
-      joins: JSON.stringify(joins),
-      filters: JSON.stringify(filters),
-      items_per_page,
-      distinctColumns: distinctColumns.length ? distinctColumns.join(',') : null,
-      type: 'totalPages'
-    }
-
-    // Log the cache check
-    const getMsg = `GET | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: getMsg,
-      lg_severity: 'I'
+      whereColumnValuePairs,
+      distinct: distinctColumns.length > 0,
+      columns: distinctColumns.length > 0 ? distinctColumns : undefined
     })
+
+    // Build readable SQL for cache key
+    const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+
+    // Add items_per_page to cache key (for total pages calculation)
+    const cacheKey = `${readableSql} | items_per_page: ${items_per_page} | type: totalPages`
 
     // Check cache first
-    const cachedData = store.get<number>(table, cacheKeys)
+    const cachedData = cache_get<number>(cacheKey, functionName)
     if (cachedData !== null) {
-      const hitMsg = `HIT | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | Value: ${cachedData}`
-      write_Logging({
-        lg_caller: caller,
-        lg_functionname: functionName,
-        lg_msg: hitMsg,
-        lg_severity: 'I'
-      })
       return cachedData
     }
-
-    const missMsg = `MISS | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: missMsg,
-      lg_severity: 'I'
-    })
 
     // Execute query
     const totalPages = await table_fetch_pages_total({
@@ -93,15 +81,7 @@ export async function fetchTotalPages({
     })
 
     // Store in cache
-    store.set(table, cacheKeys, totalPages)
-
-    const storedMsg = `STORED | Identifier: ${table} | Keys: ${JSON.stringify(cacheKeys)} | Value: ${totalPages}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    cache_set(cacheKey, totalPages, functionName)
 
     return totalPages
   }

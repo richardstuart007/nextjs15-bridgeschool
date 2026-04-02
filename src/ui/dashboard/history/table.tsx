@@ -815,6 +815,7 @@ export default function Table_History() {
                       }
                     }}
                     overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
+                    caller={functionName}
                   >
                     Review
                   </MyLink>
@@ -850,6 +851,7 @@ export default function Table_History() {
                           }
                     }
                     overrideClass={`text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
+                    caller={functionName}
                   >
                     Quiz
                   </MyLink>
@@ -882,6 +884,7 @@ export default function Table_History() {
                 uq_route: 'history'
               }
             }}
+            caller={functionName}
           >
             Back to Dashboard
           </MyLink>

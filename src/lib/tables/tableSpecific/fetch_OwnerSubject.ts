@@ -3,7 +3,7 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //
 //  Fetch unique owner/subject
 //
-export const fetch_OwnerSubject = async (owner: string, subject: string) => {
+export const fetch_OwnerSubject = async (owner: string, subject: string, caller: string = '') => {
   const functionName = 'fetch_OwnerSubject'
   //
   // Early return if owner or subject is not selected
@@ -37,7 +37,7 @@ export const fetch_OwnerSubject = async (owner: string, subject: string) => {
     const errorMessage = `Error fetching subject: owner=(${owner}), subject=(${subject})`
     console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

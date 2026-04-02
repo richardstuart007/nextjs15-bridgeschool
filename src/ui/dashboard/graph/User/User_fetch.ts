@@ -1,8 +1,11 @@
 'use server'
 
 import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { userCache_store } from '@/src/lib/cache/userCache_store'
+import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { ColumnValuePair } from '@/src/lib/tables/structures'
+
 //---------------------------------------------------------------------
 //  Fetch latest results for the last 'RecentResults_usersReturned' users
 //---------------------------------------------------------------------
@@ -16,41 +19,28 @@ interface User_fetchProps {
 export async function User_fetch({ userId, caller, months, count }: User_fetchProps) {
   const functionName = 'User_fetch'
 
-  const store = userCache_store()
-  const cacheKeys = {
-    userId,
-    months,
-    count
-  }
+  // Build SQL with placeholders
+  const whereColumnValuePairs: ColumnValuePair[] = [
+    { column: 'hs_usid', value: userId, operator: '=' },
+    { column: 'hs_datetime', value: `NOW() - (${months} || ' months')::interval`, operator: '>=' }
+  ]
 
-  // Log GET attempt
-  const getMsg = `GET | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: getMsg,
-    lg_severity: 'I'
+  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
+    table: 'ths_history',
+    whereColumnValuePairs,
+    orderBy: 'hs_hsid DESC',
+    columns: ['hs_hsid', 'hs_datetime', 'hs_correctpercent'],
+    limit: count
   })
 
-  const cachedData = store.get<any>(functionName, cacheKeys)
+  // Build readable SQL for cache key
+  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+
+  // Check cache first
+  const cachedData = cache_get<any>(readableSql, functionName)
   if (cachedData) {
-    const hitMsg = `HIT | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${cachedData.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: hitMsg,
-      lg_severity: 'I'
-    })
     return cachedData
   }
-
-  const missMsg = `MISS | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)}`
-  write_Logging({
-    lg_caller: caller,
-    lg_functionname: functionName,
-    lg_msg: missMsg,
-    lg_severity: 'I'
-  })
 
   try {
     const sqlQuery = `
@@ -84,25 +74,12 @@ export async function User_fetch({ userId, caller, months, count }: User_fetchPr
     const rows = data.rows
 
     // Store in cache
-    store.set(functionName, cacheKeys, rows)
-
-    const storedMsg = `STORED | Identifier: ${functionName} | Keys: ${JSON.stringify(cacheKeys)} | rows: ${rows.length}`
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: storedMsg,
-      lg_severity: 'I'
-    })
+    cache_set(readableSql, rows, functionName)
 
     return rows
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
-    throw error
+    // Re-throw without logging - let caller handle
+    throw new Error(`${functionName}: ${errorMessage}`)
   }
 }

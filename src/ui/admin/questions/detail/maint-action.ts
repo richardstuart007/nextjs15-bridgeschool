@@ -124,7 +124,7 @@ export async function Maint_detail_action(
       //
       //  Get next sequence if Add
       //
-      qq_seq = await fetch_NextSeq(qq_owner, qq_subject)
+      qq_seq = await fetch_NextSeq(qq_owner, qq_subject, functionName)
       //
       //  Get the subject id
       //
@@ -151,11 +151,11 @@ export async function Maint_detail_action(
       //
       //  update Questions counts in Subject
       //
-      await update_sb_cntquestions(qq_sbid)
+      await update_sb_cntquestions(qq_sbid, functionName)
       //
       //  update Questions counts in Reference
       //
-      await update_rf_cntquestions(qq_rfid)
+      await update_rf_cntquestions(qq_rfid, functionName)
     }
     return {
       message: `Database updated successfully.`,

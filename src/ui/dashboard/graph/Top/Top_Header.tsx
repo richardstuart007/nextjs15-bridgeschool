@@ -14,6 +14,7 @@ interface Top_HeaderProps {
 }
 
 export function Top_Header({ initialMonths = Top_limitMonths_Default }: Top_HeaderProps) {
+  const functionName = 'Top_Header'
   const router = useRouter()
   const [months, setMonths] = useState(initialMonths)
 
@@ -24,10 +25,12 @@ export function Top_Header({ initialMonths = Top_limitMonths_Default }: Top_Head
   const handleMonthsChange = async (value: string | number) => {
     const numericValue = Number(value)
     setMonths(numericValue)
-
-    await update_tus_GraphPrefs({
-      us_graph_top_months: numericValue
-    })
+    await update_tus_GraphPrefs(
+      {
+        us_graph_top_months: numericValue
+      },
+      functionName
+    )
 
     router.refresh()
   }

@@ -7,6 +7,7 @@ import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
 import { MyLink } from '@/src/ui/components/myLink'
 
 export default function Page() {
+  const functionName = 'Page'
   const [logoSize, setLogoSize] = useState(90)
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export default function Page() {
               uq_route: 'home'
             }
           }}
+          caller={functionName}
         >
           <span>Log in</span> <ArrowRightIcon className='w-5' />
         </MyLink>

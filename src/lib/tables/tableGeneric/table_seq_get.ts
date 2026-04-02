@@ -7,6 +7,7 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //
 interface Props {
   tableName: string
+  caller?: string
 }
 //
 //  Return values
@@ -22,7 +23,7 @@ interface ReturnValues {
 //
 export async function table_seqGet(Props: Props): Promise<ReturnValues> {
   const functionName = 'table_seqGet'
-  const { tableName } = Props
+  const { tableName, caller = '' } = Props
   //
   // Initialisation
   //
@@ -57,7 +58,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     `
     const values = [tableName]
     const sequenceResult = await db.query({
-      caller: '',
+      caller: caller,
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -74,7 +75,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     if (!sequenceName) {
       const message = `No sequence found for ${tableName}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: message,
         lg_severity: 'E'
@@ -86,7 +87,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     const message = `Sequence found: ${sequenceName} for ${tableName}.${columnName}`
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: message,
       lg_severity: 'I'
@@ -107,7 +108,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     if (!maxValue) {
       const message = `No maxValue found for Table ${tableName} column ${columnName}`
       write_Logging({
-        lg_caller: '',
+        lg_caller: caller,
         lg_functionname: functionName,
         lg_msg: message,
         lg_severity: 'E'
@@ -119,7 +120,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     //
     const message1 = `maxValue found: ${sequenceName} for ${tableName}.${columnName} with maxValue(${maxValue})`
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: message1,
       lg_severity: 'I'
@@ -139,7 +140,7 @@ export async function table_seqGet(Props: Props): Promise<ReturnValues> {
     const errorMessage = `Table(${tableName}) FAILED`
     console.error(`${functionName}: ${errorMessage}`, error)
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

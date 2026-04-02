@@ -583,6 +583,7 @@ export default function Table_Subject() {
                       segment: String(tabledata.sb_sbid)
                     }}
                     overrideClass={`text-white bg-green-500 hover:bg-green-600 ${shrink_Text} h-5 w-16 ${!shrink ? 'md:h-6 md:w-20' : ''}`}
+                    caller={functionName}
                   >
                     Quiz
                   </MyLink>
@@ -611,6 +612,7 @@ export default function Table_Subject() {
                 uq_route: 'subject'
               }
             }}
+            caller={functionName}
           >
             Back to Dashboard
           </MyLink>

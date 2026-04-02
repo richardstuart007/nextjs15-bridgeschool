@@ -6,7 +6,7 @@ import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionI
 // ----------------------------------------------------------------------
 //  Determine if Admin User
 // ----------------------------------------------------------------------
-export async function fetch_IsAdmin() {
+export async function fetch_IsAdmin(caller = '') {
   const functionName = 'fetch_IsAdmin'
   try {
     //
@@ -31,7 +31,7 @@ export async function fetch_IsAdmin() {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

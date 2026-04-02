@@ -25,6 +25,7 @@ export default function Form({
   onSuccess,
   shouldCloseOnUpdate = true
 }: FormProps) {
+  const functionName = 'Form_Questions'
   const initialState = { message: null, errors: {}, databaseUpdated: false }
   const [formState, formAction] = useActionState(Maint_detail_action, initialState)
   //
@@ -54,7 +55,7 @@ export default function Form({
     if (qq_owner === '' || qq_subject === '') return
 
     try {
-      const row = await fetch_OwnerSubject(String(qq_owner), String(qq_subject))
+      const row = await fetch_OwnerSubject(functionName, String(qq_owner), String(qq_subject))
       if (row) {
         const { sb_sbid } = row
         setqq_sbid(sb_sbid)

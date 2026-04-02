@@ -5,7 +5,7 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 //---------------------------------------------------------------------
 //  Get next qq_seq
 //---------------------------------------------------------------------
-export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
+export async function fetch_NextSeq(qq_owner: string, qq_subject: string, caller: string = '') {
   const functionName = 'fetch_NextSeq'
   try {
     const sqlQuery = `
@@ -23,7 +23,7 @@ export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
     //
     const db = await sql()
     const data = await db.query({
-      caller: '',
+      caller: caller,
       query: sqlQuery,
       params: values,
       functionName: functionName
@@ -39,7 +39,7 @@ export async function fetch_NextSeq(qq_owner: string, qq_subject: string) {
   } catch (error) {
     const errorMessage = (error as Error).message
     write_Logging({
-      lg_caller: '',
+      lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,
       lg_severity: 'E'

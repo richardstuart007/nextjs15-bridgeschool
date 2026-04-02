@@ -8,6 +8,7 @@ import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 //  Return Auth Session
 //
 export async function getAuthServer_au_ssid() {
+  const functionName = 'getAuthServer_au_ssid'
   //
   //  If cached value exists, return it
   //
@@ -18,7 +19,7 @@ export async function getAuthServer_au_ssid() {
   //  Get session from Auth
   //
   try {
-    const authSession = await getAuthSession()
+    const authSession = await getAuthSession(functionName)
     const au_ssid = authSession?.user?.au_ssid || 0
     return au_ssid
     //
