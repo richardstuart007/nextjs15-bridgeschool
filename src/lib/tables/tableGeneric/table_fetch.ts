@@ -3,9 +3,9 @@
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
-import { TABLES, CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
+import { TABLES } from '@/src/root/constants/constants_tables'
 import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
-import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric//buildSql_Placeholders'
+import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
 import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
 
 //----------------------------------------------------------------------------------
@@ -23,7 +23,9 @@ export type table_fetch_Props = {
   columns?: string[]
   limit?: number
 }
+
 const functionName = 'table_fetch'
+
 export async function table_fetch({
   caller,
   table,
@@ -42,41 +44,14 @@ export async function table_fetch({
     columns,
     limit
   })
-
+  //
   // Build readable SQL for cache key
+  //
   const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+  const cachedData = cache_get<any>(readableSql, functionName)
+  if (cachedData) return cachedData
 
-  //
-  // Decide whether this call should use caching (based on table)
-  //
-  if (CACHED_TABLES.has(table as TableName)) {
-    // Check cache first using readable SQL as key
-    const cachedData = cache_get<any>(readableSql, functionName)
-    if (cachedData) {
-      return cachedData
-    }
-
-    // Execute query
-    const data = await table_fetch_query({
-      caller,
-      table,
-      whereColumnValuePairs,
-      orderBy,
-      distinct,
-      columns,
-      limit
-    })
-
-    // Store in cache using readable SQL as key
-    cache_set(readableSql, data, functionName)
-
-    return data
-  }
-
-  //
-  // Non-cached path
-  //
-  return table_fetch_query({
+  const data = await table_fetch_query({
     caller,
     table,
     whereColumnValuePairs,
@@ -85,6 +60,8 @@ export async function table_fetch({
     columns,
     limit
   })
+  cache_set(readableSql, data, caller)
+  return data
 }
 
 //----------------------------------------------------------------------------------
@@ -114,7 +91,9 @@ async function table_fetch_query({
   }
 
   try {
+    //
     // Build the SQL with placeholders
+    //
     const { sqlQuery, values } = buildSql_Placeholders({
       table,
       whereColumnValuePairs,
@@ -123,11 +102,13 @@ async function table_fetch_query({
       columns,
       limit
     })
-
+    //
     // Create readable SQL for logging
+    //
     const readableSql = buildSql_Readable(sqlQuery, values)
-
+    //
     // Log the SQL
+    //
     const sqlMsg = `STRING_SQL | ${readableSql}`
     write_Logging({
       lg_caller: caller,
@@ -135,8 +116,9 @@ async function table_fetch_query({
       lg_msg: sqlMsg,
       lg_severity: 'I'
     })
-
+    //
     // Execute the query
+    //
     const db = await sql()
     const data = await db.query({
       query: sqlQuery,
@@ -144,8 +126,9 @@ async function table_fetch_query({
       functionName: functionName,
       caller: caller
     })
-
+    //
     // Return rows
+    //
     return data.rows.length > 0 ? data.rows : []
     //
     // Errors

@@ -1,6 +1,5 @@
 'use server'
 
-import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
 import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 import {
   JoinParams,
@@ -45,46 +44,29 @@ export async function fetchTotalPages({
 }): Promise<number> {
   const functionName = 'fetchTotalPages'
 
-  // Same caching decision as fetchFiltered
-  if (CACHED_TABLES.has(table as TableName)) {
-    // Convert filters to whereColumnValuePairs for SQL building
-    const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
+  const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
+  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
+    table,
+    whereColumnValuePairs,
+    distinct: distinctColumns.length > 0,
+    columns: distinctColumns.length > 0 ? distinctColumns : undefined
+  })
+  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+  const joinSuffix = joins.map(j => `JOIN ${j.table}`).join(' ')
+  const baseCacheKey = joinSuffix ? `${readableSql} ${joinSuffix}` : readableSql
+  const cacheKey = `${baseCacheKey} | items_per_page: ${items_per_page} | type: totalPages`
 
-    // Build SQL with placeholders for cache key
-    const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
-      table,
-      whereColumnValuePairs,
-      distinct: distinctColumns.length > 0,
-      columns: distinctColumns.length > 0 ? distinctColumns : undefined
-    })
+  const cachedData = cache_get<number>(cacheKey, functionName)
+  if (cachedData !== null) return cachedData
 
-    // Build readable SQL for cache key
-    const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
-
-    // Add items_per_page to cache key (for total pages calculation)
-    const cacheKey = `${readableSql} | items_per_page: ${items_per_page} | type: totalPages`
-
-    // Check cache first
-    const cachedData = cache_get<number>(cacheKey, functionName)
-    if (cachedData !== null) {
-      return cachedData
-    }
-
-    // Execute query
-    const totalPages = await table_fetch_pages_total({
-      table,
-      joins,
-      filters,
-      items_per_page,
-      distinctColumns,
-      caller
-    })
-
-    // Store in cache
-    cache_set(cacheKey, totalPages, functionName)
-
-    return totalPages
-  }
-
-  return table_fetch_pages_total({ table, joins, filters, items_per_page, distinctColumns, caller })
+  const totalPages = await table_fetch_pages_total({
+    table,
+    joins,
+    filters,
+    items_per_page,
+    distinctColumns,
+    caller
+  })
+  cache_set(cacheKey, totalPages, caller)
+  return totalPages
 }

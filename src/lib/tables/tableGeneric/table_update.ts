@@ -2,6 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { cache_clearTable } from '@/src/lib/tables/cache/userCache_store'
 //
 // Column-value pairs
 //
@@ -64,6 +65,10 @@ export async function table_update({
       functionName: functionName
     })
     //
+    // Clear cache entries for this table
+    //
+    cache_clearTable(table, functionName)
+    //
     // Return rows updated
     //
     return data.rows
@@ -79,6 +84,6 @@ export async function table_update({
       lg_msg: errorMessage,
       lg_severity: 'E'
     })
-    throw new Error(`functionName, ${errorMessage}`)
+    throw new Error(`${functionName}: ${errorMessage}`)
   }
 }

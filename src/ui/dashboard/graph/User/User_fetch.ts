@@ -2,9 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
-import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
 import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
-import { ColumnValuePair } from '@/src/lib/tables/structures'
 
 //---------------------------------------------------------------------
 //  Fetch latest results for the last 'RecentResults_usersReturned' users
@@ -19,48 +17,22 @@ interface User_fetchProps {
 export async function User_fetch({ userId, caller, months, count }: User_fetchProps) {
   const functionName = 'User_fetch'
 
-  // Build SQL with placeholders
-  const whereColumnValuePairs: ColumnValuePair[] = [
-    { column: 'hs_usid', value: userId, operator: '=' },
-    { column: 'hs_datetime', value: `NOW() - (${months} || ' months')::interval`, operator: '>=' }
-  ]
-
-  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
-    table: 'ths_history',
-    whereColumnValuePairs,
-    orderBy: 'hs_hsid DESC',
-    columns: ['hs_hsid', 'hs_datetime', 'hs_correctpercent'],
-    limit: count
-  })
-
-  // Build readable SQL for cache key
-  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+  const sqlQuery = `
+    SELECT hs_hsid, hs_datetime, hs_correctpercent
+    FROM ths_history
+    WHERE hs_usid = $1
+      AND hs_datetime >= NOW() - ($2 || ' months')::interval
+    ORDER BY hs_hsid DESC
+    LIMIT $3
+  `
+  const values = [userId, months, count]
+  const cacheKey = buildSql_Readable(sqlQuery, values)
 
   // Check cache first
-  const cachedData = cache_get<any>(readableSql, functionName)
-  if (cachedData) {
-    return cachedData
-  }
+  const cachedData = cache_get<any>(cacheKey, functionName)
+  if (cachedData) return cachedData
 
   try {
-    const sqlQuery = `
-    SELECT
-      hs_hsid,
-      hs_datetime,
-      hs_correctpercent
-    FROM
-      ths_history
-    WHERE
-      hs_usid = $1
-      AND hs_datetime >= NOW() - ($2 || ' months')::interval
-    ORDER BY
-      hs_hsid DESC
-    LIMIT $3;
-    `
-    //
-    // Run SQL Query - use the dynamic values
-    //
-    const values = [userId, months, count]
     const db = await sql()
     const data = await db.query({
       query: sqlQuery,
@@ -68,18 +40,12 @@ export async function User_fetch({ userId, caller, months, count }: User_fetchPr
       functionName: functionName,
       caller: caller
     })
-    //
-    // Return rows
-    //
+
     const rows = data.rows
-
-    // Store in cache
-    cache_set(readableSql, rows, functionName)
-
+    cache_set(cacheKey, rows, functionName)
     return rows
   } catch (error) {
     const errorMessage = (error as Error).message
-    // Re-throw without logging - let caller handle
     throw new Error(`${functionName}: ${errorMessage}`)
   }
 }

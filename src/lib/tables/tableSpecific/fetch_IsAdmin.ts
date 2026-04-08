@@ -2,7 +2,8 @@
 
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
-import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
+import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+
 // ----------------------------------------------------------------------
 //  Determine if Admin User
 // ----------------------------------------------------------------------
@@ -18,13 +19,33 @@ export async function fetch_IsAdmin(caller = '') {
     //
     if (!co_ssid) return false
     //
-    //  Session info
+    //  Get user record from tus_users using the session
+    //  First get session info to get us_usid
     //
-    const sessionInfo = await fetch_SessionInfo({ caller: functionName })
+    const sessionRows = await table_fetch({
+      caller: functionName,
+      table: 'tss_sessions',
+      whereColumnValuePairs: [{ column: 'ss_ssid', value: co_ssid }],
+      columns: ['ss_usid']
+    })
+
+    if (!sessionRows || sessionRows.length === 0) return false
+
+    const us_usid = sessionRows[0].ss_usid
+    //
+    //  Query tus_users for admin flag only with caching
+    //
+    const userRows = await table_fetch({
+      caller: functionName,
+      table: 'tus_users',
+      whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
+    })
+
+    if (!userRows || userRows.length === 0) return false
     //
     //  Return admin flag
     //
-    return sessionInfo.si_admin
+    return userRows[0].us_admin === true
     //
     //  Errors
     //
@@ -37,6 +58,6 @@ export async function fetch_IsAdmin(caller = '') {
       lg_severity: 'E'
     })
     console.error('Error:', errorMessage)
-    throw new Error(`${functionName}: Failed`)
+    return false
   }
 }

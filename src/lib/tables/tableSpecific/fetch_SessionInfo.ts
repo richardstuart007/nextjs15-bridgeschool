@@ -1,9 +1,9 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
+import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------
@@ -15,46 +15,41 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   //
   //  Get the session id
   //
-  const co_ssid = await getAuthServer_au_ssid()
+  const co_ssid = Number(await getAuthServer_au_ssid())
 
   try {
-    const sqlQuery = `
-    SELECT
-        ss_ssid,
-        us_usid,
-        us_name,
-        us_email,
-        us_admin,
-        us_skipcorrect,
-        us_maxquestions
-      FROM tss_sessions
-      JOIN tus_users
-      ON   ss_usid = us_usid
-      WHERE ss_ssid = $1
-    `
-    const queryValues = [co_ssid]
     //
-    //  Execute the sql
+    //  Query 1 - get usid from session
     //
-    const db = await sql()
-    const data = await db.query({
-      query: sqlQuery,
-      params: queryValues,
-      functionName: functionName,
-      caller: caller
+    const sessionRows = await table_fetch({
+      caller: functionName,
+      table: 'tss_sessions',
+      whereColumnValuePairs: [{ column: 'ss_ssid', value: co_ssid }],
+      columns: ['ss_usid']
     })
-    const row = data.rows[0]
+    if (!sessionRows || sessionRows.length === 0) throw new Error('Session not found')
+    const us_usid = sessionRows[0].ss_usid
+    //
+    //  Query 2 - get user data
+    //
+    const userRows = await table_fetch({
+      caller: functionName,
+      table: 'tus_users',
+      whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
+    })
+    if (!userRows || userRows.length === 0) throw new Error('User not found')
+    const userRow = userRows[0]
     //
     //  Return the session info
     //
     const structure_SessionsInfo: structure_SessionsInfo = {
-      si_ssid: row.ss_ssid,
-      si_usid: row.us_usid,
-      si_name: row.us_name,
-      si_email: row.us_email,
-      si_admin: row.us_admin,
-      si_skipcorrect: row.us_skipcorrect,
-      si_maxquestions: row.us_maxquestions
+      si_ssid: co_ssid,
+      si_usid: userRow.us_usid,
+      si_name: userRow.us_name,
+      si_email: userRow.us_email,
+      si_admin: userRow.us_admin,
+      si_skipcorrect: userRow.us_skipcorrect,
+      si_maxquestions: userRow.us_maxquestions
     }
     return structure_SessionsInfo
     //

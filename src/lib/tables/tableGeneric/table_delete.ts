@@ -3,6 +3,7 @@
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
+import { cache_clearTable } from '@/src/lib/tables/cache/userCache_store'
 //
 // Props
 //
@@ -65,6 +66,10 @@ export async function table_delete({
       params: values,
       functionName: functionName
     })
+    //
+    // Clear cache entries for this table
+    //
+    cache_clearTable(table, functionName)
     //
     // If RETURNING * is specified, return the deleted rows
     //

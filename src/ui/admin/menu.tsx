@@ -145,7 +145,19 @@ export default function Page() {
           <div className='w-36 '></div>
           <div className='w-36 '></div>
           {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-36 '></div>
+
+          <MyLink
+            key='cache'
+            href={{
+              pathname: '/admin/maint/cache',
+              reference: 'cache'
+            }}
+            overrideClass='w-36 justify-center'
+            caller={functionName}
+          >
+            Cache
+          </MyLink>
+
           <div className='w-36 '></div>
           <div className='w-36 '></div>
           <div className='w-36 '></div>

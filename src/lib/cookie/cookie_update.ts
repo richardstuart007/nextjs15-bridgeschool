@@ -14,7 +14,7 @@ export async function cookie_update(co_ssid: number) {
     const cookieValue = JSON.stringify(co_ssid)
     const cookieStore = await cookies()
     cookieStore.set(cookieName, cookieValue, {
-      httpOnly: false,
+      httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/'

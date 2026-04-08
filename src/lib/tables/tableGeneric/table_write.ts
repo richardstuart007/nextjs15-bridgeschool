@@ -2,6 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { cache_clearTable } from '@/src/lib/tables/cache/userCache_store'
 //
 // Define the column-value pair interface
 //
@@ -44,6 +45,10 @@ export async function table_write({ table, columnValuePairs, caller }: Props): P
       functionName: functionName,
       caller: caller
     })
+    //
+    // Clear cache entries for this table
+    //
+    cache_clearTable(table, functionName)
     //
     // Return the inserted rows
     //

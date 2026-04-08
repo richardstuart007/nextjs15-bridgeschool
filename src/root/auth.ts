@@ -8,7 +8,6 @@ import { providerSignIn } from '@/src/lib/dataAuth/providerSignIn'
 import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeOnSignIn'
 
 const functionName = 'auth'
 // ----------------------------------------------------------------------
@@ -197,9 +196,6 @@ export const {
         const stringAuSsid = newAuSsid.toString()
         const userTyped = user as au_UserData
         userTyped.au_ssid = stringAuSsid
-
-        //  CLEAR CACHE FOR THIS USER - ADD THIS LINE
-        await userCache_purgeOnSignIn(userRecord.us_usid, functionName)
 
         //
         //  All OK

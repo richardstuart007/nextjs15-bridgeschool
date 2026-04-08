@@ -3,10 +3,13 @@ import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
 type CacheEntry<T> = {
   data: T
   sql: string
+  caller: string
 }
 
-// Private cache instance - only accessible within this module
-let cache = new Map<string, CacheEntry<any>>()
+// Singleton cache anchored to globalThis so all Next.js bundles share the same instance
+const globalForCache = globalThis as unknown as { _bridgeCache: Map<string, CacheEntry<any>> }
+if (!globalForCache._bridgeCache) globalForCache._bridgeCache = new Map()
+const cache = globalForCache._bridgeCache
 
 //---------------------------------------------------------------------
 //  normalizeSql - Remove extra whitespace from SQL for cleaner cache keys
@@ -63,7 +66,8 @@ export function cache_set<T>(sql: string, data: T, caller: string = ''): void {
 
   cache.set(normalizedSql, {
     data,
-    sql: normalizedSql
+    sql: normalizedSql,
+    caller
   })
 
   // Print entire cache after save
@@ -84,7 +88,10 @@ export function cache_clearUser(userId: number, caller: string = ''): number {
   const entries: string[] = []
 
   for (const [key, entry] of cache.entries()) {
-    if (entry.sql.includes(`userId:${userId}`) || entry.sql.includes(`= ${userId}`)) {
+    if (
+      entry.sql.includes(`userId:${userId}`) ||
+      new RegExp(`= ${userId}(?!\\d)`).test(entry.sql)
+    ) {
       entries.push(entry.sql)
       cache.delete(key)
       cleared++
@@ -101,6 +108,44 @@ export function cache_clearUser(userId: number, caller: string = ''): number {
     })
   } else {
     const noEntriesMsg = `CACHE_CLR_USER | UserId: ${userId} | No entries found`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: noEntriesMsg,
+      lg_severity: 'I'
+    })
+  }
+
+  return cleared
+}
+
+//---------------------------------------------------------------------
+//  cache_clearTable - Clear all entries referencing a table in FROM or JOIN
+//---------------------------------------------------------------------
+export function cache_clearTable(tableName: string, caller: string = ''): number {
+  const functionName = 'cache_clearTable'
+  let cleared = 0
+  const entries: string[] = []
+  const tableRegex = new RegExp(`\\b(?:FROM|JOIN)\\s+${tableName}\\b`, 'i')
+
+  for (const [key, entry] of cache.entries()) {
+    if (tableRegex.test(entry.sql)) {
+      entries.push(entry.sql)
+      cache.delete(key)
+      cleared++
+    }
+  }
+
+  if (cleared > 0) {
+    const clearMsg = `CACHE_CLR_TABLE | Table: ${tableName} | Cleared ${cleared} entries: ${entries.join(', ')}`
+    write_Logging({
+      lg_caller: caller,
+      lg_functionname: functionName,
+      lg_msg: clearMsg,
+      lg_severity: 'I'
+    })
+  } else {
+    const noEntriesMsg = `CACHE_CLR_TABLE | Table: ${tableName} | No entries found`
     write_Logging({
       lg_caller: caller,
       lg_functionname: functionName,
@@ -161,6 +206,62 @@ export function cache_getStats(caller: string = '') {
     size: cache.size,
     sqls
   }
+}
+
+//---------------------------------------------------------------------
+//  cache_getEntriesInfo - Return all cache entries with data info for display
+//---------------------------------------------------------------------
+export type CacheEntryInfo = {
+  sql: string
+  info: string
+  caller: string
+  table: string
+}
+
+export function cache_getEntriesInfo(): CacheEntryInfo[] {
+  return Array.from(cache.entries()).map(([key, entry]) => {
+    const tableMatch = key.match(/\bFROM\s+(\w+)/i)
+    return {
+      sql: key,
+      info: getDataInfo(entry.data),
+      caller: entry.caller,
+      table: tableMatch ? tableMatch[1] : ''
+    }
+  })
+}
+
+//---------------------------------------------------------------------
+//  cache_getEntryData - Return the raw data stored for a cache entry
+//---------------------------------------------------------------------
+export function cache_getEntryData(sql: string): any | null {
+  const normalizedSql = normalizeSql(sql)
+  const entry = cache.get(normalizedSql)
+  return entry ? entry.data : null
+}
+
+//---------------------------------------------------------------------
+//  cache_deleteEntry - Delete a single cache entry by SQL key
+//---------------------------------------------------------------------
+export function cache_deleteEntry(sql: string, caller: string = ''): boolean {
+  const functionName = 'cache_deleteEntry'
+  const normalizedSql = normalizeSql(sql)
+  const deleted = cache.delete(normalizedSql)
+
+  write_Logging({
+    lg_caller: caller,
+    lg_functionname: functionName,
+    lg_msg: `CACHE_DEL | ${deleted ? 'Deleted' : 'Not found'} | ${normalizedSql}`,
+    lg_severity: 'I'
+  })
+
+  return deleted
+}
+
+//---------------------------------------------------------------------
+//  cache_getEntries - Return all cached SQL strings for display
+//---------------------------------------------------------------------
+export function cache_getEntries(): string[] {
+  return Array.from(cache.keys())
 }
 
 //---------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 import { sql } from '@/src/lib/db'
 import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
 
 interface Recent_fetch_1Props {
   caller: string
@@ -14,28 +15,7 @@ export async function Recent_fetch_1({
 }: Recent_fetch_1Props) {
   const functionName = 'Recent_fetch_1'
 
-  // Build readable SQL for cache key with actual value
-  const cacheKey = `
-    SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent, hs_datetime
-    FROM (
-      SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent, hs_datetime,
-        ROW_NUMBER() OVER (PARTITION BY hs_usid ORDER BY hs_hsid DESC) AS rn
-      FROM ths_history
-      JOIN tus_users ON hs_usid = us_usid
-    ) AS ranked
-    WHERE rn = 1
-    ORDER BY hs_hsid DESC
-    LIMIT ${uq_graph_recent_usersReturned}
-  `
-
-  // Check cache
-  const cachedData = cache_get<any>(cacheKey, functionName)
-  if (cachedData) {
-    return cachedData
-  }
-
-  try {
-    const sqlQuery = `
+  const sqlQuery = `
     SELECT
       hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent, hs_datetime
       FROM (
@@ -59,10 +39,19 @@ export async function Recent_fetch_1({
         hs_hsid DESC
       LIMIT $1
       `
+  const values = [uq_graph_recent_usersReturned]
+  const cacheKey = buildSql_Readable(sqlQuery, values)
+
+  // Check cache
+  const cachedData = cache_get<any>(cacheKey, functionName)
+  if (cachedData) {
+    return cachedData
+  }
+
+  try {
     //
     //  Run sql Query
     //
-    const values = [uq_graph_recent_usersReturned]
     const db = await sql()
     const data = await db.query({
       query: sqlQuery,

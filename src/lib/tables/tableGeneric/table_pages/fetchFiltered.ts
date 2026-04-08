@@ -1,6 +1,5 @@
 'use server'
 
-import { CACHED_TABLES, TableName } from '@/src/root/constants/constants_tables'
 import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
 import {
   JoinParams,
@@ -48,53 +47,24 @@ export async function fetchFiltered({
 }): Promise<any[]> {
   const functionName = 'fetchFiltered'
 
-  // Decide caching based on table (same as table_fetch)
-  if (CACHED_TABLES.has(table as TableName)) {
-    // Convert filters to whereColumnValuePairs for SQL building
-    const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
+  const whereColumnValuePairs = filtersToWhereColumnValuePairs(filters)
+  const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
+    table,
+    whereColumnValuePairs,
+    orderBy,
+    distinct: distinctColumns.length > 0,
+    columns: distinctColumns.length > 0 ? distinctColumns : undefined,
+    limit
+  })
+  const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
+  const joinSuffix = joins.map(j => `JOIN ${j.table}`).join(' ')
+  const baseCacheKey = joinSuffix ? `${readableSql} ${joinSuffix}` : readableSql
+  const cacheKey = offset ? `${baseCacheKey} OFFSET ${offset}` : baseCacheKey
 
-    // Build SQL with placeholders for cache key
-    const { sqlQuery: sqlWithPlaceholders, values } = buildSql_Placeholders({
-      table,
-      whereColumnValuePairs,
-      orderBy,
-      distinct: distinctColumns.length > 0,
-      columns: distinctColumns.length > 0 ? distinctColumns : undefined,
-      limit
-    })
+  const cachedData = cache_get<any>(cacheKey, functionName)
+  if (cachedData) return cachedData
 
-    // Build readable SQL for cache key
-    const readableSql = buildSql_Readable(sqlWithPlaceholders, values)
-
-    // Add offset to SQL for cache key (since it's not in buildSql_Placeholders)
-    const cacheKey = offset ? `${readableSql} OFFSET ${offset}` : readableSql
-
-    // Check cache first
-    const cachedData = cache_get<any>(cacheKey, functionName)
-    if (cachedData) {
-      return cachedData
-    }
-
-    // Execute query
-    const data = await table_fetch_pages_filtered({
-      table,
-      joins,
-      filters,
-      orderBy,
-      limit,
-      offset,
-      distinctColumns,
-      caller
-    })
-
-    // Store in cache
-    cache_set(cacheKey, data, functionName)
-
-    return data
-  }
-
-  // Non-cached path
-  return table_fetch_pages_filtered({
+  const data = await table_fetch_pages_filtered({
     table,
     joins,
     filters,
@@ -104,4 +74,6 @@ export async function fetchFiltered({
     distinctColumns,
     caller
   })
+  cache_set(cacheKey, data, caller)
+  return data
 }

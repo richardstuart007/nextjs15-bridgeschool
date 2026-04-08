@@ -12,5 +12,4 @@ export const basetables = [
   // 'tup_userspwd',
   // 'tdb_database',
   // 'tlg_logging',
-  // 'tml_menulinks'
 ]
