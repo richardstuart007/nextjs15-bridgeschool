@@ -2,12 +2,12 @@
 
 import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { action, StateRegister } from '@/src/ui/register/action'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect, useActionState } from 'react'
-import { MyInput } from '@/src/ui/components/myInput'
-import { MyLoadingMessage } from '@/src/ui/components/myLoadingMessage'
+import { MyInput } from 'nextjs-shared/MyInput'
+import { MyLoadingMessage } from 'nextjs-shared/MyLoadingMessage'
 
 export default function RegisterForm() {
   const router = useRouter()

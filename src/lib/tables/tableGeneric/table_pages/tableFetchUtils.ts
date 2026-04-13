@@ -1,6 +1,6 @@
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
+import { Comparison_operator } from 'nextjs-shared/table_comparison_values'
 import { ITEMS_PER_PAGE } from './page_constants'
 
 // Define types for joins and filters

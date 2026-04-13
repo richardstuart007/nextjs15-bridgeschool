@@ -1,7 +1,7 @@
 'use server'
 
 import ReviewFormClient from '@/src/ui/dashboard/quizreview/reviewFormClient'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch } from 'nextjs-shared/table_fetch'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 

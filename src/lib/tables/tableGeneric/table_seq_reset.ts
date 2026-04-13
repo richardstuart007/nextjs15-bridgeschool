@@ -1,8 +1,8 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { table_seqGet } from '@/src/lib/tables/tableGeneric/table_seq_get'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
+import { table_seqGet } from 'nextjs-shared/table_seq_get'
 
 interface Props {
   tableName: string

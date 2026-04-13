@@ -2,10 +2,10 @@
 
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { write_users } from '@/src/lib/tables/tableSpecific/write_Users'
 import { write_sessions } from '@/src/lib/tables/tableSpecific/write_sessions'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 export async function providerSignIn(
   { provider, email, name }: structure_ProviderSignInParams,

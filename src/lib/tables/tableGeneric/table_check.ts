@@ -1,7 +1,7 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { TableColumnValuePairs } from '@/src/lib/tables/structures'
 
 export async function table_check(

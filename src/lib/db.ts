@@ -1,6 +1,6 @@
 import { Client } from 'pg'
 import { sql as vercelSql } from '@vercel/postgres'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 //
 // Placeholder for the `query` method
 //

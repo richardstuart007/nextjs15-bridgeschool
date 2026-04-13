@@ -1,8 +1,8 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch } from 'nextjs-shared/table_fetch'
 
 // ----------------------------------------------------------------------
 //  Determine if Admin User

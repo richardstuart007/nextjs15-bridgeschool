@@ -6,8 +6,8 @@ import {
   cache_getEntriesInfo,
   cache_getEntryData,
   CacheEntryInfo
-} from '@/src/lib/tables/cache/userCache_store'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+} from 'nextjs-shared/userCache_store'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 const functionName = 'cache_actions'
 

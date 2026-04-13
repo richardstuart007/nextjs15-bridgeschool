@@ -1,8 +1,8 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { cache_clearTable } from '@/src/lib/tables/cache/userCache_store'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
+import { cache_clearTable } from 'nextjs-shared/userCache_store'
 //
 // Define the column-value pair interface
 //

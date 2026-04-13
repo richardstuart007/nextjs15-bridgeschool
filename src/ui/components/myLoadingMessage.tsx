@@ -1,4 +1,4 @@
-import { MyHourGlass } from '@/src/ui/components/myHourGlass'
+import { MyHourGlass } from 'nextjs-shared/MyHourGlass'
 interface MyLoadingMessageProps {
   message1?: string
   message2?: string

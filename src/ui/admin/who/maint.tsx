@@ -1,11 +1,11 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/who/maint-action'
 import type { table_Who } from '@/src/lib/tables/definitions'
-import { MyInput } from '@/src/ui/components/myInput'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
   record: table_Who | null

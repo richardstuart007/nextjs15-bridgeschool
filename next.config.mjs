@@ -32,6 +32,7 @@ const redirectsConfig = {
 }
 
 const config = {
+  transpilePackages: ['nextjs-shared'],
   cacheComponents: false,
   env: {
     CUSTOM_ENV: process.env.CUSTOM_ENV,

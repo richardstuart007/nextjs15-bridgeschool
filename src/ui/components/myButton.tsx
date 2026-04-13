@@ -1,4 +1,4 @@
-import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
+import { myMergeClasses } from 'nextjs-shared/MyMergeClasses'
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode

@@ -1,9 +1,9 @@
 'use server'
 
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch } from 'nextjs-shared/table_fetch'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
 //---------------------------------------------------------------------

@@ -1,12 +1,12 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 import { TABLES } from '@/src/root/constants/constants_tables'
-import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
-import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
-import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
+import { buildSql_Placeholders } from 'nextjs-shared/buildSql_Placeholders'
+import { buildSql_Readable } from 'nextjs-shared/buildSql_Readable'
 
 //----------------------------------------------------------------------------------
 //  Main function

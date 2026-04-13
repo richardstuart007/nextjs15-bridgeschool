@@ -1,9 +1,9 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
-import { cache_clearTable } from '@/src/lib/tables/cache/userCache_store'
+import { cache_clearTable } from 'nextjs-shared/userCache_store'
 //
 // Props
 //

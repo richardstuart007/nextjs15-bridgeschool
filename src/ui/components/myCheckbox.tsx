@@ -1,8 +1,8 @@
 // src/ui/components/myCheckbox.tsx
 import { useState, useMemo } from 'react'
-import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
-import { MyInput } from '@/src/ui/components/myInput'
-import { MyButton } from '@/src/ui/components/myButton'
+import { myMergeClasses } from 'nextjs-shared/MyMergeClasses'
+import { MyInput } from 'nextjs-shared/MyInput'
+import { MyButton } from 'nextjs-shared/MyButton'
 
 //
 //  Define the options

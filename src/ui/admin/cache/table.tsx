@@ -1,15 +1,15 @@
 'use client'
 
 import { useState, Fragment } from 'react'
-import { MyButton } from '@/src/ui/components/myButton'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
+import { MyButton } from 'nextjs-shared/MyButton'
+import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import {
   cacheAction_clearAll,
   cacheAction_getEntries,
   cacheAction_deleteEntry,
   cacheAction_getEntryData
-} from '@/src/lib/tables/cache/cache_actions'
-import { CacheEntryInfo } from '@/src/lib/tables/cache/userCache_store'
+} from 'nextjs-shared/cache_actions'
+import { CacheEntryInfo } from 'nextjs-shared/userCache_store'
 import { TABLES } from '@/src/root/constants/constants_tables'
 
 const functionName = 'CacheTable'

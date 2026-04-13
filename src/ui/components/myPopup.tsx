@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 
 interface PopupProps {
   isOpen: boolean

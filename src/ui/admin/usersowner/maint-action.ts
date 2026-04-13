@@ -2,8 +2,8 @@
 
 import { z } from 'zod'
 import validateUsersowner from '@/src/ui/admin/usersowner/maint-validate'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { table_write } from 'nextjs-shared/table_write'
+import { write_Logging } from 'nextjs-shared/write_logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------

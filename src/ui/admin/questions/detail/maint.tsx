@@ -1,13 +1,13 @@
 'use client'
 import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Maint_detail_action } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import MyDropdown from '@/src/ui/components/myDropdown'
-import { MyInput } from '@/src/ui/components/myInput'
-import { MyTextarea } from '@/src/ui/components/myTextarea'
+import MyDropdown from 'nextjs-shared/MyDropdown'
+import { MyInput } from 'nextjs-shared/MyInput'
+import { MyTextarea } from 'nextjs-shared/MyTextarea'
 import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 
 interface FormProps {

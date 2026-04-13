@@ -1,5 +1,5 @@
 import { table_Reftype } from '@/src/lib/tables/definitions'
-import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
+import { table_check } from 'nextjs-shared/table_check'
 //
 //  Errors and Messages
 //

@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { table_Subject } from '@/src/lib/tables/definitions'
-import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
-import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
-import { Filter, JoinParams } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
-import MyPagination from '@/src/ui/components/myPagination'
-import MyDropdown from '@/src/ui/components/myDropdown'
+import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
+import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
+import { Filter, JoinParams } from 'nextjs-shared/tableFetchUtils'
+import MyPagination from 'nextjs-shared/MyPagination'
+import MyDropdown from 'nextjs-shared/MyDropdown'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyInput } from '@/src/ui/components/myInput'
-import { MyLink } from '@/src/ui/components/myLink'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { MyInput } from 'nextjs-shared/MyInput'
+import { MyLink } from 'nextjs-shared/MyLink'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 
 export default function Table_Subject() {
   const functionName = 'Table_Subject'

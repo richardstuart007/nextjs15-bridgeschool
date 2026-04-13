@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { table_Questions } from '@/src/lib/tables/definitions'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { table_write } from 'nextjs-shared/table_write'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import QuizChoice from '@/src/ui/dashboard/quiz/choices'
-import { MyButton } from '@/src/ui/components/myButton'
-import { MyLink } from '@/src/ui/components/myLink'
+import { MyButton } from 'nextjs-shared/MyButton'
+import { MyLink } from 'nextjs-shared/MyLink'
 import { useUserContext } from '@/src/context/UserContext'
 
 interface QuizClientProps {

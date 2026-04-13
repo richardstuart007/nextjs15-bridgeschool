@@ -1,9 +1,9 @@
 'use server'
 
 import { z } from 'zod'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { table_write } from 'nextjs-shared/table_write'
 import validateOwner from '@/src/ui/admin/owner/maint-validate'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 // ----------------------------------------------------------------------
 //  Update Owner Setup
 // ----------------------------------------------------------------------

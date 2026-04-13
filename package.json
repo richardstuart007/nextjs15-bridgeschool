@@ -24,6 +24,7 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "next": "^16.1.6",
+    "nextjs-shared": "github:richardstuart007/nextjs-shared",
     "next-auth": "^5.0.0-beta.22",
     "pg": "^8.13.1",
     "postcss": "8.4.31",

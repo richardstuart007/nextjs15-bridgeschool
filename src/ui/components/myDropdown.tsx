@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { MyInput } from '@/src/ui/components/myInput'
+import { myMergeClasses } from 'nextjs-shared/MyMergeClasses'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
+import { MyInput } from 'nextjs-shared/MyInput'
 //
 //  Define the options
 //

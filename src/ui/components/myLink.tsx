@@ -1,5 +1,5 @@
 'use client'
-import { myMergeClasses } from '@/src/ui/components/myMergeClasses'
+import { myMergeClasses } from 'nextjs-shared/MyMergeClasses'
 import Link from 'next/link'
 
 interface LinkHref {

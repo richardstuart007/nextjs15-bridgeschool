@@ -1,5 +1,5 @@
 'use client'
-import { MyLink } from '@/src/ui/components/myLink'
+import { MyLink } from 'nextjs-shared/MyLink'
 import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
 import { user_Logout } from '@/src/lib/user_logout'
 import { useEffect, useState } from 'react'

@@ -1,15 +1,15 @@
 'use server'
 
-import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
 import {
   JoinParams,
   Filter,
   table_fetch_pages_total
-} from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
+} from 'nextjs-shared/tableFetchUtils'
 import { ITEMS_PER_PAGE } from './page_constants'
-import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
-import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
-import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+import { buildSql_Placeholders } from 'nextjs-shared/buildSql_Placeholders'
+import { buildSql_Readable } from 'nextjs-shared/buildSql_Readable'
+import { Comparison_operator } from 'nextjs-shared/table_comparison_values'
 
 //---------------------------------------------------------------------
 //  Helper function to convert filters to whereColumnValuePairs

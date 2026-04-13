@@ -1,4 +1,4 @@
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 type CacheEntry<T> = {
   data: T

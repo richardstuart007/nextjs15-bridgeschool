@@ -1,10 +1,10 @@
 'use server'
 
 import { z } from 'zod'
-import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { table_update } from 'nextjs-shared/table_update'
+import { table_write } from 'nextjs-shared/table_write'
 import validate from '@/src/ui/admin/reftype/maint-validate'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------

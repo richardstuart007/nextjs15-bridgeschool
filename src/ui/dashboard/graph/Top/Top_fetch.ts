@@ -1,13 +1,13 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
+import { sql } from 'nextjs-shared/db'
 import {
   Top_count_min,
   Top_count_max,
   Top_usersReturned
 } from '@/src/ui/dashboard/graph/Top/Top_constants'
-import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
-import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
+import { buildSql_Readable } from 'nextjs-shared/buildSql_Readable'
 
 interface Top_fetchProps {
   caller: string

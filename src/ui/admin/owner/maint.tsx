@@ -1,10 +1,10 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { OwnerMaint } from '@/src/ui/admin/owner/maint-action'
-import { MyInput } from '@/src/ui/components/myInput'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
   onSuccess: () => void

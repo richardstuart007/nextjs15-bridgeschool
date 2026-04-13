@@ -1,4 +1,4 @@
-import MySchoolLogo from '@/src/ui/components/mySchool-logo'
+import MySchoolLogo from 'nextjs-shared/MySchoolLogo'
 import RegisterForm from '@/src/ui/register/form'
 import { Metadata } from 'next'
 
