@@ -1,7 +1,7 @@
 'use server'
 
 import { userCache_purge } from '@/src/lib/tables/cache/userCache_purge'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 export async function userCache_purgeOnSignIn(userId: number, caller: string = '') {
   const functionName = 'userCache_purgeOnSignIn'

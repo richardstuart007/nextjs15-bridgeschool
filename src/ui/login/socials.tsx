@@ -2,7 +2,7 @@
 'use client'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub } from 'react-icons/fa'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { socials_signin } from './socials_signin'
 
 interface SocialsProps {

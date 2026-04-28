@@ -1,5 +1,5 @@
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
+import { write_Logging } from 'nextjs-shared/write_logging'
 //
 //  Fetch unique owner/subject
 //

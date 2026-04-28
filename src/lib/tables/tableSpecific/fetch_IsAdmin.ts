@@ -1,6 +1,6 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 // ----------------------------------------------------------------------

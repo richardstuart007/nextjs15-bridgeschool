@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useUserContext } from '@/src/context/UserContext'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 
 export default function NavDev() {
   //

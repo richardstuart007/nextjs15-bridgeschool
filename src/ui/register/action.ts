@@ -2,9 +2,9 @@
 
 import { z } from 'zod'
 import { signIn } from '@/auth'
-import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { write_users } from '@/src/lib/tables/tableSpecific/write_Users'
+import { table_check } from 'nextjs-shared/table_check'
+import { table_write } from 'nextjs-shared/table_write'
+import { write_users } from '@/src/lib/tables/tableSpecific/write_users'
 import bcrypt from 'bcryptjs'
 
 const FormSchemaRegister = z.object({

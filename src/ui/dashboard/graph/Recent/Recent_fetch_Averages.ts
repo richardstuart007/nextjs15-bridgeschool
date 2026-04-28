@@ -1,7 +1,7 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
+import { sql } from 'nextjs-shared/db'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
 
 interface AveragesProps {
   userIds: number[]

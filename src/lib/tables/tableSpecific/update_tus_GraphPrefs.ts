@@ -1,8 +1,8 @@
 'use server'
 
-import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
+import { table_update } from 'nextjs-shared/table_update'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 interface GraphPrefs {
   us_graph_user_months?: number

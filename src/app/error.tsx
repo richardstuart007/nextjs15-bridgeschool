@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 
 export default function Error({
   error,

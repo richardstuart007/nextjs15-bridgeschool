@@ -1,8 +1,13 @@
-export const URL_current = 'https://nextjs15-bridgeschool.vercel.app'
-export const URL_old1 = 'nextjs-bridgeschool.vercel.app'
-export const URL_old2 = 'nextjs14-bridgeschool.vercel.app'
+/** @type {import('next').NextConfig} */
+const config = {
+  transpilePackages: ['nextjs-shared'],
+  cacheComponents: false,
+  env: {
+    CUSTOM_ENV: process.env.CUSTOM_ENV,
+    POSTGRES_URL: process.env.POSTGRES_URL
+  },
 
-const redirectsConfig = {
+  // Your existing redirects configuration
   async redirects() {
     return [
       {
@@ -10,10 +15,10 @@ const redirectsConfig = {
         has: [
           {
             type: 'host',
-            value: URL_old1
+            value: 'nextjs-bridgeschool.vercel.app' // URL_old1 value
           }
         ],
-        destination: `${URL_current}/:path*`,
+        destination: 'https://nextjs15-bridgeschool.vercel.app/:path*',
         permanent: true
       },
       {
@@ -21,23 +26,14 @@ const redirectsConfig = {
         has: [
           {
             type: 'host',
-            value: URL_old2
+            value: 'nextjs14-bridgeschool.vercel.app' // URL_old2 value
           }
         ],
-        destination: `${URL_current}/:path*`,
+        destination: 'https://nextjs15-bridgeschool.vercel.app/:path*',
         permanent: true
       }
     ]
   }
-}
-
-const config = {
-  cacheComponents: false,
-  env: {
-    CUSTOM_ENV: process.env.CUSTOM_ENV,
-    POSTGRES_URL: process.env.POSTGRES_URL
-  },
-  ...redirectsConfig
 }
 
 export default config

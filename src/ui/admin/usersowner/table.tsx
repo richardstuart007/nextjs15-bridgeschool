@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Usersowner } from '@/src/lib/tables/definitions'
-import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
-import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
-import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
-import MyPagination from '@/src/ui/components/myPagination'
-import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import MyDropdown from '@/src/ui/components/myDropdown'
-import { MyButton } from '@/src/ui/components/myButton'
+import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
+import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
+import { Filter } from 'nextjs-shared/tableFetchUtils'
+import MyPagination from 'nextjs-shared/MyPagination'
+import { table_delete } from 'nextjs-shared/table_delete'
+import MyDropdown from 'nextjs-shared/MyDropdown'
+import { MyButton } from 'nextjs-shared/MyButton'
 
 interface FormProps {
   selected_uid?: number | null

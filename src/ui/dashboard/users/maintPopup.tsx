@@ -1,5 +1,5 @@
 'use client'
-import MyPopup from '@/src/ui/components/myPopup'
+import MyPopup from 'nextjs-shared/MyPopup'
 import Form from '@/src/ui/dashboard/users/maint'
 
 interface Props {

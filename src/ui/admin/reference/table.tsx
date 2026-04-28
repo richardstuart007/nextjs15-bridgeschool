@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/reference/maintPopup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
-import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
-import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
-import { Filter, JoinParams } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
-import MyPagination from '@/src/ui/components/myPagination'
-import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
+import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
+import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
+import { Filter, JoinParams } from 'nextjs-shared/tableFetchUtils'
+import MyPagination from 'nextjs-shared/MyPagination'
+import { table_delete } from 'nextjs-shared/table_delete'
 import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb_cntreference'
-import MyDropdown from '@/src/ui/components/myDropdown'
-import { MyButton } from '@/src/ui/components/myButton'
-import { MyInput } from '@/src/ui/components/myInput'
+import MyDropdown from 'nextjs-shared/MyDropdown'
+import { MyButton } from 'nextjs-shared/MyButton'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
   selected_sbid?: number | undefined

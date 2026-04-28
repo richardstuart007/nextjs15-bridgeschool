@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { MyInput } from '@/src/ui/components/myInput'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface RadioOption {
   id: string

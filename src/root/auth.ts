@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs'
 import { providerSignIn } from '@/src/lib/dataAuth/providerSignIn'
 import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
-import { table_fetch } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch } from 'nextjs-shared/table_fetch'
 import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeOnSignIn'
 
 const functionName = 'auth'

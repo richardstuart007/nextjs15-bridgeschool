@@ -2,16 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import MaintPopup from '@/src/ui/admin/owner/maintPopup'
-import { MyConfirmDialog, ConfirmDialogInt } from '@/src/ui/components/myConfirmDialog'
+import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Owner } from '@/src/lib/tables/definitions'
-import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
-import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
-import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
-import MyPagination from '@/src/ui/components/myPagination'
-import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
-import { table_delete } from '@/src/lib/tables/tableGeneric/table_delete'
-import { MyButton } from '@/src/ui/components/myButton'
-import { MyInput } from '@/src/ui/components/myInput'
+import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
+import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
+import { Filter } from 'nextjs-shared/tableFetchUtils'
+import MyPagination from 'nextjs-shared/MyPagination'
+import { table_check } from 'nextjs-shared/table_check'
+import { table_delete } from 'nextjs-shared/table_delete'
+import { MyButton } from 'nextjs-shared/MyButton'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 export default function Table() {
   const functionName = 'Table_Owner'
@@ -247,9 +247,9 @@ export default function Table() {
           <tbody className='bg-white'>
             {data?.map(row => (
               <tr key={row.ow_owid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1 text-xs '>{row.ow_owner}</td>
-                <td className='text-xs px-2 py-1 text-xs '>{row.ow_owid}</td>
-                <td className='text-xs px-2 py-1 text-xs'>
+                <td className='text-xs px-2 py-1 '>{row.ow_owner}</td>
+                <td className='text-xs px-2 py-1 '>{row.ow_owid}</td>
+                <td className='text-xs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleDeleteClick(row)}
                     overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'

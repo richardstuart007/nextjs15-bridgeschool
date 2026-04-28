@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { table_Logging } from '@/src/lib/tables/definitions'
-import { fetchFiltered } from '@/src/lib/tables/tableGeneric/table_pages/fetchFiltered'
-import { fetchTotalPages } from '@/src/lib/tables/tableGeneric/table_pages/fetchTotalPages'
-import { Filter } from '@/src/lib/tables/tableGeneric/table_pages/tableFetchUtils'
-import MyPagination from '@/src/ui/components/myPagination'
-import { MyInput } from '@/src/ui/components/myInput'
+import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
+import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
+import { Filter } from 'nextjs-shared/tableFetchUtils'
+import MyPagination from 'nextjs-shared/MyPagination'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 export default function Table() {
   const functionName = 'Table_Logging'

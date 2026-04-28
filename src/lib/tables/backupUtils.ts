@@ -4,8 +4,8 @@ import * as fs from 'fs'
 import path from 'path'
 import csv from 'csv-parser'
 import readline from 'readline'
-import { sql } from '@/src/lib/db'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { sql } from 'nextjs-shared/db'
+import { write_Logging } from 'nextjs-shared/write_logging'
 //--------------------------------------------------------------------------
 //  Checks if a directory exists on the system
 //--------------------------------------------------------------------------

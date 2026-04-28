@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { MyLink } from '@/src/ui/components/myLink'
+import { MyLink } from 'nextjs-shared/MyLink'
 import { usePathname } from 'next/navigation'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
 import {

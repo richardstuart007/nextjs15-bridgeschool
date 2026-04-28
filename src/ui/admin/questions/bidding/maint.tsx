@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/questions/bidding/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import { MyInput } from '@/src/ui/components/myInput'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 const bidding_names = [
   'R1B1',

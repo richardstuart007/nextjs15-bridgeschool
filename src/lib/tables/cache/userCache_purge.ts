@@ -1,7 +1,7 @@
 'use server'
 
-import { cache_clearUser } from '@/src/lib/tables/cache/userCache_store'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { cache_clearUser } from 'nextjs-shared/userCache_store'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 const functionName = 'userCache_purge'
 

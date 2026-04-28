@@ -18,7 +18,7 @@ import {
 } from '@/src/ui/dashboard/graph/User/User_constants'
 import { Top_limitMonths_Default } from '@/src/ui/dashboard/graph/Top/Top_constants'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { GraphSummaryWrapper } from './graph_summaryWrapper'
 import { GraphStructure } from './graph_types'

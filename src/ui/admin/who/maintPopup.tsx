@@ -1,5 +1,5 @@
 'use client'
-import MyPopup from '@/src/ui/components/myPopup'
+import MyPopup from 'nextjs-shared/MyPopup'
 import Form from '@/src/ui/admin/who/maint'
 import { table_Who } from '@/src/lib/tables/definitions'
 

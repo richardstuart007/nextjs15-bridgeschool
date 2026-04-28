@@ -1,6 +1,6 @@
 'use server'
 
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { table_write } from 'nextjs-shared/table_write'
 import {
   Recent_usersReturned_Default,
   Recent_usersAverage_Default

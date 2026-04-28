@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 import { lusitana } from '@/src/root/constants/constants_fonts'
 import { cookie_delete } from '@/src/lib/cookie/cookie_delete'
-import { MyLink } from '@/src/ui/components/myLink'
+import { MyLink } from 'nextjs-shared/MyLink'
 
 export default function Page() {
   const functionName = 'Page'

@@ -1,5 +1,5 @@
 'use server'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 export default async function getBreadcrumb() {
   const functionName = 'getBreadcrumb'

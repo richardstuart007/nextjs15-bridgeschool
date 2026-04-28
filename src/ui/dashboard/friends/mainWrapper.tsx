@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import MaintPopup from './maintPopup'
 import { useUserContext } from '@/src/context/UserContext'
-import { table_fetch, table_fetch_Props } from '@/src/lib/tables/tableGeneric/table_fetch'
+import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 
 interface Props {
   isOpen: boolean

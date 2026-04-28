@@ -1,4 +1,4 @@
-import { Comparison_operator } from '@/src/lib/tables/tableGeneric/table_comparison_values'
+import { Comparison_operator } from 'nextjs-shared/table_comparison_values'
 export type structure_SessionsInfo = {
   si_usid: number
   si_name: string

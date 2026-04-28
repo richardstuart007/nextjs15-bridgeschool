@@ -1,12 +1,12 @@
 'use client'
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Maint } from '@/src/ui/admin/subject/maint-action'
 import type { table_Subject } from '@/src/lib/tables/definitions'
-import MyDropdown from '@/src/ui/components/myDropdown'
-import { MyInput } from '@/src/ui/components/myInput'
+import MyDropdown from 'nextjs-shared/MyDropdown'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
   record: table_Subject | null

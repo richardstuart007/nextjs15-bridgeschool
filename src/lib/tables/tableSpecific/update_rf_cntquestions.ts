@@ -1,8 +1,8 @@
 'use server'
 
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
-import { table_count } from '@/src/lib/tables/tableGeneric/table_count'
-import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
+import { write_Logging } from 'nextjs-shared/write_logging'
+import { table_count } from 'nextjs-shared/table_count'
+import { table_update } from 'nextjs-shared/table_update'
 //---------------------------------------------------------------------
 //  subject - Questions Count
 //---------------------------------------------------------------------

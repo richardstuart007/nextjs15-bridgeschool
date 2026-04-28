@@ -1,12 +1,12 @@
 'use server'
 
 import { z } from 'zod'
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
-import { table_update } from '@/src/lib/tables/tableGeneric/table_update'
+import { table_write } from 'nextjs-shared/table_write'
+import { table_update } from 'nextjs-shared/table_update'
 import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb_cntreference'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
-import { table_check } from '@/src/lib/tables/tableGeneric/table_check'
+import { table_check } from 'nextjs-shared/table_check'
 import type { table_Reference } from '@/src/lib/tables/definitions'
 //
 //  Form Schema for validation

@@ -1,9 +1,9 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
-import { cache_get, cache_set } from '@/src/lib/tables/cache/userCache_store'
-import { buildSql_Placeholders } from '@/src/lib/tables/tableGeneric/buildSql_Placeholders'
-import { buildSql_Readable } from '@/src/lib/tables/tableGeneric/buildSql_Readable'
+import { sql } from 'nextjs-shared/db'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
+import { buildSql_Placeholders } from 'nextjs-shared/buildSql_Placeholders'
+import { buildSql_Readable } from 'nextjs-shared/buildSql_Readable'
 import { ColumnValuePair } from '@/src/lib/tables/structures'
 
 //---------------------------------------------------------------------

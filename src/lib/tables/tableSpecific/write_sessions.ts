@@ -1,6 +1,6 @@
 'use server'
 
-import { table_write } from '@/src/lib/tables/tableGeneric/table_write'
+import { table_write } from 'nextjs-shared/table_write'
 import { cookie_update } from '@/src/lib/cookie/cookie_update'
 
 export async function write_sessions(ss_usid: number) {

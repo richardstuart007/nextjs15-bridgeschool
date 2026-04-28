@@ -1,11 +1,11 @@
 'use client'
 import { useState, useActionState, useEffect } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { MyButton } from '@/src/ui/components/myButton'
+import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { action } from './action'
-import MyCheckBox from '@/src/ui/components/myCheckbox'
-import { MyInput } from '@/src/ui/components/myInput'
+import MyCheckBox from 'nextjs-shared/MyCheckbox'
+import { MyInput } from 'nextjs-shared/MyInput'
 
 interface Props {
   uf_usid: number

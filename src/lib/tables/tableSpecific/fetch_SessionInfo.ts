@@ -1,8 +1,8 @@
 'use server'
 
-import { sql } from '@/src/lib/db'
+import { sql } from 'nextjs-shared/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { write_Logging } from '@/src/lib/tables/tableSpecific/write_logging'
+import { write_Logging } from 'nextjs-shared/write_logging'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
